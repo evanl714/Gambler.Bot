@@ -23,7 +23,7 @@ namespace KryGamesBotControls.Strategies
     /// </summary>
     public partial class ProgrammerModePY : UserControl, iStrategy
     {
-        DoormatBot.Strategies.ProgrammerPython Strat = null;
+        //DoormatBot.Strategies.ProgrammerPython Strat = null;
         public ProgrammerModePY()
         {
             InitializeComponent();
@@ -50,19 +50,19 @@ namespace KryGamesBotControls.Strategies
 
         public void SetStrategy(BaseStrategy Strategy)
         {
-            Strat = Strategy as ProgrammerPython;
+            //trat = Strategy as ProgrammerPython;
             LoadDocument();
         }
         void LoadDocument()
         {
-            if (Strat?.FileName != null)
+            /*if (Strat?.FileName != null)
             {
                 string path = Strat?.FileName;
                 if (Strat != null)
                     Strat.FileName = path;
 
                 richEditControl1.LoadDocument(path, DocumentFormat.PlainText);
-            }
+            }*/
         }
         private void richEditControl1_Loaded(object sender, RoutedEventArgs e)
         {

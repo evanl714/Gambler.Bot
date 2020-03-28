@@ -14,8 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\DoormatBot\Doormat.Bot\Doormat.Bot.csproj" />
-    <ProjectReference Include="..\Doormat\DoormatCore.csproj" />
+    <ProjectReference Include="..\..\DoormatBot\Doormat.Bot\Doormat.Bot.csproj" />
+    <ProjectReference Include="..\..\Doormat\Doormat\Doormat\DoormatCore.csproj" />
+    <ProjectReference Include="..\..\Doormat\Doormat\GlobalsObject\GlobalsObject.csproj" />
   </ItemGroup>
 
   <ItemGroup>

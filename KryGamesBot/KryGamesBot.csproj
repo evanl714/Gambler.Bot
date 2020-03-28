@@ -12,9 +12,9 @@
     <PackageReference Include="Microsoft.Packaging.Tools.Trimming" Version="1.1.0-preview1-25818-01" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\DoormatBot\Doormat.Bot\Doormat.Bot.csproj" />
-    <ProjectReference Include="..\Doormat\DoormatCore.csproj" />
+  <ItemGroup>    
+    <ProjectReference Include="..\..\DoormatBot\Doormat.Bot\Doormat.Bot.csproj" />    
+    <ProjectReference Include="..\..\Doormat\Doormat\Doormat\DoormatCore.csproj" />    
     <ProjectReference Include="..\KryGamesBotControls\KryGamesBotControls.csproj" />
   </ItemGroup>
 
