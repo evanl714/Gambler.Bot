@@ -1,0 +1,63 @@
+﻿<dx:DXWindow xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui"  xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    x:Class="KryGamesBot.GlobalSettings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KryGamesBot"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    mc:Ignorable="d"
+        Title="GlobalSettings" Height="450" Width="800">
+    <dxlc:LayoutControl>
+        <dxlc:LayoutGroup Orientation="Horizontal" HorizontalAlignment="Left">
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem>
+                    <dxg:GridControl MinHeight="500" MaxHeight="1000" MinWidth="150" MaxWidth="200" SelectedItemChanged="TreeListControl_SelectedItemChanged">
+                        <dxg:GridControl.View>
+                            <dxg:TreeListView>
+                                <dxg:TreeListView.Nodes>
+                                    <dxg:TreeListNode Content="Skin">
+                                        
+                                    </dxg:TreeListNode>
+                                    <dxg:TreeListNode Content="KeePass">
+
+                                    </dxg:TreeListNode>
+                                    <dxg:TreeListNode Content="Storage">
+                                        <dxg:TreeListNode.Nodes>
+                                            <dxg:TreeListNode Content="Bets">
+                                            </dxg:TreeListNode>
+                                            <dxg:TreeListNode Content="Strategies">
+                                            </dxg:TreeListNode>
+                                        </dxg:TreeListNode.Nodes>
+                                    </dxg:TreeListNode>
+                                    <dxg:TreeListNode Content="Notifications">
+                                    </dxg:TreeListNode>
+                                    <dxg:TreeListNode Content="Updates">
+                                    </dxg:TreeListNode>
+                                    <dxg:TreeListNode Content="Live Bets">
+                                        <dxg:TreeListNode.Nodes>
+                                            <dxg:TreeListNode Content="Chart">
+                                            </dxg:TreeListNode>
+                                            <dxg:TreeListNode Content="Feed">
+                                            </dxg:TreeListNode>
+                                        </dxg:TreeListNode.Nodes>
+                                    </dxg:TreeListNode>
+                                    <dxg:TreeListNode Content="Donate">
+                                    </dxg:TreeListNode>
+                                    <dxg:TreeListNode Content="Proxy">
+                                    </dxg:TreeListNode>
+                                </dxg:TreeListView.Nodes>
+                            </dxg:TreeListView>
+                        </dxg:GridControl.View>
+                    </dxg:GridControl>
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxwui:NavigationFrame Name="navFrame">
+                    
+                </dxwui:NavigationFrame>
+            </dxlc:LayoutGroup>
+        </dxlc:LayoutGroup>
+    </dxlc:LayoutControl>
+</dx:DXWindow>

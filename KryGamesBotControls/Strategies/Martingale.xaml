@@ -1,0 +1,209 @@
+﻿<krygamesbotcontrols:BaseControl
+    xmlns:krygamesbotcontrols="clr-namespace:KryGamesBotControls"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"  xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"  x:Class="KryGamesBotControls.Strategies.Martingale"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:KryGamesBotControls.Strategies"
+             mc:Ignorable="d" Height="600" Width="400">
+    <dxlc:LayoutControl VerticalAlignment="Top" >
+        <dxlc:LayoutGroup Orientation="Vertical" View="Tabs">
+            <dxlc:LayoutGroup Orientation="Vertical"  Header="Multiplier On Loss">
+                <dxlc:LayoutGroup Orientation="Vertical"  View="GroupBox" Header="Multiplier Settings">
+                    <dxlc:LayoutGroup Orientation="Horizontal">
+                    <dxlc:LayoutItem Label="Multiplier">
+                            <dxe:SpinEdit DisplayFormatString="0.00000" EditValue="{Binding Strategy.Multiplier}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="% Increase">
+                            <dxe:SpinEdit DisplayFormatString="0.00000"  />
+                    </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+                
+                <dxlc:LayoutItem Label="Multiplier Mode">
+                        <dxe:ComboBoxEdit Name="cbeMultiplierMode" IsTextEditable="False" SelectedIndex="{Binding Strategy.MultiplierMode}" SelectedIndexChanged="ComboBoxEdit_SelectedIndexChanged">
+                            <dxe:ComboBoxEditItem>
+                                Standard/Constant
+                            </dxe:ComboBoxEditItem>
+                            <dxe:ComboBoxEditItem>
+                                Maximum Increases
+                            </dxe:ComboBoxEditItem>
+                            <dxe:ComboBoxEditItem>
+                                Change Multiplier Once
+                            </dxe:ComboBoxEditItem>
+                            <dxe:ComboBoxEditItem>
+                                Variable
+                            </dxe:ComboBoxEditItem>
+                        </dxe:ComboBoxEdit>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Max Muliplies" Name="lciMaxMultiplies">
+                        <dxe:SpinEdit DisplayFormatString="0" EditValue="{Binding Strategy.MaxMultiplies}" />
+                </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="After" Name="lciDivideCounter">
+                        <dxe:SpinEdit DisplayFormatString="0" EditValue="{Binding Strategy.Devidecounter}"/>
+                </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Times Multiplier By" Name="lciDivider">
+                        <dxe:SpinEdit DisplayFormatString="0.00000" EditValue="{Binding Strategy.Devider}"/>
+                </dxlc:LayoutItem>
+                </dxlc:LayoutGroup>
+                <dxlc:LayoutGroup Orientation="Vertical" View="Group">
+                <dxlc:LayoutGroup Orientation="Horizontal">
+                    
+                    <dxlc:LayoutItem Width="15" >
+                            <dxe:CheckEdit EditValue="{Binding Strategy.EnableChangeLoseStreak}" />
+                </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Width="35" >
+                        <Label>After</Label>
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Width="75">
+                            <dxe:SpinEdit Width="70" EditValue="{Binding Strategy.ChangeLoseStreak}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem >
+                    <Label>Losses in a row,</Label>
+                </dxlc:LayoutItem>
+                </dxlc:LayoutGroup>
+                <dxlc:LayoutGroup Orientation="Horizontal">
+                <dxlc:LayoutItem Label="Change bet to">
+                            <dxe:SpinEdit MinWidth="100" EditValue="{Binding Strategy.ChangeLoseStreakTo}"/>
+                    
+                </dxlc:LayoutItem>
+                </dxlc:LayoutGroup>
+                </dxlc:LayoutGroup>
+                <dxlc:LayoutGroup Orientation="Vertical" View="Group">
+                    <dxlc:LayoutGroup Orientation="Horizontal">
+
+                        <dxlc:LayoutItem Width="15" >
+                            <dxe:CheckEdit EditValue="{Binding Strategy.EnableChangeChanceLose}"/>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Width="35" >
+                            <Label>After</Label>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Width="75">
+                            <dxe:SpinEdit Width="70" EditValue="{Binding Strategy.ChangeChanceLoseStreak}"/>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem >
+                            <Label>Losses in a row,</Label>
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+                    <dxlc:LayoutGroup Orientation="Horizontal">
+                        <dxlc:LayoutItem Label="Change Chance to">
+                            <dxe:SpinEdit MinWidth="100" EditValue="{Binding Strategy.ChangeChanceLoseTo}"/>
+
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+                </dxlc:LayoutGroup>
+                <dxlc:LayoutItem Label="Multiply Every ">
+                    <StackPanel Orientation="Horizontal">
+                        <dxe:SpinEdit MinWidth="100" EditValue="{Binding Strategy.StretchLoss}"/>
+                        <Label>Losses</Label>
+                    </StackPanel>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <StackPanel Orientation="Horizontal">
+                        <dxe:CheckEdit EditValue="{Binding Strategy.EnableFirstResetLoss}"/>
+                        <Label>Reset after first loss</Label>
+                    </StackPanel>
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            
+            
+            
+            <dxlc:LayoutGroup Orientation="Vertical" Header="Multiplier On Win"  >
+                <dxlc:LayoutGroup Orientation="Vertical"  View="GroupBox" Header="Multiplier Settings">
+                    <dxlc:LayoutGroup Orientation="Horizontal">
+                        <dxlc:LayoutItem Label="Multiplier">
+                            <dxe:SpinEdit DisplayFormatString="0.00000" EditValue="{Binding Strategy.WinMultiplier}" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="% Increase">
+                            <dxe:SpinEdit DisplayFormatString="0.00000"  />
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+
+                    <dxlc:LayoutItem Label="Multiplier Mode">
+                        <dxe:ComboBoxEdit Name="cbeMultiplierModeWin" IsTextEditable="False" SelectedIndex="{Binding Strategy.WinMultiplierMode}" SelectedIndexChanged="cbeMultiplierModeWin_SelectedIndexChanged">
+                            <dxe:ComboBoxEditItem>
+                                Standard/Constant
+                            </dxe:ComboBoxEditItem>
+                            <dxe:ComboBoxEditItem>
+                                Maximum Increases
+                            </dxe:ComboBoxEditItem>
+                            <dxe:ComboBoxEditItem>
+                                Change Multiplier Once
+                            </dxe:ComboBoxEditItem>
+                            <dxe:ComboBoxEditItem>
+                                Variable
+                            </dxe:ComboBoxEditItem>
+                        </dxe:ComboBoxEdit>
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Max Muliplies" Name="lciWinMaxMultiplies">
+                        <dxe:SpinEdit DisplayFormatString="0" EditValue="{Binding Strategy.WinMaxMultiplies}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="After" Name="lciWinDivideCounter">
+                        <dxe:SpinEdit DisplayFormatString="0" EditValue="{Binding Strategy.WinDevideCounter}"/>
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Times Multiplier By" Name="lciWinDivider">
+                        <dxe:SpinEdit DisplayFormatString="0.00000" EditValue="{Binding Strategy.WinDevider}"/>
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutGroup>
+                <dxlc:LayoutGroup Orientation="Vertical" View="Group">
+                    <dxlc:LayoutGroup Orientation="Horizontal">
+
+                        <dxlc:LayoutItem Width="15" >
+                            <dxe:CheckEdit EditValue="{Binding Strategy.EnableChangeWinStreak}" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Width="35" >
+                            <Label>After</Label>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Width="75">
+                            <dxe:SpinEdit Width="70" EditValue="{Binding Strategy.ChangeWinStreak}" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem >
+                            <Label>Wins in a row,</Label>
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+                    <dxlc:LayoutGroup Orientation="Horizontal">
+                        <dxlc:LayoutItem Label="Change bet to">
+                            <dxe:SpinEdit MinWidth="100" EditValue="{Binding Strategy.ChangeWinStreakTo}"/>
+
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+                </dxlc:LayoutGroup>
+                <dxlc:LayoutGroup Orientation="Vertical" View="Group">
+                    <dxlc:LayoutGroup Orientation="Horizontal">
+
+                        <dxlc:LayoutItem Width="15" >
+                            <dxe:CheckEdit EditValue="{Binding Strategy.EnableChangeChanceWin}"/>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Width="35" >
+                            <Label>After</Label>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Width="75">
+                            <dxe:SpinEdit Width="70" EditValue="{Binding Strategy.ChangeChanceWinStreak}"/>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem >
+                            <Label>Losses in a row,</Label>
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+                    <dxlc:LayoutGroup Orientation="Horizontal">
+                        <dxlc:LayoutItem Label="Change Chance to">
+                            <dxe:SpinEdit MinWidth="100" EditValue="{Binding Strategy.ChangeChanceWinTo}"/>
+
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+                </dxlc:LayoutGroup>
+                <dxlc:LayoutItem Label="Multiply Every ">
+                    <StackPanel Orientation="Horizontal">
+                        <dxe:SpinEdit MinWidth="100" EditValue="{Binding Strategy.StretchWin}"/>
+                        <Label>Wins</Label>
+                    </StackPanel>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <StackPanel Orientation="Horizontal">
+                        <dxe:CheckEdit EditValue="{Binding Strategy.EnableFirstResetWin}"/>
+                        <Label>Reset after first loss</Label>
+                    </StackPanel>
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+        </dxlc:LayoutGroup>
+    </dxlc:LayoutControl>
+</krygamesbotcontrols:BaseControl>

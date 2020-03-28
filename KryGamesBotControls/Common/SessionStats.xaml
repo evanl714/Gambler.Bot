@@ -1,0 +1,104 @@
+﻿<krygamesbotcontrols:BaseControl xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" 
+    xmlns:krygamesbotcontrols="clr-namespace:KryGamesBotControls"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"  x:Class="KryGamesBotControls.Common.SessionStats"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:KryGamesBotControls.Common"
+                                 xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+                                 mc:Ignorable="d" 
+             d:DesignHeight="450" Width="303">
+    <dx:DXTabControl >
+        <dx:DXTabControl.Items>
+            <dx:DXTabItem Header="Basic Stats">
+                <dxlc:LayoutControl >
+        
+                    <dxlc:LayoutGroup Orientation="Horizontal" >
+                        <dxlc:LayoutGroup Orientation="Vertical" >
+                            <dxlc:LayoutItem Label="Time Running" >
+                                <dxe:TextEdit IsReadOnly="True" Name="lblTimeRunning" EditValue="{Binding Stats.RunningTimeSpan, Mode=OneWay}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Profit" >
+                                <dxe:TextEdit IsReadOnly="True" Name="lblProfit" EditValue="{Binding Stats.Profit}" DisplayFormatString="0.00000000" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Wagered" >
+                                <dxe:TextEdit IsReadOnly="True" Name="lblWagered"  EditValue="{Binding Stats.Wagered}" DisplayFormatString="0.00000000"/>
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Bets" >
+                                <dxe:TextEdit IsReadOnly="True" Name="lblBets"  EditValue="{Binding Stats.Bets}"/>
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Wins" >
+                                <dxe:TextEdit IsReadOnly="True" Name="lblWins"  EditValue="{Binding Stats.Wins}"/>
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Losses" >
+                                <dxe:TextEdit IsReadOnly="True" Name="lblLosses"  EditValue="{Binding Stats.Losses}"/>
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Best Streak" >
+                                <dxe:TextEdit IsReadOnly="True" Name="lblBestWinStreak"  EditValue="{Binding Stats.BestStreak}"/>
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Works Streak" >
+                                <dxe:TextEdit IsReadOnly="True" Name="lblWorstLoseStreak"  EditValue="{Binding Stats.WorstStreak}"/>
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Profit / Hour" >
+                                <dxe:TextEdit IsReadOnly="True" Name="lblProfitperhour" EditValue="{Binding Stats.ProfitPerHour}" DisplayFormatString="0.00000000" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Profit / 24 Hours" >
+                                <dxe:TextEdit IsReadOnly="True" Name="lblProfit24h" EditValue="{Binding Stats.ProfitPer24Hour}"  DisplayFormatString="0.00000000" />
+                            </dxlc:LayoutItem>   
+                            <dxlc:LayoutItem Label="Current Streak" >
+                                <dxe:TextEdit IsReadOnly="True" Name="lblCurrentStreak"  EditValue="{Binding Stats.CurrentStreak, Mode=OneWay}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Avg Profit/Bet" >
+                                <dxe:TextEdit IsReadOnly="True" Name="lblAvgProfit" DisplayFormatString="0.00000000" EditValue="{Binding Stats.ProfitPerBet}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Luck" >
+                                <dxe:TextEdit IsReadOnly="True" Name="lblLuck"  EditValue="{Binding Stats.luck}"  DisplayFormatString="p2"/>
+                            </dxlc:LayoutItem>
+                        </dxlc:LayoutGroup>
+                    </dxlc:LayoutGroup>
+                    </dxlc:LayoutControl >
+                </dx:DXTabItem>
+                <dx:DXTabItem Header="More Stats">
+                <dxlc:LayoutControl >
+                    <dxlc:LayoutGroup Orientation="Vertical" >
+                        <dxlc:LayoutItem Label="Avg Streak" >
+                            <dxe:TextEdit IsReadOnly="True"  EditValue="{Binding Stats.AvgStreak}"  DisplayFormatString="0.00" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Avg Win Streak" >
+                            <dxe:TextEdit IsReadOnly="True" EditValue="{Binding Stats.AvgWin}" DisplayFormatString="0.00" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Avg Lose Streak" >
+                            <dxe:TextEdit IsReadOnly="True"  EditValue="{Binding Stats.AvgLoss}" DisplayFormatString="0.00" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="3 Best Streaks" >
+                            <StackPanel>
+                                <dxe:TextEdit IsReadOnly="True" EditValue="{Binding Stats.BestStreak}"/>
+                                <dxe:TextEdit IsReadOnly="True"  EditValue="{Binding Stats.BestStreak2}"/>
+                                <dxe:TextEdit IsReadOnly="True"  EditValue="{Binding Stats.BestStreak3}"/>
+                            </StackPanel>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="3 Worst Streaks" >
+                            <StackPanel>
+                                <dxe:TextEdit IsReadOnly="True"   EditValue="{Binding Stats.WorstStreak}"/>
+                                <dxe:TextEdit IsReadOnly="True"   EditValue="{Binding Stats.WorstStreak2}"/>
+                                <dxe:TextEdit IsReadOnly="True"   EditValue="{Binding Stats.WorstStreak3}"/>
+                            </StackPanel>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Largest Bet" >
+                            <dxe:TextEdit IsReadOnly="True"  EditValue="{Binding Stats.LargestBet}"  DisplayFormatString="0.00000000"/>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Largest Win" >
+                            <dxe:TextEdit IsReadOnly="True"  EditValue="{Binding Stats.LargestWin}"  DisplayFormatString="0.00000000"/>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Largest Loss" >
+                            <dxe:TextEdit IsReadOnly="True"   EditValue="{Binding Stats.LargestLoss}"  DisplayFormatString="0.00000000"/>
+                        </dxlc:LayoutItem>
+                        
+                    </dxlc:LayoutGroup>
+                </dxlc:LayoutControl>
+            </dx:DXTabItem>
+            </dx:DXTabControl.Items>
+        </dx:DXTabControl>
+    
+</krygamesbotcontrols:BaseControl>

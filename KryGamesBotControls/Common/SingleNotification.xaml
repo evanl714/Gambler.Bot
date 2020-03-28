@@ -1,0 +1,35 @@
+﻿<UserControl xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"  xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"  x:Class="KryGamesBotControls.Common.SingleNotification"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:KryGamesBotControls.Common"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <dxlc:LayoutControl DataContext="NotificationTrigger" >
+        <dxlc:LayoutGroup >
+            <dxlc:LayoutItem Label="Enabled" LabelPosition="Top">
+                <dxe:CheckEdit Name="chkEnabled" Checked="{Binding Enabled}" />
+            </dxlc:LayoutItem>
+            <dxlc:LayoutItem Label="Action" LabelPosition="Top">
+                <dxe:ComboBoxEdit Name="cbeAction" EditValue="{Binding Action}" />
+            </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="When" />
+                <dxlc:LayoutItem Label="Value" LabelPosition="Top" >
+                <dxe:ComboBoxEdit Name="cbeValue" IsTextEditable="false" EditValue="{Binding TriggerProperty}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Compares" LabelPosition="Top">
+                    <dxe:ComboBoxEdit Name="cbeComparison1"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Against/Of" LabelPosition="Top">
+                <dxe:ComboBoxEdit Name="cbeTarget" />
+            </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Compares" LabelPosition="Top">
+                <dxe:ComboBoxEdit Name="cbeComparison2" />
+            </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Percent" LabelPosition="Top">
+                <dxe:SpinEdit Name="cbePercentage" />
+            </dxlc:LayoutItem>
+        </dxlc:LayoutGroup>
+    </dxlc:LayoutControl>
+</UserControl>

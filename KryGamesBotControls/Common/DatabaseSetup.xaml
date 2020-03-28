@@ -1,0 +1,36 @@
+﻿<UserControl xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"  xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"  xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"  x:Class="KryGamesBotControls.Common.DatabaseSetup"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:KryGamesBotControls.Common"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    
+    <dxlc:LayoutControl >
+        <dxlc:LayoutGroup Orientation="Vertical" >
+            <dxlc:LayoutItem >
+                <TextBlock TextWrapping="WrapWithOverflow" Name="txtdbIntro"></TextBlock>
+            </dxlc:LayoutItem>
+            <dxlc:LayoutItem Label="Storage Options:" >
+                <dxe:ComboBoxEdit IsTextEditable="False" SelectedIndexChanged="ComboBoxEdit_SelectedIndexChanged" SelectedIndex="0" Name="cbeProvider"  >
+                    <dxe:ComboBoxEditItem Content="SQLite (Default)"/>
+                    <dxe:ComboBoxEditItem Content="SQL Server"/>
+                    <dxe:ComboBoxEditItem Content="MySQL"/>
+                    <dxe:ComboBoxEditItem Content="MongoDb"/>
+                    <dxe:ComboBoxEditItem Content="PostGres"/>
+                </dxe:ComboBoxEdit>
+            </dxlc:LayoutItem>
+            <dxlc:LayoutGroup Header="Database Settings" >
+            <dxlc:LayoutItem Name="lciDBSetup" Content="{Binding dbForm}" />
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup Orientation="Vertical">
+                <dxlc:LayoutItem Label="Encyption Password" ><dxe:PasswordBoxEdit Name="txtDBPassword" /></dxlc:LayoutItem>
+                <TextBlock TextWrapping="WrapWithOverflow">This password is used to encrypt your connection string for your storage option. You will need to enter it every time you open KryGamesBot. If you leave it blank, you will not need to enter a password but your connection string will be saved in plain text.</TextBlock> 
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutItem>
+                <dx:SimpleButton Content="Test Connection" HorizontalAlignment="Left" MaxWidth="100" Click="btnContinue_Click" Name="btnContinue" />
+            </dxlc:LayoutItem>
+        </dxlc:LayoutGroup>
+    </dxlc:LayoutControl>
+</UserControl>

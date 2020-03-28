@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DevExpress.WindowsDesktop.Wpf.Controls" Version="19.2.5" />
+    <PackageReference Include="DevExpress.WindowsDesktop.Wpf.Docking" Version="19.2.5" />
+    <PackageReference Include="Microsoft.Packaging.Tools.Trimming" Version="1.1.0-preview1-25818-01" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\DoormatBot\Doormat.Bot\Doormat.Bot.csproj" />
+    <ProjectReference Include="..\Doormat\DoormatCore.csproj" />
+    <ProjectReference Include="..\KryGamesBotControls\KryGamesBotControls.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Images\Sites\BitExo.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Images\Sites\Bitsler.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Images\Sites\Bitvest.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Images\Sites\CryptoGames.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Images\Sites\Dice999.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Images\Sites\DuckDice.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Images\Sites\PrimeDice.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Images\Sites\PrimeDice.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Images\Sites\Stake.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
