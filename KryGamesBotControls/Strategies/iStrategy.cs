@@ -10,6 +10,7 @@ namespace KryGamesBotControls.Strategies
         event EventHandler StartBetting;
         void GameChanged(DoormatCore.Games.Games newGame);
         void SetStrategy(DoormatBot.Strategies.BaseStrategy Strategy);
+        bool TopAlign();
 
     }
 }

@@ -93,6 +93,11 @@ namespace KryGamesBotControls.Strategies
         {
             DateTime LastChanged = DateTime.Now;
         }
+        public bool TopAlign()
+        {
+            return false;
+        }
+       
     }
 }
 

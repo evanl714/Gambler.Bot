@@ -54,5 +54,9 @@ namespace KryGamesBotControls.Strategies
             //show stuff and shit like whatever
             //ok but really, show a browse button to import a list of bets - csv, text, excel??
         }
+        public bool TopAlign()
+        {
+            return true;
+        }
     }
 }

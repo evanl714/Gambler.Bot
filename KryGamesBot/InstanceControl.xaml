@@ -67,7 +67,7 @@
                 </dxdo:LayoutGroup>
                 <dxdo:TabbedGroup Orientation="Horizontal" ItemWidth="400">
                         <dxdo:LayoutPanel Caption="Strategty" VerticalAlignment="Stretch" SizeChanged="LayoutPanel_SizeChanged">
-                            <dxlc:LayoutControl Orientation="Vertical" Name="lcStrategy">
+                            <dxlc:LayoutControl Orientation="Vertical" Name="lcStrategy" VerticalAlignment="Top">
                                 <dxlc:LayoutGroup Orientation="Horizontal" >
                                     <dxlc:LayoutItem>
                                         <dxe11:LookUpEdit Name="cbeStartegies" EditValueChanged="cbeStartegies_EditValueChanged" IsTextEditable="False"  />
@@ -84,9 +84,9 @@
                                             <dxec:SimpleButton Name="btnStopWin" Content="Stop On Win" Click="btnStopWin_Click" MaxHeight="25"/>
                                     </dxlc:LayoutItem>
                                 </dxlc:LayoutGroup>
-                                <dxlc:LayoutItem VerticalAlignment="Top">
-                                    <ContentControl Content="{Binding StrategyControl}"/>
-                                </dxlc:LayoutItem>
+
+                                <ContentControl Name="StratContent" VerticalAlignment="Stretch" Content="{Binding StrategyControl}"/>
+                                
                             </dxlc:LayoutControl>
                         </dxdo:LayoutPanel>
                         <dxdo:LayoutPanel Caption="Reset Settings" ItemWidth="400" >

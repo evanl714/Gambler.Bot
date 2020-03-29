@@ -46,5 +46,10 @@ namespace KryGamesBotControls.Strategies
             if (Strategy is DoormatBot.Strategies.DAlembert)
                 this.Strategy = Strategy as DoormatBot.Strategies.DAlembert;
         }
+
+        public bool TopAlign()
+        {
+            return true;
+        }
     }
 }

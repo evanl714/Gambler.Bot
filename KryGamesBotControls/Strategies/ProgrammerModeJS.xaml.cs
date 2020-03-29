@@ -87,6 +87,10 @@ namespace KryGamesBotControls.Strategies
             richEditControl1.Document.Sections[0].LineNumbering.Distance = 0.1f;
             
         }
+        public bool TopAlign()
+        {
+            return false;
+        }
     }
 }
 

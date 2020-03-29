@@ -42,7 +42,15 @@ namespace KryGamesBotControls.Strategies
 
         public void SetStrategy(BaseStrategy Strategy)
         {
-            throw new NotImplementedException();
+            if (Strategy is DoormatBot.Strategies.Fibonacci)
+                this.Strategy = Strategy as DoormatBot.Strategies.Fibonacci;
+
+        }
+        
+        
+        public bool TopAlign()
+        {
+            return true;
         }
     }
 }

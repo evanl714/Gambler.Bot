@@ -70,5 +70,9 @@ namespace KryGamesBotControls.Strategies
                 case 3: lciWinDivideCounter.Visibility = lciWinDivider.Visibility = Visibility.Visible; lciWinMaxMultiplies.Visibility = Visibility.Collapsed; break;
             }
         }
+        public bool TopAlign()
+        {
+            return true;
+        }
     }
 }

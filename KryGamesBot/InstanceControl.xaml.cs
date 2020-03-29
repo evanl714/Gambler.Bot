@@ -94,7 +94,7 @@ namespace KryGamesBot
                 default:
                     botIns.Strategy = new DoormatBot.Strategies.Martingale(); break;
             }
-            
+            StratContent.VerticalAlignment = StrategyControl.TopAlign() ? VerticalAlignment.Top : VerticalAlignment.Stretch;
             StrategyControl.SetStrategy(botIns.Strategy);
             OnPropertyChanged(nameof(StrategyControl));
         }
