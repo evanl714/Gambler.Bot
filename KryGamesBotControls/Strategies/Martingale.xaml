@@ -6,8 +6,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:KryGamesBotControls.Strategies"
-             mc:Ignorable="d" Height="600" Width="400">
-    <dxlc:LayoutControl VerticalAlignment="Top" >
+             mc:Ignorable="d" Height="600" Width="400"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"  >
+    <dxlc:LayoutControl Name="mainControl" VerticalAlignment="Top" >
         <dxlc:LayoutGroup Orientation="Vertical" View="Tabs">
             <dxlc:LayoutGroup Orientation="Vertical"  Header="Multiplier On Loss">
                 <dxlc:LayoutGroup Orientation="Vertical"  View="GroupBox" Header="Multiplier Settings">
@@ -37,10 +38,10 @@
                         </dxe:ComboBoxEdit>
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="Max Muliplies" Name="lciMaxMultiplies">
-                        <dxe:SpinEdit DisplayFormatString="0" EditValue="{Binding Strategy.MaxMultiplies}" />
+                        <dxe:SpinEdit DisplayFormatString="0" EditValue="{Binding Strategy.MaxMultiplies}"  EditValueType="{x:Type sys:Int32}"/>
                 </dxlc:LayoutItem>
                     <dxlc:LayoutItem Label="After" Name="lciDivideCounter">
-                        <dxe:SpinEdit DisplayFormatString="0" EditValue="{Binding Strategy.Devidecounter}"/>
+                        <dxe:SpinEdit DisplayFormatString="0" EditValue="{Binding Strategy.Devidecounter}" EditValueType="{x:Type sys:Int32}"/>
                 </dxlc:LayoutItem>
                     <dxlc:LayoutItem Label="Times Multiplier By" Name="lciDivider">
                         <dxe:SpinEdit DisplayFormatString="0.00000" EditValue="{Binding Strategy.Devider}"/>
@@ -56,7 +57,7 @@
                         <Label>After</Label>
                     </dxlc:LayoutItem>
                     <dxlc:LayoutItem Width="75">
-                            <dxe:SpinEdit Width="70" EditValue="{Binding Strategy.ChangeLoseStreak}" />
+                            <dxe:SpinEdit Width="70" EditValue="{Binding Strategy.ChangeLoseStreak}"  EditValueType="{x:Type sys:Int32}"/>
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem >
                     <Label>Losses in a row,</Label>
@@ -79,7 +80,7 @@
                             <Label>After</Label>
                         </dxlc:LayoutItem>
                         <dxlc:LayoutItem Width="75">
-                            <dxe:SpinEdit Width="70" EditValue="{Binding Strategy.ChangeChanceLoseStreak}"/>
+                            <dxe:SpinEdit Width="70" EditValue="{Binding Strategy.ChangeChanceLoseStreak}" EditValueType="{x:Type sys:Int32}"/>
                         </dxlc:LayoutItem>
                         <dxlc:LayoutItem >
                             <Label>Losses in a row,</Label>
@@ -94,7 +95,7 @@
                 </dxlc:LayoutGroup>
                 <dxlc:LayoutItem Label="Multiply Every ">
                     <StackPanel Orientation="Horizontal">
-                        <dxe:SpinEdit MinWidth="100" EditValue="{Binding Strategy.StretchLoss}"/>
+                        <dxe:SpinEdit MinWidth="100" EditValue="{Binding Strategy.StretchLoss}" EditValueType="{x:Type sys:Int32}" />
                         <Label>Losses</Label>
                     </StackPanel>
                 </dxlc:LayoutItem>
@@ -136,10 +137,10 @@
                         </dxe:ComboBoxEdit>
                     </dxlc:LayoutItem>
                     <dxlc:LayoutItem Label="Max Muliplies" Name="lciWinMaxMultiplies">
-                        <dxe:SpinEdit DisplayFormatString="0" EditValue="{Binding Strategy.WinMaxMultiplies}" />
+                        <dxe:SpinEdit DisplayFormatString="0" EditValue="{Binding Strategy.WinMaxMultiplies}" EditValueType="{x:Type sys:Int32}" />
                     </dxlc:LayoutItem>
                     <dxlc:LayoutItem Label="After" Name="lciWinDivideCounter">
-                        <dxe:SpinEdit DisplayFormatString="0" EditValue="{Binding Strategy.WinDevideCounter}"/>
+                        <dxe:SpinEdit DisplayFormatString="0" EditValue="{Binding Strategy.WinDevideCounter}" EditValueType="{x:Type sys:Int32}"/>
                     </dxlc:LayoutItem>
                     <dxlc:LayoutItem Label="Times Multiplier By" Name="lciWinDivider">
                         <dxe:SpinEdit DisplayFormatString="0.00000" EditValue="{Binding Strategy.WinDevider}"/>
@@ -155,7 +156,7 @@
                             <Label>After</Label>
                         </dxlc:LayoutItem>
                         <dxlc:LayoutItem Width="75">
-                            <dxe:SpinEdit Width="70" EditValue="{Binding Strategy.ChangeWinStreak}" />
+                            <dxe:SpinEdit Width="70" EditValue="{Binding Strategy.ChangeWinStreak}" EditValueType="{x:Type sys:Int32}" />
                         </dxlc:LayoutItem>
                         <dxlc:LayoutItem >
                             <Label>Wins in a row,</Label>
@@ -178,7 +179,7 @@
                             <Label>After</Label>
                         </dxlc:LayoutItem>
                         <dxlc:LayoutItem Width="75">
-                            <dxe:SpinEdit Width="70" EditValue="{Binding Strategy.ChangeChanceWinStreak}"/>
+                            <dxe:SpinEdit Width="70" EditValue="{Binding Strategy.ChangeChanceWinStreak}" EditValueType="{x:Type sys:Int32}"/>
                         </dxlc:LayoutItem>
                         <dxlc:LayoutItem >
                             <Label>Losses in a row,</Label>
@@ -193,7 +194,7 @@
                 </dxlc:LayoutGroup>
                 <dxlc:LayoutItem Label="Multiply Every ">
                     <StackPanel Orientation="Horizontal">
-                        <dxe:SpinEdit MinWidth="100" EditValue="{Binding Strategy.StretchWin}"/>
+                        <dxe:SpinEdit MinWidth="100" EditValue="{Binding Strategy.StretchWin}" EditValueType="{x:Type sys:Int32}"/>
                         <Label>Wins</Label>
                     </StackPanel>
                 </dxlc:LayoutItem>

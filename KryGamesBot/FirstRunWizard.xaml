@@ -30,53 +30,7 @@
                 <TextBlock TextWrapping="WrapWithOverflow" Name="tbMainIntro" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </dxco:WelcomeWizardPage>
             <dxco:WizardPage Header="Look and Feel">
-                <StackPanel >
-                    <TextBlock  Name="tbTheme" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    <dxe:ComboBoxEdit Name="cbeTheme" ItemsSource="{helpers:ThemesProvider}" AllowCollectionView="True" 
-                          EditValue="{Binding Path=(dx:ThemeManager.ThemeName), ElementName=win, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                          AllowUpdateTwoWayBoundPropertiesOnSynchronization="False" IsTextEditable="False" DisplayMember="Name" ValueMember="Name"
-                                      EditValueChanged="cbeTheme_EditValueChanged"
-                                      >
-                        <dxe:ComboBoxEdit.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Vertical" Width="200" >
-                                    <Image Source="{Binding LargeGlyph}" HorizontalAlignment="Center" Width="32" Height="32"/>
-                                    <TextBlock Text="{Binding}" Margin="20" HorizontalAlignment="Center"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </dxe:ComboBoxEdit.ItemTemplate>
-                        <dxe:ComboBoxEdit.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel />
-                            </ItemsPanelTemplate>
-                        </dxe:ComboBoxEdit.ItemsPanel>
-                        <dxe:ComboBoxEdit.GroupStyle>
-                            <GroupStyle HidesIfEmpty="True">
-                                <GroupStyle.ContainerStyle>
-                                    <Style TargetType="{x:Type GroupItem}">
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate>
-                                                    <Grid>
-                                                        <Grid.RowDefinitions>
-                                                            <RowDefinition Height="20"/>
-                                                            <RowDefinition Height="Auto"/>
-                                                        </Grid.RowDefinitions>
-                                                        <Border Background="Gray" Padding="2">
-                                                            <TextBlock Text="{Binding Name}"/>
-                                                        </Border>
-
-                                                        <ItemsPresenter Grid.Row="1"/>
-                                                    </Grid>
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Style>
-                                </GroupStyle.ContainerStyle>
-                            </GroupStyle>
-                        </dxe:ComboBoxEdit.GroupStyle>
-                    </dxe:ComboBoxEdit>
-                </StackPanel>
+                <Common:SetTheme />
             </dxco:WizardPage>
             <dxco:WizardPage Header="Portable" DataContext="this">
                 <StackPanel >

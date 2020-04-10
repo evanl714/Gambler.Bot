@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows.Data;
 using System.Windows.Markup;
 
-namespace KryGamesBot.Helpers
+namespace KryGamesBotControls.Helpers
 {
     public class ThemesProviderExtension : MarkupExtension
     {

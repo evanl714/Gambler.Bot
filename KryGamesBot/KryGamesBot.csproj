@@ -25,6 +25,8 @@
     <None Remove="Images\Sites\PrimeDice.svg" />
     <None Remove="Images\Sites\ProvablyIO.png" />
     <None Remove="Images\Sites\Stake.PNG" />
+    <None Remove="Images\Sites\WinDice.png" />
+    <None Remove="Images\Sites\WolfBet.png" />
     <None Remove="Images\Sites\YoloDice.png" />
   </ItemGroup>
 
@@ -78,6 +80,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Images\Sites\Stake.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Sites\WinDice.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Sites\WolfBet.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Images\Sites\YoloDice.png">

@@ -31,7 +31,8 @@ namespace KryGamesBotControls.Strategies
         public Martingale()
         {
             InitializeComponent();
-            DataContext = this;
+            
+            DataContext = this;            
         }
 
         public event EventHandler StartBetting;

@@ -1,6 +1,8 @@
 ﻿using DevExpress.Xpf.Core;
+using KryGamesBotControls.Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,19 +18,87 @@ namespace KryGamesBot
     /// <summary>
     /// Interaction logic for GlobalSettings.xaml
     /// </summary>
-    public partial class GlobalSettings : DXWindow
+    public partial class GlobalSettings : DXWindow, INotifyPropertyChanged
     {
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+    
+        public SettingNode SelectedNode { get { return TreeListView.DataControl.SelectedItem as SettingNode; } }
+        public List<SettingNode> nodes { get; set; } = new List<SettingNode>() { };
         public string[] SettingItems { get; set; }
         public GlobalSettings()
         {
+            nodes.Add(new SettingNode { Id = 1, Name = "Skin", UserControl= new SetTheme() });
+            nodes.Add(new SettingNode { Id = 2, Name = "KeePass", UserControl= new KeePassSettings() { FileName="" } });
+            nodes.Add(new SettingNode { Id = 3, Name = "Storage" });
+            nodes.Add(new SettingNode { Id = 4, Name = "Bets", ParentId = 3, UserControl= new DatabaseSetup() });
+            nodes.Add(new SettingNode { Id = 5, Name = "Strategies", ParentId = 3 });
+            nodes.Add(new SettingNode { Id = 6, Name = "Notifications" });
+            nodes.Add(new SettingNode { Id = 7, Name = "Updates" });
+            nodes.Add(new SettingNode { Id = 8, Name = "Live Bets" });
+            nodes.Add(new SettingNode { Id = 9, Name = "Chart", ParentId=8 });
+            nodes.Add(new SettingNode { Id = 10, Name = "Feed", ParentId = 8 });
+            nodes.Add(new SettingNode { Id = 11, Name = "Donate" });
+            nodes.Add(new SettingNode { Id = 12, Name = "Proxy" });
+            nodes.Add(new SettingNode { Id = 13, Name = "Errors", UserControl=new ErrorSettings() });
             InitializeComponent();
-            SettingItems =  new string[]{"Skin","KeePass","Bet Storage","Errors","Notifications","Updates","Live View","Donate","Proxy","Strategy Storage" };
+            
+            //SettingItems =  new string[]{"Skin","KeePass","Bet Storage","Errors","Notifications","Updates","Live View","Donate","Proxy","Strategy Storage" };
             DataContext = this;
         }
 
         private void TreeListControl_SelectedItemChanged(object sender, DevExpress.Xpf.Grid.SelectedItemChangedEventArgs e)
         {
-
+            OnPropertyChanged("SelectedNode");
         }
     }
+
+    public class SettingNode
+    {
+        public int Id { get; set; }
+        public int? ParentId { get; set; }
+        public string Name { get; set; }
+        public Control UserControl { get; set; }
+
+
+    }
 }
+
+/*<dxg:TreeListView.Nodes>
+                                    <dxg:TreeListNode Content="Skin" >
+                                       
+                                    </dxg:TreeListNode>
+                                    <dxg:TreeListNode Content="KeePass">
+
+                                    </dxg:TreeListNode>
+                                    <dxg:TreeListNode Content="Storage">
+                                        <dxg:TreeListNode.Nodes>
+                                            <dxg:TreeListNode Content="Bets">
+                                            </dxg:TreeListNode>
+                                            <dxg:TreeListNode Content="Strategies">
+                                            </dxg:TreeListNode>
+                                        </dxg:TreeListNode.Nodes>
+                                    </dxg:TreeListNode>
+                                    <dxg:TreeListNode Content="Notifications">
+                                    </dxg:TreeListNode>
+                                    <dxg:TreeListNode Content="Updates">
+                                    </dxg:TreeListNode>
+                                    <dxg:TreeListNode Content="Live Bets">
+                                        <dxg:TreeListNode.Nodes>
+                                            <dxg:TreeListNode Content="Chart">
+                                            </dxg:TreeListNode>
+                                            <dxg:TreeListNode Content="Feed">
+                                            </dxg:TreeListNode>
+                                        </dxg:TreeListNode.Nodes>
+                                    </dxg:TreeListNode>
+                                    <dxg:TreeListNode Content="Donate">
+                                    </dxg:TreeListNode>
+                                    <dxg:TreeListNode Content="Proxy">
+                                    </dxg:TreeListNode>
+                                </dxg:TreeListView.Nodes>
+                            </dxg:TreeListView>
+*/

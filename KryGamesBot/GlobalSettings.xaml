@@ -13,50 +13,21 @@
         <dxlc:LayoutGroup Orientation="Horizontal" HorizontalAlignment="Left">
             <dxlc:LayoutGroup>
                 <dxlc:LayoutItem>
-                    <dxg:GridControl MinHeight="500" MaxHeight="1000" MinWidth="150" MaxWidth="200" SelectedItemChanged="TreeListControl_SelectedItemChanged">
-                        <dxg:GridControl.View>
-                            <dxg:TreeListView>
-                                <dxg:TreeListView.Nodes>
-                                    <dxg:TreeListNode Content="Skin">
-                                        
-                                    </dxg:TreeListNode>
-                                    <dxg:TreeListNode Content="KeePass">
+                    <dxg:GridControl MinHeight="500" MaxHeight="{Binding Height}" MinWidth="150" MaxWidth="250" SelectedItemChanged="TreeListControl_SelectedItemChanged" ItemsSource="{Binding nodes}">
+                        <dxg:GridControl.Columns>
+                            <dxg:GridColumn Name="SettingName" Header="" FieldName="Name" ReadOnly="True" />
+                        </dxg:GridControl.Columns>
 
-                                    </dxg:TreeListNode>
-                                    <dxg:TreeListNode Content="Storage">
-                                        <dxg:TreeListNode.Nodes>
-                                            <dxg:TreeListNode Content="Bets">
-                                            </dxg:TreeListNode>
-                                            <dxg:TreeListNode Content="Strategies">
-                                            </dxg:TreeListNode>
-                                        </dxg:TreeListNode.Nodes>
-                                    </dxg:TreeListNode>
-                                    <dxg:TreeListNode Content="Notifications">
-                                    </dxg:TreeListNode>
-                                    <dxg:TreeListNode Content="Updates">
-                                    </dxg:TreeListNode>
-                                    <dxg:TreeListNode Content="Live Bets">
-                                        <dxg:TreeListNode.Nodes>
-                                            <dxg:TreeListNode Content="Chart">
-                                            </dxg:TreeListNode>
-                                            <dxg:TreeListNode Content="Feed">
-                                            </dxg:TreeListNode>
-                                        </dxg:TreeListNode.Nodes>
-                                    </dxg:TreeListNode>
-                                    <dxg:TreeListNode Content="Donate">
-                                    </dxg:TreeListNode>
-                                    <dxg:TreeListNode Content="Proxy">
-                                    </dxg:TreeListNode>
-                                </dxg:TreeListView.Nodes>
+                        <dxg:GridControl.View>
+                            <dxg:TreeListView Name="TreeListView" AutoWidth="True" KeyFieldName="Id" ParentFieldName="ParentId" TreeDerivationMode="Selfreference">
                             </dxg:TreeListView>
                         </dxg:GridControl.View>
+                        
                     </dxg:GridControl>
                 </dxlc:LayoutItem>
             </dxlc:LayoutGroup>
             <dxlc:LayoutGroup>
-                <dxwui:NavigationFrame Name="navFrame">
-                    
-                </dxwui:NavigationFrame>
+                <ContentControl Content="{Binding SelectedNode.UserControl}"/>
             </dxlc:LayoutGroup>
         </dxlc:LayoutGroup>
     </dxlc:LayoutControl>

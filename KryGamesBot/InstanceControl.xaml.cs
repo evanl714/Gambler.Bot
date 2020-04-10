@@ -14,6 +14,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,6 +26,8 @@ namespace KryGamesBot
     
     public partial class InstanceControl : UserControl, INotifyPropertyChanged
     {
+        string BetSettingsFile = "";
+        string PersonalSettingsFile = "";
         Doormat botIns = new Doormat();
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -67,14 +70,16 @@ namespace KryGamesBot
             botIns.CurrentGame = DoormatCore.Games.Games.Dice;
             if (File.Exists("personalsettings.json"))
             {
-                botIns.LoadPersonalSettings(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json");
+                PersonalSettingsFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json";
+                
             }
             //Check if global settings for this account exists
             else if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json"))
             {
-                botIns.LoadPersonalSettings(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json");
+                PersonalSettingsFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json";
             }
-            cbeStartegies.EditValue = botIns.Strategy.GetType().Name;
+            botIns.LoadPersonalSettings(PersonalSettingsFile);
+            cbeStartegies.EditValue = botIns.Strategy.StrategyName;
         }
 
         private void BotIns_OnStrategyChanged(object sender, EventArgs e)
@@ -96,6 +101,8 @@ namespace KryGamesBot
             }
             StratContent.VerticalAlignment = StrategyControl.TopAlign() ? VerticalAlignment.Top : VerticalAlignment.Stretch;
             StrategyControl.SetStrategy(botIns.Strategy);
+            if ((string)cbeStartegies.EditValue != botIns.Strategy.StrategyName) 
+                cbeStartegies.EditValue = botIns.Strategy.StrategyName;
             OnPropertyChanged(nameof(StrategyControl));
         }
 
@@ -274,9 +281,11 @@ namespace KryGamesBot
             InstanceName = Name;
             //load bet settings
             if (File.Exists(path+Name + ".betset"))
-            {   
-                botIns.LoadBetSettings(path + Name + ".betset");
+            {
+                BetSettingsFile = path + Name + ".betset";
+                
             }
+            botIns.LoadBetSettings(BetSettingsFile);
             //load layout
             if (File.Exists(path + Name +".layout"))
             {
@@ -367,9 +376,33 @@ namespace KryGamesBot
 
         private void cbeStartegies_EditValueChanged(object sender, DevExpress.Xpf.Editors.EditValueChangedEventArgs e)
         {
-            if (botIns.Strategy.StrategyName != e.NewValue.ToString())
-                botIns.Strategy = Activator.CreateInstance(botIns.Strategies[e.NewValue?.ToString()]) as DoormatBot.Strategies.BaseStrategy;
             
+            if (botIns.Strategy.StrategyName != e.NewValue.ToString()&&!string.IsNullOrWhiteSpace(BetSettingsFile))
+            {
+                botIns.SaveBetSettings(BetSettingsFile);
+                var Settings = botIns.LoadBetSettings(BetSettingsFile, false);
+                IEnumerable<PropertyInfo> Props = Settings.GetType().GetProperties().Where(m => typeof(DoormatBot.Strategies.BaseStrategy).IsAssignableFrom(m.PropertyType));
+                DoormatBot.Strategies.BaseStrategy newStrat = null;
+                foreach (PropertyInfo x in Props)
+                {
+                    DoormatBot.Strategies.BaseStrategy strat = (DoormatBot.Strategies.BaseStrategy)x.GetValue(Settings);
+                    if (strat != null)
+                    {
+                        PropertyInfo StratNameProp = strat.GetType().GetProperty("StrategyName");
+                        string nm = (string)StratNameProp.GetValue(strat);
+                        if (nm == e.NewValue.ToString())
+                        {
+                            newStrat = strat;
+                            break;
+                        }
+                    }
+                }
+                if (newStrat == null)
+                {
+                    newStrat = Activator.CreateInstance(botIns.Strategies[e.NewValue?.ToString()]) as DoormatBot.Strategies.BaseStrategy;                    
+                }
+                botIns.Strategy = newStrat;
+            }
         }
 
         private void BarButtonItem_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)

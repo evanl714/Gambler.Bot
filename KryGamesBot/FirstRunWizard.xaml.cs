@@ -69,7 +69,7 @@ In normal mode, settings are stored in your application settings, thus cannot be
             tbFinished.Text = @"That's it!
 
 You're all set up and ready to start. Finish this wizard to choose the site you want to play at and start betting!";
-            tbTheme.Text = "You can select from a list of themes and skins for KryGamesBot.";
+            
             DataContext = this;
             //DevExpress.Xpf.Core.Theme.Themes
             
@@ -87,10 +87,7 @@ You're all set up and ready to start. Finish this wizard to choose the site you 
 
         }
 
-        private void cbeTheme_EditValueChanged(object sender, DevExpress.Xpf.Editors.EditValueChangedEventArgs e)
-        {
-            ApplicationThemeHelper.ApplicationThemeName = cbeTheme.EditValue?.ToString();
-        }
+       
 
         private void Wizard_Next(object sender, CancelEventArgs e)
         {
