@@ -11,6 +11,7 @@ namespace KryGamesBotControls.Strategies
         void GameChanged(DoormatCore.Games.Games newGame);
         void SetStrategy(DoormatBot.Strategies.BaseStrategy Strategy);
         bool TopAlign();
+        void Saving();
 
     }
 }

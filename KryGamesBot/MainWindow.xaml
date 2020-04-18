@@ -37,9 +37,10 @@
                                 dxdo:RestoreLayoutOptions.RemoveOldLayoutControlItems="False"
                                 dxdo:RestoreLayoutOptions.RemoveOldLayoutGroups="False"
                                 dxdo:RestoreLayoutOptions.RemoveOldPanels="False"
+                                DockItemClosed="dlmMainMainLayout_DockItemClosed"
                                 >
             <dxdo:LayoutGroup>
-                <dxdo:DocumentGroup Name="mainTabs"  ClosePageButtonShowMode="InAllTabPagesAndTabControlHeader" >
+                <dxdo:DocumentGroup Name="mainTabs"  ClosePageButtonShowMode="InAllTabPagesAndTabControlHeader" DestroyOnClosingChildren="False" >
                     <dxdo:DocumentGroup.ControlBoxContentTemplate>
                         <DataTemplate>
                             <dx:SimpleButton Glyph="{dx:DXImage Image=Plus}" Content="New Tab" Click="SimpleButton_Click_1" />

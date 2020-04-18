@@ -2,6 +2,7 @@
 using DoormatBot.Helpers;
 using DoormatBot.Strategies;
 using DoormatCore.Sites;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -122,7 +123,7 @@ namespace KryGamesBotControls.Common
 
         private void btnSaveFile_Click(object sender, RoutedEventArgs e)
         {
-            DXSaveFileDialog dg = new DXSaveFileDialog();
+            SaveFileDialog dg = new SaveFileDialog();
             if (dg.ShowDialog()??false)
             {
                 CurrentSimulation.MoveLog(dg.FileName);

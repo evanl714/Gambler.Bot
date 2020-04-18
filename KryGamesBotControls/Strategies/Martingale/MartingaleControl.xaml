@@ -1,6 +1,6 @@
 ﻿<krygamesbotcontrols:BaseControl
     xmlns:krygamesbotcontrols="clr-namespace:KryGamesBotControls"
-    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"  xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"  x:Class="KryGamesBotControls.Strategies.Martingale"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"  xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"  x:Class="KryGamesBotControls.Strategies.Martingale.MartingaleControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -8,7 +8,10 @@
              xmlns:local="clr-namespace:KryGamesBotControls.Strategies"
              mc:Ignorable="d" Height="600" Width="400"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"  >
-    <dxlc:LayoutControl Name="mainControl" VerticalAlignment="Top" >
+    <dxlc:LayoutControl Name="mainControl" VerticalAlignment="Top" Orientation="Vertical" >
+        <dxlc:LayoutItem Name="lciStartControl" Content="{Binding StartControl}">
+            
+        </dxlc:LayoutItem>
         <dxlc:LayoutGroup Orientation="Vertical" View="Tabs">
             <dxlc:LayoutGroup Orientation="Vertical"  Header="Multiplier On Loss">
                 <dxlc:LayoutGroup Orientation="Vertical"  View="GroupBox" Header="Multiplier Settings">

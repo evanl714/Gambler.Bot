@@ -52,7 +52,7 @@ namespace KryGamesBotControls.Common.DBSetup
 
         private void SimpleButton_Click(object sender, RoutedEventArgs e)
         {
-            DXSaveFileDialog dg = new DXSaveFileDialog();
+            SaveFileDialog dg = new SaveFileDialog();
             dg.Filter = "Sqlite Databases (*.db)|*.db";
             if (dg.ShowDialog()??false)
             {

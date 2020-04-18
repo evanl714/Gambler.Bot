@@ -8,6 +8,7 @@ using KryGamesBotControls.Common;
 using KryGamesBotControls.Games;
 using KryGamesBotControls.Games.Dice;
 using KryGamesBotControls.Strategies;
+using KryGamesBotControls.Strategies.Martingale;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -66,7 +67,7 @@ namespace KryGamesBot
             botIns.OnStrategyChanged += BotIns_OnStrategyChanged;
             botIns.Strategy = new DoormatBot.Strategies.ProgrammerLUA();
             //(botIns.Strategy as DoormatBot.Strategies.Martingale).MinBet = 0.00000001m;
-            botIns.Strategy.Amount = 0.00000001m;
+            //botIns.Strategy.Amount = 0.00000001m;
             botIns.CurrentGame = DoormatCore.Games.Games.Dice;
             if (File.Exists("personalsettings.json"))
             {
@@ -90,12 +91,12 @@ namespace KryGamesBot
                 case "DAlembert": StrategyControl = new dAlembert();break;
                 case "Fibonacci": StrategyControl = new Fibonacci();break;
                 case "Labouchere": StrategyControl = new Labouchere();break;
-                case "Martingale": StrategyControl = new Martingale(); break;
+                case "Martingale": StrategyControl = new MartingaleControl(); break;
                 case "PresetList":
                 case "ProgrammerCS": StrategyControl = new ProgrammerModeCS(); break;
                 case "ProgrammerJS": StrategyControl = new ProgrammerModeJS(); break;
                 case "ProgrammerLUA": StrategyControl = new ProgrammerModeLUA();  break;
-                case "ProgrammerPython": StrategyControl = new ProgrammerModePY(); break;
+                case "ProgrammerPython": StrategyControl = new ProgrammerModePy(); break;
                 default:
                     botIns.Strategy = new DoormatBot.Strategies.Martingale(); break;
             }
@@ -124,6 +125,37 @@ namespace KryGamesBot
             SaveINstanceSettings(path + InstanceName + ".siteset");
         }
 
+        public void Removed()
+        {
+            botIns.StopDice("Application Closing");
+            if (botIns.CurrentSite != null)
+                botIns.CurrentSite.Disconnect();
+            string path = "";
+            if (MainWindow.Portable)
+                path = "";
+            else
+            {
+                path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\";
+            }
+            try
+            {
+                File.Delete(path + InstanceName + ".betset");
+            }
+            catch
+            {
+
+            }try
+            {
+                File.Delete(path + InstanceName + ".layout");
+            }
+            catch { }
+            try
+            {
+                File.Delete(path + InstanceName + ".siteset");
+            }
+            catch { }
+        }
+
         private void BotIns_OnSiteStatsUpdated(object sender, DoormatCore.Sites.StatsUpdatedEventArgs e)
         {
             SiteStats.Stats = e.NewStats;
@@ -148,6 +180,7 @@ namespace KryGamesBot
             }
             if (e.Success)
             {
+                LoginControl.LoginSucceeded();
                 //hide login, show other controls all over the place
                 lciLoginControl.Visibility = Visibility.Collapsed;
                 dlmMainLayout.Visibility = Visibility.Visible;
@@ -253,6 +286,7 @@ namespace KryGamesBot
                 itm.CheckedChanged += Itm_CheckedChanged;
                 itmGame.Items.Add(itm);
             }
+            Rename?.Invoke(this, new RenameEventArgs { newName = "Log in - "+NewSite?.SiteName });
         }
 
         private void Itm_CheckedChanged(object sender, ItemClickEventArgs e)
@@ -285,7 +319,7 @@ namespace KryGamesBot
                 BetSettingsFile = path + Name + ".betset";
                 
             }
-            botIns.LoadBetSettings(BetSettingsFile);
+            
             //load layout
             if (File.Exists(path + Name +".layout"))
             {
@@ -294,6 +328,7 @@ namespace KryGamesBot
             if (File.Exists(path + Name + ".siteset"))
             {
                 LoadInstanceSettings(path + Name + ".siteset");
+                botIns.LoadBetSettings(BetSettingsFile);
             }
             
             //load instance settings: site, currency, game, account, password if keepass is active and logged in.
@@ -324,7 +359,7 @@ namespace KryGamesBot
         void SaveINstanceSettings(string FileLocation)
         {
             string Settings = json.JsonSerializer<InstanceSettings>(new InstanceSettings { Site=botIns.CurrentSite?.GetType()?.Name, AutoLogin=false, Game=botIns.CurrentGame.ToString() });
-            File.WriteAllText(Settings, FileLocation); 
+            File.WriteAllText(FileLocation, Settings); 
         }
 
         private void LoginControl_OnLogin(object sender, KryGamesBotControls.Common.LoginEventArgs e)
@@ -428,7 +463,8 @@ namespace KryGamesBot
             botIns.StopDice("Logging Out");
             botIns.CurrentSite.Disconnect();
             dlmMainLayout.Visibility = Visibility.Collapsed;
-            LoginControl.Visibility = Visibility.Visible;
+            lciSelectSite1.Visibility = Visibility.Collapsed;
+            lciLoginControl.Visibility = Visibility.Visible;
         }
 
         private void bbtnSite_ItemClick(object sender, ItemClickEventArgs e)
@@ -436,7 +472,8 @@ namespace KryGamesBot
             botIns.StopDice("Changing Site");
             botIns.CurrentSite.Disconnect();
             dlmMainLayout.Visibility = Visibility.Collapsed;
-            SelectSite1.Visibility =  Visibility.Visible;
+            lciSelectSite1.Visibility =  Visibility.Visible;
+            lciLoginControl.Visibility = Visibility.Collapsed;
         }
 
         private void LayoutPanel_SizeChanged(object sender, SizeChangedEventArgs e)

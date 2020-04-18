@@ -12,12 +12,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace KryGamesBotControls.Strategies
+namespace KryGamesBotControls.Strategies.Martingale
 {
     /// <summary>
     /// Interaction logic for Martingale.xaml
     /// </summary>
-    public partial class Martingale : BaseControl, iStrategy
+    public partial class MartingaleControl : BaseControl, iStrategy
     {
         private DoormatBot.Strategies.Martingale currentStrat = null;
         public DoormatBot.Strategies.Martingale Strategy { 
@@ -26,9 +26,12 @@ namespace KryGamesBotControls.Strategies
             set { 
                 currentStrat = value;
                 OnPropertyChanged(nameof(Strategy)); 
-            } }
+            }
+        }
 
-        public Martingale()
+        public UserControl StartControl { get; set; } = new MartingaleDice();
+
+        public MartingaleControl()
         {
             InitializeComponent();
             
@@ -39,14 +42,21 @@ namespace KryGamesBotControls.Strategies
 
         public void GameChanged(DoormatCore.Games.Games newGame)
         {
-            
-            throw new NotImplementedException();
+            switch(newGame)
+            {
+                case DoormatCore.Games.Games.Dice:
+                default: StartControl = new MartingaleDice();break;
+
+            }
+            StartControl.DataContext = Strategy;
+            OnPropertyChanged("StartControl");
         }
 
         public void SetStrategy(BaseStrategy Strategy)
         {
             if (Strategy is DoormatBot.Strategies.Martingale)
                 this.Strategy = (Strategy as DoormatBot.Strategies.Martingale);
+            StartControl.DataContext = Strategy;
             OnPropertyChanged(nameof(Strategy));
         }
 
@@ -74,6 +84,11 @@ namespace KryGamesBotControls.Strategies
         public bool TopAlign()
         {
             return true;
+        }
+
+        public void Saving()
+        {
+            throw new NotImplementedException();
         }
     }
 }

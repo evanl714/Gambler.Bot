@@ -12,7 +12,7 @@
             
         </dxlc:LayoutGroup>
             <dxlc:LayoutItem Name="lciError" Visibility="Hidden">
-                <Label Name="lblError" Visibility="Visible" />
+                <Label Name="lblError" Visibility="Visible" Foreground="Red" HorizontalAlignment="Center"  />
             </dxlc:LayoutItem>
         <dxlc:LayoutGroup >
             <dxlc:LayoutItem >

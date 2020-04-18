@@ -81,33 +81,50 @@ namespace KryGamesBotControls.Common
 
         public void LoginFailed()
         {
+
             if (!Dispatcher.CheckAccess())
                 Dispatcher.Invoke(LoginFailed);
             else
             {
+                SetButtonState(true);
                 //hide login adnimation and show failure text
-                lblError.Content = "Could not log in.";
+                //lblError.Content = "Could not log in.";
                 lciError.Visibility = Visibility.Visible;
+                lblError.Content = "Could not log in.";
+                
+                waitind.Visibility = Visibility.Collapsed;
             }
-            waitind.Visibility = Visibility.Collapsed;
+            
+        }
+
+        void SetButtonState(bool enabled)
+        {
+            btnSkip.IsEnabled = btnLogIn.IsEnabled = btnBack.IsEnabled = enabled;
         }
 
         public void LoginSucceeded()
         {
-            foreach (BaseEdit x in logincontrols.Keys)
+            if (!Dispatcher.CheckAccess())
+                Dispatcher.Invoke(LoginSucceeded);
+            else
             {
-                LoginParameter tmp = logincontrols[x];
-                if (tmp.ClearAfterLogin)
+                SetButtonState(true);
+                foreach (BaseEdit x in logincontrols.Keys)
                 {
-                    //set required label
-                    x.EditValue = null;
+                    LoginParameter tmp = logincontrols[x];
+                    if (tmp.ClearAfterLogin)
+                    {
+                        //set required label
+                        x.EditValue = null;
+                    }
                 }
+                waitind.Visibility = Visibility.Collapsed;
             }
-            waitind.Visibility = Visibility.Collapsed;
         }
 
         private void btnLogIn_Click(object sender, RoutedEventArgs e)
         {
+            SetButtonState(false);
             waitind.Visibility = Visibility.Visible;
             //show login animation
             LoginEventArgs arg = new LoginEventArgs();
@@ -118,7 +135,9 @@ namespace KryGamesBotControls.Common
                 {
                     //set required label
                     lciError.Visibility = Visibility.Visible;
+                    waitind.Visibility = Visibility.Hidden;
                     lblError.Content = tmp.Name + " is required.";
+                    SetButtonState(true);
                     return;
                 }
                 
@@ -128,7 +147,7 @@ namespace KryGamesBotControls.Common
                 
 
             }
-            lblError.Visibility = Visibility.Hidden;
+            lciError.Visibility = Visibility.Hidden;
             OnLogin?.Invoke(this, arg);
         }
 

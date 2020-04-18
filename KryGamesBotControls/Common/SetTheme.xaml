@@ -8,11 +8,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              xmlns:helpers="clr-namespace:KryGamesBotControls.Helpers"
-             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core">
+             xmlns:dxt="http://schemas.devexpress.com/winfx/2008/xaml/core">
     <StackPanel >
         <TextBlock  Name="tbTheme" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         <dxe:ComboBoxEdit Name="cbeTheme" ItemsSource="{helpers:ThemesProvider}" AllowCollectionView="True" 
-                          EditValue="{Binding Path=(dx:ThemeManager.ThemeName), ElementName=win, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                          EditValue="{Binding Path=(dxt:ThemeManager.ThemeName), ElementName=win, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                           AllowUpdateTwoWayBoundPropertiesOnSynchronization="False" IsTextEditable="False" DisplayMember="Name" ValueMember="Name"
                                       EditValueChanged="cbeTheme_EditValueChanged"
                                       >

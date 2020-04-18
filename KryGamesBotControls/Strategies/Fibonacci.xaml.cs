@@ -52,5 +52,10 @@ namespace KryGamesBotControls.Strategies
         {
             return true;
         }
+
+        public void Saving()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -46,8 +46,6 @@ namespace KryGamesBot
             //dlmMainMainLayout.DataContext = this;
             AddNewCommand = new DelegateCommand(AddNew);
             ApplicationThemeHelper.ApplicationThemeName = "Office2019Black";
-            
-
         }
 
         public void AddNew()
@@ -57,11 +55,13 @@ namespace KryGamesBot
             AddNew(newPanel);
             
             mainTabs.Add(newPanel);
-
+            mainTabs.Visibility = Visibility.Visible;
+            
         }
 
         public void AddNew(DocumentPanel newPanel)
         {
+            
             newPanel.Caption = "Select a site";
             newPanel.Content = new InstanceControl();
             (newPanel.Content as InstanceControl).Rename += MainWindow_Rename;
@@ -109,10 +109,12 @@ namespace KryGamesBot
             {
                 //mainTabs.it
                 if (x is DocumentPanel)
-
-                {
-                    AddNew(x as DocumentPanel);
-                    added = true;
+                {                    
+                    if (!x.Closed)
+                    {
+                        AddNew(x as DocumentPanel);
+                        added = true;
+                    }
                 }
             }
             if (!added)
@@ -170,6 +172,21 @@ namespace KryGamesBot
 
         protected override void OnClosing(CancelEventArgs e)
         {
+            for (int i =0; i< documents.Count;i++)
+            {
+                var Tab = documents[i];
+                if (Tab.Closed)
+                {
+                    mainTabs.Remove(Tab);
+                    try
+                    {
+                        dlmMainMainLayout.ClosedPanels.Remove(Tab);                        
+                    }
+                    catch { }
+                    documents.RemoveAt(i--);
+                    (Tab.Content as InstanceControl).Removed();
+                }
+            }
             string layoutresult = "";
             //using (MemoryStream strm = new MemoryStream())
             {
@@ -288,6 +305,16 @@ namespace KryGamesBot
         private void bsAbout_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
         {
 
+        }
+
+        private void dlmMainMainLayout_DockItemClosed(object sender, DevExpress.Xpf.Docking.Base.DockItemClosedEventArgs e)
+        {
+            // ((sender as DocumentPanel).Content as InstanceControl).Removed();
+            if (e.Item is DocumentPanel pnl)
+            {
+                (pnl.Content as InstanceControl).Closing();
+                //documents.Remove(e.Item as DocumentPanel);
+            }
         }
     }
 }
