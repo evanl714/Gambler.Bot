@@ -51,8 +51,17 @@
                 <dxdo:LayoutGroup Orientation="Horizontal" >
                     <dxdo:LayoutGroup Orientation="Vertical" ItemWidth="300" >
                         <dxdo:LayoutPanel Caption="User Stats" ItemHeight="250" >
-                            <Common1:SiteStats Name="SiteStats" />
-                    </dxdo:LayoutPanel>
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal">
+                                    <dxe11:LookUpEdit Name="lueCurrencies" IsTextEditable="False"  EditValueChanged="lueCurrencies_EditValueChanged" />
+                                    <dxe11:LookUpEdit Name="lueGames" IsTextEditable="False" EditValueChanged="lueGames_EditValueChanged"  />
+                                    <dxec:SimpleButton Content="Sign Out" Name="btnSignOut" />
+                                    <dxec:SimpleButton Content="Change Site" Name="btnChangeSite" />
+                                </StackPanel>
+                                <Common1:SiteStats Name="SiteStats" />
+                            </StackPanel>
+                        </dxdo:LayoutPanel>
+                        
                         <dxdo:LayoutPanel Caption="Session Stats" ItemWidth="300">
                             <Common1:SessionStats Name="sessionStats"/>
                     </dxdo:LayoutPanel>
@@ -75,7 +84,10 @@
                                 </dxlc:LayoutGroup>
                                 <dxlc:LayoutGroup Orientation="Horizontal" DockPanel.Dock="Top">
                                     <dxlc:LayoutItem>
-                                        <dxec:SimpleButton Name="btcStart" Content="Start" Click="btcStart_Click" MaxHeight="25"/>
+                                        <dxec:SimpleButton Name="btcStart" Content="Start" Click="btcStart_Click" MaxHeight="25" IsEnabled="{Binding botIns.BotInsNotRunning}"/>
+                                    </dxlc:LayoutItem>
+                                    <dxlc:LayoutItem>
+                                        <dxec:SimpleButton Name="btnResume" Content="Resume" Click="btcStart_Click" MaxHeight="25" IsEnabled="{Binding botIns.BotInsNotRunning}"/>
                                     </dxlc:LayoutItem>
                                     <dxlc:LayoutItem>
                                             <dxec:SimpleButton Name="btnStop" Content="Stop" Click="btcStop_Click" MaxHeight="25"/>
@@ -90,11 +102,14 @@
                             </dxlc:LayoutControl>
                         </dxdo:LayoutPanel>
                         <dxdo:LayoutPanel Caption="Reset Settings" ItemWidth="400" >
-
-                    </dxdo:LayoutPanel>
+                            <Common1:SRCControls Name="StopAndReset"/>
+                        </dxdo:LayoutPanel>
                         <dxdo:LayoutPanel Caption="Advanced" ItemWidth="400" >
+                            
+                        </dxdo:LayoutPanel>
+                        <dxdo:LayoutPanel Caption="Custom Triggers" ItemWidth="400" >
 
-                    </dxdo:LayoutPanel>
+                        </dxdo:LayoutPanel>
                         <dxdo:LayoutPanel Caption="Manual" ItemWidth="400" Content="{Binding ManualBet}" >
                         
                     </dxdo:LayoutPanel>

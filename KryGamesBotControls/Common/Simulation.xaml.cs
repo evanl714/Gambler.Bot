@@ -71,10 +71,17 @@ namespace KryGamesBotControls.Common
             btnSaveFile.IsEnabled = false;
             CurrentSimulation.OnSimulationWriting += Tmp_OnSimulationWriting;
             CurrentSimulation.OnSimulationComplete += Tmp_OnSimulationComplete;
+            CurrentSimulation.OnBetSimulated += CurrentSimulation_OnBetSimulated;
             SimTimer.Start();
             CurrentSimulation.Start();
             sesseionStats1.Stats = CurrentSimulation.Stats;
         }
+
+        private void CurrentSimulation_OnBetSimulated(object sender, BetFinisedEventArgs e)
+        {
+           
+        }
+
         private void Tmp_OnSimulationComplete(object sender, EventArgs e)
         {
             

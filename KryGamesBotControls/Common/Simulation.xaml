@@ -7,34 +7,33 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:KryGamesBotControls.Common"
              xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <dxlc:LayoutControl>
+             mc:Ignorable="d" d:DesignWidth="800" Height="843">
+    <dxlc:LayoutControl Orientation="Vertical">
         <dxlc:LayoutGroup Orientation="Horizontal">
             <dxlc:LayoutGroup Orientation="Vertical" >
-            <dxlc:LayoutGroup Orientation="Vertical" MaxWidth="300">
-                <dxlc:LayoutItem Label="Starting Balance">
-                    <dxe:SpinEdit Name="txtBalance" DisplayFormatString="0.00000000" />
-                </dxlc:LayoutItem>
-                <dxlc:LayoutItem Label="Number of Bets">
-                    <dxe:SpinEdit Name="txtBets" Value="10000"/>
-                </dxlc:LayoutItem>
-                <dxlc:LayoutItem HorizontalAlignment="Right" >
-                    <dx:SimpleButton Content="Start Simulation" MaxWidth="130" Click="SimpleButton_Click" />
-                </dxlc:LayoutItem>
-            </dxlc:LayoutGroup>
-            <dxlc:LayoutGroup Header="Simulation Seeds" Orientation="Vertical" >
-                <dxlc:LayoutItem  Label="Server seed" >
+                <dxlc:LayoutGroup Orientation="Vertical" MaxWidth="300">
+                    <dxlc:LayoutItem Label="Starting Balance">
+                        <dxe:SpinEdit Name="txtBalance" Value="1" DisplayFormatString="0.00000000" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Number of Bets">
+                        <dxe:SpinEdit Name="txtBets" Value="10000"/>
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem HorizontalAlignment="Right" >
+                        <dx:SimpleButton Content="Start Simulation" MaxWidth="130" Click="SimpleButton_Click" />
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutGroup>
+                <dxlc:LayoutGroup Header="Simulation Seeds" Orientation="Vertical" >
+                    <dxlc:LayoutItem  Label="Server seed" >
                         <dxe:TextEdit IsReadOnly="True" EditValue="{Binding CurrentSimulation.serverseed}" />
-                </dxlc:LayoutItem>
-                <dxlc:LayoutItem Label="Server Seed Hash">
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Server Seed Hash">
                         <dxe:TextEdit  IsReadOnly="True" EditValue="{Binding CurrentSimulation.serverseed}"/>
-                    
-                </dxlc:LayoutItem>
-                <dxlc:LayoutItem Label="Client seed">
+
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Client seed">
                         <dxe:TextEdit  IsReadOnly="True" EditValue="{Binding CurrentSimulation.clientseed}"/>
                     </dxlc:LayoutItem>
-            </dxlc:LayoutGroup>
+                </dxlc:LayoutGroup>
                 <dxlc:LayoutGroup Orientation="Vertical">
                     <dxlc:LayoutItem Label="Balance">
                         <dxe:TextEdit IsReadOnly="True" EditValue="{Binding CurrentSimulation.Balance}" DisplayFormatString="0.00000000" />
@@ -56,11 +55,12 @@
                     </dxlc:LayoutItem>
                 </dxlc:LayoutGroup>
             </dxlc:LayoutGroup>
-        <dxlc:LayoutGroup >
+            <dxlc:LayoutGroup >
                 <dxlc:LayoutItem>
                     <local:SessionStats x:Name="sesseionStats1" />
                 </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
         </dxlc:LayoutGroup>
-        </dxlc:LayoutGroup>
+        
     </dxlc:LayoutControl>
 </krygamesbotcontrols:BaseControl>

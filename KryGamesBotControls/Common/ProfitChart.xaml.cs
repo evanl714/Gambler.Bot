@@ -22,6 +22,7 @@ namespace KryGamesBotControls.Common
     /// </summary>
     public partial class ProfitChart : UserControl
     {
+        public int MaxItems { get; set; } = 1000;
         RealTimeDataCollection DataPoints = new RealTimeDataCollection();
         public ProfitChart()
         {
@@ -47,6 +48,7 @@ namespace KryGamesBotControls.Common
         delegate void dAddPoint(decimal profit);
         public void AddPoint(decimal Profit)
         {
+            
             if (!Dispatcher.CheckAccess())
                 Dispatcher.BeginInvoke(new dAddPoint(AddPoint), Profit);
             else
@@ -54,6 +56,10 @@ namespace KryGamesBotControls.Common
                 ChartProfit += Profit;
                 DataPoints.Add(new SimpleDataPoint(ChartItems++, (double)ChartProfit));
                 //profitChart.AddPoint(ChartItems++, (double)Profit);
+                while (DataPoints.Count> MaxItems)
+                {
+                    DataPoints.RemoveRangeAt(0,  (DataPoints.Count - MaxItems) + 1);
+                }
             }
         }
         SolidColorBrush GreenBrush = new SolidColorBrush(Colors.Green);

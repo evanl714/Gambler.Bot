@@ -1,4 +1,5 @@
 ﻿using DevExpress.Xpf.Core;
+using DoormatBot.Helpers;
 using KryGamesBotControls.Common;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,8 @@ namespace KryGamesBot
     /// </summary>
     public partial class GlobalSettings : DXWindow, INotifyPropertyChanged
     {
+        public PersonalSettings Settings { get; set; }
+
         protected void OnPropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
@@ -33,7 +36,7 @@ namespace KryGamesBot
         public GlobalSettings()
         {
             nodes.Add(new SettingNode { Id = 1, Name = "Skin", UserControl= new SetTheme() });
-            nodes.Add(new SettingNode { Id = 2, Name = "KeePass", UserControl= new KeePassSettings() { FileName="" } });
+            nodes.Add(new SettingNode { Id = 2, Name = "KeePass", UserControl= new KeePassSettings() { FileName="" } });            
             nodes.Add(new SettingNode { Id = 3, Name = "Storage" });
             nodes.Add(new SettingNode { Id = 4, Name = "Bets", ParentId = 3, UserControl= new DatabaseSetup() });
             nodes.Add(new SettingNode { Id = 5, Name = "Strategies", ParentId = 3 });
@@ -52,7 +55,7 @@ namespace KryGamesBot
         }
 
         private void TreeListControl_SelectedItemChanged(object sender, DevExpress.Xpf.Grid.SelectedItemChangedEventArgs e)
-        {
+         {
             OnPropertyChanged("SelectedNode");
         }
     }

@@ -25,7 +25,11 @@ namespace KryGamesBotControls.Helpers
         public MySyntaxHighlightService(RichEditControl syntaxEditor)
         {
             this.syntaxEditor = syntaxEditor;
-            syntaxColors = new SyntaxColors(Theme.Default);
+            //syntaxEditor.Document.the
+            bool dark = false;
+            int BrushValue =  (int)syntaxEditor.AutoBackground.Color.R + (int)syntaxEditor.AutoBackground.Color.G + (int)syntaxEditor.AutoBackground.Color.B;
+            dark = (double)BrushValue / 3.0 < 125;
+            syntaxColors = new SyntaxColors(dark);
 
         }
 
@@ -98,8 +102,9 @@ namespace KryGamesBotControls.Helpers
             string ext = Path.GetExtension(syntaxEditor.Options.DocumentSaveOptions.CurrentFileName);
             
             ParserLanguageID lang_ID = ParserLanguage.FromFileExtension(ext);
+            
             if (ext.ToLower() == ".lua")
-                lang_ID = ParserLanguageID.JavaScript;
+                lang_ID = ParserLanguageID.Basic;
             else
             // Do not parse HTML or XML.
             if (lang_ID == ParserLanguageID.Html ||
@@ -123,27 +128,39 @@ namespace KryGamesBotControls.Helpers
     /// </summary>
     public class SyntaxColors
     {
+        bool Dark = false;
         static Color DefaultCommentColor { get { return Color.Green; } }
         static Color DefaultKeywordColor { get { return Color.Blue; } }
         static Color DefaultStringColor { get { return Color.Brown; } }
         static Color DefaultXmlCommentColor { get { return Color.Gray; } }
         static Color DefaultTextColor { get { return Color.Black; } }
-        Theme lookAndFeel;
+        
 
-        public Color CommentColor { get { return  DefaultCommentColor; } }
-        public Color KeywordColor { get { return  DefaultKeywordColor; } }
-        public Color TextColor { get { return DefaultTextColor; } }
-        public Color XmlCommentColor { get { return DefaultXmlCommentColor; } }
-        public Color StringColor { get { return DefaultStringColor; } }
+        public Color CommentColor { get { return GetCommonColorByName(nameof(CommentColor), DefaultCommentColor); } }
+        public Color KeywordColor { get { return GetCommonColorByName(nameof(KeywordColor), DefaultKeywordColor); ; } }
+        public Color TextColor { get { return GetCommonColorByName(nameof(TextColor), DefaultTextColor); ; } }
+        public Color XmlCommentColor { get { return GetCommonColorByName(nameof(XmlCommentColor), DefaultXmlCommentColor); ; } }
+        public Color StringColor { get { return GetCommonColorByName(nameof(StringColor), DefaultStringColor); ; } }
 
-        public SyntaxColors(Theme lookAndFeel)
+        public SyntaxColors(bool Dark)
         {
-            this.lookAndFeel = lookAndFeel;
+            this.Dark = Dark;
+
+
         }
 
         Color GetCommonColorByName(string colorName, Color defaultColor)
         {
-            
+            if (!Dark)
+                return defaultColor;
+            switch (colorName)
+            {
+                case nameof(CommentColor): return Color.LimeGreen; break;
+                case nameof(KeywordColor):return Color.DodgerBlue; break;
+                case nameof(StringColor):return Color.Peru; break;
+                case nameof(XmlCommentColor): return Color.LightGray; break;
+                case nameof(TextColor): return Color.GhostWhite; break;
+            }
             /*Skin skin = CommonSkins.GetSkin(lookAndFeel);
             if (skin == null)*/
                 return defaultColor;

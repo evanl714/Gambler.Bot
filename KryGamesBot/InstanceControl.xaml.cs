@@ -29,7 +29,7 @@ namespace KryGamesBot
     {
         string BetSettingsFile = "";
         string PersonalSettingsFile = "";
-        Doormat botIns = new Doormat();
+        public Doormat botIns = new Doormat();
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler<RenameEventArgs> Rename;
@@ -37,10 +37,16 @@ namespace KryGamesBot
         public iLiveBet LiveBets { get; set; }
         public iPlaceBet ManualBet { get; set; }
         public iStrategy StrategyControl { get; set; }
+
+        public bool BotInsNotRunning { get => botIns?.Running ?? false; }
         protected void OnPropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            //botIns.CurrentSite.Currencies
+            
         }
+            
+    
 
 
         public InstanceControl()
@@ -104,6 +110,7 @@ namespace KryGamesBot
             StrategyControl.SetStrategy(botIns.Strategy);
             if ((string)cbeStartegies.EditValue != botIns.Strategy.StrategyName) 
                 cbeStartegies.EditValue = botIns.Strategy.StrategyName;
+            StopAndReset.DataContext = botIns.BetSettings;
             OnPropertyChanged(nameof(StrategyControl));
         }
 
@@ -286,6 +293,10 @@ namespace KryGamesBot
                 itm.CheckedChanged += Itm_CheckedChanged;
                 itmGame.Items.Add(itm);
             }
+            lueCurrencies.ItemsSource = botIns.CurrentSite.Currencies;
+            lueCurrencies.EditValue = botIns.CurrentSite.CurrentCurrency;
+            lueGames.ItemsSource = botIns.CurrentSite.SupportedGames;
+            lueGames.EditValue = botIns.CurrentGame;
             Rename?.Invoke(this, new RenameEventArgs { newName = "Log in - "+NewSite?.SiteName });
         }
 
@@ -479,6 +490,19 @@ namespace KryGamesBot
         private void LayoutPanel_SizeChanged(object sender, SizeChangedEventArgs e)
         {
 //            lcStrategy.Height = e.NewSize.Height-10;
+        }
+
+        private void lueCurrencies_EditValueChanged(object sender, DevExpress.Xpf.Editors.EditValueChangedEventArgs e)
+        {
+            if (botIns.CurrentSite.CurrentCurrency!= (string)lueCurrencies.EditValue)
+                botIns.CurrentSite.Currency = Array.IndexOf(botIns.CurrentSite.Currencies, lueCurrencies.EditValue);
+ 
+        }
+
+        private void lueGames_EditValueChanged(object sender, DevExpress.Xpf.Editors.EditValueChangedEventArgs e)
+        {
+            if (botIns.CurrentGame != (DoormatCore.Games.Games)lueGames.EditValue)
+                botIns.CurrentGame = (DoormatCore.Games.Games)lueGames.EditValue;
         }
     }
     public class RenameEventArgs:EventArgs

@@ -14,6 +14,13 @@
         <dxc:ChartControl >
 
             <dxc:XYDiagram2D Name="xyDiagram">
+                <dxc:XYDiagram2D.AxisY>
+                    <dxc:AxisY2D>
+                        <dxc:AxisY2D.WholeRange>
+                            <dxc:Range dxc:AxisY2D.AlwaysShowZeroLevel="False"/>
+                        </dxc:AxisY2D.WholeRange>
+                    </dxc:AxisY2D>
+                </dxc:XYDiagram2D.AxisY>
                 <dxc:LineSeries2D x:Name="series" MarkerVisible="True" ArgumentDataMember="Argument" ValueDataMember="Value" ColorDataMember="Value" DataSource="{Binding}" >
                     <dxc:LineSeries2D.SegmentColorizer>
                         <dxc:TrendSegmentColorizer x:Name="trendSegmentColorizer"/>

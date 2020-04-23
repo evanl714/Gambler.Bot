@@ -124,7 +124,7 @@ namespace KryGamesBotControls.Strategies
 
         private void richEditControl1_Loaded(object sender, RoutedEventArgs e)
         {
-            
+            richEditControl1.ActiveView.AdjustColorsToSkins = true;
             if (richEditControl1.ActiveView != null)
             {
                 richEditControl1.ReplaceService<ISyntaxHighlightService>(new MySyntaxHighlightService(richEditControl1));
@@ -133,6 +133,7 @@ namespace KryGamesBotControls.Strategies
                 richEditControl1.Views.PrintLayoutView.AllowDisplayLineNumbers = true;
                 richEditControl1.Views.SimpleView.Padding = new System.Windows.Forms.Padding(40, 4, 0, 0);
             }
+            
             LoadDocument();
         }
 

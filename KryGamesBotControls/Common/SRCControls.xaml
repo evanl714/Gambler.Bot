@@ -1,0 +1,199 @@
+﻿<UserControl xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"  xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"  x:Class="KryGamesBotControls.Common.SRCControls"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:KryGamesBotControls.Common"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <dxlc:LayoutControl Orientation="Vertical">
+        <dxlc:LayoutGroup  View="GroupBox" Header="General" Orientation="Vertical">
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem LabelHorizontalAlignment="Center">
+                    <dxe:CheckEdit Content="Stop After" Name="chkEnableStopAfterBets" IsChecked="{Binding EnableStopAfterBets}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <dxe:SpinEdit Name="seStopAfterBets" EditValue="{Binding StopAfterBets}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Bets" LabelVerticalAlignment="Center"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem LabelHorizontalAlignment="Center">
+                    <dxe:CheckEdit Content="Stop After" Name="chkEnableResetAfterBets" IsChecked="{Binding EnableResetAfterBets}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <dxe:SpinEdit Name="seResetAfterBets" EditValue="{Binding ResetAfterBets}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Bets" LabelVerticalAlignment="Center"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            
+        </dxlc:LayoutGroup>
+        <dxlc:LayoutGroup  View="GroupBox" Header="On Loss" Orientation="Vertical">
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem LabelHorizontalAlignment="Center">
+                    <dxe:CheckEdit Content="Reset After" Name="chkEnableResetStreakLosses" IsChecked="{Binding EnableResetAfterLoseStreak}"/>                    
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <dxe:SpinEdit Name="seResetStreakLosses" EditValue="{Binding ResetAfterLoseStreak}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Losses in a row" LabelVerticalAlignment="Center"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem>
+                    <dxe:CheckEdit Content="Reset After every" Name="chkEnableResetLosses" IsChecked="{Binding EnableResetAfterLosses}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <dxe:SpinEdit Name="seResetLosses" EditValue="{Binding ResetAfterLosses}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Losses" LabelVerticalAlignment="Center"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem>
+                    <dxe:CheckEdit Content="Reset After" Name="chkEnableResetStreakLoss" EditValue="{Binding EnableResetAfterBtcStreakLoss}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <dxe:SpinEdit Name="seResetStreakLoss" DisplayFormatString="0.00000000" EditValue="{Binding ResetAfterBtcStreakLoss}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Value Lost in a row" LabelVerticalAlignment="Center"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem>
+                    <dxe:CheckEdit Content="Reset After Every" Name="chkEnableResetLoss" EditValue="{Binding EnableResetAfterBtcLoss}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <dxe:SpinEdit Name="seResetLoss" DisplayFormatString="0.00000000" EditValue="{Binding ResetAfterBtcLoss}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Value Lost" LabelVerticalAlignment="Center"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem>
+                    <dxe:CheckEdit Content="Reset After" Name="chkEnableResetLossSinceMaxProfit"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <dxe:SpinEdit Name="seResetLossSinceMaxprofit" DisplayFormatString="0.00000000"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Loss since max profit" LabelVerticalAlignment="Center"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem>
+                    <dxe:CheckEdit Content="Stop After" Name="chkEnableStopStreakLosses" EditValue="{Binding EnableStopAfterLoseStreak}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <dxe:SpinEdit Name="seStopStreakLosses" EditValue="{Binding StopAfterLoseStreak}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Losses in a row"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem>
+                    <dxe:CheckEdit Content="Stop After every" Name="chkEnableStopLosses" EditValue="{Binding EnableStopAfterLosses}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <dxe:SpinEdit Name="seStopLosses" EditValue="{Binding StopAfterLosses}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Losses"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem>
+                    <dxe:CheckEdit Content="Stop After" Name="chkEnableStopStreakLoss" EditValue="{Binding EnableStopAfterBtcLoseStreak}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <dxe:SpinEdit Name="seStopStreakLoss" DisplayFormatString="0.00000000" EditValue="{Binding StopAfterBtcLoseStreak}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Value Lost in a row"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem>
+                    <dxe:CheckEdit Content="Stop After Every" Name="chkEnableStopLoss" EditValue="{Binding EnableStopAfterBtcLoss}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <dxe:SpinEdit Name="seStopLoss" DisplayFormatString="0.00000000" EditValue="{Binding StopAfterBtcLoss}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Value Lost"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+        </dxlc:LayoutGroup>
+
+        <dxlc:LayoutGroup  View="GroupBox" Header="On Win" Orientation="Vertical">
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem LabelHorizontalAlignment="Center">
+                    <dxe:CheckEdit Content="Reset After" Name="chkEnableResetStreakWins" EditValue="{Binding EnableResetAfterWinStreak}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <dxe:SpinEdit Name="seResetStreakWins" EditValue="{Binding ResetAfterWinStreak}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Wins in a row" LabelVerticalAlignment="Center"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem>
+                    <dxe:CheckEdit Content="Reset After every" Name="chkEnableResetWins" EditValue="{Binding EnableResetAfterWins}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <dxe:SpinEdit Name="seResetWins" EditValue="{Binding ResetAfterWins}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Wins" LabelVerticalAlignment="Center"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem>
+                    <dxe:CheckEdit Content="Reset After" Name="chkEnableResetStreakWin" EditValue="{Binding EnableResetAfterBtcStreakWin}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <dxe:SpinEdit Name="seResetStreakWin" DisplayFormatString="0.00000000" EditValue="{Binding ResetAfterBtcStreakWin}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Value Lost in a row" LabelVerticalAlignment="Center"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem>
+                    <dxe:CheckEdit Content="Reset After Every" Name="chkEnableResetWin" EditValue="{Binding EnableResetAfterBtcWin}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <dxe:SpinEdit Name="seResetWin" DisplayFormatString="0.00000000" EditValue="{Binding ResetAfterBtcWin}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Value Lost" LabelVerticalAlignment="Center"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem>
+                    <dxe:CheckEdit Content="Reset After" Name="chkEnableResetWinSinceMaxProfit"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <dxe:SpinEdit Name="seResetWinSinceMaxprofit" DisplayFormatString="0.00000000"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Win since min profit" LabelVerticalAlignment="Center"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem>
+                    <dxe:CheckEdit Content="Stop After" Name="chkEnableStopStreakWins" EditValue="{Binding EnableStopAfterWinStreak}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <dxe:SpinEdit Name="seStopStreakWins" EditValue="{Binding StopAfterWinStreak}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Wins in a row"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem>
+                    <dxe:CheckEdit Content="Stop After every" Name="chkEnableStopWins" EditValue="{Binding EnableStopAfterWins}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <dxe:SpinEdit Name="seStopWins" EditValue="{Binding StopAfterWins}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Wins"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem>
+                    <dxe:CheckEdit Content="Stop After" Name="chkEnableStopStreakWin" EditValue="{Binding EnableStopAfterBtcWinStreak}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <dxe:SpinEdit Name="seStopStreakWin" DisplayFormatString="0.00000000" EditValue="{Binding StopAfterBtcWinStreak}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Value Lost in a row"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem>
+                    <dxe:CheckEdit Content="Stop After Every" Name="chkEnableStopWin" EditValue="{Binding EnableStopAfterBtcWin}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <dxe:SpinEdit Name="seStopWin" DisplayFormatString="0.00000000" EditValue="{Binding StopAfterBtcWin}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Value Lost"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+        </dxlc:LayoutGroup>
+    </dxlc:LayoutControl>
+</UserControl>

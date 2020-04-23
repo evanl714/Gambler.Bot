@@ -52,18 +52,28 @@ namespace KryGamesBot
         {
             DocumentPanel newPanel = new DocumentPanel();
             newPanel.Name = "_" + Guid.NewGuid().ToString().Replace("-", "");
-            AddNew(newPanel);
+            AddNew(newPanel, true);
             
             mainTabs.Add(newPanel);
             mainTabs.Visibility = Visibility.Visible;
             
         }
 
-        public void AddNew(DocumentPanel newPanel)
+        public void AddNew(DocumentPanel newPanel, bool ActualNew=false)
         {
-            
             newPanel.Caption = "Select a site";
             newPanel.Content = new InstanceControl();
+            if (ActualNew && dlmMainMainLayout.ActiveDockItem is DocumentPanel ActivePanel && ActivePanel.Content is InstanceControl ActiveInstance)
+            {
+
+                (newPanel.Content as InstanceControl).botIns.StoredBetSettings = 
+                    DoormatCore.Helpers.CopyHelper.CreateCopy<DoormatBot.Doormat.ExportBetSettings>(
+                        ActiveInstance.botIns.StoredBetSettings);
+                (newPanel.Content as InstanceControl).botIns.Strategy = (newPanel.Content as InstanceControl).botIns.StoredBetSettings.GetStrat();
+
+
+
+            }
             (newPanel.Content as InstanceControl).Rename += MainWindow_Rename;
             documents.Add(newPanel);            
             (newPanel.Content as InstanceControl).LoadSettings(newPanel.Name);
@@ -279,6 +289,7 @@ namespace KryGamesBot
         private void bchk_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
         {
             GlobalSettings tmp = new GlobalSettings();
+            //tmp.Settings = personal settings instance being used?
             tmp.Show();
         }
 
