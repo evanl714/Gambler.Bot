@@ -1,0 +1,158 @@
+﻿<UserControl xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"  xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"  x:Class="KryGamesBotControls.Common.AdvancedPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:KryGamesBotControls.Common"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="500">
+    <dxlc:LayoutControl Orientation="Vertical">
+        <dxlc:LayoutGroup View="GroupBox" Header="Auto Withdraw/Tip" Orientation="Vertical">
+            <dxlc:LayoutGroup View="GroupBox" Header="Upper Limit" Orientation="Vertical">
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem  Width="25">
+                    <dxe:CheckEdit EditValue="{Binding EnableUpperLimit}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <dxe:ComboBoxEdit EditValue="{Binding UpperLimitAction}" >
+                        <dxe:ComboBoxEdit.Items>
+                            <dxe:ComboBoxEditItem Content="Withdraw" />
+                            <dxe:ComboBoxEditItem Content="Tip" />
+                            <dxe:ComboBoxEditItem Content="Stop" />
+                        </dxe:ComboBoxEdit.Items>
+                    </dxe:ComboBoxEdit>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="When">
+                    <dxe:ComboBoxEdit EditValue="{Binding UpperLimitCompare}" >
+                        <dxe:ComboBoxEdit.Items>
+                                <dxe:ComboBoxEditItem Content="Profit"/>
+                                <dxe:ComboBoxEditItem Content="Balance"/>
+                            </dxe:ComboBoxEdit.Items>
+                    </dxe:ComboBoxEdit>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label=">">
+                    <dxe:SpinEdit EditValue="{Binding UpperLimit}" />
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+                <dxlc:LayoutItem Label="Amount">
+                    <dxe:SpinEdit DisplayFormatString="0.00000000" EditValue="{Binding UpperLimitActionAmount}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Address/User">
+                    <dxe:TextEdit EditValue="{Binding UpperLimitAddress}" />
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup View="GroupBox" Header="Lower Limit" Orientation="Vertical">
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem Width="25" VerticalAlignment="Center">
+                        <dxe:CheckEdit EditValue="{Binding EnableLowerLimit}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                        <dxe:ComboBoxEdit EditValue="{Binding LowerLimitAction}">
+                            <dxe:ComboBoxEdit.Items>
+                                <dxe:ComboBoxEditItem Content="Withdraw" />
+                                <dxe:ComboBoxEditItem Content="Tip" />
+                                <dxe:ComboBoxEditItem Content="Stop" />
+                            </dxe:ComboBoxEdit.Items>
+                        </dxe:ComboBoxEdit>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="When">
+                        <dxe:ComboBoxEdit EditValue="{Binding LowerLimitCompare}">
+                            <dxe:ComboBoxEdit.Items>
+                                <dxe:ComboBoxEditItem Content="Profit"/>
+                                <dxe:ComboBoxEditItem Content="Balance"/>
+                            </dxe:ComboBoxEdit.Items>
+                        </dxe:ComboBoxEdit>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="&lt;">
+                    <dxe:SpinEdit EditValue="{Binding LowerLimit}" />
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+                <dxlc:LayoutItem Label="Amount">
+                    <dxe:SpinEdit DisplayFormatString="0.00000000" EditValue="{Binding LowerLimitActionAmount}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Address/User">
+                    <dxe:TextEdit EditValue="{Binding LowerLimitAddress}" />
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            
+        </dxlc:LayoutGroup>
+        
+        <dxlc:LayoutGroup View="GroupBox" Header="Reset Seed" Orientation="Vertical">
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem Width="25">
+                    <dxe:CheckEdit EditValue="{Binding EnableResetSeedBets}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Reset after Every">
+                    <dxe:SpinEdit EditValue="{Binding ResetSeedBets}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Bets"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem Width="25">
+                    <dxe:CheckEdit EditValue="{Binding EnableResetSeedWins}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Reset after Every">
+                    <dxe:SpinEdit EditValue="{Binding ResetSeedWins}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Wins"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem Width="25">
+                    <dxe:CheckEdit EditValue="{Binding EnableResetSeedWinStreak}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Reset after Every">
+                    <dxe:SpinEdit EditValue="{Binding ResetSeedWinStreak}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Wins in a row"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem Width="25">
+                    <dxe:CheckEdit EditValue="{Binding EnableResetSeedLosses}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Reset after Every">
+                    <dxe:SpinEdit EditValue="{Binding ResetSeedLosses}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Losses"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem Width="25">
+                    <dxe:CheckEdit EditValue="{Binding EnableResetSeedLossStreak}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Reset after Every">
+                    <dxe:SpinEdit EditValue="{Binding ResetSeedLossStreak}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Losses in a row"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem Width="25">
+                    <dxe:CheckEdit EditValue="{Binding EnableResetSeedProfit}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Reset after Every">
+                    <dxe:SpinEdit EditValue="{Binding ResetSeedProfit}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Profit"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem Width="25">
+                    <dxe:CheckEdit EditValue="{Binding EnableResetSeedLoss}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Reset after Every">
+                    <dxe:SpinEdit EditValue="{Binding ResetSeedLoss}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Loss"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+        </dxlc:LayoutGroup>
+        <dxlc:LayoutGroup View="GroupBox" Header="Bot Speed" Orientation="Vertical">
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem Width="25">
+                    <dxe:CheckEdit EditValue="{Binding EnableBotSpeed}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Bot Speed">
+                    <dxe:SpinEdit EditValue="{Binding BotSpeed}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Bets per second"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <TextBlock TextWrapping="Wrap">By default, the bot bets as fast as it can. The bot speed setting should only be enabled if you intend to slow down the betting speed or if you are getting errors from the site.</TextBlock>
+        </dxlc:LayoutGroup>
+    </dxlc:LayoutControl>
+</UserControl>

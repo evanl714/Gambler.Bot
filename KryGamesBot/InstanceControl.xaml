@@ -105,7 +105,7 @@
                             <Common1:SRCControls Name="StopAndReset"/>
                         </dxdo:LayoutPanel>
                         <dxdo:LayoutPanel Caption="Advanced" ItemWidth="400" >
-                            
+                            <Common1:AdvancedPanel Name="AdvancedSettings" />
                         </dxdo:LayoutPanel>
                         <dxdo:LayoutPanel Caption="Custom Triggers" ItemWidth="400" >
 

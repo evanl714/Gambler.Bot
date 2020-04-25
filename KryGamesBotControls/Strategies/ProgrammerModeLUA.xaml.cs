@@ -112,11 +112,17 @@ namespace KryGamesBotControls.Strategies
                 string path = Strat?.FileName;
                 if (Strat != null)
                     Strat.FileName = path;
+                try
+                {
+                    richEditControl1.LoadDocument(path, DocumentFormat.PlainText);
+                    richEditControl1.DocumentSaveOptions.CurrentFormat = DocumentFormat.PlainText;
+                    richEditControl1.DocumentSaveOptions.DefaultFormat = DocumentFormat.PlainText;
+                    txtFileName.Text = System.IO.Path.GetFileName(richEditControl1.DocumentSaveOptions.CurrentFileName);
+                }
+                catch
+                {
 
-                richEditControl1.LoadDocument(path, DocumentFormat.PlainText);
-                richEditControl1.DocumentSaveOptions.CurrentFormat = DocumentFormat.PlainText;
-                richEditControl1.DocumentSaveOptions.DefaultFormat = DocumentFormat.PlainText;
-                txtFileName.Text = System.IO.Path.GetFileName(richEditControl1.DocumentSaveOptions.CurrentFileName);
+                }
             }
         }
 

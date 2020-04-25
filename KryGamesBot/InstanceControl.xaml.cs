@@ -111,6 +111,7 @@ namespace KryGamesBot
             if ((string)cbeStartegies.EditValue != botIns.Strategy.StrategyName) 
                 cbeStartegies.EditValue = botIns.Strategy.StrategyName;
             StopAndReset.DataContext = botIns.BetSettings;
+            AdvancedSettings.DataContext = botIns.BetSettings;
             OnPropertyChanged(nameof(StrategyControl));
         }
 
