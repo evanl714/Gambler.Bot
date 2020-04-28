@@ -20,6 +20,7 @@ namespace KryGamesBotControls.Common.DBSetup
     /// </summary>
     public partial class SqlIte : BaseControl, iDatabaseForm
     {
+        public bool Portable { get; set; }
         private string fileName="KryGamesBot.db";
 
         public string FileName
@@ -32,6 +33,9 @@ namespace KryGamesBotControls.Common.DBSetup
         {
             InitializeComponent();
             DataContext = this;
+            if (Portable)
+                FileName = "KryGamesBot.db";
+            else
             FileName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\KryGamesBot.db";
         }
 

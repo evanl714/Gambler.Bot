@@ -37,7 +37,7 @@
                             <dxlc:LayoutItem Label="Best Streak" >
                                 <dxe:TextEdit IsReadOnly="True" Name="lblBestWinStreak"  EditValue="{Binding Stats.BestStreak}"/>
                             </dxlc:LayoutItem>
-                            <dxlc:LayoutItem Label="Works Streak" >
+                            <dxlc:LayoutItem Label="Worst Streak" >
                                 <dxe:TextEdit IsReadOnly="True" Name="lblWorstLoseStreak"  EditValue="{Binding Stats.WorstStreak}"/>
                             </dxlc:LayoutItem>
                             <dxlc:LayoutItem Label="Profit / Hour" >

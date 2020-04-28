@@ -21,12 +21,7 @@
     </Window.Resources>
     <Grid>
         <dxco:Wizard Cancel="Wizard_Cancel" Next="Wizard_Next" Finish="wzrd_Finish" AnimationType="Fade" Name="wzrd">
-            <dxco:WelcomeWizardPage HeaderBackground="AliceBlue" Header="KryGamesBot Setup">
-                <dxco:WelcomeWizardPage.SideContent>
-                    <Border Background="Cornsilk">
-                        <TextBlock Text="Side content" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="3"/>
-                    </Border>
-                </dxco:WelcomeWizardPage.SideContent>
+            <dxco:WelcomeWizardPage Header="KryGamesBot Setup">                
                 <TextBlock TextWrapping="WrapWithOverflow" Name="tbMainIntro" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </dxco:WelcomeWizardPage>
             <dxco:WizardPage Header="Look and Feel">

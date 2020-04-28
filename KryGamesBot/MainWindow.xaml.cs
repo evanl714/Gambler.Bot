@@ -71,8 +71,6 @@ namespace KryGamesBot
                         ActiveInstance.botIns.StoredBetSettings);
                 (newPanel.Content as InstanceControl).botIns.Strategy = (newPanel.Content as InstanceControl).botIns.StoredBetSettings.GetStrat();
 
-
-
             }
             (newPanel.Content as InstanceControl).Rename += MainWindow_Rename;
             documents.Add(newPanel);            

@@ -16,9 +16,13 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="b2v" />
     </UserControl.Resources>
-    <DockPanel LastChildFill="True" dxb:BarManager.ToolbarGlyphSize="Small" >
-        
-        <dxb:BarContainerControl DockPanel.Dock="Top" ContainerType="Top">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <dxb:BarContainerControl DockPanel.Dock="Top" ContainerType="Top" Grid.Row="0">
 
             <dxb:ToolBarControl>
                 <dxb:BarSubItem Name="bsSite" CategoryName="BuiltInMenus" Content="Site">
@@ -35,88 +39,101 @@
                     <dxb:BarButtonItem BarItemName="bbtnSimulator" Content="Simulator" ItemClick="BarButtonItem_ItemClick"/>
                     <dxb:BarButtonItem BarItemName="bbtnrollVerifier" Content="Roll Verifier" />
                     <dxb:BarButtonItem BarItemName="bbtnBetHistory" Content="Bet History" />
-                    
+
                 </dxb:BarSubItem>
+
             </dxb:ToolBarControl>
-            
+
         </dxb:BarContainerControl>
-        <dxlc:LayoutGroup>
-        <dxlc:LayoutItem Name="lciSelectSite1" Visibility="Visible">
-            <Common1:SelectSite Name="SelectSite1" OnSiteSelected="SelectSite1_OnSiteSelected" />
-        </dxlc:LayoutItem>
-        <dxlc:LayoutItem Name="lciLoginControl"  Visibility="Collapsed" >
-            <Common1:Login Name="LoginControl"  OnLogin="LoginControl_OnLogin" OnBack="LoginControl_OnBack" OnSkip="LoginControl_OnSkip"/>
-        </dxlc:LayoutItem>
-            <dxdo:DockLayoutManager dxdo:RestoreLayoutOptions.AddNewPanels="True" FloatingMode="Desktop" Visibility="Collapsed" Name="dlmMainLayout" ClosedPanelsBarVisibility="Auto" ClosedPanelsBarPosition="Top" >
-                <dxdo:LayoutGroup Orientation="Horizontal" >
-                    <dxdo:LayoutGroup Orientation="Vertical" ItemWidth="300" >
-                        <dxdo:LayoutPanel Caption="User Stats" ItemHeight="250" >
-                            <StackPanel Orientation="Vertical">
-                                <StackPanel Orientation="Horizontal">
-                                    <dxe11:LookUpEdit Name="lueCurrencies" IsTextEditable="False"  EditValueChanged="lueCurrencies_EditValueChanged" />
-                                    <dxe11:LookUpEdit Name="lueGames" IsTextEditable="False" EditValueChanged="lueGames_EditValueChanged"  />
-                                    <dxec:SimpleButton Content="Sign Out" Name="btnSignOut" />
-                                    <dxec:SimpleButton Content="Change Site" Name="btnChangeSite" />
+        <DockPanel LastChildFill="True" dxb:BarManager.ToolbarGlyphSize="Small" Grid.Row="1" >
+
+            
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem Name="lciSelectSite1" Visibility="Visible">
+                    <Common1:SelectSite Name="SelectSite1" OnSiteSelected="SelectSite1_OnSiteSelected" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Name="lciLoginControl"  Visibility="Collapsed" >
+                    <Common1:Login Name="LoginControl"  OnLogin="LoginControl_OnLogin" OnBack="LoginControl_OnBack" OnSkip="LoginControl_OnSkip"/>
+                </dxlc:LayoutItem>
+                <dxdo:DockLayoutManager dxdo:RestoreLayoutOptions.AddNewPanels="True" FloatingMode="Desktop" Visibility="Collapsed" Name="dlmMainLayout" ClosedPanelsBarVisibility="Auto" ClosedPanelsBarPosition="Top" >
+                    <dxdo:LayoutGroup Orientation="Horizontal" >
+                        <dxdo:LayoutGroup Orientation="Vertical" ItemWidth="300" >
+                            <dxdo:LayoutPanel Caption="User Stats" ItemHeight="250" >
+                                <StackPanel Orientation="Vertical">
+                                    <StackPanel Orientation="Horizontal">
+                                        <dxe11:LookUpEdit Name="lueCurrencies" IsTextEditable="False"  EditValueChanged="lueCurrencies_EditValueChanged" />
+                                        <dxe11:LookUpEdit Name="lueGames" IsTextEditable="False" EditValueChanged="lueGames_EditValueChanged"  />
+                                        <dxec:SimpleButton Content="Sign Out" Name="btnSignOut" />
+                                        <dxec:SimpleButton Content="Change Site" Name="btnChangeSite" />
+                                    </StackPanel>
+                                    <Common1:SiteStats Name="SiteStats" />
                                 </StackPanel>
-                                <Common1:SiteStats Name="SiteStats" />
-                            </StackPanel>
-                        </dxdo:LayoutPanel>
-                        
-                        <dxdo:LayoutPanel Caption="Session Stats" ItemWidth="300">
-                            <Common1:SessionStats Name="sessionStats"/>
-                    </dxdo:LayoutPanel>
-                </dxdo:LayoutGroup>
-                    <dxdo:LayoutGroup Orientation="Vertical" >
-                        <dxdo:LayoutPanel Caption="Profit Chart" >
-                        <Common1:ProfitChart Name="ProfitChart1" />
-                    </dxdo:LayoutPanel>
-                        <dxdo:LayoutPanel Caption="Live Bets" Content="{Binding LiveBets}">
-                            
-                    </dxdo:LayoutPanel>
-                </dxdo:LayoutGroup>
-                <dxdo:TabbedGroup Orientation="Horizontal" ItemWidth="400">
-                        <dxdo:LayoutPanel Caption="Strategty" VerticalAlignment="Stretch" SizeChanged="LayoutPanel_SizeChanged">
-                            <dxlc:LayoutControl Orientation="Vertical" Name="lcStrategy" VerticalAlignment="Top">
-                                <dxlc:LayoutGroup Orientation="Horizontal" >
-                                    <dxlc:LayoutItem>
-                                        <dxe11:LookUpEdit Name="cbeStartegies" EditValueChanged="cbeStartegies_EditValueChanged" IsTextEditable="False"  />
-                                    </dxlc:LayoutItem>
-                                </dxlc:LayoutGroup>
-                                <dxlc:LayoutGroup Orientation="Horizontal" DockPanel.Dock="Top">
-                                    <dxlc:LayoutItem>
-                                        <dxec:SimpleButton Name="btcStart" Content="Start" Click="btcStart_Click" MaxHeight="25" IsEnabled="{Binding botIns.BotInsNotRunning}"/>
-                                    </dxlc:LayoutItem>
-                                    <dxlc:LayoutItem>
-                                        <dxec:SimpleButton Name="btnResume" Content="Resume" Click="btcStart_Click" MaxHeight="25" IsEnabled="{Binding botIns.BotInsNotRunning}"/>
-                                    </dxlc:LayoutItem>
-                                    <dxlc:LayoutItem>
+                            </dxdo:LayoutPanel>
+
+                            <dxdo:LayoutPanel Caption="Session Stats" ItemWidth="300">
+                                <Common1:SessionStats Name="sessionStats"/>
+                            </dxdo:LayoutPanel>
+                        </dxdo:LayoutGroup>
+                        <dxdo:LayoutGroup Orientation="Vertical" >
+                            <dxdo:LayoutPanel Caption="Profit Chart" >
+                                <Common1:ProfitChart Name="ProfitChart1" />
+                            </dxdo:LayoutPanel>
+                            <dxdo:LayoutPanel Caption="Live Bets" Content="{Binding LiveBets}">
+
+                            </dxdo:LayoutPanel>
+                        </dxdo:LayoutGroup>
+                        <dxdo:TabbedGroup Orientation="Horizontal" ItemWidth="400">
+                            <dxdo:LayoutPanel Caption="Strategy" VerticalAlignment="Stretch" SizeChanged="LayoutPanel_SizeChanged">
+                                <dxlc:LayoutControl Orientation="Vertical" Name="lcStrategy" VerticalAlignment="Top">
+                                    <dxlc:LayoutGroup Orientation="Horizontal" >
+                                        <dxlc:LayoutItem>
+                                            <dxe11:LookUpEdit Name="cbeStartegies" EditValueChanged="cbeStartegies_EditValueChanged" IsTextEditable="False"  />
+                                        </dxlc:LayoutItem>
+                                    </dxlc:LayoutGroup>
+                                    <dxlc:LayoutGroup Orientation="Horizontal" DockPanel.Dock="Top">
+                                        <dxlc:LayoutItem>
+                                            <dxec:SimpleButton Name="btcStart" Content="Start" Click="btcStart_Click" MaxHeight="25" IsEnabled="{Binding botIns.BotInsNotRunning}"/>
+                                        </dxlc:LayoutItem>
+                                        <dxlc:LayoutItem>
+                                            <dxec:SimpleButton Name="btnResume" Content="Resume" Click="btnResume_Click" MaxHeight="25" IsEnabled="{Binding botIns.BotInsNotRunning}"/>
+                                        </dxlc:LayoutItem>
+                                        <dxlc:LayoutItem>
                                             <dxec:SimpleButton Name="btnStop" Content="Stop" Click="btcStop_Click" MaxHeight="25"/>
-                                    </dxlc:LayoutItem>
-                                    <dxlc:LayoutItem >
+                                        </dxlc:LayoutItem>
+                                        <dxlc:LayoutItem >
                                             <dxec:SimpleButton Name="btnStopWin" Content="Stop On Win" Click="btnStopWin_Click" MaxHeight="25"/>
-                                    </dxlc:LayoutItem>
-                                </dxlc:LayoutGroup>
+                                        </dxlc:LayoutItem>
+                                    </dxlc:LayoutGroup>
 
-                                <ContentControl Name="StratContent" VerticalAlignment="Stretch" Content="{Binding StrategyControl}"/>
-                                
-                            </dxlc:LayoutControl>
-                        </dxdo:LayoutPanel>
-                        <dxdo:LayoutPanel Caption="Reset Settings" ItemWidth="400" >
-                            <Common1:SRCControls Name="StopAndReset"/>
-                        </dxdo:LayoutPanel>
-                        <dxdo:LayoutPanel Caption="Advanced" ItemWidth="400" >
-                            <Common1:AdvancedPanel Name="AdvancedSettings" />
-                        </dxdo:LayoutPanel>
-                        <dxdo:LayoutPanel Caption="Custom Triggers" ItemWidth="400" >
+                                    <ContentControl Name="StratContent" VerticalAlignment="Stretch" Content="{Binding StrategyControl}"/>
 
-                        </dxdo:LayoutPanel>
-                        <dxdo:LayoutPanel Caption="Manual" ItemWidth="400" Content="{Binding ManualBet}" >
-                        
-                    </dxdo:LayoutPanel>
-                </dxdo:TabbedGroup>
-            </dxdo:LayoutGroup>
-        
-        </dxdo:DockLayoutManager>
-        </dxlc:LayoutGroup>
-    </DockPanel>
+                                </dxlc:LayoutControl>
+                            </dxdo:LayoutPanel>
+                            <dxdo:LayoutPanel Caption="Reset Settings" ItemWidth="400" >
+                                <Common1:SRCControls Name="StopAndReset"/>
+                            </dxdo:LayoutPanel>
+                            <dxdo:LayoutPanel Caption="Advanced" ItemWidth="400" >
+                                <Common1:AdvancedPanel Name="AdvancedSettings" />
+                            </dxdo:LayoutPanel>
+                            <dxdo:LayoutPanel Caption="Custom Triggers" ItemWidth="400" >
+
+                            </dxdo:LayoutPanel>
+                            <dxdo:LayoutPanel Caption="Manual" ItemWidth="400" Content="{Binding ManualBet}" >
+
+                            </dxdo:LayoutPanel>
+                        </dxdo:TabbedGroup>
+                    </dxdo:LayoutGroup>
+
+                </dxdo:DockLayoutManager>
+            </dxlc:LayoutGroup>
+
+        </DockPanel>
+        <dxb:BarContainerControl Grid.Row="2">
+            <dxb:StatusBarControl DockPanel.Dock="Bottom" VerticalAlignment="Bottom" HorizontalAlignment="Left">
+                <dxb:BarStaticItem Name="StatusBar">
+
+                </dxb:BarStaticItem>
+            </dxb:StatusBarControl>
+        </dxb:BarContainerControl>
+    </Grid>
 </UserControl>

@@ -118,6 +118,7 @@ namespace KryGamesBotControls.Strategies
                     richEditControl1.DocumentSaveOptions.CurrentFormat = DocumentFormat.PlainText;
                     richEditControl1.DocumentSaveOptions.DefaultFormat = DocumentFormat.PlainText;
                     txtFileName.Text = System.IO.Path.GetFileName(richEditControl1.DocumentSaveOptions.CurrentFileName);
+                    richEditControl1.ReadOnly = false;
                 }
                 catch
                 {

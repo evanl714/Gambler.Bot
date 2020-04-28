@@ -119,8 +119,15 @@ You're all set up and ready to start. Finish this wizard to choose the site you 
             if (IsPortable)
                 tmpInstance.SavePersonalSettings("PersonalSettings.json");
             else
-            tmpInstance.SavePersonalSettings(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json");
+            {
+                string docspath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\";
+                if (!Directory.Exists(docspath))
+                {
+                    Directory.CreateDirectory(docspath);
+                }
+                tmpInstance.SavePersonalSettings(docspath+"PersonalSettings.json");
 
+            }
         }
     }
 }

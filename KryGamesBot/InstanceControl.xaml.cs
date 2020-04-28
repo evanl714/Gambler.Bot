@@ -176,7 +176,13 @@ namespace KryGamesBot
 
         private void BotIns_OnSiteNotify(object sender, DoormatCore.Sites.GenericEventArgs e)
         {
-            //throw new NotImplementedException();
+            if (!Dispatcher.CheckAccess()) // CheckAccess returns true if you're on the dispatcher thread
+            {
+                Dispatcher.Invoke(new DoormatCore.Sites.BaseSite.dNotify(BotIns_OnSiteNotify), sender, e);
+                return;
+            }           
+                StatusBar.Content = e.Message;
+            
         }
 
         private void BotIns_OnSiteLoginFinished(object sender, DoormatCore.Sites.LoginFinishedEventArgs e)
@@ -202,7 +208,13 @@ namespace KryGamesBot
 
         private void BotIns_OnSiteError(object sender, DoormatCore.Sites.ErrorEventArgs e)
         {
-            //throw new NotImplementedException();
+            if (!Dispatcher.CheckAccess()) // CheckAccess returns true if you're on the dispatcher thread
+            {
+                Dispatcher.Invoke(new DoormatCore.Sites.BaseSite.dError(BotIns_OnSiteError), sender, e);
+                return;
+            }
+            StatusBar.Content = "Error! "+e.Message;
+            
         }
 
         private void BotIns_OnSiteChat(object sender, DoormatCore.Sites.GenericEventArgs e)
@@ -223,12 +235,31 @@ namespace KryGamesBot
 
         private void BotIns_OnSiteAction(object sender, DoormatCore.Sites.GenericEventArgs e)
         {
-            //throw new NotImplementedException();
+            if (!Dispatcher.CheckAccess()) // CheckAccess returns true if you're on the dispatcher thread
+            {
+                Dispatcher.Invoke(new DoormatCore.Sites.BaseSite.dAction(BotIns_OnSiteAction), sender, e);
+                return;
+            }
+            StatusBar.Content = e.Message;
+
         }
 
         private void BotIns_OnNotification(object sender, DoormatCore.Helpers.NotificationEventArgs e)
         {
-            //throw new NotImplementedException();
+            if (!Dispatcher.CheckAccess()) // CheckAccess returns true if you're on the dispatcher thread
+            {
+                Dispatcher.Invoke(new Action<object, NotificationEventArgs> (BotIns_OnNotification),sender, e);
+                return;
+            }
+            switch (e.NotificationTrigger.Action)
+            {
+                case DoormatCore.Helpers.TriggerAction.Alarm:                
+                case DoormatCore.Helpers.TriggerAction.Chime:
+                case DoormatCore.Helpers.TriggerAction.Email:break;
+                case DoormatCore.Helpers.TriggerAction.Popup: StatusBar.Content = "Something happened that triggered a notification.";break ;
+                    
+            }
+            //StatusBar.Content = e.NotificationTrigger.Action = DoormatCore.Helpers.TriggerAction.;
         }
 
         private void BotIns_OnGameChanged(object sender, EventArgs e)
@@ -393,7 +424,16 @@ namespace KryGamesBot
 
         private void btcStart_Click(object sender, RoutedEventArgs e)
         {
-            botIns.StartDice();
+            try
+            {
+                StrategyControl.Saving();
+                botIns.SaveBetSettings(BetSettingsFile);
+                botIns.StartDice();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void btcStop_Click(object sender, RoutedEventArgs e)
@@ -504,6 +544,11 @@ namespace KryGamesBot
         {
             if (botIns.CurrentGame != (DoormatCore.Games.Games)lueGames.EditValue)
                 botIns.CurrentGame = (DoormatCore.Games.Games)lueGames.EditValue;
+        }
+
+        private void btnResume_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
     public class RenameEventArgs:EventArgs

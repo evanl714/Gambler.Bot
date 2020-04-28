@@ -16,14 +16,14 @@
             </dxlc:LayoutItem>
         <dxlc:LayoutGroup >
             <dxlc:LayoutItem >
-                <dx:SimpleButton Content="Back" HorizontalAlignment="Left" Name="btnBack" Click="btnBack_Click" />
+                <dx:SimpleButton IsCancel="True" Content="Back" HorizontalAlignment="Left" Name="btnBack" Click="btnBack_Click" />
             </dxlc:LayoutItem>
             <dxlc:LayoutItem />
             <dxlc:LayoutItem >
                 <dx:SimpleButton Content="Skip" Click="SimpleButton_Click" Name="btnSkip" HorizontalAlignment="Right" />
             </dxlc:LayoutItem>
             <dxlc:LayoutItem >
-                <dx:SimpleButton Content="Log In" Click="btnLogIn_Click"  Name="btnLogIn" HorizontalAlignment="Right" />
+                <dx:SimpleButton IsDefault="True" Content="Log In" Click="btnLogIn_Click"  Name="btnLogIn" HorizontalAlignment="Right" />
             </dxlc:LayoutItem>
         </dxlc:LayoutGroup>
         </dxlc:LayoutGroup>

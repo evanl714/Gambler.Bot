@@ -35,8 +35,9 @@ namespace KryGamesBotControls.Common
             series.LineStyle = new LineStyle(1);
             series.CrosshairLabelPattern = "{S}: {V:0.00000000}";            
             series.MarkerSize = 3;
-            trendSegmentColorizer.RisingTrendColor = Colors.Green;
-            trendSegmentColorizer.FallingTrendColor = Colors.Red;
+            bool dark = Helpers.ThemesProviderExtension.IsDark();
+            trendSegmentColorizer.RisingTrendColor = dark? Colors.LightGreen: Colors.Green;
+            trendSegmentColorizer.FallingTrendColor = dark? Colors.Brown : Colors.Red;
             series.Colorizer = new PointTrendColorizer() { FallingColor = Colors.Red, RisingColor = Colors.Green };
             series.DataSource = DataPoints;
             

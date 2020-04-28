@@ -17,6 +17,6 @@
             <dx:SimpleButton Name="btnSaveAs" Content="Save As" Glyph="{dx:SvgImageSource AutoSize=True, Uri=/KryGamesBotControls;Component/Images/SaveAs.svg}" Click="btnSaveAs_Click"/>
         </StackPanel>
         
-        <dxre:RichEditControl x:Name="richEditControl1" ActiveViewType="Simple"  Loaded="richEditControl1_Loaded" TextChanged="richEditControl1_TextChanged" DocumentLoaded="richEditControl1_DocumentLoaded" MinHeight="500" />
+        <dxre:RichEditControl ReadOnly="True" x:Name="richEditControl1" ActiveViewType="Simple"  Loaded="richEditControl1_Loaded" TextChanged="richEditControl1_TextChanged" DocumentLoaded="richEditControl1_DocumentLoaded" MinHeight="500" />
     </StackPanel>
 </UserControl>
