@@ -71,7 +71,7 @@
                             </dxdo:LayoutPanel>
 
                             <dxdo:LayoutPanel Caption="Session Stats" ItemWidth="300">
-                                <Common1:SessionStats Name="sessionStats"/>
+                                <Common1:SessionStats Name="sessionStats" ResetStats="sessionStats_ResetStats"/>
                             </dxdo:LayoutPanel>
                         </dxdo:LayoutGroup>
                         <dxdo:LayoutGroup Orientation="Vertical" >

@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:KryGamesBotControls.Common"
              mc:Ignorable="d" 
-             d:DesignHeight="800" d:DesignWidth="500">
+             d:DesignHeight="800" d:DesignWidth="500"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib" >
     <dxlc:LayoutControl Orientation="Vertical">
         <dxlc:LayoutGroup View="GroupBox" Header="Auto Withdraw/Tip" Orientation="Vertical">
             <dxlc:LayoutGroup View="GroupBox" Header="Upper Limit" Orientation="Vertical">
@@ -83,7 +84,7 @@
                     <dxe:CheckEdit EditValue="{Binding EnableResetSeedBets}" />
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="Reset after Every">
-                    <dxe:SpinEdit EditValue="{Binding ResetSeedBets}" />
+                    <dxe:SpinEdit EditValue="{Binding ResetSeedBets}" EditValueType="{x:Type sys:Int32}" />
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="Bets"></dxlc:LayoutItem>
             </dxlc:LayoutGroup>
@@ -92,7 +93,7 @@
                     <dxe:CheckEdit EditValue="{Binding EnableResetSeedWins}" />
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="Reset after Every">
-                    <dxe:SpinEdit EditValue="{Binding ResetSeedWins}" />
+                    <dxe:SpinEdit EditValue="{Binding ResetSeedWins}"  EditValueType="{x:Type sys:Int32}"/>
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="Wins"></dxlc:LayoutItem>
             </dxlc:LayoutGroup>
@@ -101,7 +102,7 @@
                     <dxe:CheckEdit EditValue="{Binding EnableResetSeedWinStreak}" />
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="Reset after Every">
-                    <dxe:SpinEdit EditValue="{Binding ResetSeedWinStreak}" />
+                    <dxe:SpinEdit EditValue="{Binding ResetSeedWinStreak}" EditValueType="{x:Type sys:Int32}" />
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="Wins in a row"></dxlc:LayoutItem>
             </dxlc:LayoutGroup>
@@ -110,7 +111,7 @@
                     <dxe:CheckEdit EditValue="{Binding EnableResetSeedLosses}" />
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="Reset after Every">
-                    <dxe:SpinEdit EditValue="{Binding ResetSeedLosses}" />
+                    <dxe:SpinEdit EditValue="{Binding ResetSeedLosses}"  EditValueType="{x:Type sys:Int32}"/>
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="Losses"></dxlc:LayoutItem>
             </dxlc:LayoutGroup>
@@ -119,7 +120,7 @@
                     <dxe:CheckEdit EditValue="{Binding EnableResetSeedLossStreak}" />
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="Reset after Every">
-                    <dxe:SpinEdit EditValue="{Binding ResetSeedLossStreak}" />
+                    <dxe:SpinEdit EditValue="{Binding ResetSeedLossStreak}"  EditValueType="{x:Type sys:Int32}"/>
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="Losses in a row"></dxlc:LayoutItem>
             </dxlc:LayoutGroup>
@@ -148,7 +149,7 @@
                     <dxe:CheckEdit EditValue="{Binding EnableBotSpeed}" />
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="Bot Speed">
-                    <dxe:SpinEdit EditValue="{Binding BotSpeed}" />
+                    <dxe:SpinEdit EditValue="{Binding BotSpeed}"  EditValueType="{x:Type sys:Int32}"/>
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="Bets per second"></dxlc:LayoutItem>
             </dxlc:LayoutGroup>

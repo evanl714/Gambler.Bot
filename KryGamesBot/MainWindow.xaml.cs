@@ -37,7 +37,7 @@ namespace KryGamesBot
         public ICommand AddNewCommand { get; private set; }
         public MainWindow()
         {
-            
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
@@ -47,6 +47,11 @@ namespace KryGamesBot
             //dlmMainMainLayout.DataContext = this;
             AddNewCommand = new DelegateCommand(AddNew);
             ApplicationThemeHelper.ApplicationThemeName = "Office2019Black";
+        }
+
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            DoormatCore.Helpers.Logger.DumpLog(e.ExceptionObject as Exception);
         }
 
         public void AddNew()
@@ -87,7 +92,7 @@ namespace KryGamesBot
                 Directory.CreateDirectory(DocsPath);
                 if (File.Exists("mainlayout"))
                     dlmMainMainLayout.RestoreLayoutFromXml("mainlayout");
-                else if (File.Exists("mainlayout"))
+                else if (File.Exists(DocsPath + "mainlayout"))
                 dlmMainMainLayout.RestoreLayoutFromXml(DocsPath+"mainlayout");
             DoormatBot.Doormat tmpInstance = new DoormatBot.Doormat();
             tmpInstance.NeedConstringPassword += TmpInstance_NeedConstringPassword;

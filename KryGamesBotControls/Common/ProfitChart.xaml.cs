@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -47,26 +48,64 @@ namespace KryGamesBotControls.Common
         int ChartItems = 0;
         decimal ChartProfit = 0;
         delegate void dAddPoint(decimal profit);
+        public bool Enabled { get; set; } = true;
         public void AddPoint(decimal Profit)
         {
-            
+            if (Enabled)
+            {
+                if (!Dispatcher.CheckAccess())
+                    Dispatcher.BeginInvoke(new dAddPoint(AddPoint), Profit);
+                else
+                {
+                    ChartProfit += Profit;
+                    DataPoints.Add(new SimpleDataPoint(ChartItems++, (double)ChartProfit));
+                    //profitChart.AddPoint(ChartItems++, (double)Profit);
+                    while (DataPoints.Count > MaxItems)
+                    {
+                        DataPoints.RemoveRangeAt(0, (DataPoints.Count - MaxItems) + 1);
+                    }
+                }
+            }
+        }
+        public void AddRange(List<decimal> points)
+        {
             if (!Dispatcher.CheckAccess())
-                Dispatcher.BeginInvoke(new dAddPoint(AddPoint), Profit);
+                Dispatcher.BeginInvoke(new Action<List<decimal>>(AddRange), points);
             else
             {
-                ChartProfit += Profit;
-                DataPoints.Add(new SimpleDataPoint(ChartItems++, (double)ChartProfit));
-                //profitChart.AddPoint(ChartItems++, (double)Profit);
-                while (DataPoints.Count> MaxItems)
+                DataPoints.AddRange(points.Select(m => new SimpleDataPoint(ChartItems++, (double)(ChartProfit += m))).ToList());
+                while (DataPoints.Count > MaxItems)
                 {
-                    DataPoints.RemoveRangeAt(0,  (DataPoints.Count - MaxItems) + 1);
+                    DataPoints.RemoveRangeAt(0, (DataPoints.Count - MaxItems) + 1);
                 }
             }
         }
         SolidColorBrush GreenBrush = new SolidColorBrush(Colors.Green);
         SolidColorBrush RedBrush = new SolidColorBrush(Colors.Red);
 
-       
+        public void Reset()
+        {
+            bool OriginalEnabled = Enabled;
+            Enabled = false;
+            ChartProfit = 0;
+            ChartItems = 0;
+            DataPoints.Clear();
+            Enabled = OriginalEnabled;
+        }
+
+        private void btnReset_Click(object sender, RoutedEventArgs e)
+        {
+            Reset();
+        }
+
+        private void btnFreeze_Click(object sender, RoutedEventArgs e)
+        {
+            Enabled = !Enabled;
+            if (Enabled)
+                btnFreeze.Content = "Freeze Chart";
+            else
+                btnFreeze.Content = "Resume Chart";
+        }
     }
     public class RealTimeDataCollection : ObservableCollection<SimpleDataPoint>
     {

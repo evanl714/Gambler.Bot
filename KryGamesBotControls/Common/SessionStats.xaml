@@ -12,7 +12,7 @@
     <dx:DXTabControl >
         <dx:DXTabControl.Items>
             <dx:DXTabItem Header="Basic Stats">
-                <dxlc:LayoutControl >
+                <dxlc:LayoutControl Orientation="Vertical" >
         
                     <dxlc:LayoutGroup Orientation="Horizontal" >
                         <dxlc:LayoutGroup Orientation="Vertical" >
@@ -57,6 +57,10 @@
                             </dxlc:LayoutItem>
                         </dxlc:LayoutGroup>
                     </dxlc:LayoutGroup>
+                    
+                    <dxlc:LayoutItem VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                        <dx:SimpleButton Content="Reset Stats" Name="btnReset" Click="btnReset_Click" />
+                    </dxlc:LayoutItem>
                     </dxlc:LayoutControl >
                 </dx:DXTabItem>
                 <dx:DXTabItem Header="More Stats">

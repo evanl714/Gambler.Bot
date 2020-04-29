@@ -57,10 +57,15 @@
             </dxlc:LayoutGroup>
             <dxlc:LayoutGroup >
                 <dxlc:LayoutItem>
-                    <local:SessionStats x:Name="sesseionStats1" />
+                    <local:SessionStats x:Name="sesseionStats1" ShowResetButton="False" />
                 </dxlc:LayoutItem>
             </dxlc:LayoutGroup>
         </dxlc:LayoutGroup>
-        
+        <dxlc:LayoutGroup Orientation="Vertical">
+            <dxlc:LayoutItem>
+                <dx:SimpleButton Content="Enable Chart (Slows down simulation)" HorizontalAlignment="Right" Name="btnEnableChart" Click="btnEnableChart_Click"/>
+            </dxlc:LayoutItem>
+            <local:ProfitChart x:Name="chrt" MaxItems="20000" Visibility="Collapsed" IsEnabled="False"/>
+        </dxlc:LayoutGroup>
     </dxlc:LayoutControl>
 </krygamesbotcontrols:BaseControl>

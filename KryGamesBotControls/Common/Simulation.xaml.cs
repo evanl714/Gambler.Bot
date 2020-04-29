@@ -66,7 +66,7 @@ namespace KryGamesBotControls.Common
 
         private void SimpleButton_Click(object sender, RoutedEventArgs e)
         {
-
+            chrt.Reset();
             CurrentSimulation = new DoormatBot.Helpers.Simulation(txtBalance.Value, (long)txtBets.Value, CurrentSite, Strategy, BetSettings,"tmp.sim",true);
             btnSaveFile.IsEnabled = false;
             CurrentSimulation.OnSimulationWriting += Tmp_OnSimulationWriting;
@@ -76,10 +76,18 @@ namespace KryGamesBotControls.Common
             CurrentSimulation.Start();
             sesseionStats1.Stats = CurrentSimulation.Stats;
         }
-
+        List<decimal> Bets = new List<decimal>();
         private void CurrentSimulation_OnBetSimulated(object sender, BetFinisedEventArgs e)
         {
-           
+            Bets.Add(e.NewBet.Profit);
+            if (Bets.Count>0 && Bets.Count%100==0)
+            {
+                if (chrt.Enabled)
+                {
+                    chrt.AddRange(Bets);
+                    Bets = new List<decimal>();
+                }
+            }
         }
 
         private void Tmp_OnSimulationComplete(object sender, EventArgs e)
@@ -106,25 +114,30 @@ namespace KryGamesBotControls.Common
 
         private void Tmp_OnSimulationWriting(object sender, EventArgs e)
         {
-            DoormatBot.Helpers.Simulation tmp = sender as DoormatBot.Helpers.Simulation;
-            //Console.WriteLine("Simulation Progress: " + tmp.TotalBetsPlaced + " bets of " + tmp.Bets);
-
-            if (tmp.TotalBetsPlaced > 0)
+            if (!Dispatcher.CheckAccess())
+                Dispatcher.BeginInvoke(new Action<object, EventArgs>(Tmp_OnSimulationWriting), sender,e);
+            else
             {
-                long ElapsedMilliseconds = SimTimer.ElapsedMilliseconds;
-                Progress = (decimal)tmp.TotalBetsPlaced / (decimal)tmp.Bets;
+                DoormatBot.Helpers.Simulation tmp = sender as DoormatBot.Helpers.Simulation;
+                //Console.WriteLine("Simulation Progress: " + tmp.TotalBetsPlaced + " bets of " + tmp.Bets);
 
-                decimal totaltime = ElapsedMilliseconds / Progress;
-                TimeRunning = TimeSpan.FromMilliseconds(ElapsedMilliseconds);
-                ProjectedTime = TimeSpan.FromMilliseconds((double)totaltime);
-                ProjectedRemaining = TimeSpan.FromMilliseconds((double)totaltime - ElapsedMilliseconds);
+                if (tmp.TotalBetsPlaced > 0)
+                {
+                    long ElapsedMilliseconds = SimTimer.ElapsedMilliseconds;
+                    Progress = (decimal)tmp.TotalBetsPlaced / (decimal)tmp.Bets;
 
-                OnPropertyChanged(nameof(Progress));
-                OnPropertyChanged(nameof(TimeRunning));
-                OnPropertyChanged(nameof(ProjectedTime));
-                OnPropertyChanged(nameof(ProjectedRemaining));
-                OnPropertyChanged(nameof(CurrentSimulation));
-                sesseionStats1.RefreshStats();
+                    decimal totaltime = ElapsedMilliseconds / Progress;
+                    TimeRunning = TimeSpan.FromMilliseconds(ElapsedMilliseconds);
+                    ProjectedTime = TimeSpan.FromMilliseconds((double)totaltime);
+                    ProjectedRemaining = TimeSpan.FromMilliseconds((double)totaltime - ElapsedMilliseconds);
+
+                    OnPropertyChanged(nameof(Progress));
+                    OnPropertyChanged(nameof(TimeRunning));
+                    OnPropertyChanged(nameof(ProjectedTime));
+                    OnPropertyChanged(nameof(ProjectedRemaining));
+                    OnPropertyChanged(nameof(CurrentSimulation));
+                    sesseionStats1.RefreshStats();
+                }
             }
         }
 
@@ -134,6 +147,25 @@ namespace KryGamesBotControls.Common
             if (dg.ShowDialog()??false)
             {
                 CurrentSimulation.MoveLog(dg.FileName);
+            }
+        }
+
+
+        private void btnEnableChart_Click(object sender, RoutedEventArgs e)
+        {
+            chrt.Enabled = !chrt.Enabled;
+            if (chrt.Enabled)
+            {
+                btnEnableChart.Content = "Disable Chart";
+                chrt.Visibility = Visibility.Visible;
+                Window.GetWindow(this).Height +=400;
+
+            }
+            else
+            {
+                Window.GetWindow(this).Height -= 400;
+                chrt.Visibility = Visibility.Collapsed;                
+                btnEnableChart.Content = "Enable Chart (Slows down simulation)";
             }
         }
     }

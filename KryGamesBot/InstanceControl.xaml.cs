@@ -144,7 +144,7 @@ namespace KryGamesBot
         string InstanceName = "";
         public void Closing()
         {
-            botIns.StopDice("Application Closing");
+            botIns.StopStrategy("Application Closing");
             if (botIns.CurrentSite!=null)
                 botIns.CurrentSite.Disconnect();
             string path = "";
@@ -161,7 +161,7 @@ namespace KryGamesBot
 
         public void Removed()
         {
-            botIns.StopDice("Application Closing");
+            botIns.StopStrategy("Application Closing");
             if (botIns.CurrentSite != null)
                 botIns.CurrentSite.Disconnect();
             string path = "";
@@ -445,7 +445,13 @@ namespace KryGamesBot
 
         void SaveINstanceSettings(string FileLocation)
         {
-            string Settings = json.JsonSerializer<InstanceSettings>(new InstanceSettings { Site=botIns.CurrentSite?.GetType()?.Name, AutoLogin=false, Game=botIns.CurrentGame.ToString() });
+            string Settings = json.JsonSerializer<InstanceSettings>(new InstanceSettings 
+            { 
+                Site=botIns.CurrentSite?.GetType()?.Name, 
+                AutoLogin=false, 
+                Game=botIns.CurrentGame.ToString(),
+                Currency=botIns.CurrentSite?.CurrentCurrency
+            });
             File.WriteAllText(FileLocation, Settings); 
         }
 
@@ -472,7 +478,7 @@ namespace KryGamesBot
             {
                 StrategyControl.Saving();
                 botIns.SaveBetSettings(BetSettingsFile);
-                botIns.StartDice();
+                botIns.Start();
             }
             catch (Exception ex)
             {
@@ -482,7 +488,7 @@ namespace KryGamesBot
 
         private void btcStop_Click(object sender, RoutedEventArgs e)
         {
-            botIns.StopDice("Stop button clicked");
+            botIns.StopStrategy("Stop button clicked");
         }
 
         private void btnDark_Click(object sender, RoutedEventArgs e)
@@ -502,7 +508,7 @@ namespace KryGamesBot
 
         private void btnStopWin_Click(object sender, RoutedEventArgs e)
         {
-
+            botIns.StopOnWin = true;
         }
 
         private void cbeStartegies_EditValueChanged(object sender, DevExpress.Xpf.Editors.EditValueChangedEventArgs e)
@@ -544,7 +550,7 @@ namespace KryGamesBot
             simControl.Strategy = botIns.Strategy;
             simControl.BetSettings = botIns.BetSettings;
             tmpWindow.Content = simControl;
-            tmpWindow.Height = 500;
+            tmpWindow.Height = 550;
             tmpWindow.Width = 700;
             tmpWindow.Show();
         }
@@ -556,7 +562,7 @@ namespace KryGamesBot
 
         private void bbtnLogOut_ItemClick(object sender, ItemClickEventArgs e)
         {
-            botIns.StopDice("Logging Out");
+            botIns.StopStrategy("Logging Out");
             botIns.CurrentSite.Disconnect();
             dlmMainLayout.Visibility = Visibility.Collapsed;
             lciSelectSite1.Visibility = Visibility.Collapsed;
@@ -565,7 +571,7 @@ namespace KryGamesBot
 
         private void bbtnSite_ItemClick(object sender, ItemClickEventArgs e)
         {
-            botIns.StopDice("Changing Site");
+            botIns.StopStrategy("Changing Site");
             botIns.CurrentSite.Disconnect();
             dlmMainLayout.Visibility = Visibility.Collapsed;
             lciSelectSite1.Visibility =  Visibility.Visible;
@@ -592,7 +598,19 @@ namespace KryGamesBot
 
         private void btnResume_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                botIns.Resume();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
 
+        private void sessionStats_ResetStats(object sender, EventArgs e)
+        {
+            botIns.ResetStats();
         }
     }
     public class RenameEventArgs:EventArgs

@@ -18,6 +18,8 @@ namespace KryGamesBotControls.Common
     /// </summary>
     public partial class SessionStats : BaseControl
     {
+        public bool ShowResetButton { get { return btnReset.Visibility == Visibility.Visible; } set { btnReset.Visibility = value ? Visibility.Visible : Visibility.Collapsed; } }
+        public event EventHandler ResetStats;
         private DoormatBot.Helpers.SessionStats stats;
 
         public DoormatBot.Helpers.SessionStats Stats
@@ -35,6 +37,11 @@ namespace KryGamesBotControls.Common
         public void RefreshStats()
         {
             OnPropertyChanged(nameof(Stats));
+        }
+
+        private void btnReset_Click(object sender, RoutedEventArgs e)
+        {
+            ResetStats?.Invoke(this, new EventArgs());
         }
     }
 }
