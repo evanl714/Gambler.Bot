@@ -12,5 +12,6 @@ namespace KryGamesBot.Helpers
         public string KeepassId { get; set; }
         public bool AutoLogin { get; set; }
         public string Game { get; set; }
+        public string Currency { get; set; }
     }
 }

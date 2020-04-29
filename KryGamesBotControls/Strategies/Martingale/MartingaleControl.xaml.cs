@@ -88,7 +88,7 @@ namespace KryGamesBotControls.Strategies.Martingale
 
         public void Saving()
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

@@ -51,14 +51,14 @@ namespace KryGamesBotControls.Common
 
         private void btnSelect_Click(object sender, RoutedEventArgs e)
         {
+            SitesList selectedsite = SiteDetailControl.Content as SitesList;
             //Site has been selected
             OnSiteSelected?.Invoke(this, new SiteSelectedEventArgs {
-                SelectedSite = tblView.DataControl.SelectedItem as SitesList/*,
-               SelectedGame = (Games)Enum.Parse(typeof(Games), LastSelectedGame),
-                SelectedCurrency=LastSelectedCurrency*/
+                SelectedSite = selectedsite
             }) ;
         }
         string LastSelectedGame = "";
+        
         private void crncView_SelectedItemChanged(object sender, SelectedItemChangedEventArgs e)
         {
             LastSelectedGame = (e.NewItem as CurrencyVM).Name;

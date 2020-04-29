@@ -29,6 +29,7 @@ namespace KryGamesBot
     public partial class MainWindow : DXWindow
     {
         public static bool Portable { get{return File.Exists("personalsettings.json"); } }
+        public static string Path { get { return Portable ? "" : Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\"; } }
         List<DocumentPanel> documents = new List<DocumentPanel>();
         public string dbPw { get; set; }
         public string kpPw { get; set; }
@@ -78,23 +79,28 @@ namespace KryGamesBot
         }
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            
             dlmMainMainLayout.DockItemRestored += DlmMainMainLayout_DockItemRestored;
             dlmMainMainLayout.LayoutItemRestored += DlmMainMainLayout_LayoutItemRestored1;
-            
-            if (File.Exists("mainlayout"))
-                dlmMainMainLayout.RestoreLayoutFromXml("mainlayout");
+            string DocsPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\";
+            if (!Directory.Exists(DocsPath))
+                Directory.CreateDirectory(DocsPath);
+                if (File.Exists("mainlayout"))
+                    dlmMainMainLayout.RestoreLayoutFromXml("mainlayout");
+                else if (File.Exists("mainlayout"))
+                dlmMainMainLayout.RestoreLayoutFromXml(DocsPath+"mainlayout");
             DoormatBot.Doormat tmpInstance = new DoormatBot.Doormat();
             tmpInstance.NeedConstringPassword += TmpInstance_NeedConstringPassword;
             tmpInstance.NeedKeepassPassword += TmpInstance_NeedKeepassPassword;
             //check if there's a local settings file
             if (File.Exists("personalsettings.json"))
             {   
-                tmpInstance.LoadPersonalSettings(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json");
+                tmpInstance.LoadPersonalSettings("PersonalSettings.json");
             }
             //Check if global settings for this account exists
             else if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json"))
             {
-                tmpInstance.LoadPersonalSettings(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json");
+                tmpInstance.LoadPersonalSettings(DocsPath+"PersonalSettings.json");
             }
             else
             {
@@ -198,7 +204,9 @@ namespace KryGamesBot
             string layoutresult = "";
             //using (MemoryStream strm = new MemoryStream())
             {
-                dlmMainMainLayout.SaveLayoutToXml("mainlayout");
+                
+                dlmMainMainLayout.SaveLayoutToXml(Path+"mainlayout");
+                 
                 /*strm.Position = 0;
                 byte[] bytes = new byte[strm.Length];
                 strm.Read(bytes, 0, (int)strm.Length);

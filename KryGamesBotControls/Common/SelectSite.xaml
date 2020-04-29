@@ -22,8 +22,8 @@
             <StackPanel MaxHeight="450" Width="410" >
                 <TextBlock FontSize="24" Text="{Binding Content.Name, RelativeSource={RelativeSource TemplatedParent}}"/>
                 <TextBlock FontSize="15" Text="Games"/>
-                
-                    <dxg:GridControl ItemsSource="{Binding Content.vmGames, RelativeSource={RelativeSource TemplatedParent}}"  MaxHeight="200" Width="400" >
+
+                <dxg:GridControl Name="gcGames" ItemsSource="{Binding Content.vmGames, RelativeSource={RelativeSource TemplatedParent}}" CurrentItem="{Binding Content.SelectedGame , RelativeSource={RelativeSource TemplatedParent}}"  MaxHeight="200" Width="400" >
                     <dxg:GridControl.Columns>
                             <dxg:GridColumn FieldName="{Binding Content.Name, RelativeSource={RelativeSource TemplatedParent}}"/>
                     </dxg:GridControl.Columns>
@@ -44,12 +44,12 @@
                     </dxg:GridControl.View>                    
                 </dxg:GridControl>
                 <TextBlock FontSize="15" Text="Currencies"/>
-                    <dxg:GridControl ItemsSource="{Binding Content.vmCurrencies, RelativeSource={RelativeSource TemplatedParent}}"  MaxHeight="200" Width="400">
+                <dxg:GridControl Name="gcCurrencies" ItemsSource="{Binding Content.vmCurrencies, RelativeSource={RelativeSource TemplatedParent}}" CurrentItem="{Binding Content.SelectedCurrency, RelativeSource={RelativeSource TemplatedParent}}"  MaxHeight="200" Width="400">
                     <dxg:GridControl.Columns>
                         <dxg:GridColumn FieldName="Name"/>
                     </dxg:GridControl.Columns>
                     <dxg:GridControl.View>
-                        <dxg:CardView
+                        <dxg:CardView 
                             CardLayout="Rows"
                             CardAlignment="Center"
                             ShowCardExpandButton="False"
@@ -58,6 +58,7 @@
                             ShowSearchPanelCloseButton="False"
                             ShowColumnHeaders="False"
                             dxg:DataControlBase.SelectedItemChanged="crncView_SelectedItemChanged"
+                             
                             >
                             
                             
