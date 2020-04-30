@@ -8,15 +8,26 @@
              xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel Orientation="Vertical">
-        <dxe:TextEdit Name="txtFileName" IsReadOnly="True" />
-        <StackPanel Orientation="Horizontal">
-            <dx:SimpleButton Name="btnNew" Content="New" Glyph="{dx:SvgImageSource AutoSize=True, Uri=/KryGamesBotControls;Component/Images/New.svg}" Click="btnNew_Click"/>
-            <dx:SimpleButton Name="btnOpen" Content="Open" Glyph="{dx:SvgImageSource AutoSize=True, Uri=/KryGamesBotControls;Component/Images/Open.svg}" Click="btnOpen_Click"/>
-            <dx:SimpleButton Name="btnSave" Content="Save" Glyph="{dx:SvgImageSource AutoSize=True, Uri=/KryGamesBotControls;Component/Images/Save.svg}" Click="btnSave_Click"/>
-            <dx:SimpleButton Name="btnSaveAs" Content="Save As" Glyph="{dx:SvgImageSource AutoSize=True, Uri=/KryGamesBotControls;Component/Images/SaveAs.svg}" Click="btnSaveAs_Click"/>
-        </StackPanel>
-        
-        <dxre:RichEditControl ReadOnly="True" x:Name="richEditControl1" ActiveViewType="Simple"  Loaded="richEditControl1_Loaded" TextChanged="richEditControl1_TextChanged" DocumentLoaded="richEditControl1_DocumentLoaded" MinHeight="500" />
-    </StackPanel>
+    <dxlc:LayoutControl Name="mainControl" VerticalAlignment="Top" Orientation="Vertical" >
+        <dxlc:LayoutItem Name="lciStartControl" Content="{Binding StartControl}">
+
+        </dxlc:LayoutItem>
+        <dxlc:LayoutGroup Orientation="Vertical" View="Tabs" Padding="0">
+            <dxlc:LayoutGroup Header="Script">
+                <StackPanel Orientation="Vertical">
+                    <dxe:TextEdit Name="txtFileName" IsReadOnly="True" />
+                    <StackPanel Orientation="Horizontal">
+                        <dx:SimpleButton Name="btnNew" Content="New" Glyph="{dx:SvgImageSource AutoSize=True, Uri=/KryGamesBotControls;Component/Images/New.svg}" Click="btnNew_Click"/>
+                        <dx:SimpleButton Name="btnOpen" Content="Open" Glyph="{dx:SvgImageSource AutoSize=True, Uri=/KryGamesBotControls;Component/Images/Open.svg}" Click="btnOpen_Click"/>
+                        <dx:SimpleButton Name="btnSave" Content="Save" Glyph="{dx:SvgImageSource AutoSize=True, Uri=/KryGamesBotControls;Component/Images/Save.svg}" Click="btnSave_Click"/>
+                        <dx:SimpleButton Name="btnSaveAs" Content="Save As" Glyph="{dx:SvgImageSource AutoSize=True, Uri=/KryGamesBotControls;Component/Images/SaveAs.svg}" Click="btnSaveAs_Click"/>
+                    </StackPanel>
+                    <dxre:RichEditControl ReadOnly="True" x:Name="richEditControl1" ActiveViewType="Simple"  Loaded="richEditControl1_Loaded" TextChanged="richEditControl1_TextChanged" DocumentLoaded="richEditControl1_DocumentLoaded" MinHeight="500" />
+                </StackPanel>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup Header="Console">
+                <local:ProgrammerModeConsole x:Name="Console" />
+            </dxlc:LayoutGroup>
+        </dxlc:LayoutGroup>       
+    </dxlc:LayoutControl>
 </UserControl>

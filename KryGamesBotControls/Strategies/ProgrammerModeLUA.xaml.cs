@@ -53,6 +53,7 @@ namespace KryGamesBotControls.Strategies
             CreateWatcher();
         }
 
+
         protected virtual void SetLanguage()
         {
             FileExtension = "lua";
@@ -95,7 +96,8 @@ namespace KryGamesBotControls.Strategies
 
         public void SetStrategy(BaseStrategy Strategy)
         {
-            Strat = Strategy as ProgrammerMode;
+
+            Console.Strategy = Strat = Strategy as ProgrammerMode;
             LoadDocument();
             CreateWatcher();
             //throw new NotImplementedException();
