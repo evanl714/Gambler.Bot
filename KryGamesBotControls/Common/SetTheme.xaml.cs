@@ -1,4 +1,5 @@
 ﻿using DevExpress.Xpf.Core;
+using KryGamesBotControls.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,6 +28,7 @@ namespace KryGamesBotControls.Common
         private void cbeTheme_EditValueChanged(object sender, DevExpress.Xpf.Editors.EditValueChangedEventArgs e)
         {
             ApplicationThemeHelper.ApplicationThemeName = cbeTheme.EditValue?.ToString();
+            UISettings.Settings.ThemeName = ApplicationThemeHelper.ApplicationThemeName;
         }
     }
 }

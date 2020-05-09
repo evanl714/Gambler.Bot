@@ -24,15 +24,15 @@
             <dxco:WelcomeWizardPage Header="KryGamesBot Setup">                
                 <TextBlock TextWrapping="WrapWithOverflow" Name="tbMainIntro" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </dxco:WelcomeWizardPage>
-            <dxco:WizardPage Header="Look and Feel">
-                <Common:SetTheme />
-            </dxco:WizardPage>
             <dxco:WizardPage Header="Portable" DataContext="this">
                 <StackPanel >
-                <TextBlock  Name="tbPortable" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock  Name="tbPortable" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     <dxe:CheckEdit EditValue="{Binding IsPortable}" Margin="30" HorizontalAlignment="Center" Name="chkPortable" Content="Enable Portable Mode (Default: Off)" />
                 </StackPanel>
             </dxco:WizardPage>
+            <dxco:WizardPage Header="Look and Feel">
+                <Common:SetTheme />
+            </dxco:WizardPage>            
             <dxco:WizardPage Header="Bet Storage">
                 <Common:DatabaseSetup Name="dbsetup1" />
             </dxco:WizardPage>

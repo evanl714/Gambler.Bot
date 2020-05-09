@@ -91,10 +91,32 @@ You're all set up and ready to start. Finish this wizard to choose the site you 
 
         private void Wizard_Next(object sender, CancelEventArgs e)
         {
+            /*
+             if (!Portable)
+            {
+               
+                
+            }
+             */
+            string DocsPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\";
+
             switch (wzrd.SelectedIndex)
             {
-                case 0:
-                case 1:
+                case 0:break;
+                case 1:if (chkPortable.IsChecked ??false)
+                    {
+                        File.Create("portable");
+                    }
+                    else
+                    {
+                        if (File.Exists("portable"))
+                        {
+                            File.Delete("portable");
+                        }
+                        if (!Directory.Exists(DocsPath))
+                            Directory.CreateDirectory(DocsPath);
+                    }
+                    break;
                 case 2:break;
                 case 3: 
                     e.Cancel = !dbsetup1.Verify(); 

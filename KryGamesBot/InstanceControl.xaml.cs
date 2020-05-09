@@ -76,13 +76,13 @@ namespace KryGamesBot
             //(botIns.Strategy as DoormatBot.Strategies.Martingale).MinBet = 0.00000001m;
             //botIns.Strategy.Amount = 0.00000001m;
             botIns.CurrentGame = DoormatCore.Games.Games.Dice;
-            if (File.Exists("personalsettings.json"))
+            if (MainWindow.Portable && File.Exists("personalsettings.json"))
             {
                 PersonalSettingsFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json";
                 
             }
             //Check if global settings for this account exists
-            else if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json"))
+            else if (!MainWindow.Portable && File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json"))
             {
                 PersonalSettingsFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json";
             }
@@ -97,6 +97,7 @@ namespace KryGamesBot
                 Dispatcher.Invoke(new Action<object, DoormatCore.Sites.GenericEventArgs>(BotIns_OnStopped),sender,e);
             else
             {
+                bbtnSimulator.IsEnabled = true;
                 StatusBar.Content = $"Stopping: {e.Message}";
                 btcStart.IsEnabled = true;
                 btnResume.IsEnabled = true;
@@ -109,6 +110,7 @@ namespace KryGamesBot
                 Dispatcher.Invoke(new Action<object, DoormatCore.Sites.GenericEventArgs>(BotIns_OnStopped), sender, e);
             else
             {
+                bbtnSimulator.IsEnabled = false;
                 StatusBar.Content = $"Bot Started.";
                 btcStart.IsEnabled = false ;
                 btnResume.IsEnabled = false;
@@ -491,16 +493,7 @@ namespace KryGamesBot
             botIns.StopStrategy("Stop button clicked");
         }
 
-        private void btnDark_Click(object sender, RoutedEventArgs e)
-        {
-            ApplicationThemeHelper.ApplicationThemeName = "Office2019Black";
-        }
-
-        private void btnLight_Click(object sender, RoutedEventArgs e)
-        {
-            ApplicationThemeHelper.ApplicationThemeName = "Office2019White";
-        }
-
+       
         private void bExit_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
         {
             string x = botIns.CurrentSite?.SiteName;

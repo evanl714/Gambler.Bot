@@ -1,8 +1,12 @@
 ﻿using DevExpress.Mvvm;
 using DevExpress.Xpf.Core;
 using DevExpress.Xpf.Docking;
+using DoormatBot;
+using DoormatCore.Helpers;
+using KryGamesBot.Helpers;
 using KryGamesBotControls;
 using KryGamesBotControls.Common;
+using KryGamesBotControls.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -28,7 +32,8 @@ namespace KryGamesBot
     /// </summary>
     public partial class MainWindow : DXWindow
     {
-        public static bool Portable { get{return File.Exists("personalsettings.json"); } }
+        
+        public static bool Portable { get{return File.Exists("portable"); } }
         public static string Path { get { return Portable ? "" : Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\"; } }
         List<DocumentPanel> documents = new List<DocumentPanel>();
         public string dbPw { get; set; }
@@ -85,25 +90,21 @@ namespace KryGamesBot
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             
+            
             dlmMainMainLayout.DockItemRestored += DlmMainMainLayout_DockItemRestored;
             dlmMainMainLayout.LayoutItemRestored += DlmMainMainLayout_LayoutItemRestored1;
             string DocsPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\";
-            if (!Directory.Exists(DocsPath))
-                Directory.CreateDirectory(DocsPath);
-                if (File.Exists("mainlayout"))
-                    dlmMainMainLayout.RestoreLayoutFromXml("mainlayout");
-                else if (File.Exists(DocsPath + "mainlayout"))
-                dlmMainMainLayout.RestoreLayoutFromXml(DocsPath+"mainlayout");
+            
             DoormatBot.Doormat tmpInstance = new DoormatBot.Doormat();
             tmpInstance.NeedConstringPassword += TmpInstance_NeedConstringPassword;
             tmpInstance.NeedKeepassPassword += TmpInstance_NeedKeepassPassword;
             //check if there's a local settings file
-            if (File.Exists("personalsettings.json"))
+            if (Portable && File.Exists("personalsettings.json"))
             {   
                 tmpInstance.LoadPersonalSettings("PersonalSettings.json");
             }
             //Check if global settings for this account exists
-            else if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json"))
+            else if (!Portable && File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json"))
             {
                 tmpInstance.LoadPersonalSettings(DocsPath+"PersonalSettings.json");
             }
@@ -120,9 +121,22 @@ namespace KryGamesBot
                 /*dbSetup.Visibility = Visibility.Visible;
                 tcMainTabs.Visibility = Visibility.Hidden;*/
             }
+            if (Portable && File.Exists("mainlayout"))
+                dlmMainMainLayout.RestoreLayoutFromXml("mainlayout");
+            else if (!Portable && File.Exists(DocsPath + "mainlayout"))
+                dlmMainMainLayout.RestoreLayoutFromXml(DocsPath + "mainlayout");
+
+            if (File.Exists(Path + "UISettings.json"))
+            {
+                UISettings.Settings = json.JsonDeserialize<UISettings>(File.ReadAllText(Path + "UISettings.json"));
+                ApplicationThemeHelper.ApplicationThemeName = UISettings.Settings.ThemeName;
+            }
+            
+            //Load UI Settings
+
             /*DevExpress.Xpf.Core.DXTabItem NewTab = tcMainTabs.AddNewTabItem() as DevExpress.Xpf.Core.DXTabItem;
             NewTab.Header = "Select a site";*/
-            bool added = false;
+                        bool added = false;
             var result = dlmMainMainLayout.GetItems();
             foreach (var x in result)
             {
@@ -207,17 +221,9 @@ namespace KryGamesBot
                 }
             }
             string layoutresult = "";
-            //using (MemoryStream strm = new MemoryStream())
-            {
+            dlmMainMainLayout.SaveLayoutToXml(Path+"mainlayout");
+            File.WriteAllText(Path + "UISettings.json", json.JsonSerializer<UISettings>(UISettings.Settings));
                 
-                dlmMainMainLayout.SaveLayoutToXml(Path+"mainlayout");
-                 
-                /*strm.Position = 0;
-                byte[] bytes = new byte[strm.Length];
-                strm.Read(bytes, 0, (int)strm.Length);
-                layoutresult = Encoding.UTF8.GetString(bytes);
-                File.WriteAllText("mainlayout", layoutresult);*/
-            }
             foreach (var Tab in documents)
             {
                 if (Tab.Content is InstanceControl)
@@ -300,6 +306,9 @@ namespace KryGamesBot
         private void bchk_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
         {
             GlobalSettings tmp = new GlobalSettings();
+            Doormat botins = new Doormat();
+            botins.LoadPersonalSettings(Path + "personalsettings.json");
+            tmp.Settings = botins.PersonalSettings;
             //tmp.Settings = personal settings instance being used?
             tmp.Show();
         }

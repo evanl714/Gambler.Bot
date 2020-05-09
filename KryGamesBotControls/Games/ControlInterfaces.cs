@@ -10,7 +10,7 @@ namespace KryGamesBotControls.Games
     {
         void AddBet(Bet newBet);
         event EventHandler<ViewBetEventArgs> BetClicked;
-        int NumberOfBets();
+        
     }
 
     public interface iPlaceBet

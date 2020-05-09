@@ -1,4 +1,5 @@
 ﻿using DevExpress.Xpf.Charts;
+using KryGamesBotControls.Helpers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace KryGamesBotControls.Common
     /// </summary>
     public partial class ProfitChart : UserControl
     {
-        public int MaxItems { get; set; } = 1000;
+        public int MaxItems { get; set; } = -1;
         RealTimeDataCollection DataPoints = new RealTimeDataCollection();
         public ProfitChart()
         {
@@ -36,6 +37,7 @@ namespace KryGamesBotControls.Common
             series.LineStyle = new LineStyle(1);
             series.CrosshairLabelPattern = "{S}: {V:0.00000000}";            
             series.MarkerSize = 3;
+            
             bool dark = Helpers.ThemesProviderExtension.IsDark();
             trendSegmentColorizer.RisingTrendColor = dark? Colors.LightGreen: Colors.Green;
             trendSegmentColorizer.FallingTrendColor = dark? Colors.Brown : Colors.Red;
@@ -60,9 +62,9 @@ namespace KryGamesBotControls.Common
                     ChartProfit += Profit;
                     DataPoints.Add(new SimpleDataPoint(ChartItems++, (double)ChartProfit));
                     //profitChart.AddPoint(ChartItems++, (double)Profit);
-                    while (DataPoints.Count > MaxItems)
+                    while (DataPoints.Count > (MaxItems>0?MaxItems: UISettings.Settings.ChartBets))
                     {
-                        DataPoints.RemoveRangeAt(0, (DataPoints.Count - MaxItems) + 1);
+                        DataPoints.RemoveRangeAt(0, (DataPoints.Count - (MaxItems > 0 ? MaxItems : UISettings.Settings.ChartBets)) + 1);
                     }
                 }
             }
@@ -74,9 +76,9 @@ namespace KryGamesBotControls.Common
             else
             {
                 DataPoints.AddRange(points.Select(m => new SimpleDataPoint(ChartItems++, (double)(ChartProfit += m))).ToList());
-                while (DataPoints.Count > MaxItems)
+                while (DataPoints.Count > (MaxItems > 0 ? MaxItems : UISettings.Settings.ChartBets))
                 {
-                    DataPoints.RemoveRangeAt(0, (DataPoints.Count - MaxItems) + 1);
+                    DataPoints.RemoveRangeAt(0, (DataPoints.Count - (MaxItems > 0 ? MaxItems : UISettings.Settings.ChartBets)) + 1);
                 }
             }
         }

@@ -36,9 +36,9 @@
                     <dxb:BarButtonItem BarItemName="Export" Content="Export"/>
                 </dxb:BarSubItem>
                 <dxb:BarSubItem Name="bsView" CategoryName="BuiltInMenus" Content="Tools">
-                    <dxb:BarButtonItem BarItemName="bbtnSimulator" Content="Simulator" ItemClick="BarButtonItem_ItemClick"/>
-                    <dxb:BarButtonItem BarItemName="bbtnrollVerifier" Content="Roll Verifier" />
-                    <dxb:BarButtonItem BarItemName="bbtnBetHistory" Content="Bet History" />
+                    <dxb:BarButtonItem BarItemName="bbtnSimulator" Name="bbtnSimulator" Content="Simulator" ItemClick="BarButtonItem_ItemClick"/>
+                    <dxb:BarButtonItem BarItemName="bbtnrollVerifier" Name="bbtnrollVerifier" Content="Roll Verifier" />
+                    <dxb:BarButtonItem BarItemName="bbtnBetHistory" Name="bbtnBetHistory" Content="Bet History" />
 
                 </dxb:BarSubItem>
 

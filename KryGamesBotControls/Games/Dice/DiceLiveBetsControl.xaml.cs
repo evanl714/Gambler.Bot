@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using DevExpress.Xpf.Core;
 using DevExpress.Xpf.Grid;
 using DoormatCore.Games;
+using KryGamesBotControls.Helpers;
 
 namespace KryGamesBotControls.Games.Dice
 {
@@ -120,7 +121,7 @@ namespace KryGamesBotControls.Games.Dice
             else
             {
                 //if (Bets.CanRemove)
-                    while (Bets.Count > this.NumberOfBets()+1)
+                    while (Bets.Count > UISettings.Settings.LiveBets+1)
                     {
 
                         //System.Threading.Thread.Sleep(10);
@@ -138,10 +139,6 @@ namespace KryGamesBotControls.Games.Dice
             }
         }
 
-        public int NumberOfBets()
-        {
-            return 100;
-        }
 
         private void TableView_RowDoubleClick(object sender, DevExpress.Xpf.Grid.RowDoubleClickEventArgs e)
         {

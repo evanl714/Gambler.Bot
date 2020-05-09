@@ -1,4 +1,6 @@
 ﻿using DevExpress.Xpf.Core;
+using DevExpress.XtraCharts.Native;
+using DoormatBot;
 using DoormatBot.Helpers;
 using KryGamesBotControls.Common;
 using System;
@@ -35,6 +37,7 @@ namespace KryGamesBot
         public string[] SettingItems { get; set; }
         public GlobalSettings()
         {
+            
             nodes.Add(new SettingNode { Id = 1, Name = "Skin", UserControl= new SetTheme() });
             nodes.Add(new SettingNode { Id = 2, Name = "KeePass", UserControl= new KeePassSettings() { FileName="" } });            
             nodes.Add(new SettingNode { Id = 3, Name = "Storage" });
@@ -42,12 +45,16 @@ namespace KryGamesBot
             nodes.Add(new SettingNode { Id = 5, Name = "Strategies", ParentId = 3 });
             nodes.Add(new SettingNode { Id = 6, Name = "Notifications" });
             nodes.Add(new SettingNode { Id = 7, Name = "Updates" });
-            nodes.Add(new SettingNode { Id = 8, Name = "Live Bets" });
-            nodes.Add(new SettingNode { Id = 9, Name = "Chart", ParentId=8 });
-            nodes.Add(new SettingNode { Id = 10, Name = "Feed", ParentId = 8 });
+            nodes.Add(new SettingNode { Id = 8, Name = "Live Bets", UserControl= new LiveBetSettings() });            
             nodes.Add(new SettingNode { Id = 11, Name = "Donate" });
-            nodes.Add(new SettingNode { Id = 12, Name = "Proxy" });
-            nodes.Add(new SettingNode { Id = 13, Name = "Errors", UserControl=new ErrorSettings() });
+            nodes.Add(new SettingNode { Id = 12, Name = "Proxy" });            
+            var ErrSetts = new ErrorSettings();
+            foreach (var x in Settings.ErrorSettings)
+            {
+                ErrSetts.AddItem(x);
+            }
+            nodes.Add(new SettingNode { Id = 13, Name = "Errors", UserControl = ErrSetts });
+
             InitializeComponent();
             
             //SettingItems =  new string[]{"Skin","KeePass","Bet Storage","Errors","Notifications","Updates","Live View","Donate","Proxy","Strategy Storage" };
