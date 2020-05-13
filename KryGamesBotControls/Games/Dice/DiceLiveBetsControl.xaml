@@ -19,7 +19,7 @@
                         <dxe:DateEditSettings Mask="yyyy/MM/dd HH:mm:ss.ff" MaskUseAsDisplayFormat="True"/>
                     </dxg:GridColumn.EditSettings>
                 </dxg:GridColumn>
-                <dxg:GridColumn Name="colAmount" Header="Amount" FieldName="TotalAmount" />
+                <dxg:GridColumn Name="colAmount" Header="Amount" FieldName="TotalAmount" EditSettings="{dxe:TextSettings DisplayFormat=0.00000000}" />
                 <dxg:GridColumn Name="colHigh" Header="High" FieldName="High"/>
                 <dxg:GridColumn Name="colChance" Header="Chance" FieldName="Chance" />
                 <dxg:GridColumn Name="colRoll" Header="Roll" FieldName="Roll"/>

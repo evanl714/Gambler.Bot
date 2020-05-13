@@ -204,7 +204,7 @@
                 <dxlc:LayoutItem>
                     <StackPanel Orientation="Horizontal">
                         <dxe:CheckEdit EditValue="{Binding Strategy.EnableFirstResetWin}"/>
-                        <Label>Reset after first loss</Label>
+                        <Label>Reset after first win</Label>
                     </StackPanel>
                 </dxlc:LayoutItem>
             </dxlc:LayoutGroup>

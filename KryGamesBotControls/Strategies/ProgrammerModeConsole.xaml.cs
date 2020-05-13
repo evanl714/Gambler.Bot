@@ -1,6 +1,8 @@
-﻿using System;
+﻿using DevExpress.XtraRichEdit.Commands;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -18,7 +20,9 @@ namespace KryGamesBotControls.Strategies
     /// </summary>
     public partial class ProgrammerModeConsole : UserControl
     {
-
+        System.Timers.Timer tmpTimer = new System.Timers.Timer(100);
+        string QueuedPrints = "";
+        object QueuedPrintsLock = new object();
         List<string> LastCommands = new List<string>();
         int CommandsIndex = 0;
         private DoormatBot.Strategies.ProgrammerMode strategy;
@@ -56,13 +60,56 @@ namespace KryGamesBotControls.Strategies
         public ProgrammerModeConsole()
         {
             InitializeComponent();
+            tmpTimer.Elapsed += TmpTimer_Elapsed;
+            tmpTimer.Enabled = true;
+        }
+
+        private void TmpTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            if (QueuedPrints.Length > 0)
+            {
+                if (!Dispatcher.CheckAccess())
+                {
+                    Dispatcher.Invoke(new Action<object, System.Timers.ElapsedEventArgs>(TmpTimer_Elapsed), sender, e);
+                    return;
+                }
+            
+                string Message ="";
+                lock (QueuedPrintsLock)
+                {
+                    Message = QueuedPrints;
+                    QueuedPrints = "";
+                }
+                txtOutput.Text += Message;
+                while (txtOutput.LineCount > 1000)
+                {
+                    string tmp = txtOutput.Text;
+                    for (int i = 0; i< txtOutput.LineCount-980; i++)
+                    {
+                        tmp = tmp.Substring(tmp.IndexOf('\n')+1);
+                    }
+                    txtOutput.Text = tmp;
+                }
+                
+            }
         }
 
         public void Print(string Message)
         {
+            lock (QueuedPrintsLock)
+            {
+                QueuedPrints += Message + "\n";
+            }
+            /*
+            if (!Dispatcher.CheckAccess()) // CheckAccess returns true if you're on the dispatcher thread
+            {
+                Dispatcher.Invoke(new Action<string>(Print), Message);
+                return;
+            }
+
             txtOutput.Text += Message+"\n";
             if (txtOutput.LineCount > 1000)
-                txtOutput.Text = txtOutput.Text.Substring(20);
+                txtOutput.Text = txtOutput.Text.Substring(20);*/
         }
 
         private void txtConsole_KeyDown(object sender, KeyEventArgs e)
@@ -107,6 +154,13 @@ namespace KryGamesBotControls.Strategies
                 txtConsole.EditValue = "";
                 e.Handled = true;
             }
+        }
+
+        private void txtOutput_EditValueChanged(object sender, DevExpress.Xpf.Editors.EditValueChangedEventArgs e)
+        {
+            //txtOutput.Focus();
+            //txtOutput.SelectionStart = txtOutput.Text.Length;
+            (txtOutput.EditCore as TextBox).ScrollToEnd();
         }
     }
 }

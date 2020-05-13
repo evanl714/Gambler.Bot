@@ -13,7 +13,7 @@
         </Grid.RowDefinitions>
         <dxe:TextEdit Grid.Row="0" IsReadOnly="True" Name="txtOutput" TextWrapping="Wrap"  
                 AcceptsReturn="True"  
-                VerticalContentAlignment="Top" />
+                VerticalContentAlignment="Top" EditValueChanged="txtOutput_EditValueChanged" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" VerticalScrollBarVisibility="Auto" />
         <dxe:TextEdit Grid.Row="1" Name="txtConsole" KeyDown="txtConsole_KeyDown" Margin="0,5,0,0" TextWrapping="Wrap" AcceptsReturn="True"   
                 VerticalContentAlignment="Top" PreviewKeyDown="txtConsole_PreviewKeyDown" />
     </Grid>
