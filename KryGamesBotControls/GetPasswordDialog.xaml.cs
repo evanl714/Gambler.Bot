@@ -22,8 +22,7 @@ namespace KryGamesBotControls
 
         public string Pw
         {
-            get;
-            set;
+            get { return pwbPass.Text; }            
         }
 
         public GetPasswordDialog()
@@ -31,11 +30,5 @@ namespace KryGamesBotControls
             InitializeComponent();
         }
 
-        private void btnDone_Click(object sender, RoutedEventArgs e)
-        {
-            Pw = pwbPass.EditValue?.ToString();
-            this.DialogResult = true;
-            this.Close();
-        }
     }
 }

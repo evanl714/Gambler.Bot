@@ -36,8 +36,8 @@ namespace KryGamesBot
         public static bool Portable { get{return File.Exists("portable"); } }
         public static string Path { get { return Portable ? "" : Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\"; } }
         List<DocumentPanel> documents = new List<DocumentPanel>();
-        public string dbPw { get; set; }
-        public string kpPw { get; set; }
+        private static string dbPw { get; set; }
+        private static string kpPw { get; set; }
         public ICommand CloseCommand { get; private set; }
         public ICommand AddNewCommand { get; private set; }
         public MainWindow()
@@ -169,11 +169,11 @@ namespace KryGamesBot
         }
 
 
-        internal void TmpInstance_NeedKeepassPassword(object sender, DoormatBot.Helpers.PersonalSettings.GetConstringPWEventArgs e)
+        internal static void TmpInstance_NeedKeepassPassword(object sender, DoormatBot.Helpers.PersonalSettings.GetConstringPWEventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(this.dbPw))
+            if (!string.IsNullOrWhiteSpace(kpPw))
             {
-                e.Password = dbPw;
+                e.Password = kpPw;
                 return;
             }
 
@@ -181,16 +181,16 @@ namespace KryGamesBot
             
             if (tmpdiag.ShowDialog()??false)
             {
-                e.Password = tmpdiag.Pw;
+                kpPw = e.Password = tmpdiag.Pw;
                 
             }
         }
 
-        internal void TmpInstance_NeedConstringPassword(object sender, DoormatBot.Helpers.PersonalSettings.GetConstringPWEventArgs e)
+        internal static void TmpInstance_NeedConstringPassword(object sender, DoormatBot.Helpers.PersonalSettings.GetConstringPWEventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(this.kpPw))
+            if (!string.IsNullOrWhiteSpace(dbPw))
             {
-                e.Password = kpPw;
+                e.Password = dbPw;
                 return;
             }
 
@@ -198,7 +198,7 @@ namespace KryGamesBot
 
             if (tmpdiag.ShowDialog() ?? false)
             {
-                e.Password = tmpdiag.Pw;
+                dbPw = e.Password = tmpdiag.Pw;
 
             }
         }

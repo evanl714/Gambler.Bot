@@ -63,8 +63,8 @@
                                     <StackPanel Orientation="Horizontal">
                                         <dxe11:LookUpEdit Name="lueCurrencies" IsTextEditable="False"  EditValueChanged="lueCurrencies_EditValueChanged" />
                                         <dxe11:LookUpEdit Name="lueGames" IsTextEditable="False" EditValueChanged="lueGames_EditValueChanged"  />
-                                        <dxec:SimpleButton Content="Sign Out" Name="btnSignOut" />
-                                        <dxec:SimpleButton Content="Change Site" Name="btnChangeSite" />
+                                        <dxec:SimpleButton Content="Sign Out" Name="btnSignOut" Click="btnSignOut_Click" />
+                                        <dxec:SimpleButton Content="Change Site" Name="btnChangeSite" Click="btnChangeSite_Click" />
                                     </StackPanel>
                                     <Common1:SiteStats Name="SiteStats" />
                                 </StackPanel>

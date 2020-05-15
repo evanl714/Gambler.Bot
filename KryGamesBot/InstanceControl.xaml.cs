@@ -315,14 +315,14 @@ namespace KryGamesBot
 
         private void BotIns_NeedKeepassPassword(object sender, DoormatBot.Helpers.PersonalSettings.GetConstringPWEventArgs e)
         {
-            MainWindow parentWindow = Window.GetWindow(this) as MainWindow;
-            parentWindow.TmpInstance_NeedKeepassPassword(sender, e);
+            //MainWindow parentWindow = Window.GetWindow(this) as MainWindow;
+            MainWindow.TmpInstance_NeedKeepassPassword(sender, e);
         }
 
         private void BotIns_NeedConstringPassword(object sender, DoormatBot.Helpers.PersonalSettings.GetConstringPWEventArgs e)
         {
-            MainWindow parentWindow = Window.GetWindow(this) as MainWindow;
-            parentWindow.TmpInstance_NeedKeepassPassword(sender, e);
+            //MainWindow parentWindow = Window.GetWindow(this) as MainWindow;
+            MainWindow.TmpInstance_NeedConstringPassword(sender, e);
         }
 
         private void SelectSite1_OnSiteSelected(object sender, KryGamesBotControls.Common.SiteSelectedEventArgs e)
@@ -555,20 +555,17 @@ namespace KryGamesBot
 
         private void bbtnLogOut_ItemClick(object sender, ItemClickEventArgs e)
         {
-            botIns.StopStrategy("Logging Out");
-            botIns.CurrentSite.Disconnect();
-            dlmMainLayout.Visibility = Visibility.Collapsed;
-            lciSelectSite1.Visibility = Visibility.Collapsed;
-            lciLoginControl.Visibility = Visibility.Visible;
+            SignOut();
+            //botIns.StopStrategy("Logging Out");
+            //botIns.CurrentSite.Disconnect();
+            //dlmMainLayout.Visibility = Visibility.Collapsed;
+            //lciSelectSite1.Visibility = Visibility.Collapsed;
+            //lciLoginControl.Visibility = Visibility.Visible;
         }
 
         private void bbtnSite_ItemClick(object sender, ItemClickEventArgs e)
         {
-            botIns.StopStrategy("Changing Site");
-            botIns.CurrentSite.Disconnect();
-            dlmMainLayout.Visibility = Visibility.Collapsed;
-            lciSelectSite1.Visibility =  Visibility.Visible;
-            lciLoginControl.Visibility = Visibility.Collapsed;
+            ChangeSite();
         }
 
         private void LayoutPanel_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -604,6 +601,36 @@ namespace KryGamesBot
         private void sessionStats_ResetStats(object sender, EventArgs e)
         {
             botIns.ResetStats();
+        }
+
+        private void btnSignOut_Click(object sender, RoutedEventArgs e)
+        {
+            SignOut();
+        }
+
+        void SignOut()
+        {
+            botIns.StopStrategy("Logging Out");
+            botIns.CurrentSite?.Disconnect();
+            SiteChanged((Activator.CreateInstance(botIns.CurrentSite.GetType()) as DoormatCore.Sites.BaseSite), botIns.CurrentSite.CurrentCurrency, botIns.CurrentGame.ToString());
+        }
+
+        private void btnChangeSite_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeSite();
+        }
+
+        void ChangeSite()
+        {
+            var result = MessageBox.Show("Betting will be stopped and you will be signed out of the current site\n\nDo you want to continue?", "Change Site", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
+            {
+                botIns.StopStrategy("Changing Site");
+                botIns.CurrentSite.Disconnect();
+                dlmMainLayout.Visibility = Visibility.Collapsed;
+                lciSelectSite1.Visibility = Visibility.Visible;
+                lciLoginControl.Visibility = Visibility.Collapsed;
+            }
         }
     }
     public class RenameEventArgs:EventArgs

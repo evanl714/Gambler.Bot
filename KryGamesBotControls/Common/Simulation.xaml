@@ -8,8 +8,8 @@
              xmlns:local="clr-namespace:KryGamesBotControls.Common"
              xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
              mc:Ignorable="d" d:DesignWidth="800" Height="843">
-    <dxlc:LayoutControl Orientation="Vertical">
-        <dxlc:LayoutGroup Orientation="Horizontal">
+    <dxlc:LayoutControl Orientation="Vertical" ScrollBars="Auto">
+        <dxlc:LayoutGroup Orientation="Horizontal" VerticalAlignment="Top">
             <dxlc:LayoutGroup Orientation="Vertical" >
                 <dxlc:LayoutGroup Orientation="Vertical" MaxWidth="300">
                     <dxlc:LayoutItem Label="Starting Balance">
