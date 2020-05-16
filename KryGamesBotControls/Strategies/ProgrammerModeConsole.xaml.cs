@@ -158,9 +158,19 @@ namespace KryGamesBotControls.Strategies
 
         private void txtOutput_EditValueChanged(object sender, DevExpress.Xpf.Editors.EditValueChangedEventArgs e)
         {
-            //txtOutput.Focus();
-            //txtOutput.SelectionStart = txtOutput.Text.Length;
-            (txtOutput.EditCore as TextBox).ScrollToEnd();
+            try
+            {
+                if (txtOutput.EditCore != null)
+                {
+                    //txtOutput.Focus();
+                    //txtOutput.SelectionStart = txtOutput.Text.Length;
+                    (txtOutput.EditCore as TextBox).ScrollToEnd();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
     }
 }
