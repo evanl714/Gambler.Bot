@@ -1,6 +1,7 @@
 ﻿using DevExpress.Xpf.LayoutControl;
 using DoormatBot.Helpers;
 using KryGamesBotControls.Common.DBSetup;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,6 +23,7 @@ namespace KryGamesBotControls.Common
     /// </summary>
     public partial class DatabaseSetup : UserControl, INotifyPropertyChanged
     {
+        public PersonalSettings Settings { get; set; }
         public iDatabaseForm dbForm { get; set; }
         public DatabaseSetup()
         {
@@ -57,16 +59,25 @@ If you're not sure what to enter here, it's recommended you use the default sett
 
         }
 
-        public void UpdateSettings(PersonalSettings settings)
+        public void UpdateSettings()
         {
-            settings.Provider = dbForm.Provider();
-            settings.EncryptConstring = txtDBPassword.EditValue != null;
-            settings.SetConnectionString(dbForm.ConnectionString(), txtDBPassword.Text);
+            Settings.Provider = dbForm.Provider();
+            Settings.EncryptConstring = txtDBPassword.EditValue != null;
+            Settings.SetConnectionString(dbForm.ConnectionString(), txtDBPassword.Text);
         }
 
         public bool Verify()
         {
             return dbForm.Validate();
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (Settings!=null)
+            {
+                cbeProvider.EditValue = Settings.Provider;
+                
+            }
         }
     }
 }

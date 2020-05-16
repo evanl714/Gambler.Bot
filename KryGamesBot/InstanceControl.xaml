@@ -55,7 +55,10 @@
                 <dxlc:LayoutItem Name="lciLoginControl"  Visibility="Collapsed" >
                     <Common1:Login Name="LoginControl"  OnLogin="LoginControl_OnLogin" OnBack="LoginControl_OnBack" OnSkip="LoginControl_OnSkip"/>
                 </dxlc:LayoutItem>
-                <dxdo:DockLayoutManager dxdo:RestoreLayoutOptions.AddNewPanels="True" FloatingMode="Desktop" Visibility="Collapsed" Name="dlmMainLayout" ClosedPanelsBarVisibility="Auto" ClosedPanelsBarPosition="Top" >
+                <dxdo:DockLayoutManager 
+                    dxdo:RestoreLayoutOptions.AddNewPanels="True" 
+                    FloatingMode="Desktop" Visibility="Collapsed" 
+                    Name="dlmMainLayout" ClosedPanelsBarVisibility="Auto" ClosedPanelsBarPosition="Top" >
                     <dxdo:LayoutGroup Orientation="Horizontal" >
                         <dxdo:LayoutGroup Orientation="Vertical" ItemWidth="300" >
                             <dxdo:LayoutPanel Caption="User Stats" ItemHeight="250" >

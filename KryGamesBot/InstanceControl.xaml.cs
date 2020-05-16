@@ -124,7 +124,7 @@ namespace KryGamesBot
             {
                 case "DAlembert": StrategyControl = new dAlembert();break;
                 case "Fibonacci": StrategyControl = new Fibonacci();break;
-                case "Labouchere": StrategyControl = new Labouchere();break;
+                case "Labouchere": StrategyControl = new KryGamesBotControls.Strategies.Labouchere.Labouchere();break;
                 case "Martingale": StrategyControl = new MartingaleControl(); break;
                 case "PresetList":
                 case "ProgrammerCS": StrategyControl = new ProgrammerModeCS(); break;

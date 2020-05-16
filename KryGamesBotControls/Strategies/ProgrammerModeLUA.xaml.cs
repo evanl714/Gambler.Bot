@@ -47,7 +47,7 @@ namespace KryGamesBotControls.Strategies
             richEditControl1.Document.DefaultTabWidth = 5;
             richEditControl1.HorizontalRulerOptions.Visibility = RichEditRulerVisibility.Hidden;
             richEditControl1.VerticalRulerOptions.Visibility = RichEditRulerVisibility.Hidden;
-            richEditControl1.Height = this.Height;
+            richEditControl1.Height = this.Height-135;
             richEditControl1.Width = this.Width;
             this.SizeChanged += ProgrammerModeLUA_SizeChanged;
             CreateWatcher();
@@ -83,8 +83,8 @@ namespace KryGamesBotControls.Strategies
 
         private void ProgrammerModeLUA_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            richEditControl1.Height = e.NewSize.Height;
-            richEditControl1.Width = e.NewSize.Width;
+            richEditControl1.Height = e.NewSize.Height-135;
+            richEditControl1.Width = e.NewSize.Width-50;
         }
 
         public event EventHandler StartBetting;

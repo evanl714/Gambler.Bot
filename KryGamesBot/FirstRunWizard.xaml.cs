@@ -43,7 +43,7 @@ namespace KryGamesBot
         {
             InitializeComponent();
             settings = PersonalSettings.Default();
-
+            dbsetup1.Settings = settings;
             foreach (var x in settings.ErrorSettings)
             {
                 ErrorSettings.AddItem(x);
@@ -122,7 +122,7 @@ You're all set up and ready to start. Finish this wizard to choose the site you 
                     e.Cancel = !dbsetup1.Verify(); 
                     if (!e.Cancel)
                     {
-                        dbsetup1.UpdateSettings(settings);
+                        dbsetup1.UpdateSettings();
                     }
                 //update conenction settings
                     break;
