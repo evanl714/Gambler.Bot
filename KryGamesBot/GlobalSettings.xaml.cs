@@ -3,9 +3,11 @@ using DevExpress.XtraCharts.Native;
 using DoormatBot;
 using DoormatBot.Helpers;
 using KryGamesBotControls.Common;
+using Microsoft.Scripting.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -49,16 +51,23 @@ namespace KryGamesBot
             nodes.Add(new SettingNode { Id = 11, Name = "Donate" });
             nodes.Add(new SettingNode { Id = 12, Name = "Proxy" });            
             var ErrSetts = new ErrorSettings();
+            
+            nodes.Add(new SettingNode { Id = 13, Name = "Errors", UserControl = ErrSetts });
+
+            InitializeComponent();
+            this.Loaded += GlobalSettings_Loaded;
+            //SettingItems =  new string[]{"Skin","KeePass","Bet Storage","Errors","Notifications","Updates","Live View","Donate","Proxy","Strategy Storage" };
+            DataContext = this;
+        }
+
+        private void GlobalSettings_Loaded(object sender, RoutedEventArgs e)
+        {
+            SettingNode tmpNode = nodes.First(m => m.Name == "Errors");
+            if (tmpNode.UserControl is ErrorSettings ErrSetts && Settings!=null)
             foreach (var x in Settings.ErrorSettings)
             {
                 ErrSetts.AddItem(x);
             }
-            nodes.Add(new SettingNode { Id = 13, Name = "Errors", UserControl = ErrSetts });
-
-            InitializeComponent();
-            
-            //SettingItems =  new string[]{"Skin","KeePass","Bet Storage","Errors","Notifications","Updates","Live View","Donate","Proxy","Strategy Storage" };
-            DataContext = this;
         }
 
         private void TreeListControl_SelectedItemChanged(object sender, DevExpress.Xpf.Grid.SelectedItemChangedEventArgs e)
