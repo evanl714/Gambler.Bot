@@ -41,4 +41,16 @@
     <ProjectReference Include="..\..\Doormat\Doormat\GlobalsObject\GlobalsObject.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Strategies\PresetList\PresetDice.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Strategies\PresetList\PresetDice.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
 </Project>

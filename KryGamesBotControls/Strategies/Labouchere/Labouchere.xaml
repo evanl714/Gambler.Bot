@@ -16,7 +16,7 @@
                 <dxg:GridControl Name="gcItems" MaxHeight="1000" Height="800" ItemsSource="{Binding Bets}" >
                     <dxg:GridColumn FieldName="Amount" AllowEditing="true">
                         <dxg:GridColumn.EditSettings>
-                            <dxe:SpinEditSettings MaxValue="999" MinValue="0" DisplayFormat="0.00000000"/>
+                            <dxe:SpinEditSettings MaxValue="999999999999999" MinValue="0" DisplayFormat="0.00000000"/>
                         </dxg:GridColumn.EditSettings>
                     </dxg:GridColumn>
                     

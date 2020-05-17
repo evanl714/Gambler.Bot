@@ -126,7 +126,7 @@ namespace KryGamesBot
                 case "Fibonacci": StrategyControl = new Fibonacci();break;
                 case "Labouchere": StrategyControl = new KryGamesBotControls.Strategies.Labouchere.Labouchere();break;
                 case "Martingale": StrategyControl = new MartingaleControl(); break;
-                case "PresetList":
+                case "PresetList": StrategyControl = new KryGamesBotControls.Strategies.PresetList.PresetListControl();break;
                 case "ProgrammerCS": StrategyControl = new ProgrammerModeCS(); break;
                 case "ProgrammerJS": StrategyControl = new ProgrammerModeJS(); break;
                 case "ProgrammerLUA": StrategyControl = new ProgrammerModeLUA();  break;

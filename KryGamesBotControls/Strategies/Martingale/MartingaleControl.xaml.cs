@@ -54,8 +54,8 @@ namespace KryGamesBotControls.Strategies.Martingale
 
         public void SetStrategy(BaseStrategy Strategy)
         {
-            if (Strategy is DoormatBot.Strategies.Martingale)
-                this.Strategy = (Strategy as DoormatBot.Strategies.Martingale);
+            if (Strategy is DoormatBot.Strategies.Martingale mart)
+                this.Strategy = mart;
             StartControl.DataContext = Strategy;
             OnPropertyChanged(nameof(Strategy));
         }
