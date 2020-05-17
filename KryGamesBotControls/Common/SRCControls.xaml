@@ -68,10 +68,10 @@
             </dxlc:LayoutGroup>
             <dxlc:LayoutGroup>
                 <dxlc:LayoutItem>
-                    <dxe:CheckEdit Content="Reset After" Name="chkEnableResetLossSinceMaxProfit"/>
+                    <dxe:CheckEdit Content="Reset After" Name="chkEnableResetLossSinceMaxProfit" EditValue="{Binding EnableResetLossFromMaxProfit}"/>
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem>
-                    <dxe:SpinEdit Name="seResetLossSinceMaxprofit" DisplayFormatString="0.00000000"/>
+                    <dxe:SpinEdit Name="seResetLossSinceMaxprofit" DisplayFormatString="0.00000000" EditValue="{Binding ResetLossFromMaxProfit}"/>
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="Loss since max profit" LabelVerticalAlignment="Center"></dxlc:LayoutItem>
             </dxlc:LayoutGroup>
@@ -111,6 +111,15 @@
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="Value Lost"></dxlc:LayoutItem>
             </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem>
+                    <dxe:CheckEdit Content="Stop After" Name="chkEnableStopLossSinceMaxProfit" EditValue="{Binding EnableStopLossFromMaxProfit}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <dxe:SpinEdit Name="seStopLossSinceMaxprofit" DisplayFormatString="0.00000000" EditValue="{Binding StopLossFromMaxProfit}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Loss since max profit" LabelVerticalAlignment="Center"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
         </dxlc:LayoutGroup>
 
         <dxlc:LayoutGroup  View="GroupBox" Header="On Win" Orientation="Vertical">
@@ -139,7 +148,7 @@
                 <dxlc:LayoutItem>
                     <dxe:SpinEdit Name="seResetStreakWin" DisplayFormatString="0.00000000" EditValue="{Binding ResetAfterBtcStreakWin}"/>
                 </dxlc:LayoutItem>
-                <dxlc:LayoutItem Label="Value Lost in a row" LabelVerticalAlignment="Center"></dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Streak Profit" LabelVerticalAlignment="Center"></dxlc:LayoutItem>
             </dxlc:LayoutGroup>
             <dxlc:LayoutGroup>
                 <dxlc:LayoutItem>
@@ -148,14 +157,14 @@
                 <dxlc:LayoutItem>
                     <dxe:SpinEdit Name="seResetWin" DisplayFormatString="0.00000000" EditValue="{Binding ResetAfterBtcWin}"/>
                 </dxlc:LayoutItem>
-                <dxlc:LayoutItem Label="Value Lost" LabelVerticalAlignment="Center"></dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Profit" LabelVerticalAlignment="Center"></dxlc:LayoutItem>
             </dxlc:LayoutGroup>
             <dxlc:LayoutGroup>
                 <dxlc:LayoutItem>
-                    <dxe:CheckEdit Content="Reset After" Name="chkEnableResetWinSinceMaxProfit"/>
+                    <dxe:CheckEdit Content="Reset After" Name="chkEnableResetWinSinceMaxProfit" EditValue="{Binding EnableResetWinFromMinProfit}"/>
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem>
-                    <dxe:SpinEdit Name="seResetWinSinceMaxprofit" DisplayFormatString="0.00000000"/>
+                    <dxe:SpinEdit Name="seResetWinSinceMaxprofit" DisplayFormatString="0.00000000" EditValue="{Binding ResetWinFromMinProfit}"/>
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="Win since min profit" LabelVerticalAlignment="Center"></dxlc:LayoutItem>
             </dxlc:LayoutGroup>
@@ -184,7 +193,7 @@
                 <dxlc:LayoutItem>
                     <dxe:SpinEdit Name="seStopStreakWin" DisplayFormatString="0.00000000" EditValue="{Binding StopAfterBtcWinStreak}"/>
                 </dxlc:LayoutItem>
-                <dxlc:LayoutItem Label="Value Lost in a row"></dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Streak Profit"></dxlc:LayoutItem>
             </dxlc:LayoutGroup>
             <dxlc:LayoutGroup>
                 <dxlc:LayoutItem>
@@ -193,8 +202,18 @@
                 <dxlc:LayoutItem>
                     <dxe:SpinEdit Name="seStopWin" DisplayFormatString="0.00000000" EditValue="{Binding StopAfterBtcWin}"/>
                 </dxlc:LayoutItem>
-                <dxlc:LayoutItem Label="Value Lost"></dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Profit"></dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem>
+                    <dxe:CheckEdit Content="Reset After" Name="chkEnableStopWinSinceMaxProfit" EditValue="{Binding EnableStopWinFromMinProfit}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <dxe:SpinEdit Name="seStopWinSinceMaxprofit" DisplayFormatString="0.00000000" EditValue="{Binding StopWinFromMinProfit}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Win since min profit" LabelVerticalAlignment="Center"></dxlc:LayoutItem>
             </dxlc:LayoutGroup>
         </dxlc:LayoutGroup>
+        
     </dxlc:LayoutControl>
 </UserControl>

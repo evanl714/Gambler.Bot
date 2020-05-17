@@ -23,7 +23,7 @@ namespace KryGamesBotControls.Strategies.PresetList
     public partial class PresetListControl : BaseControl, iStrategy
     {
         DoormatCore.Games.Games Game = DoormatCore.Games.Games.Dice;
-        DoormatBot.Strategies.PresetList Strategy { get; set; }
+        public DoormatBot.Strategies.PresetList Strategy { get; set; }
         public UserControl StartControl { get; set; } = new PresetDice();
         public PresetListControl()
         {
@@ -34,7 +34,7 @@ namespace KryGamesBotControls.Strategies.PresetList
 
         private void PresetListControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            gcBets.Height = e.NewSize.Height - btnGroup.Height;
+            gcBets.Height = e.NewSize.Height - 24;
         }
 
         private void btnOpen_Click(object sender, RoutedEventArgs e)
@@ -72,7 +72,8 @@ namespace KryGamesBotControls.Strategies.PresetList
                 this.Strategy = lst;
                 
             }
-            this.DataContext = this.Strategy;
+            this.DataContext = this;
+            StartControl.DataContext = this.Strategy;
             OnPropertyChanged(nameof(this.Strategy));
             tvBets.BestFitColumns();
         }

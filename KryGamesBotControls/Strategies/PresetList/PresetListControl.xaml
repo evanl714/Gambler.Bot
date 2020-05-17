@@ -25,7 +25,7 @@
             <dx:SimpleButton  Content="Save As" Name="btnSaveSas" Height="25" Click="btnSaveSas_Click"/>
             <TextBlock/>
         </dxlc:LayoutGroup>
-        <dxg:GridControl Name="gcBets" Grid.Column="0" Grid.Row="1" Grid.RowSpan="4" ItemsSource="{Binding PresetBets}">
+        <dxg:GridControl MaxHeight="4000" Name="gcBets" Grid.Column="0" Grid.Row="1" Grid.RowSpan="5" ItemsSource="{Binding Strategy.PresetBets}">
             <dxg:GridColumn FieldName="Amount" Name="gcAmount" >
                 <dxg:GridColumn.EditSettings>
                     <dxe:SpinEditSettings MaxValue="999999999999999" MinValue="0" DisplayFormat="0.00000000"/>
@@ -61,10 +61,10 @@
                 </dxg:TableView>
             </dxg:GridControl.View>
         </dxg:GridControl>
-        <ContentControl Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"/>
+        <ContentControl Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Content="{Binding StartControl}"/>
         <dxlc:LayoutGroup Grid.Column="1" Grid.Row="2" View="GroupBox" Header="When end of list is reached" Orientation="Vertical">
             <dxlc:LayoutItem>
-                <dxe:ComboBoxEdit EditValue="{Binding EndAction}">
+                <dxe:ComboBoxEdit EditValue="{Binding Strategy.EndAction}">
                     <dxe:ComboBoxEditItem Content="Reset" />
                     <dxe:ComboBoxEditItem Content="Stop" />
                     <dxe:ComboBoxEditItem Content="Step" />
@@ -72,14 +72,14 @@
             </dxlc:LayoutItem>
             <dxlc:LayoutGroup>
                 <dxlc:LayoutItem >
-                    <dxe:SpinEdit EditValue="{Binding EndStep}" EditValueType="{x:Type sys:Int32}" />                
+                    <dxe:SpinEdit EditValue="{Binding Strategy.EndStep}" EditValueType="{x:Type sys:Int32}" />                
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="steps backwards"></dxlc:LayoutItem>
             </dxlc:LayoutGroup>
         </dxlc:LayoutGroup>
         <dxlc:LayoutGroup Grid.Column="1" Grid.Row="3" View="GroupBox" Header="On Loss"  Orientation="Vertical">
             <dxlc:LayoutItem>
-                <dxe:ComboBoxEdit EditValue="{Binding LossAction}">
+                <dxe:ComboBoxEdit EditValue="{Binding Strategy.LossAction}">
                     <dxe:ComboBoxEditItem Content="Reset" />
                     <dxe:ComboBoxEditItem Content="Stop" />
                     <dxe:ComboBoxEditItem Content="Step" />
@@ -87,14 +87,14 @@
             </dxlc:LayoutItem>
             <dxlc:LayoutGroup>
                 <dxlc:LayoutItem >
-                    <dxe:SpinEdit  EditValue="{Binding LossStep}" EditValueType="{x:Type sys:Int32}"/>
+                    <dxe:SpinEdit  EditValue="{Binding Strategy.LossStep}" EditValueType="{x:Type sys:Int32}"/>
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="steps"></dxlc:LayoutItem>
             </dxlc:LayoutGroup>
         </dxlc:LayoutGroup>
         <dxlc:LayoutGroup Grid.Column="1" Grid.Row="4" View="GroupBox" Header="On Win" Orientation="Vertical">
             <dxlc:LayoutItem>
-                <dxe:ComboBoxEdit  EditValue="{Binding WinAction}">
+                <dxe:ComboBoxEdit  EditValue="{Binding Strategy.WinAction}">
                     <dxe:ComboBoxEditItem Content="Reset" />
                     <dxe:ComboBoxEditItem Content="Stop" />
                     <dxe:ComboBoxEditItem Content="Step" />
@@ -102,7 +102,7 @@
             </dxlc:LayoutItem>
             <dxlc:LayoutGroup>
                 <dxlc:LayoutItem >
-                    <dxe:SpinEdit  EditValue="{Binding WinStep}" EditValueType="{x:Type sys:Int32}"/>
+                    <dxe:SpinEdit  EditValue="{Binding Strategy.WinStep}" EditValueType="{x:Type sys:Int32}"/>
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="steps"></dxlc:LayoutItem>
             </dxlc:LayoutGroup>
