@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
@@ -10,6 +10,89 @@
     <None Remove="Images\Open.svg" />
     <None Remove="Images\Save.svg" />
     <None Remove="Images\SaveAs.svg" />
+    <None Remove="Images\Sites\bitdice.png" />
+    <None Remove="Images\Sites\BitExo.PNG" />
+    <None Remove="Images\Sites\Bitsler.PNG" />
+    <None Remove="Images\Sites\Bitvest.PNG" />
+    <None Remove="Images\Sites\CryptoGames.PNG" />
+    <None Remove="Images\Sites\Dice999.PNG" />
+    <None Remove="Images\Sites\DuckDice.PNG" />
+    <None Remove="Images\Sites\Ethercrash.png" />
+    <None Remove="Images\Sites\freebitcoin.png" />
+    <None Remove="Images\Sites\kingdice.png" />
+    <None Remove="Images\Sites\Megadice.png" />
+    <None Remove="Images\Sites\Nitrodice.png" />
+    <None Remove="Images\Sites\NitrogenSports.png" />
+    <None Remove="Images\Sites\PrimeDice.png" />
+    <None Remove="Images\Sites\PrimeDice.svg" />
+    <None Remove="Images\Sites\ProvablyIO.png" />
+    <None Remove="Images\Sites\Stake.PNG" />
+    <None Remove="Images\Sites\WinDice.png" />
+    <None Remove="Images\Sites\WolfBet.png" />
+    <None Remove="Images\Sites\YoloDice.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Images\Sites\bitdice.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Sites\BitExo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Sites\Bitsler.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Sites\Bitvest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Sites\CryptoGames.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Sites\Dice999.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Sites\DuckDice.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Sites\Ethercrash.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Sites\freebitcoin.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Sites\kingdice.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Sites\Megadice.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Sites\Nitrodice.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Sites\NitrogenSports.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Sites\PrimeDice.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Sites\PrimeDice.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Sites\ProvablyIO.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Sites\Stake.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Sites\WinDice.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Sites\WolfBet.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images\Sites\YoloDice.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -28,17 +111,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DevExpress.WindowsDesktop.Charts" Version="19.2.7" />
-    <PackageReference Include="DevExpress.WindowsDesktop.Wpf.Charts" Version="19.2.7" />
-    <PackageReference Include="DevExpress.WindowsDesktop.Wpf.Dialogs" Version="19.2.7" />
-    <PackageReference Include="DevExpress.WindowsDesktop.Wpf.Grid" Version="19.2.7" />
-    <PackageReference Include="DevExpress.WindowsDesktop.Wpf.Themes.All" Version="19.2.7" />
+    <PackageReference Include="DevExpress.Charts" Version="23.1.5" />
+    <PackageReference Include="DevExpress.Wpf.Charts" Version="23.1.5" />
+    <PackageReference Include="DevExpress.Wpf.Dialogs" Version="23.1.5" />
+    <PackageReference Include="DevExpress.Wpf.Grid" Version="23.1.5" />
+    <PackageReference Include="DevExpress.Wpf.Themes.All" Version="23.1.5" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\DoormatBot\Doormat.Bot\Doormat.Bot.csproj" />
     <ProjectReference Include="..\..\Doormat\Doormat\Doormat\DoormatCore.csproj" />
-    <ProjectReference Include="..\..\Doormat\Doormat\GlobalsObject\GlobalsObject.csproj" />
   </ItemGroup>
 
   <ItemGroup>

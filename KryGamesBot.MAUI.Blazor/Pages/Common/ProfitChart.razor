@@ -1,0 +1,72 @@
+﻿@using KryGamesBot.MAUI.Blazor.Classes;
+<h3>ProfitChart</h3>
+<DxButton Text="Reset Chart" Click="btnReset_Click"/>
+<DxButton Text="@freezeContent" Click="btnFreeze_Click" />
+<DxChart Data="@DataPoints">
+    <DxChartLineSeries 
+        ArgumentField="@((SimpleDataPoint s) => s.Argument)"
+        ValueField="@(s => s.Value)"
+        />
+</DxChart>
+
+@code {
+    public bool Enabled { get; set; } = true;
+    int ChartItems = 0;
+    decimal ChartProfit = 0;
+    string freezeContent = "Freeze Chart";
+    public RealTimeDataCollection DataPoints { get; set; }
+    [Parameter]
+    public int MaxItems { get; set; } = -1;
+    public ProfitChart()
+    {
+        
+    }
+    
+    public void AddPoint(decimal Profit)
+    {
+        if (Enabled)
+        {
+           
+            ChartProfit += Profit;
+            DataPoints.Add(new SimpleDataPoint(ChartItems++, (double)ChartProfit));
+            //profitChart.AddPoint(ChartItems++, (double)Profit);
+            while (DataPoints.Count > (MaxItems > 0 ? MaxItems : UISettings.Settings.ChartBets))
+            {
+                DataPoints.RemoveRangeAt(0, (DataPoints.Count - (MaxItems > 0 ? MaxItems : UISettings.Settings.ChartBets)) + 1);
+            }
+            
+        }
+    }
+    public void AddRange(List<decimal> points)
+    {        
+        DataPoints.AddRange(points.Select(m => new SimpleDataPoint(ChartItems++, (double)(ChartProfit += m))).ToList());
+        while (DataPoints.Count > (MaxItems > 0 ? MaxItems : UISettings.Settings.ChartBets))
+        {
+            DataPoints.RemoveRangeAt(0, (DataPoints.Count - (MaxItems > 0 ? MaxItems : UISettings.Settings.ChartBets)) + 1);
+        }
+    }
+    public void Reset()
+    {
+        bool OriginalEnabled = Enabled;
+        Enabled = false;
+        ChartProfit = 0;
+        ChartItems = 0;
+        DataPoints?.Clear();
+        Enabled = OriginalEnabled;
+    }
+
+    private void btnReset_Click(MouseEventArgs args)
+    {
+        Reset();
+    }
+
+    private void btnFreeze_Click(MouseEventArgs args)
+    {
+        Enabled = !Enabled;
+        if (Enabled)
+            freezeContent = "Freeze Chart";
+        else
+            freezeContent = "Resume Chart";
+    }
+}
+

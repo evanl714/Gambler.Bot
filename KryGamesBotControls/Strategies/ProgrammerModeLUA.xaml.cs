@@ -140,7 +140,7 @@ namespace KryGamesBotControls.Strategies
                 richEditControl1.Views.SimpleView.AllowDisplayLineNumbers = true;
                 richEditControl1.Views.DraftView.AllowDisplayLineNumbers = true;
                 richEditControl1.Views.PrintLayoutView.AllowDisplayLineNumbers = true;
-                richEditControl1.Views.SimpleView.Padding = new System.Windows.Forms.Padding(40, 4, 0, 0);
+                richEditControl1.Views.SimpleView.Padding = new DevExpress.Portable.PortablePadding(40, 4, 0, 0);
             }
             
             LoadDocument();

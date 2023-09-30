@@ -1,0 +1,56 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\New.svg" />
+    <None Remove="Images\Open.svg" />
+    <None Remove="Images\Save.svg" />
+    <None Remove="Images\SaveAs.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\New.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Open.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Save.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\SaveAs.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DevExpress.WindowsDesktop.Charts" Version="19.2.7" />
+    <PackageReference Include="DevExpress.WindowsDesktop.Wpf.Charts" Version="19.2.7" />
+    <PackageReference Include="DevExpress.WindowsDesktop.Wpf.Dialogs" Version="19.2.7" />
+    <PackageReference Include="DevExpress.WindowsDesktop.Wpf.Grid" Version="19.2.7" />
+    <PackageReference Include="DevExpress.WindowsDesktop.Wpf.Themes.All" Version="19.2.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\DoormatBot\Doormat.Bot\Doormat.Bot.csproj" />
+    <ProjectReference Include="..\..\Doormat\Doormat\Doormat\DoormatCore.csproj" />
+    <ProjectReference Include="..\..\Doormat\Doormat\GlobalsObject\GlobalsObject.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Strategies\PresetList\PresetDice.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Strategies\PresetList\PresetDice.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+</Project>

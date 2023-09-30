@@ -1,0 +1,164 @@
+﻿@using DoormatBot;
+@using DoormatCore.Helpers;
+@using KryGamesBot.MAUI.Blazor.Pages.Common
+<PageTitle>@title</PageTitle>
+<h3>BotInstance</h3>
+<div class="@(ShowSiteSelect?"":"visually-hidden")">
+<SelectSite Sites="@Doormat.Sites" OnSiteSelected="SiteSelected" />
+</div>
+<div class="@(ShowInstance?"InstanceContainer":"visually-hidden")">
+    <div class="instanceStatsColumn">
+        <SiteStats stats="@botIns?.CurrentSite?.Stats"/>
+        <SessionStats Stats="@botIns?.Stats" @ref="_sessionStats"/>
+    </div>
+    <div class="instanceMainColumn">
+        <ProfitChart @ref="_profitChart"/>
+    </div>
+    <div class="StrategyColumn">
+        <DxTabs>
+            <DxTabPage Text="Strategy">
+                
+            </DxTabPage>
+            <DxTabPage Text="Reset Settings">
+                <SRCControls BetSettings="@botIns?.BetSettings" />
+            </DxTabPage>
+            <DxTabPage Text="Advanced settings">
+                
+            </DxTabPage>
+            <DxTabPage Text="Custom Triggers">
+                
+            </DxTabPage>
+            <DxTabPage Text="Manual Betting">
+                
+            </DxTabPage>
+        </DxTabs>
+        
+    </div>
+</div>
+
+
+
+<DxPopup HeaderText="Log in"
+@bind-Visible="@LoginPopupVisible" >
+    <Login SelectedSite="@botIns.CurrentSite" OnBackClicked="Login_OnBackClicked" OnSkipClicked="Login_OnSkipClicked" />
+</DxPopup>
+
+
+@code {
+    ProfitChart _profitChart;
+    SessionStats _sessionStats;
+    bool ShowSiteSelect = true;
+    bool ShowInstance = false;
+    Doormat botIns = new Doormat();
+    bool LoginPopupVisible = false;
+    string title = "Select site";
+    public BotInstance()
+    {
+        botIns.CompileSites();
+        botIns.GetStrats();
+
+        /*cbeStartegies.ItemsSource = botIns.Strategies.Keys;
+        SelectSite1.Sites = Doormat.Sites;*/
+        /*botIns.NeedConstringPassword += BotIns_NeedConstringPassword;
+        botIns.NeedKeepassPassword += BotIns_NeedKeepassPassword;
+        botIns.OnGameChanged += BotIns_OnGameChanged;
+        botIns.OnNotification += BotIns_OnNotification;
+        botIns.OnSiteAction += BotIns_OnSiteAction;*/
+        botIns.OnSiteBetFinished += BotIns_OnSiteBetFinished;
+        /*
+        botIns.OnSiteChat += BotIns_OnSiteChat;
+        botIns.OnSiteError += BotIns_OnSiteError;*/
+
+        botIns.OnSiteLoginFinished += BotIns_OnSiteLoginFinished;
+
+        /*
+        botIns.OnSiteNotify += BotIns_OnSiteNotify;
+        botIns.OnSiteRegisterFinished += BotIns_OnSiteRegisterFinished;
+        botIns.OnSiteStatsUpdated += BotIns_OnSiteStatsUpdated;
+        botIns.OnStarted += BotIns_OnStarted;
+        botIns.OnStopped += BotIns_OnStopped;
+        botIns.OnStrategyChanged += BotIns_OnStrategyChanged;*/
+    }
+
+
+
+    void SiteChanged(DoormatCore.Sites.BaseSite NewSite, string currency, string game)
+    {
+        botIns.CurrentSite = NewSite;
+        if (currency != null && Array.IndexOf(botIns.CurrentSite.Currencies, currency) >= 0)
+            botIns.CurrentSite.Currency = Array.IndexOf(botIns.CurrentSite.Currencies, currency);
+        object curGame = DoormatCore.Games.Games.Dice;
+        if (game != null && Enum.TryParse(typeof(DoormatCore.Games.Games), game, out curGame) && Array.IndexOf(botIns.CurrentSite.SupportedGames, (DoormatCore.Games.Games)curGame) >= 0)
+            botIns.CurrentGame = (DoormatCore.Games.Games)curGame;
+
+        // lciSelectSite1.Visibility = Visibility.Collapsed;
+        // lciLoginControl.Visibility = Visibility.Visible;
+        // itmCurrency.Items.Clear();
+        // foreach (string x in botIns.CurrentSite.Currencies)
+        // {
+        //     var itm = new BarCheckItem();
+        //     itm.Content = x;
+        //     itm.CheckedChanged += Itm_CheckedChanged;
+        //     itmCurrency.Items.Add(itm);
+        // }
+        // itmGame.Items.Clear();
+        // foreach (var x in botIns.CurrentSite.SupportedGames)
+        // {
+        //     var itm = new BarCheckItem();
+        //     itm.Content = x.ToString();
+        //     itm.CheckedChanged += Itm_CheckedChanged;
+        //     itmGame.Items.Add(itm);
+        // }
+        // lueCurrencies.ItemsSource = botIns.CurrentSite.Currencies;
+        // lueCurrencies.EditValue = botIns.CurrentSite.CurrentCurrency;
+        // lueGames.ItemsSource = botIns.CurrentSite.SupportedGames;
+        // lueGames.EditValue = botIns.CurrentGame;
+        // Rename?.Invoke(this, new RenameEventArgs { newName = "Log in - " + NewSite?.SiteName });
+    }
+    async Task SiteSelected(SitesList selectedSite)
+    {
+
+        SiteChanged(Activator.CreateInstance(selectedSite.SiteType()) as DoormatCore.Sites.BaseSite, selectedSite.SelectedCurrency?.Name, selectedSite.SelectedGame?.Name);
+        LoginPopupVisible = true;
+
+    }
+    async Task Login_OnBackClicked()
+    {
+        ShowSiteSelect = true;
+        LoginPopupVisible = false;
+        ShowInstance = false;
+        InvokeAsync(StateHasChanged);
+    }
+    async Task Login_OnSkipClicked()
+    {
+        ShowSiteSelect = false;
+        LoginPopupVisible = false;
+        ShowInstance = true;
+        InvokeAsync(StateHasChanged);
+    }
+    void BotIns_OnSiteLoginFinished(object sender, DoormatCore.Sites.LoginFinishedEventArgs e)
+    {
+        if (e.Success)
+        {
+
+            //hide login, show other controls all over the place
+            LoginPopupVisible = false;
+            ShowSiteSelect = false;
+            title = botIns.CurrentSite.SiteName;
+            ShowInstance = true;
+            InvokeAsync(StateHasChanged);
+        }
+        else
+        {
+            //LoginControl.LoginFailed();
+        }
+    }
+    private void BotIns_OnSiteBetFinished(object sender, DoormatCore.Sites.BetFinisedEventArgs e)
+    {
+        //LiveBets.AddBet(e.NewBet);
+        _profitChart.AddPoint(e.NewBet.Profit);
+        //SiteStats.RefreshStats();
+        _sessionStats.RefreshStats();
+    }
+
+}

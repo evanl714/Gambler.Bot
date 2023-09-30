@@ -1,0 +1,36 @@
+﻿<h3>SiteStats</h3>
+<div>
+<h4 class="stat">Balance</h4>
+    <p class="stat">@stats?.Balance</p>
+</div>
+<div>
+<h4 class="stat">Profit</h4>
+    <p class="stat">@stats?.Profit</p>
+</div>
+<div>
+<h4 class="stat">Wagered</h4>
+    <p class="stat">@stats?.Wagered</p>
+</div>
+<div>
+<h4 class="stat">Wins</h4>
+    <p class="stat">@stats?.Wins</p>
+</div>
+<div>
+<h4 class="stat">Losses</h4>
+    <p class="stat">@stats?.Losses</p>
+</div>
+<div>
+<h4 class="stat">Total Bets</h4>
+    <p class="stat">@(stats?.Wins + stats?.Losses)</p>
+</div>
+
+@code {
+
+    [Parameter]
+    public DoormatCore.Sites.SiteStats stats { get; set; }
+
+public SiteStats()
+    {
+        
+    }
+}
