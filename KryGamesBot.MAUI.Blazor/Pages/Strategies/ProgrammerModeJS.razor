@@ -1,0 +1,16 @@
+﻿@inherits ProgrammerModeLUA
+@{
+    base.BuildRenderTree(__builder);
+}
+@code {
+     public ProgrammerModeJS():base()
+    {
+        
+    }
+    protected override void SetLanguage()
+    {
+        LanguageName = "javascript";
+        FileExtension = "js";
+        TemplateName = "JSTemplate.js";
+    }
+}

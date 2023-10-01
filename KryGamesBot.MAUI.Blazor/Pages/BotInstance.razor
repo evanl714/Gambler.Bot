@@ -1,10 +1,12 @@
 ﻿@using DoormatBot;
+@using DoormatBot.Strategies;
 @using DoormatCore.Helpers;
 @using KryGamesBot.MAUI.Blazor.Classes;
 @using KryGamesBot.MAUI.Blazor.Interfaces;
 @using KryGamesBot.MAUI.Blazor.Pages.Common
 @using KryGamesBot.MAUI.Blazor.Pages.Games.Dice;
 @using KryGamesBot.MAUI.Blazor.Pages.Strategies;
+@using System.Reflection;
 @implements IDisposable;
 <PageTitle>@title</PageTitle>
 <h3>BotInstance</h3>
@@ -60,7 +62,16 @@
                         @switch (ActiveTabIndex)
                         {
                             case 0:
-                                <KryGamesBot.MAUI.Blazor.Pages.Strategies.ProgrammerModeLUA @ref="ProgrammerLUA" />
+                            <div>
+                                <DxComboBox Data="botIns.Strategies.Keys" ValueChanged="@((string e)=>(StrategySelected(e)))" Value="@botIns.Strategy.StrategyName" />
+                            </div>
+                            <div>
+                                        <DxButton Text="Start" Click="Start" Enabled="btnStartIsEnabled" />
+                                <DxButton Text="Resume" Click="Resume" Enabled="btnResumeIsEnabled" />                                        
+                                <DxButton Text="Stop" Click="Stop" />
+                                <DxButton Text="Stop On Win" Click="StopOnWin" />
+                            </div>
+                                    <DynamicComponent Type="@(StrategyType)" @ref="dcStrategy" Parameters="@(new Dictionary<string, object>(){{"BotInstance", botIns }})" />                                    
                                 break;
                             case 1:
                                 <SRCControls BetSettings="@botIns?.BetSettings" />
@@ -109,12 +120,13 @@
     int ActiveTabIndex { get; set; } = 0;
     DynamicComponent dcLiveBets;
     DynamicComponent dcManualBet;
+    DynamicComponent dcStrategy;
     ProfitChart _profitChart;
     SiteStats _siteStats;
-    SessionStats _sessionStats;
-    ProgrammerModeLUA ProgrammerLUA;
+    SessionStats _sessionStats;    
     Type LiveBetViewType = typeof(DiceLiveBetsControl);
     Type ManualBetType = typeof(ManualDiceBet);
+    Type StrategyType = typeof(ManualDiceBet);
     bool ShowSiteSelect = true;
     bool ShowInstance = false;
     Doormat botIns = new Doormat();
@@ -123,33 +135,33 @@
     string BetSettingsFile = "";
     string PersonalSettingsFile = "";
     string InstanceName = "";
+    bool bbtnSimulatorIsEnabled = true;
+    //StatusBar.Content = $"Stopping: {e.Message}";
+    bool btnStartIsEnabled = true;
+    bool btnResumeIsEnabled = true;
+    public bool BotInsNotRunning { get => botIns?.Running ?? false; }
     public BotInstance()
     {
         botIns.CompileSites();
         botIns.GetStrats();
 
-
-        /*cbeStartegies.ItemsSource = botIns.Strategies.Keys;
-        SelectSite1.Sites = Doormat.Sites;*/
         /*botIns.NeedConstringPassword += BotIns_NeedConstringPassword;
-        botIns.NeedKeepassPassword += BotIns_NeedKeepassPassword;
+        botIns.NeedKeepassPassword += BotIns_NeedKeepassPassword;*/
         botIns.OnGameChanged += BotIns_OnGameChanged;
         botIns.OnNotification += BotIns_OnNotification;
-        botIns.OnSiteAction += BotIns_OnSiteAction;*/
-        botIns.OnSiteBetFinished += BotIns_OnSiteBetFinished;
-        /*
-        botIns.OnSiteChat += BotIns_OnSiteChat;
-        botIns.OnSiteError += BotIns_OnSiteError;*/
-
+        botIns.OnSiteAction += BotIns_OnSiteAction;
+        botIns.OnSiteBetFinished += BotIns_OnSiteBetFinished;        
+        botIns.OnSiteError += BotIns_OnSiteError;
         botIns.OnSiteLoginFinished += BotIns_OnSiteLoginFinished;
-
-        /*
         botIns.OnSiteNotify += BotIns_OnSiteNotify;
-        botIns.OnSiteRegisterFinished += BotIns_OnSiteRegisterFinished;
+
         botIns.OnSiteStatsUpdated += BotIns_OnSiteStatsUpdated;
         botIns.OnStarted += BotIns_OnStarted;
         botIns.OnStopped += BotIns_OnStopped;
-        botIns.OnStrategyChanged += BotIns_OnStrategyChanged;*/
+        botIns.OnStrategyChanged += BotIns_OnStrategyChanged;
+        //botIns.OnSiteRegisterFinished += BotIns_OnSiteRegisterFinished;
+
+
         /*if (MainWindow.Portable && File.Exists("personalsettings.json"))
             {
             PersonalSettingsFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json";
@@ -161,15 +173,20 @@
             PersonalSettingsFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json";
         }
         botIns.LoadPersonalSettings(PersonalSettingsFile);
+
     }
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
+        await base.OnInitializedAsync();
         //(dcManualBet.Instance as ManualDiceBet).PlaceBet = new EventCallback<PlaceBetEventArgs>(this, ManualBetPlaced);
         LoadSettings("default");
-        return base.OnInitializedAsync();
+        //await StrategySelected(botIns.Strategy?.StrategyName);        
+
+
     }
-   
+
+
     public void Dispose()
     {
         botIns.StopStrategy("Application Closing");
@@ -246,7 +263,37 @@
     {
         botIns.PlaceBet(newBet.NewBet);
     }
+    async Task StrategySelected(string e)
+    {
+        if (botIns.Strategy.StrategyName != e && !string.IsNullOrWhiteSpace(BetSettingsFile))
+        {
+            botIns.SaveBetSettings(BetSettingsFile);
+            var Settings = botIns.LoadBetSettings(BetSettingsFile, false);
+            IEnumerable<PropertyInfo> Props = Settings.GetType().GetProperties().Where(m => typeof(DoormatBot.Strategies.BaseStrategy).IsAssignableFrom(m.PropertyType));
+            DoormatBot.Strategies.BaseStrategy newStrat = null;
+            foreach (PropertyInfo x in Props)
+            {
+                DoormatBot.Strategies.BaseStrategy strat = (DoormatBot.Strategies.BaseStrategy)x.GetValue(Settings);
+                if (strat != null)
+                {
+                    PropertyInfo StratNameProp = strat.GetType().GetProperty("StrategyName");
+                    string nm = (string)StratNameProp.GetValue(strat);
+                    if (nm == e)
+                    {
+                        newStrat = strat;
+                        break;
+                    }
+                }
+            }
+            if (newStrat == null)
+            {
+                newStrat = Activator.CreateInstance(botIns.Strategies[e]) as DoormatBot.Strategies.BaseStrategy;
+            }
+            botIns.Strategy = newStrat;
+        }
+        //ProgrammerLUA.SetStrategy(botIns.Strategy);
 
+    }
     void BotIns_OnSiteLoginFinished(object sender, DoormatCore.Sites.LoginFinishedEventArgs e)
     {
         if (e.Success)
@@ -264,12 +311,36 @@
             //LoginControl.LoginFailed();
         }
     }
+
     private void BotIns_OnSiteBetFinished(object sender, DoormatCore.Sites.BetFinisedEventArgs e)
     {
         (dcLiveBets?.Instance as iLiveBet)?.AddBet(e.NewBet);
         _profitChart.AddPoint(e.NewBet.Profit);
         _siteStats.RefreshStats();
         _sessionStats.RefreshStats();
+    }
+
+    private async void BotIns_OnStrategyChanged(object sender,EventArgs e )
+    {
+        //set the strategy dynamic element type to the appropriate type.
+        string s = botIns.Strategy?.GetType().Name;
+        switch (s)
+        {
+            case nameof(DAlembert): /*StrategyType = new dAlembert();*/ break;
+            case nameof(Fibonacci): /*StrategyType = new Fibonacci();*/ break;
+            case nameof(Labouchere): /*StrategyType = new KryGamesBotControls.Strategies.Labouchere.Labouchere();*/ break;
+            case nameof(Martingale): /*StrategyType = new MartingaleControl();*/ break;
+            case nameof(PresetList):/* StrategyType = new KryGamesBotControls.Strategies.PresetList.PresetListControl(); */break;
+            case nameof(ProgrammerCS): StrategyType = typeof(ProgrammerModeCS); break;
+            case nameof(ProgrammerJS): StrategyType = typeof(ProgrammerModeJS); break;
+            case nameof(ProgrammerLUA): StrategyType = typeof(ProgrammerModeLUA); break;
+            case nameof(ProgrammerPython): StrategyType = typeof(ProgrammerModePython); break;
+            default:
+                botIns.Strategy = new DoormatBot.Strategies.Martingale(); break;
+        }
+        await InvokeAsync( StateHasChanged);
+        (dcStrategy?.Instance as iStrategy)?.SetStrategy(botIns?.Strategy);
+        //await InvokeAsync(StateHasChanged);
     }
 
     public void LoadSettings(string Name)
@@ -291,7 +362,7 @@
 
         //load layout
         /*if (File.Exists(path + Name + ".layout"))
-        {
+            {
             dlmMainLayout.RestoreLayoutFromXml(path + Name + ".layout");
         }*/
         if (File.Exists(path + Name + ".siteset"))
@@ -347,5 +418,105 @@
                 Currency = botIns.CurrentSite?.CurrentCurrency
             });
         File.WriteAllText(FileLocation, Settings);
+    }
+
+    async Task Start()
+    {
+
+        try
+        {
+            await (dcStrategy.Instance as iStrategy).Saving();
+            botIns.SaveBetSettings(BetSettingsFile);
+            botIns.Start();
+        }
+        catch (Exception ex)
+        {
+            //MessageBox.Show(ex.Message);
+        }
+    }
+    async Task Resume()
+    {
+        botIns.Resume();
+    }
+    async Task StopOnWin()
+    {
+        botIns.StopOnWin = true;
+    }
+    async Task Stop()
+    {
+        botIns.StopStrategy("Stop button clicked");
+    }
+    void BotIns_OnSiteNotify(object sender, DoormatCore.Sites.GenericEventArgs e)
+    {   
+        //Figure out how to do a status bar kind of thing....
+        //StatusBar.Content = e.Message;
+
+    }
+    private void BotIns_OnStopped(object sender, DoormatCore.Sites.GenericEventArgs e)
+    {
+        //throw new NotImplementedException();
+
+        bbtnSimulatorIsEnabled = true;
+        //StatusBar.Content = $"Stopping: {e.Message}";
+        btnStartIsEnabled = true;
+        btnResumeIsEnabled = true;
+
+    }
+    private void BotIns_OnStarted(object sender, EventArgs e)
+    {
+
+        bbtnSimulatorIsEnabled = false;
+        //StatusBar.Content = $"Bot Started.";
+        btnStartIsEnabled = false;
+        btnResumeIsEnabled = false;
+
+    }
+    private void BotIns_OnSiteAction(object sender, DoormatCore.Sites.GenericEventArgs e)
+    {   
+        //StatusBar.Content = e.Message;
+    }
+
+    private void BotIns_OnNotification(object sender, DoormatCore.Helpers.NotificationEventArgs e)
+    {
+        
+        switch (e.NotificationTrigger.Action)
+        {
+            case DoormatCore.Helpers.TriggerAction.Alarm:
+            case DoormatCore.Helpers.TriggerAction.Chime:
+            case DoormatCore.Helpers.TriggerAction.Email: break;
+            case DoormatCore.Helpers.TriggerAction.Popup: //StatusBar.Content = "Something happened that triggered a notification.";
+            break;
+
+        }
+        //StatusBar.Content = e.NotificationTrigger.Action = DoormatCore.Helpers.TriggerAction.;
+    }
+
+    private void BotIns_OnGameChanged(object sender, EventArgs e)
+    {
+        //throw new NotImplementedException();
+        switch (botIns.CurrentGame)
+        {
+            case DoormatCore.Games.Games.Crash: break;
+            case DoormatCore.Games.Games.Dice:
+                ManualBetType = typeof(ManualDiceBet);
+                LiveBetViewType = typeof(DiceLiveBetsControl);
+                break;
+            case DoormatCore.Games.Games.Plinko: break;
+            case DoormatCore.Games.Games.Roulette: break;
+        }
+        /*OnPropertyChanged(nameof(ManualBet));
+        OnPropertyChanged(nameof(LiveBets));
+        ManualBet.PlaceBet += ManualBet_PlaceBet;*/
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void BotIns_OnSiteStatsUpdated(object sender, DoormatCore.Sites.StatsUpdatedEventArgs e)
+    {
+        
+    }
+    private void BotIns_OnSiteError(object sender, DoormatCore.Sites.ErrorEventArgs e)
+    {
+        //StatusBar.Content = "Error! " + e.Message;
+
     }
 }

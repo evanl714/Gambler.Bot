@@ -11,7 +11,7 @@ namespace KryGamesBot.MAUI.Blazor.Interfaces
         void GameChanged(DoormatCore.Games.Games newGame);
         void SetStrategy(DoormatBot.Strategies.BaseStrategy Strategy);
         bool TopAlign();
-        void Saving();
+        Task Saving();
 
     }
 }

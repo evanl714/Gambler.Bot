@@ -1,0 +1,18 @@
+﻿@inherits ProgrammerModeLUA
+
+@{
+    base.BuildRenderTree(__builder);
+}
+
+@code {
+    public ProgrammerModePython():base()
+    {
+        
+    }
+    protected override void SetLanguage()
+    {
+        LanguageName = "csharp";
+        FileExtension = "py";
+        TemplateName = "PYTemplate.py";
+    }
+}

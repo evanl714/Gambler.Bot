@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using DevExpress.Blazor;
+using CommunityToolkit.Maui;
 
 namespace KryGamesBot.MAUI.Blazor
 {
@@ -13,10 +14,13 @@ namespace KryGamesBot.MAUI.Blazor
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                });
+                })
+                .UseMauiCommunityToolkit(); ;
 
             builder.Services.AddMauiBlazorWebView();
-            builder.Services.AddDevExpressBlazor(configure => configure.BootstrapVersion = BootstrapVersion.v5);
+            
+
+			builder.Services.AddDevExpressBlazor(configure => configure.BootstrapVersion = BootstrapVersion.v5);
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
 		builder.Logging.AddDebug();

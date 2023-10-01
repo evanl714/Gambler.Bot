@@ -1,58 +1,89 @@
 ﻿@using BlazorMonaco
 @using BlazorMonaco.Editor
 @using BlazorMonaco.Languages
+@using CommunityToolkit.Maui.Storage;
 @using DoormatBot.Strategies;
 @using KryGamesBot.MAUI.Blazor.Interfaces;
+@using System.Text;
 @implements iStrategy;
 
-<h3>ProgrammerModeLUA</h3>
+<h3>Programmer Mode - @LanguageName</h3>
+<div>
+<DxButton Text="New" Click="New"/>
+<DxButton Text="Open" Click="Open"/>
+<DxButton Text="Save" Click="Save" />
+<DxButton Text="Save As" Click="SaveAs" />
+</div>
 <StandaloneCodeEditor @ref="Editor" CssClass="codeEditor" ConstructionOptions="EditorConstructionOptions" />
 
 @code {
 	StandaloneCodeEditor Editor;
+	ProgrammerMode Strat { get; set; }
+	DateTime LastChanged = DateTime.Now;
+	FileSystemWatcher FileWatcher;
 
 	[Parameter]
-	public ProgrammerMode Strat { get; set; }
+	public DoormatBot.Doormat BotInstance { get; set; }
 
 	[Parameter]
 	public EventCallback StartBetting { get; set; }
 
+	protected string FileExtension { get; set; } = "lua";
+	protected string LanguageName { get; set; } = "lua";
+	protected string TemplateName { get; set; } = "LUATemplate.lua";
+
+	protected virtual void SetLanguage()
+	{
+		FileExtension = "lua";
+		LanguageName = "lua";
+		TemplateName = "LUATemplate.lua";
+	}
+
+	string content = "";
 	private StandaloneEditorConstructionOptions EditorConstructionOptions(StandaloneCodeEditor editor)
 	{
 		return new StandaloneEditorConstructionOptions
 			{
 				AutomaticLayout = true,
-				Language = "lua",
-				Value = Strat?.FileName != null ? System.IO.File.ReadAllText(Strat?.FileName) : ""
+				Language = LanguageName,
+				Value = content
 	}	;
-	}	
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		await base.OnInitializedAsync();
+		SetStrategy(BotInstance?.Strategy);
+	}
 
 	public void GameChanged(DoormatCore.Games.Games newGame)
 	{
 		//throw new NotImplementedException();
-	
+
 	}
 
 	public void SetStrategy(BaseStrategy Strategy)
 	{
-
+		Strat = Strategy as ProgrammerMode;
 		//Console.Strategy = Strat = Strategy as ProgrammerMode;
 		LoadDocument();
-		//CreateWatcher();
+		CreateWatcher();
 		//throw new NotImplementedException();
 	}
 
 	void LoadDocument()
 	{
-		
-		if (Strat?.FileName != null)
+		ProgrammerMode strat = Strat as ProgrammerMode;
+
+		if (strat?.FileName != null)
 		{
-			string path = Strat?.FileName;
+			string path = strat?.FileName;
 			if (Strat != null)
-				Strat.FileName = path;
+				strat.FileName = path;
 			try
 			{
-				
+				content = File.ReadAllText(strat.FileName);
+				Editor?.SetValue(content);
 			}
 			catch
 			{
@@ -61,14 +92,92 @@
 		}
 	}
 
+	void CreateWatcher()
+	{
+		if (FileWatcher != null)
+		{
+			FileWatcher.Dispose();
+		}
+		if (Strat != null && File.Exists(Strat.FileName))
+		{
+			FileWatcher = new FileSystemWatcher(System.IO.Path.GetDirectoryName(Strat.FileName), System.IO.Path.GetFileName(Strat.FileName));
+			FileWatcher.Changed += FileWatcher_Changed;
+			FileWatcher.EnableRaisingEvents = true;
+		}
+	}
+	private void FileWatcher_Changed(object sender, FileSystemEventArgs e)
+	{
+		if (e.ChangeType == WatcherChangeTypes.Changed)
+			LoadDocument();
+	}
+
 	public bool TopAlign()
 	{
 		return false;
 	}
 
-	public void Saving()
+	public async Task Saving()
 	{
-		//WriteDocument();
+		await WriteDocument();
+	}
+	async Task WriteDocument(string newName = null)
+	{		
+		string script = await Editor.GetValue();
+		File.WriteAllText(newName??Strat.FileName, script);
+
+	}
+	async Task Open()
+	{
+		var FilePickerResult = await FilePicker.PickAsync();
+		if (FilePickerResult.FullPath?.Length>0)
+		{
+			Strat.FileName = FilePickerResult.FullPath;
+            LoadDocument();
+            CreateWatcher();
+		}
+		//show open dialog
+		//load document
+		//create watcher
+	}
+	async Task New()
+	{
+		/*SaveFileDialog dg = new SaveFileDialog();
+		dg.Filter = $"{LanguageName} Code File (*.{FileExtension})|*.{FileExtension}";
+		dg.AddExtension = true;
+		if (dg.ShowDialog() ?? false)*/
+		{
+
+			Stream x = typeof(BaseStrategy).Assembly.GetManifestResourceStream($"Doormat.Bot.Samples.{TemplateName}");
+			CancellationTokenSource src = new CancellationTokenSource();
+
+			var fileSaverResult = await FileSaver.Default.SaveAsync("Strategy."+FileExtension, x, src.Token);
+			if (fileSaverResult.IsSuccessful)
+			{
+
+				Strat.FileName = fileSaverResult.FilePath;
+				LoadDocument();
+				CreateWatcher();
+			}
+		}
 	}
 
+	async Task Save()
+	{
+		await WriteDocument();
+	}
+
+	async Task SaveAs()
+	{
+		var contents = await Editor.GetValue();
+		Stream x = new MemoryStream(Encoding.UTF8.GetBytes(contents));
+		CancellationTokenSource src = new CancellationTokenSource();
+    
+        var fileSaverResult = await FileSaver.Default.SaveAsync("Strategy."+FileExtension, x, src.Token);
+        if (fileSaverResult.IsSuccessful)
+        {
+            Strat.FileName = fileSaverResult.FilePath;                    
+            CreateWatcher();
+        }
+		
+	}
 }
