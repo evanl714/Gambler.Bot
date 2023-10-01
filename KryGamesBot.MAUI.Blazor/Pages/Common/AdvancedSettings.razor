@@ -1,0 +1,179 @@
+﻿@using DoormatBot.Helpers;
+
+<h3>AdvancedSettings</h3>
+<DxFormLayout>
+    <DxFormLayoutGroup Caption="Auto Withdraw/Tip">
+        <DxFormLayoutGroup Caption="Upper Limit">
+            <DxFormLayoutItem  ColSpanMd="12">
+                <Template>
+                    <div class="settingContainer">
+                        <DxCheckBox CssClass="settingEdit" @bind-Checked="@BetSettings.EnableUpperLimit" Text="Auto Withdraw" />
+                        <DxComboBox CssClass="settingEdit" Data="Actions" @bind-Value="BetSettings.UpperLimitAction">
+                        
+                    </DxComboBox>
+                    when
+                        <DxComboBox CssClass="settingEdit" Data="Compares" @bind-Value="BetSettings.UpperLimitCompare">
+
+                    </DxComboBox>
+                    >
+                        <DxSpinEdit CssClass="settingEdit" @bind-Value="BetSettings.UpperLimit" />
+                    </div>
+                </Template>
+            </DxFormLayoutItem>
+            <DxFormLayoutItem  ColSpanMd="12">
+                <Template>
+                    <div class="settingContainer">
+                    Amount
+                        <DxSpinEdit CssClass="settingEdit" @bind-Value="BetSettings.UpperLimitActionAmount" Enabled="@(BetSettings.UpperLimitAction!= InternalBetSettings.LimitAction.Stop)" />
+                    </div>
+                </Template>
+            </DxFormLayoutItem>
+            <DxFormLayoutItem  ColSpanMd="12">
+                <Template>
+                    <div class="settingContainer">
+                    Address/User
+                        <DxTextBox CssClass="settingEdit" @bind-Value="BetSettings.UpperLimitAddress" Enabled="@(BetSettings.UpperLimitAction!= InternalBetSettings.LimitAction.Stop)" />
+                    </div>
+                </Template>
+            </DxFormLayoutItem>
+        </DxFormLayoutGroup>
+        <DxFormLayoutGroup Caption="Lower Limit">
+            <DxFormLayoutItem  ColSpanMd="12">
+                <Template>
+                    <div class="settingContainer">
+                        <DxCheckBox CssClass="settingEdit" @bind-Checked="@BetSettings.EnableLowerLimit" Text="Auto Withdraw" />
+                        <DxComboBox CssClass="settingEdit" Data="Actions" @bind-Value="BetSettings.LowerLimitAction">
+
+                    </DxComboBox>
+                    when
+                        <DxComboBox CssClass="settingEdit" Data="Compares" @bind-Value="BetSettings.LowerLimitCompare">
+
+                    </DxComboBox>
+                    >
+                        <DxSpinEdit CssClass="settingEdit"  @bind-Value="BetSettings.LowerLimit" />
+                    </div>
+                </Template>
+            </DxFormLayoutItem>
+            <DxFormLayoutItem  ColSpanMd="12">
+                <Template>
+                    <div class="settingContainer">
+                    Amount
+                        <DxSpinEdit CssClass="settingEdit" @bind-Value="BetSettings.LowerLimitActionAmount" Enabled="@(BetSettings.LowerLimitAction!= InternalBetSettings.LimitAction.Stop)" />
+                    </div>
+                </Template>
+            </DxFormLayoutItem>
+            <DxFormLayoutItem  ColSpanMd="12">
+                <Template>
+                    <div class="settingContainer">
+                    Address/User
+                        <DxTextBox CssClass="settingEdit" @bind-Value="BetSettings.LowerLimitAddress" Enabled="@(BetSettings.LowerLimitAction!= InternalBetSettings.LimitAction.Stop)" />
+                    </div>
+                </Template>
+            </DxFormLayoutItem>
+        </DxFormLayoutGroup>
+    </DxFormLayoutGroup>
+    <DxFormLayoutGroup Caption="Reset Seed">
+        <DxFormLayoutItem ColSpanMd="12">
+            <Template>
+                <div class="settingContainer">
+                    <DxCheckBox CssClass="settingEdit" @bind-Checked="@BetSettings.EnableResetSeedBets" Text="Auto Withdraw" />
+                Reset after every
+                    <DxSpinEdit CssClass="settingEdit" @bind-Value="BetSettings.ResetSeedBets" Enabled="@(BetSettings.LowerLimitAction!= InternalBetSettings.LimitAction.Stop)" />
+                Bets
+
+                </div>
+            </Template>
+        </DxFormLayoutItem>
+        <DxFormLayoutItem ColSpanMd="12">
+            <Template>
+                <div class="settingContainer">
+                    <DxCheckBox CssClass="settingEdit" @bind-Checked="@BetSettings.EnableResetSeedWins" Text="Auto Withdraw" />
+                Reset after every
+                    <DxSpinEdit CssClass="settingEdit" @bind-Value="BetSettings.ResetSeedWins" Enabled="@(BetSettings.LowerLimitAction!= InternalBetSettings.LimitAction.Stop)" />
+                    Wins
+                </div>
+            </Template>
+        </DxFormLayoutItem>
+        <DxFormLayoutItem  ColSpanMd="12">
+            <Template>
+                <div class="settingContainer">
+                    <DxCheckBox CssClass="settingEdit" @bind-Checked="@BetSettings.EnableResetSeedWinStreak" Text="Auto Withdraw" />
+                Reset after every
+                    <DxSpinEdit CssClass="settingEdit" @bind-Value="BetSettings.ResetSeedWinStreak" Enabled="@(BetSettings.LowerLimitAction!= InternalBetSettings.LimitAction.Stop)" />
+                    Wins in a row
+                </div>
+            </Template>
+        </DxFormLayoutItem>
+        <DxFormLayoutItem ColSpanMd="12">
+            <Template>
+                <div class="settingContainer">
+                    <DxCheckBox CssClass="settingEdit" @bind-Checked="@BetSettings.EnableResetSeedLosses" Text="Auto Withdraw" />
+                Reset after every
+                    <DxSpinEdit CssClass="settingEdit" @bind-Value="BetSettings.ResetSeedLosses" Enabled="@(BetSettings.LowerLimitAction!= InternalBetSettings.LimitAction.Stop)" />
+                    Losses
+                </div>
+            </Template>
+        </DxFormLayoutItem>
+        <DxFormLayoutItem ColSpanMd="12">
+            <Template>
+                <div class="settingContainer">
+                    <DxCheckBox CssClass="settingEdit" @bind-Checked="@BetSettings.EnableResetSeedLossStreak" Text="Auto Withdraw" />
+                Reset after every
+                    <DxSpinEdit CssClass="settingEdit" @bind-Value="BetSettings.ResetSeedLossStreak" Enabled="@(BetSettings.LowerLimitAction!= InternalBetSettings.LimitAction.Stop)" />
+                    Losses in a row
+                </div>
+            </Template>
+        </DxFormLayoutItem>
+        <DxFormLayoutItem ColSpanMd="12">
+            <Template>
+                <div class="settingContainer">
+                    <DxCheckBox CssClass="settingEdit" @bind-Checked="@BetSettings.EnableResetSeedProfit" Text="Auto Withdraw" />
+                Reset after every
+                    <DxSpinEdit CssClass="settingEdit" @bind-Value="BetSettings.ResetSeedProfit" Enabled="@(BetSettings.LowerLimitAction!= InternalBetSettings.LimitAction.Stop)" />
+                Profit
+                </div>
+            </Template>
+        </DxFormLayoutItem>
+        <DxFormLayoutItem ColSpanMd="12">
+            <Template>
+                <div class="settingContainer">
+                    <DxCheckBox CssClass="settingEdit" @bind-Checked="@BetSettings.EnableResetSeedLoss" Text="Auto Withdraw" />
+                Reset after every
+                    <DxSpinEdit CssClass="settingEdit" @bind-Value="BetSettings.ResetSeedLoss" Enabled="@(BetSettings.LowerLimitAction!= InternalBetSettings.LimitAction.Stop)" />
+                    Loss
+                </div>
+            </Template>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+    <DxFormLayoutGroup Caption="Bot Speed">
+        <DxFormLayoutItem  ColSpanMd="12">
+            <Template>
+                <div class="settingContainer">
+                    <DxCheckBox CssClass="settingEdit" @bind-Checked="@BetSettings.EnableBotSpeed" Text="Auto Withdraw" />
+                Bot Speed
+                    <DxSpinEdit CssClass="settingEdit" @bind-Value="BetSettings.BotSpeed" Enabled="@(BetSettings.LowerLimitAction!= InternalBetSettings.LimitAction.Stop)" />
+                Bets per second
+                
+                </div>
+                <p>
+                    By default, the bot bets as fast as it can. The bot speed setting should only be enabled if you intend to slow down the betting speed or if you are getting errors from the site.
+                </p>
+            </Template>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>
+
+@code {
+    [Parameter]
+    public InternalBetSettings BetSettings { get; set; }
+
+    List<string> Actions = new List<string> { "Withdraw", "Tip", "Stop" };
+    List<string> Compares = new List<string> { "Profit", "Balance" };
+
+    public AdvancedSettings()
+    {
+        
+    }
+
+
+}

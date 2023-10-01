@@ -33,4 +33,9 @@ public SiteStats()
     {
         
     }
+
+    public void RefreshStats()
+    {
+        InvokeAsync(StateHasChanged);
+    }
 }

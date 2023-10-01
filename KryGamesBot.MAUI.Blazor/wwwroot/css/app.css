@@ -157,17 +157,19 @@ div.InstanceContainer{
     display: flex;
 }
 
-div.instanceStatsColumn{
+div.instanceStatsColumn {
     max-width: 20rem;
-    flex:1;
+    flex: 1 1 auto;
 }
 
-div.instanceMainColumn {    
-    flex:5;
+div.instanceMainColumn {
 }
 div.StrategyColumn {
     max-width: 50rem;
-    flex:2;
+    flex: 1 1 auto;
+    display: flex;
+    flex-flow: column;
+    height: 100%;
 }
 
 .settingEdit{
@@ -177,6 +179,19 @@ div.StrategyColumn {
 }
 
 .settingContainer{
+    display:flex;
+}
+
+.settingTabContainer {
+    flex: 1 1 auto;
     display: flex;
-    
+    flex-direction: column;
+}
+.stratTabs {
+    flex: 1 1 auto;
+}
+
+
+.codeEditor {
+    flex: 1 1 auto;
 }

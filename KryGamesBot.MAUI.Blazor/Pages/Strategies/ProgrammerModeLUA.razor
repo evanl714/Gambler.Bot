@@ -1,0 +1,74 @@
+﻿@using BlazorMonaco
+@using BlazorMonaco.Editor
+@using BlazorMonaco.Languages
+@using DoormatBot.Strategies;
+@using KryGamesBot.MAUI.Blazor.Interfaces;
+@implements iStrategy;
+
+<h3>ProgrammerModeLUA</h3>
+<StandaloneCodeEditor @ref="Editor" CssClass="codeEditor" ConstructionOptions="EditorConstructionOptions" />
+
+@code {
+	StandaloneCodeEditor Editor;
+
+	[Parameter]
+	public ProgrammerMode Strat { get; set; }
+
+	[Parameter]
+	public EventCallback StartBetting { get; set; }
+
+	private StandaloneEditorConstructionOptions EditorConstructionOptions(StandaloneCodeEditor editor)
+	{
+		return new StandaloneEditorConstructionOptions
+			{
+				AutomaticLayout = true,
+				Language = "lua",
+				Value = Strat?.FileName != null ? System.IO.File.ReadAllText(Strat?.FileName) : ""
+	}	;
+	}	
+
+	public void GameChanged(DoormatCore.Games.Games newGame)
+	{
+		//throw new NotImplementedException();
+	
+	}
+
+	public void SetStrategy(BaseStrategy Strategy)
+	{
+
+		//Console.Strategy = Strat = Strategy as ProgrammerMode;
+		LoadDocument();
+		//CreateWatcher();
+		//throw new NotImplementedException();
+	}
+
+	void LoadDocument()
+	{
+		
+		if (Strat?.FileName != null)
+		{
+			string path = Strat?.FileName;
+			if (Strat != null)
+				Strat.FileName = path;
+			try
+			{
+				
+			}
+			catch
+			{
+
+			}
+		}
+	}
+
+	public bool TopAlign()
+	{
+		return false;
+	}
+
+	public void Saving()
+	{
+		//WriteDocument();
+	}
+
+}

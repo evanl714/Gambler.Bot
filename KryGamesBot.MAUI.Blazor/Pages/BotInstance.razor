@@ -1,39 +1,100 @@
 ﻿@using DoormatBot;
 @using DoormatCore.Helpers;
+@using KryGamesBot.MAUI.Blazor.Classes;
+@using KryGamesBot.MAUI.Blazor.Interfaces;
 @using KryGamesBot.MAUI.Blazor.Pages.Common
+@using KryGamesBot.MAUI.Blazor.Pages.Games.Dice;
+@using KryGamesBot.MAUI.Blazor.Pages.Strategies;
+@implements IDisposable;
 <PageTitle>@title</PageTitle>
 <h3>BotInstance</h3>
 <div class="@(ShowSiteSelect?"":"visually-hidden")">
 <SelectSite Sites="@Doormat.Sites" OnSiteSelected="SiteSelected" />
 </div>
 <div class="@(ShowInstance?"InstanceContainer":"visually-hidden")">
-    <div class="instanceStatsColumn">
-        <SiteStats stats="@botIns?.CurrentSite?.Stats"/>
-        <SessionStats Stats="@botIns?.Stats" @ref="_sessionStats"/>
-    </div>
-    <div class="instanceMainColumn">
-        <ProfitChart @ref="_profitChart"/>
-    </div>
-    <div class="StrategyColumn">
-        <DxTabs>
-            <DxTabPage Text="Strategy">
-                
-            </DxTabPage>
-            <DxTabPage Text="Reset Settings">
-                <SRCControls BetSettings="@botIns?.BetSettings" />
-            </DxTabPage>
-            <DxTabPage Text="Advanced settings">
-                
-            </DxTabPage>
-            <DxTabPage Text="Custom Triggers">
-                
-            </DxTabPage>
-            <DxTabPage Text="Manual Betting">
-                
-            </DxTabPage>
-        </DxTabs>
-        
-    </div>
+    <DxGridLayout>
+        <Rows>
+
+           <DxGridLayoutRow />
+            <DxGridLayoutRow />
+            <DxGridLayoutRow />
+            <DxGridLayoutRow />
+        </Rows>
+        <Columns>
+            <DxGridLayoutColumn />
+            <DxGridLayoutColumn />
+            <DxGridLayoutColumn />
+            <DxGridLayoutColumn />
+            <DxGridLayoutColumn />
+            <DxGridLayoutColumn />
+            <DxGridLayoutColumn />
+        </Columns>
+        <Items>
+            <DxGridLayoutItem Column="0" Row="0" RowSpan="2" >
+                <Template>
+                    
+                        <SiteStats stats="@botIns?.CurrentSite?.Stats" @ref=_siteStats/>
+                        
+                    
+                </Template>
+            </DxGridLayoutItem>
+            <DxGridLayoutItem Column="0" Row="2" RowSpan="2">
+                <Template>
+                    <SessionStats Stats="@botIns?.Stats" @ref="_sessionStats" />
+                </Template>
+            </DxGridLayoutItem>
+            <DxGridLayoutItem Column="1" ColumnSpan="4" Row="0" RowSpan="2">
+                <Template>
+                    <ProfitChart @ref="_profitChart" />
+                </Template>
+            </DxGridLayoutItem>
+            <DxGridLayoutItem Column="1" ColumnSpan="4" Row="2" RowSpan="2">
+                <Template>
+                    <DynamicComponent Type="@(LiveBetViewType)" @ref="dcLiveBets" />
+                </Template>
+            </DxGridLayoutItem>
+            <DxGridLayoutItem Column="5" ColumnSpan="2" Row="0" RowSpan="4">
+                <Template>
+                    <div class="StrategyColumn">
+                    <div class="settingTabContainer">
+                        @switch (ActiveTabIndex)
+                        {
+                            case 0:
+                                <KryGamesBot.MAUI.Blazor.Pages.Strategies.ProgrammerModeLUA @ref="ProgrammerLUA" />
+                                break;
+                            case 1:
+                                <SRCControls BetSettings="@botIns?.BetSettings" />
+                                break;
+                            case 2:
+                                <AdvancedSettings BetSettings="@botIns?.BetSettings" />
+                                break;
+                            case 4:
+                                <DynamicComponent Type="@(ManualBetType)" @ref="dcManualBet" Parameters="@(new Dictionary<string, object>(){{"PlaceBet", new EventCallback<PlaceBetEventArgs>(this, ManualBetPlaced) }})" />
+                                break;
+                        }
+                    </div>
+                    <DxTabs CssClass="stratTabs" ScrollMode="TabsScrollMode.NoScroll" @bind-ActiveTabIndex="@ActiveTabIndex">
+                        <DxTab Text="Strategy">
+
+                        </DxTab>
+                        <DxTab Text="Reset Settings">
+
+                        </DxTab>
+                        <DxTab Text="Advanced settings">
+
+                        </DxTab>
+                        <DxTab Text="Custom Triggers">
+
+                        </DxTab>
+                        <DxTab Text="Manual Betting">
+
+                        </DxTab>
+                    </DxTabs>
+                    </div>
+                </Template>
+            </DxGridLayoutItem> 
+        </Items>
+    </DxGridLayout>   
 </div>
 
 
@@ -45,17 +106,28 @@
 
 
 @code {
+    int ActiveTabIndex { get; set; } = 0;
+    DynamicComponent dcLiveBets;
+    DynamicComponent dcManualBet;
     ProfitChart _profitChart;
+    SiteStats _siteStats;
     SessionStats _sessionStats;
+    ProgrammerModeLUA ProgrammerLUA;
+    Type LiveBetViewType = typeof(DiceLiveBetsControl);
+    Type ManualBetType = typeof(ManualDiceBet);
     bool ShowSiteSelect = true;
     bool ShowInstance = false;
     Doormat botIns = new Doormat();
     bool LoginPopupVisible = false;
     string title = "Select site";
+    string BetSettingsFile = "";
+    string PersonalSettingsFile = "";
+    string InstanceName = "";
     public BotInstance()
     {
         botIns.CompileSites();
         botIns.GetStrats();
+
 
         /*cbeStartegies.ItemsSource = botIns.Strategies.Keys;
         SelectSite1.Sites = Doormat.Sites;*/
@@ -78,9 +150,42 @@
         botIns.OnStarted += BotIns_OnStarted;
         botIns.OnStopped += BotIns_OnStopped;
         botIns.OnStrategyChanged += BotIns_OnStrategyChanged;*/
+        /*if (MainWindow.Portable && File.Exists("personalsettings.json"))
+            {
+            PersonalSettingsFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json";
+
+        }*/
+        //Check if global settings for this account exists
+        if ( File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json"))
+        {
+            PersonalSettingsFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json";
+        }
+        botIns.LoadPersonalSettings(PersonalSettingsFile);
     }
 
-
+    protected override Task OnInitializedAsync()
+    {
+        //(dcManualBet.Instance as ManualDiceBet).PlaceBet = new EventCallback<PlaceBetEventArgs>(this, ManualBetPlaced);
+        LoadSettings("default");
+        return base.OnInitializedAsync();
+    }
+   
+    public void Dispose()
+    {
+        botIns.StopStrategy("Application Closing");
+        if (botIns.CurrentSite != null)
+            botIns.CurrentSite.Disconnect();
+        string path = "";
+        /*if (MainWindow.Portable)
+            path = "";
+        else*/
+        {
+            path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\";
+        }
+        botIns.SaveBetSettings(path + InstanceName + ".betset");
+        //dlmMainLayout.SaveLayoutToXml(path + InstanceName + ".layout");
+        SaveINstanceSettings(path + InstanceName + ".siteset");
+    }
 
     void SiteChanged(DoormatCore.Sites.BaseSite NewSite, string currency, string game)
     {
@@ -136,6 +241,12 @@
         ShowInstance = true;
         InvokeAsync(StateHasChanged);
     }
+
+    async Task ManualBetPlaced(PlaceBetEventArgs newBet)
+    {
+        botIns.PlaceBet(newBet.NewBet);
+    }
+
     void BotIns_OnSiteLoginFinished(object sender, DoormatCore.Sites.LoginFinishedEventArgs e)
     {
         if (e.Success)
@@ -155,10 +266,86 @@
     }
     private void BotIns_OnSiteBetFinished(object sender, DoormatCore.Sites.BetFinisedEventArgs e)
     {
-        //LiveBets.AddBet(e.NewBet);
+        (dcLiveBets?.Instance as iLiveBet)?.AddBet(e.NewBet);
         _profitChart.AddPoint(e.NewBet.Profit);
-        //SiteStats.RefreshStats();
+        _siteStats.RefreshStats();
         _sessionStats.RefreshStats();
     }
 
+    public void LoadSettings(string Name)
+    {
+        string path = "";
+        /*if (MainWindow.Portable)
+            path = "";
+        else*/
+        {
+            path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\";
+        }
+        InstanceName = Name;
+        //load bet settings
+        //if (File.Exists(path+Name + ".betset"))
+        {
+            BetSettingsFile = path + Name + ".betset";
+
+        }
+
+        //load layout
+        /*if (File.Exists(path + Name + ".layout"))
+        {
+            dlmMainLayout.RestoreLayoutFromXml(path + Name + ".layout");
+        }*/
+        if (File.Exists(path + Name + ".siteset"))
+        {
+            LoadInstanceSettings(path + Name + ".siteset");
+
+        }
+        if (File.Exists(BetSettingsFile))
+            botIns.LoadBetSettings(BetSettingsFile);
+        else
+        {
+            botIns.StoredBetSettings = new Doormat.ExportBetSettings
+                {
+                    BetSettings = new DoormatBot.Helpers.InternalBetSettings(),
+
+
+                };
+            botIns.Strategy = new DoormatBot.Strategies.Martingale();
+        }
+
+        //load instance settings: site, currency, game, account, password if keepass is active and logged in.
+        //if password is available, log in.
+        //do all of this async to the gui somewhow?
+    }
+    void LoadInstanceSettings(string FileLocation)
+    {
+        string Settings = "";
+        using (StreamReader sr = new StreamReader(FileLocation))
+        {
+            Settings = sr.ReadToEnd();
+        }
+        InstanceSettings tmp = json.JsonDeserialize<InstanceSettings>(Settings);
+        //botIns.ga
+
+        var tmpsite = Doormat.Sites.FirstOrDefault(m => m.Name == tmp.Site);
+        if (tmpsite != null)
+        {
+            botIns.CurrentSite = Activator.CreateInstance(tmpsite.SiteType()) as DoormatCore.Sites.BaseSite;
+            SiteChanged(botIns.CurrentSite, tmp.Currency, tmp.Game);
+        }
+        if (tmp.Game != null)
+            botIns.CurrentGame = Enum.Parse<DoormatCore.Games.Games>(tmp.Game);
+
+    }
+
+    void SaveINstanceSettings(string FileLocation)
+    {
+        string Settings = json.JsonSerializer<InstanceSettings>(new InstanceSettings
+            {
+                Site = botIns.CurrentSite?.GetType()?.Name,
+                AutoLogin = false,
+                Game = botIns.CurrentGame.ToString(),
+                Currency = botIns.CurrentSite?.CurrentCurrency
+            });
+        File.WriteAllText(FileLocation, Settings);
+    }
 }

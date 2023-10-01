@@ -1,0 +1,136 @@
+﻿@using DoormatCore.Games;
+@using KryGamesBot.MAUI.Blazor.Interfaces;
+@implements iPlaceBet;
+<h3>ManualDiceBet</h3>
+<DxGridLayout>
+    <Rows>
+        <DxGridLayoutRow />
+        <DxGridLayoutRow />
+        <DxGridLayoutRow />
+        <DxGridLayoutRow />
+    </Rows>
+    <Columns>
+        <DxGridLayoutColumn/>
+        <DxGridLayoutColumn />
+    </Columns>
+    <Items>
+        <DxGridLayoutItem Row="0" Column="0">
+            <Template>
+            Bet <DxSpinEdit @bind-Value="@Amount" />
+            </Template>
+        </DxGridLayoutItem>
+        <DxGridLayoutItem Row="1" Column="0">
+            <Template>
+            Chance <DxSpinEdit @bind-Value="@Chance" />
+            </Template>
+        </DxGridLayoutItem>
+        <DxGridLayoutItem Row="2" Column="0">
+            <Template>
+            Payout <DxSpinEdit @bind-Value="@Payout" />
+            </Template>
+        </DxGridLayoutItem>
+        <DxGridLayoutItem Row="3" Column="0">
+            <Template>
+            Profit <DxSpinEdit @bind-Value="@Profit" />
+            </Template>
+        </DxGridLayoutItem>
+        <DxGridLayoutItem Row="0" Column="1" RowSpan="2">
+            <Template>
+            <DxButton Text="Bet High" Click="BetHigh_Click"/>
+            </Template>
+        </DxGridLayoutItem>
+        <DxGridLayoutItem Row="2" Column="1" RowSpan="2">
+            <Template>
+            <DxButton Text="Bet Low" Click="BetLow_Click"/>
+            </Template>
+        </DxGridLayoutItem>
+    </Items>
+</DxGridLayout>
+@code {
+    private decimal amount;
+
+    public decimal Amount
+    {
+        get { return amount; }
+        set { amount = value;  Calculate(nameof(Amount)); }
+    }
+
+    private decimal chance;
+
+    public decimal Chance
+    {
+        get { return chance; }
+        set { chance = value;  Calculate(nameof(Chance)); }
+    }
+
+    private decimal payout;
+
+    public decimal Payout
+    {
+        get { return payout; }
+        set { payout = value;  Calculate(nameof(Payout)); }
+    }
+
+    private decimal profit;
+
+    public decimal Profit
+    {
+        get { return profit; }
+        set { profit = value;  Calculate(nameof(Profit)); }
+    }
+
+    [Parameter]
+    public decimal Edge { get; set; } = 1;
+    [Parameter]
+    public EventCallback<PlaceBetEventArgs> PlaceBet { get; set; }
+
+    public ManualDiceBet()
+    {
+        Amount = 0.00000100m;
+        Chance = 49.5m;
+    }
+
+    void Calculate(string s)
+    {
+        switch (s)
+        {
+            case nameof(Amount):
+                if (Profit != (Amount * Payout) - Amount)
+                {
+                    Profit = (Amount * Payout) - Amount;
+                }
+                break;
+            case nameof(Chance):
+                if (Chance != 0)
+                {
+                    if (Payout != (100m - Edge) / Chance)
+                    {
+                        Payout = (100m - Edge) / Chance;
+                    }
+                }
+                break;
+            case nameof(Payout):
+                if (Chance != 0)
+                {
+                    if (Chance != (100m - Edge) / Payout)
+                    {
+                        Chance = (100m - Edge) / Payout;
+                    }
+                    if (Profit != Amount * Payout - Amount)
+                        Profit = Amount * Payout - Amount;
+                }
+                break;
+        }
+    }
+    
+
+    private void BetHigh_Click(MouseEventArgs e)
+    {
+        PlaceBet.InvokeAsync( new PlaceBetEventArgs(new PlaceDiceBet(Amount, true, Chance)));
+    }
+
+    private void BetLow_Click(MouseEventArgs e)
+    {
+        PlaceBet.InvokeAsync(new PlaceBetEventArgs(new PlaceDiceBet(Amount, false, Chance)));
+    }
+}
