@@ -1,0 +1,60 @@
+﻿<DxFormLayout>
+    <DxFormLayoutGroup>
+        <DxFormLayoutItem Caption="Starting Amount">
+            <DxSpinEdit Value="Strategy.MinBet" ValueChanged="@((decimal val) => Calculate(nameof(Strategy.Amount)))" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem Caption="Chance">
+            <DxSpinEdit Value="Strategy.MinBet" ValueChanged="@((decimal val) => Calculate(nameof(Strategy.BaseChance)))" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem Caption="Payout">
+            <DxSpinEdit Value="Strategy.MinBet" ValueChanged="@((decimal val) => Calculate(nameof(payout)))" />
+        </DxFormLayoutItem>
+        <DxFormLayoutItem Caption="Profit">
+            <DxSpinEdit @bind-Value="Strategy.MinBet" ReadOnly=true/>
+        </DxFormLayoutItem>
+        <DxCheckBox @bind-Checked="Strategy.starthigh" Text="Start High"></DxCheckBox>
+        <DxCheckBox @bind-Checked="(Strategy.startlow)" Text="Start Low"></DxCheckBox>
+    </DxFormLayoutGroup>
+</DxFormLayout>
+@code {
+
+    [Parameter]
+    public DoormatBot.Strategies.Martingale Strategy { get; set; }
+
+    decimal profit = 0;
+    decimal payout = 0;
+    decimal Edge = 1;
+    void Calculate(string s)
+    {
+        switch (s)
+        {
+            case nameof(Strategy.Amount):
+                if (profit != (Strategy.Amount * payout) - Strategy.Amount)
+                {
+                    profit = (Strategy.Amount * payout) - Strategy.Amount;
+                }
+                break;
+            case nameof(Strategy.BaseChance):
+                if (Strategy.BaseChance != 0)
+                {
+                    if (payout != (100m - Edge) / Strategy.BaseChance)
+                    {
+                        payout = (100m - Edge) / Strategy.BaseChance;
+                    }
+                }
+                break;
+            case nameof(payout):
+                if (Strategy.BaseChance != 0)
+                {
+                    if (Strategy.BaseChance != (100m - Edge) / payout)
+                    {
+                        Strategy.BaseChance = (100m - Edge) / payout;
+                    }
+                    if (profit != Strategy.Amount * payout - Strategy.Amount)
+                        profit = Strategy.Amount * payout - Strategy.Amount;
+                }
+                break;
+        }
+    }
+
+}

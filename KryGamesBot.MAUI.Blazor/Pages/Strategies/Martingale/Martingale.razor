@@ -1,0 +1,139 @@
+﻿@using DoormatBot.Strategies;
+@using KryGamesBot.MAUI.Blazor.Interfaces;
+@implements iStrategy;
+<h3>Martingale</h3>
+<MartingaleDice Strategy=strategy/>
+<DxFormLayout>
+    <DxFormLayoutTabPages>
+        <DxFormLayoutTabPage Caption="Multiplier on Losss">
+            <DxFormLayoutGroup Caption="Multiplier Settings">
+                <DxFormLayoutItem Caption="Multiplier">
+                    <DxSpinEdit @bind-Value="strategy.BaseMultiplier" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="% Increase">
+                    <DxSpinEdit @bind-Value="strategy.BaseMultiplier" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Multiplyer Mode">
+                    <DxComboBox Data="MultiplyerModes" @bind-Value="strategy.MultiplierMode" TextFieldName="Name" ValueFieldName="Value"></DxComboBox>
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Max Multiplies" Visible="strategy.MultiplierMode==1">
+                    <DxSpinEdit @bind-Value="strategy.MaxMultiplies" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="After" Visible="strategy.MultiplierMode>1">
+                    <DxSpinEdit @bind-Value="strategy.Devidecounter" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Times Multiplier By" Visible="strategy.MultiplierMode>1">
+                    <DxSpinEdit @bind-Value="strategy.Devider" />
+                </DxFormLayoutItem>
+            </DxFormLayoutGroup>
+            <DxFormLayoutItem >
+                <DxCheckBox @bind-Checked="strategy.EnableChangeLoseStreak"/>
+                after 
+                <DxSpinEdit @bind-Value="strategy.ChangeLoseStreak" />
+                losses in a row
+                Change bet to
+                <DxSpinEdit @bind-Value="strategy.ChangeLoseStreakTo" />
+            </DxFormLayoutItem>
+            <DxFormLayoutItem>
+                <DxCheckBox @bind-Checked="strategy.EnableChangeChanceLose" />
+                after
+                <DxSpinEdit @bind-Value="strategy.ChangeChanceLoseStreak" />
+                losses in a row
+                Change bet to
+                <DxSpinEdit @bind-Value="strategy.ChangeChanceLoseTo" />
+            </DxFormLayoutItem>
+            <DxFormLayoutItem>
+                Multiply every 
+                <DxSpinEdit @bind-Value="strategy.StretchLoss" />
+                losses 
+            </DxFormLayoutItem>
+            <DxFormLayoutItem Caption="Reset after first loss">
+                <DxCheckBox @bind-Checked="strategy.EnableFirstResetLoss" />
+            </DxFormLayoutItem>
+        </DxFormLayoutTabPage>
+        <DxFormLayoutTabPage Caption="Multiplier on Wins">
+            <DxFormLayoutGroup Caption="Multiplier Settings">
+                <DxFormLayoutItem Caption="Multiplier">
+                    <DxSpinEdit @bind-Value="strategy.WinBaseMultiplier" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="% Increase">
+                    <DxSpinEdit @bind-Value="strategy.WinBaseMultiplier" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Multiplyer Mode">
+                    <DxComboBox Data="MultiplyerModes" @bind-Value="strategy.WinMultiplierMode" TextFieldName="Name" ValueFieldName="Value"></DxComboBox>
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Max Multiplies" Visible="strategy.WinMultiplierMode==1">
+                    <DxSpinEdit @bind-Value="strategy.WinMaxMultiplies" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="After" Visible="strategy.WinMultiplierMode>1">
+                    <DxSpinEdit @bind-Value="strategy.WinDevidecounter" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Times Multiplier By" Visible="strategy.WinMultiplierMode>1">
+                    <DxSpinEdit @bind-Value="strategy.WinDevider" />
+                </DxFormLayoutItem>
+            </DxFormLayoutGroup>
+            <DxFormLayoutItem>
+                <DxCheckBox @bind-Checked="strategy.EnableChangeWinStreak" />
+                after
+                <DxSpinEdit @bind-Value="strategy.ChangeWinStreak" />
+                Wines in a row
+                Change bet to
+                <DxSpinEdit @bind-Value="strategy.ChangeWinStreakTo" />
+            </DxFormLayoutItem>
+            <DxFormLayoutItem>
+                <DxCheckBox @bind-Checked="strategy.EnableChangeChanceWin" />
+                after
+                <DxSpinEdit @bind-Value="strategy.ChangeChanceWinStreak" />
+                Wines in a row
+                Change bet to
+                <DxSpinEdit @bind-Value="strategy.ChangeChanceWinTo" />
+            </DxFormLayoutItem>
+            <DxFormLayoutItem>
+                Multiply every
+                <DxSpinEdit @bind-Value="strategy.StretchWin" />
+                Wines
+            </DxFormLayoutItem>
+            <DxFormLayoutItem Caption="Reset after first Win">
+                <DxCheckBox @bind-Checked="strategy.EnableFirstResetWin" />
+            </DxFormLayoutItem>
+        </DxFormLayoutTabPage>
+    </DxFormLayoutTabPages>
+</DxFormLayout>
+@code {
+    List<object> MultiplyerModes = new List<object> { new { Name = "Standard/Constant", Value = 0 }, 
+    new { Name = "Maximum Increases", Value = 1 },
+    new { Name="Change Multiplier Once", Value=2 },
+    new { Name="Variable", Value=3 },};
+    private DoormatBot.Strategies.Martingale strategy;
+    [Parameter]
+    public DoormatBot.Doormat BotInstance { get; set; }
+
+    [Parameter]
+    public EventCallback StartBetting { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        SetStrategy(BotInstance?.Strategy);
+    }
+
+    public void GameChanged(DoormatCore.Games.Games newGame)
+    {
+        //throw new NotImplementedException();
+
+    }
+
+    public void SetStrategy(BaseStrategy Strategy)
+    {
+        strategy = Strategy as DoormatBot.Strategies.Martingale;
+    }
+
+    public bool TopAlign()
+    {
+        return true;
+    }
+    public async Task Saving()
+    {
+
+    }
+}

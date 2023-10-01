@@ -12,6 +12,7 @@ namespace KryGamesBot.MAUI.Blazor.Interfaces
         void SetStrategy(DoormatBot.Strategies.BaseStrategy Strategy);
         bool TopAlign();
         Task Saving();
+        DoormatBot.Doormat BotInstance { get; set; }
 
     }
 }

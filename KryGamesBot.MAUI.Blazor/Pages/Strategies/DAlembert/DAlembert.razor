@@ -1,0 +1,66 @@
+﻿@using DoormatBot.Strategies;
+@using KryGamesBot.MAUI.Blazor.Interfaces;
+@implements iStrategy;
+
+<h3>DAlembert</h3>
+<DxFormLayout>
+    <DxFormLayoutGroup Caption="On Loss">
+        <DxFormLayoutItem Caption="Increment Bet By">
+            <Template>
+                <DxSpinEdit @bind-Value="strategy.AlembertIncrementLoss"/>
+            </Template>
+        </DxFormLayoutItem>
+        <DxFormLayoutItem Caption="Stretch Losses By">
+            <Template>
+                <DxSpinEdit @bind-Value="strategy.AlembertStretchLoss" />
+            </Template>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+    <DxFormLayoutGroup Caption="On Win">
+        <DxFormLayoutItem Caption="Increment Bet By">
+            <Template>
+                <DxSpinEdit @bind-Value="strategy.AlembertIncrementWin" />
+            </Template>
+        </DxFormLayoutItem>
+        <DxFormLayoutItem Caption="Stretch Wins By">
+            <Template>
+                <DxSpinEdit @bind-Value="strategy.AlembertStretchWin" />
+            </Template>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>
+@code {
+
+    private DoormatBot.Strategies.DAlembert strategy;
+    [Parameter]
+    public DoormatBot.Doormat BotInstance { get; set; }
+
+    [Parameter]
+    public EventCallback StartBetting { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		await base.OnInitializedAsync();
+		SetStrategy(BotInstance?.Strategy);
+	}
+
+	public void GameChanged(DoormatCore.Games.Games newGame)
+	{
+		//throw new NotImplementedException();
+
+	}
+
+	public void SetStrategy(BaseStrategy Strategy)
+	{
+        strategy = Strategy as DoormatBot.Strategies.DAlembert;
+	}
+
+    public bool TopAlign()
+    {
+        return true;
+    }
+    public async Task Saving()
+    {
+
+    }
+}

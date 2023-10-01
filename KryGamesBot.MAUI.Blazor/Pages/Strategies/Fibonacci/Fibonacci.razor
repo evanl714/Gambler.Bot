@@ -1,0 +1,141 @@
+﻿@using DoormatBot.Strategies;
+@using KryGamesBot.MAUI.Blazor.Interfaces;
+@implements iStrategy;
+
+<h3>Fibonacci</h3>
+<DxFormLayout>
+    <DxFormLayoutGroup Caption="On Loss">
+        <DxFormLayoutItem>
+            <Template>
+                <DxRadio GroupName="FiboOnLoss"
+                @bind-Value="@strategy.EnableFiboLossIncrement"
+                         CssClass="dx-demo-radio">
+                    Increment
+                </DxRadio>
+            </Template>
+        </DxFormLayoutItem>
+        <DxFormLayoutItem>
+            <Template>
+                <DxSpinEdit @bind-Value="strategy.FiboLossIncrement" Enabled="strategy.EnableFiboLossIncrement"/>
+            </Template>
+        </DxFormLayoutItem>
+        <DxFormLayoutItem>
+            <Template>
+                <DxRadio GroupName="FiboOnLoss"
+                @bind-Value="@strategy.EnableFiboLossReset"
+                         CssClass="dx-demo-radio">
+                    Reset
+                </DxRadio>
+            </Template>
+        </DxFormLayoutItem>  
+        <DxFormLayoutItem>
+            <Template>
+                <DxRadio GroupName="FiboOnLoss"
+                @bind-Value="@strategy.EnableFiboLossStop"
+                         CssClass="dx-demo-radio">
+                    Reset
+                </DxRadio>
+            </Template>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+    <DxFormLayoutGroup Caption="On Win">
+        <DxFormLayoutItem>
+            <Template>
+                <DxRadio GroupName="FiboOnWin"
+                @bind-Value="@strategy.EnableFiboWinIncrement"
+                         CssClass="dx-demo-radio">
+                    Increment
+                </DxRadio>
+            </Template>
+        </DxFormLayoutItem>
+        <DxFormLayoutItem>
+            <Template>
+                <DxSpinEdit @bind-Value="strategy.FiboWinIncrement" Enabled="strategy.EnableFiboWinIncrement" />
+            </Template>
+        </DxFormLayoutItem>
+        <DxFormLayoutItem>
+            <Template>
+                <DxRadio GroupName="FiboOnWin"
+                @bind-Value="@strategy.EnableFiboWinReset"
+                         CssClass="dx-demo-radio">
+                    Reset
+                </DxRadio>
+            </Template>
+        </DxFormLayoutItem>
+        <DxFormLayoutItem>
+            <Template>
+                <DxRadio GroupName="FiboOnWin"
+                @bind-Value="@strategy.EnableFiboWinStop"
+                         CssClass="dx-demo-radio">
+                    Reset
+                </DxRadio>
+            </Template>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+    <DxFormLayoutGroup Caption="Level">
+        <DxFormLayoutItem>
+            <Template>
+                <DxCheckBox @bind-Checked="strategy.EnableFiboLevel" />
+            </Template>
+        </DxFormLayoutItem>
+        <DxFormLayoutItem>
+            <Template>
+                <DxSpinEdit @bind-Value="strategy.FiboLeve" Enabled="strategy.EnableFiboWinIncrement" />
+            </Template>
+        </DxFormLayoutItem>
+        <DxFormLayoutItem>
+            <Template>
+                <DxRadio GroupName="FiboOnLevel"
+                @bind-Value="@strategy.EnableFiboLossReset"
+                         CssClass="dx-demo-radio">
+                    Reset
+                </DxRadio>
+            </Template>
+        </DxFormLayoutItem>
+        <DxFormLayoutItem>
+            <Template>
+                <DxRadio GroupName="FiboOnLevel"
+                @bind-Value="@strategy.EnableFiboLevelStop"
+                         CssClass="dx-demo-radio">
+                    Stop
+                </DxRadio>
+            </Template>
+        </DxFormLayoutItem>
+    </DxFormLayoutGroup>
+</DxFormLayout>
+
+
+@code {
+    private DoormatBot.Strategies.Fibonacci strategy;
+    [Parameter]
+    public DoormatBot.Doormat BotInstance { get; set; }
+
+    [Parameter]
+    public EventCallback StartBetting { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        SetStrategy(BotInstance?.Strategy);
+    }
+
+    public void GameChanged(DoormatCore.Games.Games newGame)
+    {
+        //throw new NotImplementedException();
+
+    }
+
+    public void SetStrategy(BaseStrategy Strategy)
+    {
+        strategy = Strategy as DoormatBot.Strategies.Fibonacci;
+    }
+
+    public bool TopAlign()
+    {
+        return true;
+    }
+    public async Task Saving()
+    {
+
+    }
+}
