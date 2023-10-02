@@ -3,17 +3,34 @@
 <DxButton Text="Reset Chart" Click="btnReset_Click"/>
 <DxButton Text="@freezeContent" Click="btnFreeze_Click" />
 <DxChart Data="@DataPoints" CustomizeSeriesPoint="PerpareColour"  >
-    <DxChartLineSeries 
-        Name="Profit"
+    <DxChartLineSeries         
         ArgumentField="@((SimpleDataPoint s) => s.Argument)"
         ValueField="@(s => s.Value)"
         Width="1"
+        Color="System.Drawing.Color.Red"
+         Filter='si => si.Color == "Red"'
+         BreakOnEmptyPoints="true"
     >
         <DxChartSeriesPoint Visible=true
-                            HoverMode="ChartSeriesPointHoverMode.None" Size="5" />
+                            Size="5" />
     </DxChartLineSeries>
-    <DxChartLegend Position="RelativePosition.Outside"
-                   HorizontalAlignment="HorizontalAlignment.Right" Visible=false />
+    <DxChartLineSeries         
+        ArgumentField="@((SimpleDataPoint s) => s.Argument)"
+        ValueField="@(s => s.Value)"
+        Width="1"
+        Color="System.Drawing.Color.Green"
+        Filter='si => si.Color == "Green"'
+                       BreakOnEmptyPoints="true">
+        <DxChartSeriesPoint Visible=true
+                            Size="5" />
+    </DxChartLineSeries>
+    <DxChartValueAxis Name="TotalAxis" Position="@HorizontalEdge.Left">
+        <DxChartAxisTitle Text="@nameof(SimpleDataPoint.Value)"></DxChartAxisTitle>
+    </DxChartValueAxis>
+    <DxChartArgumentAxis>
+        <DxChartAxisTitle Text="@nameof(SimpleDataPoint.Argument)"></DxChartAxisTitle>
+    </DxChartArgumentAxis>
+    <DxChartLegend Visible="false"></DxChartLegend>
 </DxChart>
 
 @code {
@@ -36,14 +53,36 @@
         DataPoints = new RealTimeDataCollection();
         return base.OnInitializedAsync();
     }
-
-    public void AddPoint(decimal Profit)
+    string previousColor = "Red";
+    public void AddPoint(decimal Profit, bool win)
     {
         if (Enabled)
         {
+            string color = win?"Green":"Red" ;
+            string color2 = win ? "Red" : "Green";
+           
+            if (ChartItems >= 1)
+            {
+                if (previousColor != color)//set a null for the previous spot so it can skip the point
+                {
+                    DataPoints.Add(new SimpleDataPoint(ChartItems, (double)(ChartProfit), color));
+                    
+                }
+            }
 
             ChartProfit += Profit;
-            DataPoints.Add(new SimpleDataPoint(ChartItems++, (double)ChartProfit));
+            DataPoints.Add(new SimpleDataPoint(++ChartItems, (double)ChartProfit, color));
+            
+            if (ChartItems >= 1)
+            {
+                if (previousColor != color)//set a null for the previous spot so it can skip the point
+                {   
+                    DataPoints.Add(new SimpleDataPoint(ChartItems-1, (double)(ChartProfit - Profit), color2));
+                    DataPoints.Add(new SimpleDataPoint(ChartItems, null, color2));
+                }
+            }
+
+            previousColor = color;
             //profitChart.AddPoint(ChartItems++, (double)Profit);
             while (DataPoints.Count > (MaxItems > 0 ? MaxItems : UISettings.Settings.ChartBets))
             {
@@ -52,9 +91,11 @@
 
         }
     }
+
     public void AddRange(List<decimal> points)
-    {        
-        DataPoints.AddRange(points.Select(m => new SimpleDataPoint(ChartItems++, (double)(ChartProfit += m))).ToList());
+    {
+
+        DataPoints.AddRange(points.Select(m => new SimpleDataPoint(ChartItems++, (double)(ChartProfit += m), m>0?"Green":"Red")).ToList());
         while (DataPoints.Count > (MaxItems > 0 ? MaxItems : UISettings.Settings.ChartBets))
         {
             DataPoints.RemoveRangeAt(0, (DataPoints.Count - (MaxItems > 0 ? MaxItems : UISettings.Settings.ChartBets)) + 1);
@@ -88,12 +129,12 @@
     protected void PerpareColour(ChartSeriesPointCustomizationSettings pointSettings)
     {
 
-        decimal value = (decimal)(double)pointSettings.Point.Value;
+        decimal? value = (decimal?)(double?)pointSettings.Point.Value;
         if (value <= previousValue)
             pointSettings.PointAppearance.Color =System.Drawing.Color.Red;
         else  
             pointSettings.PointAppearance.Color = System.Drawing.Color.Green;
-        previousValue = value;
+        previousValue = value ?? 0;
     }
 }
 

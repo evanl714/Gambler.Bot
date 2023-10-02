@@ -315,7 +315,7 @@
     private void BotIns_OnSiteBetFinished(object sender, DoormatCore.Sites.BetFinisedEventArgs e)
     {
         (dcLiveBets?.Instance as iLiveBet)?.AddBet(e.NewBet);
-        _profitChart.AddPoint(e.NewBet.Profit);
+        _profitChart.AddPoint(e.NewBet.Profit, e.NewBet.IsWin);
         _siteStats.RefreshStats();
         _sessionStats.RefreshStats();
     }
@@ -328,9 +328,9 @@
         {
             case nameof(DAlembert): StrategyType = typeof(Strategies.DAlembert.DAlembert); break;
             case nameof(Fibonacci): StrategyType = typeof(Strategies.Fibonacci.Fibonacci); break;
-            case nameof(Labouchere): /*StrategyType = new KryGamesBotControls.Strategies.Labouchere.Labouchere();*/ break;
+            case nameof(Labouchere): StrategyType = typeof(Strategies.Labouchere.Labouchere);  break;
             case nameof(Martingale): StrategyType = typeof(Strategies.Martingale.Martingale); break;
-            case nameof(PresetList):/* StrategyType = new KryGamesBotControls.Strategies.PresetList.PresetListControl(); */break;
+            case nameof(PresetList): StrategyType = typeof(Strategies.PresetList.PresetList); break;
             case nameof(ProgrammerCS): StrategyType = typeof(ProgrammerModeCS); break;
             case nameof(ProgrammerJS): StrategyType = typeof(ProgrammerModeJS); break;
             case nameof(ProgrammerLUA): StrategyType = typeof(ProgrammerModeLUA); break;

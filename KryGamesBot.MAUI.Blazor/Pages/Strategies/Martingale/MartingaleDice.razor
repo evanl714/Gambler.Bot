@@ -1,60 +1,64 @@
 ﻿<DxFormLayout>
     <DxFormLayoutGroup>
-        <DxFormLayoutItem Caption="Starting Amount">
-            <DxSpinEdit Value="Strategy.MinBet" ValueChanged="@((decimal val) => Calculate(nameof(Strategy.Amount)))" />
+        <DxFormLayoutItem Caption="Strategy Amount">
+            <DxSpinEdit Value="MStrategy.MinBet" ValueChanged="@((decimal val) => Calculate(nameof(MStrategy.MinBet), val))" />
         </DxFormLayoutItem>
         <DxFormLayoutItem Caption="Chance">
-            <DxSpinEdit Value="Strategy.MinBet" ValueChanged="@((decimal val) => Calculate(nameof(Strategy.BaseChance)))" />
+            <DxSpinEdit Value="MStrategy.BaseChance" ValueChanged="@((decimal val) => Calculate(nameof(MStrategy.BaseChance), val))" />
         </DxFormLayoutItem>
         <DxFormLayoutItem Caption="Payout">
-            <DxSpinEdit Value="Strategy.MinBet" ValueChanged="@((decimal val) => Calculate(nameof(payout)))" />
+            <DxSpinEdit Value="payout" ValueChanged="@((decimal val) => Calculate(nameof(payout), val))" />
         </DxFormLayoutItem>
         <DxFormLayoutItem Caption="Profit">
-            <DxSpinEdit @bind-Value="Strategy.MinBet" ReadOnly=true/>
+            <DxSpinEdit @bind-Value="profit" ReadOnly=true/>
         </DxFormLayoutItem>
-        <DxCheckBox @bind-Checked="Strategy.starthigh" Text="Start High"></DxCheckBox>
-        <DxCheckBox @bind-Checked="(Strategy.startlow)" Text="Start Low"></DxCheckBox>
+        <DxCheckBox @bind-Checked="MStrategy.starthigh" Text="Start High"></DxCheckBox>
+        <DxCheckBox @bind-Checked="(MStrategy.startlow)" Text="Start Low"></DxCheckBox>
     </DxFormLayoutGroup>
 </DxFormLayout>
 @code {
 
     [Parameter]
-    public DoormatBot.Strategies.Martingale Strategy { get; set; }
+    public DoormatBot.Strategies.Martingale MStrategy { get; set; }
 
     decimal profit = 0;
     decimal payout = 0;
     decimal Edge = 1;
-    void Calculate(string s)
+    void Calculate(string s,decimal value)
     {
         switch (s)
         {
-            case nameof(Strategy.Amount):
-                if (profit != (Strategy.Amount * payout) - Strategy.Amount)
+            case nameof(MStrategy.MinBet):
+                MStrategy.MinBet = value;
+                if (profit != (MStrategy.MinBet * payout) - MStrategy.MinBet)
                 {
-                    profit = (Strategy.Amount * payout) - Strategy.Amount;
+                    profit = (MStrategy.MinBet * payout) - MStrategy.MinBet;
                 }
                 break;
-            case nameof(Strategy.BaseChance):
-                if (Strategy.BaseChance != 0)
+            case nameof(MStrategy.BaseChance):
+                MStrategy.BaseChance = value;
+                if (MStrategy.BaseChance != 0)
                 {
-                    if (payout != (100m - Edge) / Strategy.BaseChance)
+                    if (payout != (100m - Edge) / MStrategy.BaseChance)
                     {
-                        payout = (100m - Edge) / Strategy.BaseChance;
+                        payout = (100m - Edge) / MStrategy.BaseChance;
                     }
                 }
                 break;
             case nameof(payout):
-                if (Strategy.BaseChance != 0)
+                payout = value;
+                if (payout != 0)
                 {
-                    if (Strategy.BaseChance != (100m - Edge) / payout)
+                    if (MStrategy.BaseChance != (100m - Edge) / payout)
                     {
-                        Strategy.BaseChance = (100m - Edge) / payout;
+                        MStrategy.BaseChance = (100m - Edge) / payout;
                     }
-                    if (profit != Strategy.Amount * payout - Strategy.Amount)
-                        profit = Strategy.Amount * payout - Strategy.Amount;
+                    if (profit != MStrategy.MinBet * payout - MStrategy.MinBet)
+                        profit = MStrategy.MinBet * payout - MStrategy.MinBet;
                 }
                 break;
         }
+        InvokeAsync(StateHasChanged);
     }
 
 }

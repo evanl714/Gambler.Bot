@@ -2,6 +2,7 @@
 @using DoormatCore.Games;
 @using KryGamesBot.MAUI.Blazor.Classes;
 @using KryGamesBot.MAUI.Blazor.Interfaces;
+
 @implements iLiveBet;
 
 <h3>DiceLiveBetsControl</h3>
@@ -35,42 +36,59 @@
     public EventCallback<ViewBetEventArgs> BetClicked { get; set; }
 
     public void AddBet(Bet newBet)
-    {  
+    {
         //if (Bets.CanRemove)
+        InvokeAsync(() => SyncedAddBet(newBet));
+
+    }
+
+    void SyncedAddBet(Bet newBet)
+    {
         while (Bets.Count > UISettings.Settings.LiveBets + 1)
         {
 
             //System.Threading.Thread.Sleep(10);
             //Bets.Remove(Bets.list);
-            Bets.RemoveAt(Bets.Count - 1);
+            Bets.RemoveAt(0);
         }
         Bets.Add(newBet as DiceBet);
-
     }
-
-    void Grid_CustomizeElement(GridCustomizeElementEventArgs e)
+    int running = 0;
+    int queued = 0;
+    void asyncCustomize(GridCustomizeElementEventArgs e)
     {
-        if (e.ElementType == GridElementType.DataRow)
+        try
         {
-            var bet = (DiceBet)e.Grid.GetDataItem(e.VisibleIndex);
-            e.Style = bet.IsWin ? "color: rgb(40, 167, 69)" : "color: rgb(220, 53, 69)";
-        }
-        else if (e.ElementType == GridElementType.DataCell)
-        {
-            var bet = (DiceBet)e.Grid.GetDataItem(e.VisibleIndex);
-
-            var fieldName = ((IGridDataColumn)e.Column).FieldName;
-            if (fieldName=="Roll")
+            if (e.ElementType == GridElementType.DataRow)
             {
-                switch (bet.WinnableType)
-                {   
-                    case 1: e.Style = "color: "+ Colors.DarkOrange.ToArgbHex(); break;
-                    case 2: e.Style = "color: " + Colors.DimGray.ToArgbHex(); break;
-                    case 3: e.Style = "color: " + Colors.Green.ToArgbHex(); break;
-                    case 4: e.Style = "color: " + Colors.Brown.ToArgbHex(); break;
+                var bet = (DiceBet)e.Grid.GetDataItem(e.VisibleIndex);
+                e.Style = "background-color: " + (bet.IsWin ? Colors.LightGreen.ToArgbHex() : Colors.LightPink.ToArgbHex());
+            }
+            else if (e.ElementType == GridElementType.DataCell)
+            {
+                var bet = (DiceBet)e.Grid.GetDataItem(e.VisibleIndex);
+
+                var fieldName = ((IGridDataColumn)e.Column).FieldName;
+                if (fieldName == "Roll")
+                {
+                    switch (bet.WinnableType)
+                    {
+                        case 1: e.Style = "color: " + Colors.DarkOrange.ToArgbHex(); break;
+                        case 2: e.Style = "color: " + Colors.DimGray.ToArgbHex(); break;
+                        case 3: e.Style = "color: " + Colors.Green.ToArgbHex(); break;
+                        case 4: e.Style = "color: " + Colors.Brown.ToArgbHex(); break;
+                    }
                 }
             }
         }
+        catch (Exception ex)
+        {
+
+        }
+    }
+    void Grid_CustomizeElement(GridCustomizeElementEventArgs e)
+    {
+        asyncCustomize(e);
     }
     
 }
