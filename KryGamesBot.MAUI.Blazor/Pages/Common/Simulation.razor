@@ -1,0 +1,110 @@
+﻿@using System.Diagnostics;
+@using DoormatBot.Helpers;
+@using DoormatBot.Strategies;
+@using DoormatCore.Sites;
+<h3>Simulation</h3>
+Starting Balance
+<DxSpinEdit @bind-Value=StartingBalance/>
+number of bets
+<DxSpinEdit @bind-Value=NumberOfBets />
+<DxButton Text="Start" Click="Start" Enabled=EnableStart/>
+
+<DxTextBox @bind-Text="CurrentSimulation.serverseed" />
+<DxTextBox @bind-Text="CurrentSimulation.serverseedhash" />
+<DxTextBox @bind-Text="CurrentSimulation.clientseed" />
+<DxSpinEdit @bind-Value="CurrentSimulation.Balance" ReadOnly=true />
+<DxSpinEdit @bind-Value="Progress" ReadOnly=true />
+<!--<DxTimeEdit @bind-Time="TimeRunning" />
+<DxTimeEdit @bind-Time="ProjectedTime" />
+<DxTimeEdit @bind-Time="ProjectedRemaining" />-->
+<DxButton Text="Save" Click="Save"/>
+<SessionStats @ref="sesseionStats1" Stats="CurrentSimulation.Stats" />
+@code {
+    SessionStats sesseionStats1 = new SessionStats();
+    long NumberOfBets = 0;
+    decimal StartingBalance = 0m;
+    Stopwatch SimTimer = new Stopwatch();
+    [Parameter]
+    public BaseSite CurrentSite { get; set; }
+    [Parameter]
+    public BaseStrategy Strategy { get; set; }
+    [Parameter]
+    public InternalBetSettings BetSettings { get; set; }
+
+    private DoormatBot.Helpers.Simulation CurrentSimulation = new DoormatBot.Helpers.Simulation(0,0,null,null,null,"",false);
+
+    bool EnableStart = true;
+    bool EnableSave = false;
+    public decimal Progress { get; set; }
+    public TimeSpan TimeRunning { get; set; } = new TimeSpan();
+    public TimeSpan ProjectedTime { get; set; } = new TimeSpan();
+    public TimeSpan ProjectedRemaining { get; set; } = new TimeSpan();
+    List<decimal> Bets = new List<decimal>();
+
+    async Task Start()
+    {
+        Bets = new List<decimal>();
+        CurrentSimulation = new DoormatBot.Helpers.Simulation(StartingBalance, NumberOfBets, CurrentSite, Strategy, BetSettings, Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), true);
+        EnableSave = false;
+        CurrentSimulation.OnSimulationWriting += Tmp_OnSimulationWriting;
+        CurrentSimulation.OnSimulationComplete += Tmp_OnSimulationComplete;
+        CurrentSimulation.OnBetSimulated += CurrentSimulation_OnBetSimulated;
+        SimTimer.Start();
+        CurrentSimulation.Start();
+        //sesseionStats1.Stats = CurrentSimulation.Stats;
+        EnableStart = false;
+    }
+    private void CurrentSimulation_OnBetSimulated(object sender, BetFinisedEventArgs e)
+    {
+        //Bets.Add(e.NewBet.Profit);
+        if (Bets.Count > 0 && Bets.Count % 100 == 0)
+        {
+            /*if (chrt.Enabled)
+                {
+                chrt.AddRange(Bets);
+                Bets = new List<decimal>();
+            }*/
+        }
+    }
+    private void Tmp_OnSimulationComplete(object sender, EventArgs e)
+    {
+
+        SimTimer.Stop();
+        DoormatBot.Helpers.Simulation tmp = sender as DoormatBot.Helpers.Simulation;
+        sesseionStats1.RefreshStats();
+        long ElapsedMilliseconds = SimTimer.ElapsedMilliseconds;
+        Progress = (decimal)tmp.TotalBetsPlaced / (decimal)tmp.Bets;
+        decimal totaltime = ElapsedMilliseconds / Progress;
+        TimeRunning = TimeSpan.FromMilliseconds(ElapsedMilliseconds);
+        ProjectedTime = TimeSpan.FromMilliseconds((double)totaltime);
+        ProjectedRemaining = TimeSpan.FromMilliseconds((double)totaltime - ElapsedMilliseconds);
+
+        SimTimer.Reset();
+        EnableSave = true;
+        EnableStart = true;
+        InvokeAsync(StateHasChanged);
+    }
+    private void Tmp_OnSimulationWriting(object sender, EventArgs e)
+    {
+        
+        DoormatBot.Helpers.Simulation tmp = sender as DoormatBot.Helpers.Simulation;
+        //Console.WriteLine("Simulation Progress: " + tmp.TotalBetsPlaced + " bets of " + tmp.Bets);
+
+        if (tmp.TotalBetsPlaced > 0)
+        {
+            long ElapsedMilliseconds = SimTimer.ElapsedMilliseconds;
+            Progress = (decimal)tmp.TotalBetsPlaced / (decimal)tmp.Bets;
+
+            decimal totaltime = ElapsedMilliseconds / Progress;
+            TimeRunning = TimeSpan.FromMilliseconds(ElapsedMilliseconds);
+            ProjectedTime = TimeSpan.FromMilliseconds((double)totaltime);
+            ProjectedRemaining = TimeSpan.FromMilliseconds((double)totaltime - ElapsedMilliseconds);
+            sesseionStats1.RefreshStats();
+        }
+        
+    }
+    async Task Save()
+    {
+        
+    }
+}

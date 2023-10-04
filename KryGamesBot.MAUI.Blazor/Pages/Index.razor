@@ -1,3 +1,39 @@
 ﻿@page "/"
+@inject NavigationManager NavManager
 
-<BotInstance/>
+<DxButton Click="GoToInstance" />
+@if (buttonclicked)
+{
+    <ErrorBoundary @ref="errorBoundary">
+        <ChildContent>
+        
+        <BotInstance />
+        </ChildContent>
+        <ErrorContent Context="Exception">
+            <div>
+                @Exception.Message<br />
+            </div>
+        </ErrorContent>
+    </ErrorBoundary>
+    
+}
+
+@code {
+    bool buttonclicked = false;
+
+    private async void GoToInstance()
+    {
+        PermissionStatus readstatus = await Permissions.RequestAsync<Permissions.StorageRead>();
+        PermissionStatus writestatus = await Permissions.RequestAsync<Permissions.StorageWrite>();
+
+        buttonclicked = true;
+    }
+
+    private ErrorBoundary? errorBoundary;
+
+    protected override void OnParametersSet()
+    {
+        errorBoundary?.Recover();
+    }
+}
+```

@@ -34,7 +34,9 @@
         <Items>
             <DxGridLayoutItem Column="0" Row="0" RowSpan="2" >
                 <Template>
-                    
+                    <DxButton Text="Log Out"/>
+                    <DxButton Text="Simulate" Click="Simulate"/>
+
                         <SiteStats stats="@botIns?.CurrentSite?.Stats" @ref=_siteStats/>
                         
                     
@@ -114,9 +116,13 @@
 @bind-Visible="@LoginPopupVisible" >
     <Login SelectedSite="@botIns.CurrentSite" OnBackClicked="Login_OnBackClicked" OnSkipClicked="Login_OnSkipClicked" />
 </DxPopup>
-
+<DxPopup HeaderText="Simulation"
+@bind-Visible="@simvisible">
+    <Simulation BetSettings="botIns.BetSettings" CurrentSite="botIns.CurrentSite" Strategy="botIns.Strategy" />
+</DxPopup>
 
 @code {
+    bool simvisible = false;
     int ActiveTabIndex { get; set; } = 0;
     DynamicComponent dcLiveBets;
     DynamicComponent dcManualBet;
@@ -168,16 +174,19 @@
 
         }*/
         //Check if global settings for this account exists
-        if ( File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json"))
-        {
-            PersonalSettingsFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json";
-        }
-        botIns.LoadPersonalSettings(PersonalSettingsFile);
+
 
     }
 
     protected override async Task OnInitializedAsync()
     {
+        string encironmentFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        PersonalSettingsFile=Path.Combine(encironmentFolder, "KryGamesBot", "PersonalSettings.json");
+        if (File.Exists(PersonalSettingsFile))
+        {
+            //PersonalSettingsFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json";
+        }
+        //botIns.LoadPersonalSettings(PersonalSettingsFile);
         await base.OnInitializedAsync();
         //(dcManualBet.Instance as ManualDiceBet).PlaceBet = new EventCallback<PlaceBetEventArgs>(this, ManualBetPlaced);
         LoadSettings("default");
@@ -350,13 +359,13 @@
             path = "";
         else*/
         {
-            path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\";
+            path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),"KryGamesBot");
         }
         InstanceName = Name;
         //load bet settings
         //if (File.Exists(path+Name + ".betset"))
         {
-            BetSettingsFile = path + Name + ".betset";
+            BetSettingsFile = Path.Combine( path ,Name + ".betset");
 
         }
 
@@ -365,9 +374,9 @@
             {
             dlmMainLayout.RestoreLayoutFromXml(path + Name + ".layout");
         }*/
-        if (File.Exists(path + Name + ".siteset"))
+        if (File.Exists(Path.Combine(path , Name + ".siteset")))
         {
-            LoadInstanceSettings(path + Name + ".siteset");
+            LoadInstanceSettings(Path.Combine(path , Name + ".siteset"));
 
         }
         if (File.Exists(BetSettingsFile))
@@ -478,14 +487,14 @@
 
     private void BotIns_OnNotification(object sender, DoormatCore.Helpers.NotificationEventArgs e)
     {
-        
+
         switch (e.NotificationTrigger.Action)
         {
             case DoormatCore.Helpers.TriggerAction.Alarm:
             case DoormatCore.Helpers.TriggerAction.Chime:
             case DoormatCore.Helpers.TriggerAction.Email: break;
             case DoormatCore.Helpers.TriggerAction.Popup: //StatusBar.Content = "Something happened that triggered a notification.";
-            break;
+                break;
 
         }
         //StatusBar.Content = e.NotificationTrigger.Action = DoormatCore.Helpers.TriggerAction.;
@@ -512,11 +521,17 @@
 
     private void BotIns_OnSiteStatsUpdated(object sender, DoormatCore.Sites.StatsUpdatedEventArgs e)
     {
-        
+
     }
     private void BotIns_OnSiteError(object sender, DoormatCore.Sites.ErrorEventArgs e)
     {
         //StatusBar.Content = "Error! " + e.Message;
 
+    }
+
+    async Task Simulate()
+    {
+        simvisible = true;
+        await InvokeAsync(StateHasChanged);
     }
 }
