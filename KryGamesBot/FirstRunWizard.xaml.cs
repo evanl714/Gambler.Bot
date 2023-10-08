@@ -129,7 +129,7 @@ You're all set up and ready to start. Finish this wizard to choose the site you 
                 case 4:
                     KeePassSettings1.UpdateSettings(settings);break; //update keepass
                 case 5://update notifications
-                case 6: settings.ErrorSettings = ErrorSettings.Errors.ToArray(); break;//udpate error settings
+                case 6: settings.ErrorSettings = ErrorSettings.Errors; break;//udpate error settings
                 default: e.Cancel = false; break;
             }
         }

@@ -1,9 +1,15 @@
 ﻿@inherits LayoutComponentBase
-
-<div class="page">
-    <main>
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
+<HeadContent>
+    
+    @foreach (var item in _activeTheme.StylesheetLinkUrl)
+    {
+        <link href="@item" rel="stylesheet" />
+    }
+</HeadContent>
+<div class="main">
+    @Body
 </div>
+@code {
+    bool _themeSwitcherShown = false;
+    public static ThemeItem _activeTheme = ThemeItem.Default;
+}

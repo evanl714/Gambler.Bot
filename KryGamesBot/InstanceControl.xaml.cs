@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 namespace KryGamesBot
@@ -431,7 +432,7 @@ namespace KryGamesBot
             {
                 Settings = sr.ReadToEnd();
             }
-            InstanceSettings tmp = json.JsonDeserialize<InstanceSettings>(Settings);
+            InstanceSettings tmp = JsonSerializer.Deserialize<InstanceSettings>(Settings);
             //botIns.ga
             
             var tmpsite = Doormat.Sites.FirstOrDefault(m => m.Name == tmp.Site);
@@ -447,7 +448,7 @@ namespace KryGamesBot
 
         void SaveINstanceSettings(string FileLocation)
         {
-            string Settings = json.JsonSerializer<InstanceSettings>(new InstanceSettings 
+            string Settings = JsonSerializer.Serialize<InstanceSettings>(new InstanceSettings 
             { 
                 Site=botIns.CurrentSite?.GetType()?.Name, 
                 AutoLogin=false, 

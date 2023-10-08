@@ -1,6 +1,6 @@
 ﻿@using DoormatCore.Sites;
 @using static DoormatCore.Sites.BaseSite;
-<h3>Login</h3>
+<h3>Login @SelectedSite.SiteName</h3>
 <div>
     <DxFormLayout CssClass="w-100">
        @foreach (var x in SelectedSite.LoginParams)
@@ -16,6 +16,7 @@
         <p CssClass="text-danger">@errorText</p>
     </div>
     <DxButton Text="Back" Click="BackClicked" />
+    <DxButton Text="View Site" Click="ViewSite" />
     <DxButton Text="Log In" Click="LogInClicked" />
     <DxButton Text="Skip" Click="SkipClicked" />
 </div>
@@ -54,6 +55,10 @@
     public async Task BackClicked(MouseEventArgs args)
     {
         await OnBackClicked.InvokeAsync();
+    }
+    public async Task ViewSite(MouseEventArgs args)
+    {
+        //await OnBackClicked.InvokeAsync();
     }
 
     public async Task SkipClicked(MouseEventArgs args)

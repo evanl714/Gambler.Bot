@@ -7,116 +7,83 @@
 @using KryGamesBot.MAUI.Blazor.Pages.Games.Dice;
 @using KryGamesBot.MAUI.Blazor.Pages.Strategies;
 @using System.Reflection;
+@using System.Text.Json;
 @implements IDisposable;
 <PageTitle>@title</PageTitle>
-<h3>BotInstance</h3>
 <div class="@(ShowSiteSelect?"":"visually-hidden")">
 <SelectSite Sites="@Doormat.Sites" OnSiteSelected="SiteSelected" />
 </div>
+
 <div class="@(ShowInstance?"InstanceContainer":"visually-hidden")">
-    <DxGridLayout>
-        <Rows>
 
-           <DxGridLayoutRow />
-            <DxGridLayoutRow />
-            <DxGridLayoutRow />
-            <DxGridLayoutRow />
-        </Rows>
-        <Columns>
-            <DxGridLayoutColumn />
-            <DxGridLayoutColumn />
-            <DxGridLayoutColumn />
-            <DxGridLayoutColumn />
-            <DxGridLayoutColumn />
-            <DxGridLayoutColumn />
-            <DxGridLayoutColumn />
-        </Columns>
-        <Items>
-            <DxGridLayoutItem Column="0" Row="0" RowSpan="2" >
-                <Template>
-                    <DxButton Text="Log Out"/>
-                    <DxButton Text="Simulate" Click="Simulate"/>
-
-                        <SiteStats stats="@botIns?.CurrentSite?.Stats" @ref=_siteStats/>
-                        
-                    
-                </Template>
-            </DxGridLayoutItem>
-            <DxGridLayoutItem Column="0" Row="2" RowSpan="2">
-                <Template>
-                    <SessionStats Stats="@botIns?.Stats" @ref="_sessionStats" />
-                </Template>
-            </DxGridLayoutItem>
-            <DxGridLayoutItem Column="1" ColumnSpan="4" Row="0" RowSpan="2">
-                <Template>
-                    <ProfitChart @ref="_profitChart" />
-                </Template>
-            </DxGridLayoutItem>
-            <DxGridLayoutItem Column="1" ColumnSpan="4" Row="2" RowSpan="2">
-                <Template>
-                    <DynamicComponent Type="@(LiveBetViewType)" @ref="dcLiveBets" />
-                </Template>
-            </DxGridLayoutItem>
-            <DxGridLayoutItem Column="5" ColumnSpan="2" Row="0" RowSpan="4">
-                <Template>
-                    <div class="StrategyColumn">
-                    <div class="settingTabContainer">
-                        @switch (ActiveTabIndex)
-                        {
-                            case 0:
-                            <div>
-                                <DxComboBox Data="botIns.Strategies.Keys" ValueChanged="@((string e)=>(StrategySelected(e)))" Value="@botIns.Strategy.StrategyName" />
-                            </div>
-                            <div>
-                                        <DxButton Text="Start" Click="Start" Enabled="btnStartIsEnabled" />
-                                <DxButton Text="Resume" Click="Resume" Enabled="btnResumeIsEnabled" />                                        
-                                <DxButton Text="Stop" Click="Stop" />
-                                <DxButton Text="Stop On Win" Click="StopOnWin" />
-                            </div>
-                                    <DynamicComponent Type="@(StrategyType)" @ref="dcStrategy" Parameters="@(new Dictionary<string, object>(){{"BotInstance", botIns }})" />                                    
-                                break;
-                            case 1:
-                                <SRCControls BetSettings="@botIns?.BetSettings" />
-                                break;
-                            case 2:
-                                <AdvancedSettings BetSettings="@botIns?.BetSettings" />
-                                break;
-                            case 4:
-                                <DynamicComponent Type="@(ManualBetType)" @ref="dcManualBet" Parameters="@(new Dictionary<string, object>(){{"PlaceBet", new EventCallback<PlaceBetEventArgs>(this, ManualBetPlaced) }})" />
-                                break;
-                        }
+        <div class="statsColumn">
+            <DxButton Text="Log Out"/>
+            <DxButton Text="Simulate" Click="Simulate"/>
+            <SiteStats stats="@botIns?.CurrentSite?.Stats" @ref=_siteStats/>
+            <SessionStats Stats="@botIns?.Stats" @ref="_sessionStats" />
+        </div>
+        <div class="statsColumn">
+            <ProfitChart @ref="_profitChart" />                
+            <DynamicComponent Type="@(LiveBetViewType)" @ref="dcLiveBets" />
+        </div>
+    <div class="StrategyColumn">
+            <div class="settingTabContainer">
+                @switch (ActiveTabIndex)
+                {
+                    case 0:
+                    <div>
+                        <DxComboBox Data="botIns.Strategies.Keys" ValueChanged="@((string e)=>(StrategySelected(e)))" Value="@botIns.Strategy.StrategyName" />
                     </div>
-                    <DxTabs CssClass="stratTabs" ScrollMode="TabsScrollMode.NoScroll" @bind-ActiveTabIndex="@ActiveTabIndex">
-                        <DxTab Text="Strategy">
-
-                        </DxTab>
-                        <DxTab Text="Reset Settings">
-
-                        </DxTab>
-                        <DxTab Text="Advanced settings">
-
-                        </DxTab>
-                        <DxTab Text="Custom Triggers">
-
-                        </DxTab>
-                        <DxTab Text="Manual Betting">
-
-                        </DxTab>
-                    </DxTabs>
+                    <div>
+                                <DxButton Text="Start" Click="Start" Enabled="btnStartIsEnabled" />
+                        <DxButton Text="Resume" Click="Resume" Enabled="btnResumeIsEnabled" />                                        
+                        <DxButton Text="Stop" Click="Stop" />
+                        <DxButton Text="Stop On Win" Click="StopOnWin" />
                     </div>
-                </Template>
-            </DxGridLayoutItem> 
-        </Items>
-    </DxGridLayout>   
+                            <DynamicComponent Type="@(StrategyType)" @ref="dcStrategy" Parameters="@(new Dictionary<string, object>(){{"BotInstance", botIns }})" />                                    
+                        break;
+                    case 1:
+                        <SRCControls BetSettings="@botIns?.BetSettings" />
+                        break;
+                    case 2:
+                        <AdvancedSettings BetSettings="@botIns?.BetSettings" />
+                        break;
+                    case 3:
+                            <Triggers BetSettings="@botIns?.BetSettings" />
+                            break;
+                    case 4:
+                        <DynamicComponent Type="@(ManualBetType)" @ref="dcManualBet" Parameters="@(new Dictionary<string, object>(){{"PlaceBet", new EventCallback<PlaceBetEventArgs>(this, ManualBetPlaced) }})" />
+                        break;
+                }
+            </div>
+            <DxTabs CssClass="stratTabs" ScrollMode="TabsScrollMode.NoScroll" @bind-ActiveTabIndex="@ActiveTabIndex">
+                <DxTab Text="Strategy">
+
+                </DxTab>
+                <DxTab Text="Reset Settings">
+
+                </DxTab>
+                <DxTab Text="Advanced settings">
+
+                </DxTab>
+                <DxTab Text="Custom Triggers">
+
+                </DxTab>
+                <DxTab Text="Manual Betting">
+
+                </DxTab>
+            </DxTabs>
+        </div>
+    
 </div>
 
 
 
-<DxPopup HeaderText="Log in"
+<DxPopup HeaderText="@("Log in " + botIns.CurrentSite?.SiteName )"
 @bind-Visible="@LoginPopupVisible" >
     <Login SelectedSite="@botIns.CurrentSite" OnBackClicked="Login_OnBackClicked" OnSkipClicked="Login_OnSkipClicked" />
 </DxPopup>
-<DxPopup HeaderText="Simulation"
+<DxPopup HeaderText="Simulate"
 @bind-Visible="@simvisible">
     <Simulation BetSettings="botIns.BetSettings" CurrentSite="botIns.CurrentSite" Strategy="botIns.Strategy" />
 </DxPopup>
@@ -180,19 +147,32 @@
 
     protected override async Task OnInitializedAsync()
     {
-        string encironmentFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        PersonalSettingsFile=Path.Combine(encironmentFolder, "KryGamesBot", "PersonalSettings.json");
-        if (File.Exists(PersonalSettingsFile))
-        {
-            //PersonalSettingsFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json";
-        }
-        //botIns.LoadPersonalSettings(PersonalSettingsFile);
+        
         await base.OnInitializedAsync();
+        LoadPersonalSettings();
         //(dcManualBet.Instance as ManualDiceBet).PlaceBet = new EventCallback<PlaceBetEventArgs>(this, ManualBetPlaced);
         LoadSettings("default");
         //await StrategySelected(botIns.Strategy?.StrategyName);        
 
+        if (botIns.CurrentSite!=null)
+        {
+            SiteChanged(botIns.CurrentSite, botIns.CurrentSite.CurrentCurrency, botIns.CurrentGame.ToString());
+            LoginPopupVisible = true;
+            ShowSiteSelect = false;
+            ShowInstance = true;
+        }
+    }
 
+    public async Task LoadPersonalSettings()
+    {
+        string encironmentFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        PersonalSettingsFile = Path.Combine(encironmentFolder, "KryGamesBot", "PersonalSettings.json");
+        if (File.Exists(PersonalSettingsFile))
+        {
+            PersonalSettingsFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json";
+        }
+        botIns.LoadPersonalSettings(PersonalSettingsFile);
+    
     }
 
 
@@ -403,7 +383,7 @@
         {
             Settings = sr.ReadToEnd();
         }
-        InstanceSettings tmp = json.JsonDeserialize<InstanceSettings>(Settings);
+        InstanceSettings tmp = JsonSerializer.Deserialize<InstanceSettings>(Settings);
         //botIns.ga
 
         var tmpsite = Doormat.Sites.FirstOrDefault(m => m.Name == tmp.Site);
@@ -419,7 +399,7 @@
 
     void SaveINstanceSettings(string FileLocation)
     {
-        string Settings = json.JsonSerializer<InstanceSettings>(new InstanceSettings
+        string Settings = JsonSerializer.Serialize<InstanceSettings>(new InstanceSettings
             {
                 Site = botIns.CurrentSite?.GetType()?.Name,
                 AutoLogin = false,

@@ -1,0 +1,57 @@
+﻿@using DoormatBot.Helpers;
+@using KryGamesBot.MAUI.Blazor.Interfaces;
+@implements ISettingScreen;
+<h3>Notifications</h3>
+<DxGrid Data="Settings.Notifications"
+        EditMode="GridEditMode.PopupEditForm"
+        EditorRenderMode="GridEditorRenderMode.Integrated"
+        EditNewRowPosition="GridEditNewRowPosition.Bottom"
+        AllowSort=false
+        PageSize="30"
+        VirtualScrollingEnabled=true
+        EditModelSaving="Grid_EditModelSaving"
+        DataItemDeleting="Grid_DataItemDeleting"
+        CustomizeEditModel="Grid_CustomizeEditModel">
+    <Columns>
+        <DxGridCommandColumn Width="160px" />
+        <DxGridDataColumn FieldName="Enabled" />
+        <DxGridDataColumn FieldName="TriggerDescription" />
+
+    </Columns>
+
+    <EditFormTemplate Context="EditFormContext">
+        <EditTrigger 
+            SelectedTrigger="@(EditFormContext.EditModel as DoormatCore.Helpers.Trigger)" 
+            Notifications=true />
+    </EditFormTemplate>
+</DxGrid>
+@code {
+    [Parameter]
+    public PersonalSettings Settings { get; set; }
+
+
+    async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
+    {
+        if (e.IsNew)
+            Settings.Notifications.Add((e.EditModel as DoormatCore.Helpers.Trigger));
+        else
+        {
+            var oldTrigger = e.DataItem as DoormatCore.Helpers.Trigger;
+            var newTrigger = e.EditModel as DoormatCore.Helpers.Trigger;
+
+        }
+    }
+    async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
+    {
+        Settings.Notifications.Remove(e.DataItem as DoormatCore.Helpers.Trigger);
+    }
+    async Task Grid_CustomizeEditModel(GridCustomizeEditModelEventArgs e)
+    {
+        if (e.IsNew)
+        {
+            var editModel = (DoormatCore.Helpers.Trigger)e.EditModel;
+            //editModel.HireDate = DateTime.Today;
+        }
+    }
+}
+

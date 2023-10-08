@@ -1,33 +1,87 @@
-﻿@page "/"
+﻿@implements IDisposable
+@page "/"
+@using DoormatCore.Helpers;
+@using KryGamesBot.MAUI.Blazor.Classes;
+@using System.Text.Json;
 @inject NavigationManager NavManager
 
-<DxButton Click="GoToInstance" />
-@if (buttonclicked)
-{
-    <ErrorBoundary @ref="errorBoundary">
-        <ChildContent>
+
+
+<ErrorBoundary @ref="errorBoundary">
+    <ChildContent>
+        <DxToolbar>
+            <Items>
+                <DxToolbarItem Text="Settings" Click="ShowSettings" />
+            </Items>
         
+        </DxToolbar>
         <BotInstance />
-        </ChildContent>
-        <ErrorContent Context="Exception">
-            <div>
-                @Exception.Message<br />
-            </div>
-        </ErrorContent>
-    </ErrorBoundary>
+    </ChildContent>
+    <ErrorContent Context="Exception">
+        <div>
+            @Exception.Message<br />
+        </div>
+    </ErrorContent>
+</ErrorBoundary>
     
-}
-
+<DxPopup Visible="@showSettings" Title="Settings" ShowCloseButton="true"  CloseOnEscape="true">
+    <CommonSettings Portable=Portable OnFinished="SettingsFinished"/>
+</DxPopup>
+<DxPopup Visible="@showWizard" Title="Welcome to KryGamesBot" ShowCloseButton="true" CloseOnEscape="true">
+    <KryGamesBot.MAUI.Blazor.Pages.Common.FirstRunWizard OnFinished="WizardFinished" />
+</DxPopup>
 @code {
-    bool buttonclicked = false;
-
-    private async void GoToInstance()
+    List<BotInstance> instances = new List<BotInstance>();
+    bool showSettings = false;
+    bool showWizard = false;
+    public static bool Portable { get; set; } 
+    public static string Path { get { return Portable ? "" : System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),"KryGamesBot"); } }
+    static string kpPw;
+    static string dbPw;
+    override protected async Task OnInitializedAsync()
     {
         PermissionStatus readstatus = await Permissions.RequestAsync<Permissions.StorageRead>();
         PermissionStatus writestatus = await Permissions.RequestAsync<Permissions.StorageWrite>();
 
-        buttonclicked = true;
+        //instances = await DoormatBot.Doormat.GetInstances();
+
+        //load instances from storage
+        //populate tabs
+        string DocsPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "KryGamesBot");
+
+        DoormatBot.Doormat tmpInstance = new DoormatBot.Doormat();
+        tmpInstance.NeedConstringPassword += TmpInstance_NeedConstringPassword;
+        tmpInstance.NeedKeepassPassword += TmpInstance_NeedKeepassPassword;
+        Portable = File.Exists("Portable");
+        //check if there's a local settings file
+        if (Portable && File.Exists("personalsettings.json"))
+        {
+            tmpInstance.LoadPersonalSettings("PersonalSettings.json");
+        }
+        //Check if global settings for this account exists
+        else if (!Portable && File.Exists(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "KryGamesBot","PersonalSettings.json")))
+        {
+            tmpInstance.LoadPersonalSettings(System.IO.Path.Combine(DocsPath , "PersonalSettings.json"));
+        }
+        else
+        {
+            showWizard = true;
+            //if this is a new install
+            /*dbSetup.Visibility = Visibility.Visible;
+            tcMainTabs.Visibility = Visibility.Hidden;*/
+        }
+        /*if (Portable && File.Exists("mainlayout"))
+            dlmMainMainLayout.RestoreLayoutFromXml("mainlayout");
+        else if (!Portable && File.Exists(DocsPath + "mainlayout"))
+            dlmMainMainLayout.RestoreLayoutFromXml(DocsPath + "mainlayout");*/
+
+        if (File.Exists(System.IO.Path.Combine(Path , "UISettings.json")))
+        {
+            UISettings.Settings = JsonSerializer.Deserialize<UISettings>(File.ReadAllText(System.IO.Path.Combine(Path, "UISettings.json")));
+            //ApplicationThemeHelper.ApplicationThemeName = UISettings.Settings.ThemeName;
+        }
     }
+
 
     private ErrorBoundary? errorBoundary;
 
@@ -35,5 +89,116 @@
     {
         errorBoundary?.Recover();
     }
+
+    async Task ShowSettings()
+    {
+        showSettings = true;
+        await InvokeAsync(StateHasChanged);
+    }
+    internal static void TmpInstance_NeedKeepassPassword(object sender, DoormatBot.Helpers.PersonalSettings.GetConstringPWEventArgs e)
+    {
+        /*if (!string.IsNullOrWhiteSpace(kpPw))
+        {
+        e.Password = kpPw;
+        return;
+        }
+
+        GetPasswordDialog tmpdiag = new GetPasswordDialog();
+
+        if (tmpdiag.ShowDialog() ?? false)
+            {
+            kpPw = e.Password = tmpdiag.Pw;
+
+        }*/
+    }
+
+    internal static void TmpInstance_NeedConstringPassword(object sender, DoormatBot.Helpers.PersonalSettings.GetConstringPWEventArgs e)
+    {
+        /* if (!string.IsNullOrWhiteSpace(dbPw))
+        {
+        e.Password = dbPw;
+        return;
+        }
+
+        GetPasswordDialog tmpdiag = new GetPasswordDialog();
+
+        if (tmpdiag.ShowDialog() ?? false)
+            {
+            dbPw = e.Password = tmpdiag.Pw;
+
+        }*/
+    }
+
+    public void Dispose()
+    {
+        //is this being closed now?
+    }
+
+    void Closing()
+    {
+        /*for (int i = 0; i < documents.Count; i++)
+    {
+    var Tab = documents[i];
+    if (Tab.Closed)
+    {
+    mainTabs.Remove(Tab);
+    try
+    {
+    dlmMainMainLayout.ClosedPanels.Remove(Tab);
+    }
+    catch { }
+    documents.RemoveAt(i--);
+    (Tab.Content as InstanceControl).Removed();
+    }
+        }
+    string layoutresult = "";
+    dlmMainMainLayout.SaveLayoutToXml(Path + "mainlayout");
+    File.WriteAllText(Path + "UISettings.json", JsonSerializer.Serialize<UISettings>(UISettings.Settings));
+
+        foreach (var Tab in documents)
+            {
+            if (Tab.Content is InstanceControl)
+    {
+    try
+    {
+    (Tab.Content as InstanceControl).Closing();
+        }
+
+    catch
+        {
+
+    }
+    }
+    }
+    foreach (FileInfo x in new DirectoryInfo(System.AppDomain.CurrentDomain.BaseDirectory).GetFiles())
+        {
+        if (x.Name.EndsWith("." + Process.GetCurrentProcess().Id))
+    {
+    try
+        {
+        x.Delete();
+    }
+    catch
+        {
+
+        }
+    }
+    }*/
+
+
+
+    }
+    async Task WizardFinished()
+    {
+        showWizard = false;
+    }
+    async Task SettingsFinished()
+    {
+        showSettings = false;
+        foreach (var instance in instances)
+        {
+            instance.LoadPersonalSettings();
+        };
+        UISettings.Settings = JsonSerializer.Deserialize<UISettings>(File.ReadAllText(System.IO.Path.Combine(Path, "UISettings.json")));
+    }
 }
-```

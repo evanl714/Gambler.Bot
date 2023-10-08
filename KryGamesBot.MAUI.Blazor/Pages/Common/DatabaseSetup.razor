@@ -1,0 +1,52 @@
+﻿@using DoormatBot.Helpers;
+@using KryGamesBot.MAUI.Blazor.Pages.Common.DBSetup;
+@implements KryGamesBot.MAUI.Blazor.Interfaces.ISettingScreen;
+
+<h3>DatabaseSetup</h3>
+<p>KryGamesBot stores bets made through it and your session stats in a database so that it can show you pretty graphs and keep track of your betting progress. To be able to do this, you need to set up a databasse for it to store to.    If you're not sure what to enter here, it's recommended you use the default settings and continue.
+</p>
+<DxComboBox Data="@DatabaseTypes" @bind-Value="DatabaseType" TextFieldName="Name" />
+<DynamicComponent @ref="DatabaseSetupComponent" Type="@DatabaseType" />
+Password: <DxTextBox Password=true @bind-Text="Password" />
+<p>This password is used to encrypt your connection string for your storage option. You will need to enter it every time you open KryGamesBot. If you leave it blank, you will not need to enter a password but your connection string will be saved in plain text.</p>
+<DxButton Text="Test Connection" Click="TestConnection"/>
+@code {
+    List<Type> DatabaseTypes = new List<Type>();
+    Type DatabaseType = null;
+    DynamicComponent DatabaseSetupComponent;
+    public string Password { get; set; }
+    
+    [Parameter]
+    public PersonalSettings Settings { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        DatabaseTypes.AddRange(new List<Type>(){ 
+            typeof(DBSetup.SQLite),
+            typeof(DBSetup.SqlServer),
+            typeof(DBSetup.MySql),
+            typeof(DBSetup.MongoDB),
+            typeof(DBSetup.Postgress) 
+        });
+        DatabaseType = DatabaseTypes[0];
+        return base.OnInitializedAsync();
+    }
+
+    public void TestConnection(MouseEventArgs args)
+    {
+        
+    }
+
+    
+
+    public void UpdateSettings()
+    {
+        Settings.Provider = (DatabaseSetupComponent.Instance as iDatabaseForm).Provider();
+        Settings.EncryptConstring = Password != null;
+        Settings.SetConnectionString((DatabaseSetupComponent.Instance as iDatabaseForm).ConnectionString(), Password);
+    }
+    public bool Verify()
+    {
+        return (DatabaseSetupComponent.Instance as iDatabaseForm).Validate();
+    }
+}

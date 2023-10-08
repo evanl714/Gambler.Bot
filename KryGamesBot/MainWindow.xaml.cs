@@ -14,6 +14,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -128,7 +129,7 @@ namespace KryGamesBot
 
             if (File.Exists(Path + "UISettings.json"))
             {
-                UISettings.Settings = json.JsonDeserialize<UISettings>(File.ReadAllText(Path + "UISettings.json"));
+                UISettings.Settings = JsonSerializer.Deserialize<UISettings>(File.ReadAllText(Path + "UISettings.json"));
                 ApplicationThemeHelper.ApplicationThemeName = UISettings.Settings.ThemeName;
             }
             
@@ -222,7 +223,7 @@ namespace KryGamesBot
             }
             string layoutresult = "";
             dlmMainMainLayout.SaveLayoutToXml(Path+"mainlayout");
-            File.WriteAllText(Path + "UISettings.json", json.JsonSerializer<UISettings>(UISettings.Settings));
+            File.WriteAllText(Path + "UISettings.json", JsonSerializer.Serialize<UISettings>(UISettings.Settings));
                 
             foreach (var Tab in documents)
             {

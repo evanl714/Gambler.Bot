@@ -34,7 +34,7 @@
                                         @for (int i = 0; i < Site.Currencies?.Length && i<20; i++)
                                         {
                                             <div>
-                                            <img src="Images/Currencies/@(Site.Currencies[i]).svg" class="currency-icon" />
+                                            <img src="Images/Currencies/@(Site.Currencies[i].ToLower()).svg" class="currency-icon" />
                                             </div>
                                         }
                                 </div>

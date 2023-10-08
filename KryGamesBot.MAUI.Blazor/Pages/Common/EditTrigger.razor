@@ -1,0 +1,127 @@
+﻿@using DoormatCore.Helpers;
+<h3>SingleTrigger</h3>
+When <DxComboBox Data="Properties" @bind-Value="SelectedTrigger.TriggerProperty"></DxComboBox>
+is <DxComboBox Data="Comparisons" @bind-Value="SelectedTrigger.Comparison"></DxComboBox>
+than <DxComboBox Data="Againsts" @bind-Value="SelectedTrigger.TargetType"></DxComboBox>
+@if (SelectedTrigger!=null)
+{
+<!-- when target type is value -->
+@if(SelectedTrigger?.TargetType == CompareAgainst.Value)
+{
+<div>
+<DxSpinEdit @bind-Value="Target" DisplayFormat="n8"></DxSpinEdit>
+</div>
+}
+<!--when target type is percentage -->
+@if (SelectedTrigger?.TargetType == CompareAgainst.Percentage)
+{
+<div>
+<DxSpinEdit @bind-Value="SelectedTrigger.Percentage" DisplayFormat="p2"></DxSpinEdit> of
+<DxComboBox Data="Properties" @bind-Value="SelectedTrigger.Target"></DxComboBox>
+</div>
+}
+<!--when target type is property-->
+@if (SelectedTrigger?.TargetType == CompareAgainst.Property)
+{
+<div>
+<DxComboBox Data="Properties" @bind-Value="SelectedTrigger.Target"></DxComboBox>
+</div>
+}
+    <span>then</span> <DxComboBox Data="Actions" @bind-Value="SelectedTrigger.Action"></DxComboBox>
+@if (SelectedTrigger!=null && AmountActions.Contains(SelectedTrigger.Action))
+{
+    <span>amount </span>
+    <DxComboBox Data="Againsts" @bind-Value="SelectedTrigger.ValueType"></DxComboBox>
+
+    @if (SelectedTrigger?.TargetType == CompareAgainst.Value)
+    {
+        <div>
+            <DxSpinEdit @bind-Value="SelectedTrigger.ValueValue" DisplayFormat="p2"></DxSpinEdit>
+        </div>
+    }
+    <!--when target type is percentage -->
+    @if (SelectedTrigger?.TargetType == CompareAgainst.Percentage)
+    {
+        <div>
+            <DxSpinEdit @bind-Value="SelectedTrigger.ValueValue" DisplayFormat="p2"></DxSpinEdit> of
+            <DxComboBox Data="Properties" @bind-Value="SelectedTrigger.ValueProperty"></DxComboBox>
+        </div>
+    }
+    <!--when target type is property-->
+    @if (SelectedTrigger?.TargetType == CompareAgainst.Property)
+    {
+        <div>
+            <DxComboBox Data="Properties" @bind-Value="SelectedTrigger.ValueProperty"></DxComboBox>
+        </div>
+    }
+}
+@if (SelectedTrigger!=null && DestinationActions.Contains(SelectedTrigger.Action))
+{
+    <span>to </span> <DxTextBox @bind-Text="SelectedTrigger.Destination" DisplayFormat="p2"></DxTextBox>
+}
+<DxCheckBox @bind-Checked="SelectedTrigger.Enabled">Enabled</DxCheckBox>
+}
+@code {
+    [Parameter]
+    public DoormatCore.Helpers.Trigger SelectedTrigger { get; set; } = new Trigger();
+
+    [Parameter]
+    public bool Notifications { get; set; }
+
+    public List<string> Properties = new List<string>();
+    public List<TriggerComparison> Comparisons = new List<TriggerComparison>();
+    public List<CompareAgainst> Againsts = new List<CompareAgainst>();
+    public List<TriggerAction> Actions = new List<TriggerAction>();
+    public List<TriggerAction> AmountActions = new List<TriggerAction>() { TriggerAction.Bank, TriggerAction.Invest, TriggerAction.Tip, TriggerAction.Withdraw};
+    public List<TriggerAction> DestinationActions = new List<TriggerAction>() { TriggerAction.Email, TriggerAction.Tip, TriggerAction.Withdraw };
+
+    decimal Target { get => getdecimal(SelectedTrigger?.Target); set => SelectedTrigger.Target = value.ToString("n8"); }
+
+    decimal getdecimal(string value)
+    {
+        if (decimal.TryParse(value, out decimal result))
+        {
+            return result;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        var props = typeof(DoormatBot.Helpers.SessionStats).GetProperties();
+        foreach (System.Reflection.PropertyInfo x in props)
+        {
+            Properties.Add(x.Name);
+        }
+        foreach (TriggerComparison x in Enum.GetValues(typeof(TriggerComparison)))
+        {
+            Comparisons.Add(x);
+        }
+        foreach (CompareAgainst x in Enum.GetValues(typeof(CompareAgainst)))
+        {
+            Againsts.Add(x);
+        }
+        if (Notifications)
+        {
+            Actions.Add(TriggerAction.Popup);
+            Actions.Add(TriggerAction.Email);
+            Actions.Add(TriggerAction.Alarm);
+            Actions.Add(TriggerAction.Chime);            
+        }
+        else
+        {
+            Actions.Add(TriggerAction.Stop);
+            Actions.Add(TriggerAction.Reset);
+            Actions.Add(TriggerAction.Withdraw);
+            Actions.Add(TriggerAction.Tip);
+            Actions.Add(TriggerAction.Invest);
+            Actions.Add(TriggerAction.Bank);
+            Actions.Add(TriggerAction.ResetSeed);
+            Actions.Add(TriggerAction.Switch);
+        }
+        return base.OnInitializedAsync();
+    }
+}

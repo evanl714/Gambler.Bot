@@ -1,0 +1,88 @@
+﻿@using DoormatBot.Helpers;
+@using KryGamesBot.MAUI.Blazor.Classes;
+<h3>CommonSettings</h3>
+<DxTreeView Data="nodes" AllowSelectNodes="true" SelectionChanged="@SelectionChanged">
+    <DataMappings>
+        <DxTreeViewDataMapping Text="Name"
+                               Key="Id"
+                               ParentKey="ParentId" />
+    </DataMappings>
+</DxTreeView>
+<DynamicComponent Type="@(SelectedNode?.UserControl)" />
+<DxButton Text="Save" Click="Save"/>
+@code {
+    [Parameter]
+    public PersonalSettings Settings { get; set; }
+
+    [Parameter]
+    public bool Portable { get; set; }
+
+    [Parameter]
+    public EventCallback OnFinished { get; set; }
+
+    public SettingNode SelectedNode { get; set; }
+    public List<SettingNode> nodes { get; set; } = new List<SettingNode>() { };
+
+
+
+    protected override Task OnInitializedAsync()
+    {
+        nodes.Add(new SettingNode { Id = 1, Name = "Skin", UserControl = typeof(ThemeSwitcherSideView) });
+        nodes.Add(new SettingNode { Id = 2, Name = "KeePass", UserControl = typeof(EmptyControl) });
+        nodes.Add(new SettingNode { Id = 3, Name = "Storage", UserControl = typeof(EmptyControl) });
+        nodes.Add(new SettingNode { Id = 4, Name = "Bets", ParentId = 3, UserControl = typeof(Common.DatabaseSetup) });
+        nodes.Add(new SettingNode { Id = 5, Name = "Strategies", ParentId = 3, UserControl = typeof(EmptyControl) });
+        nodes.Add(new SettingNode { Id = 6, Name = "Notifications", UserControl = typeof(Common.Notifications) });
+        //nodes.Add(new SettingNode { Id = 7, Name = "Updates", UserControl = typeof(EmptyControl)  });
+        nodes.Add(new SettingNode { Id = 8, Name = "Live Bets", UserControl = typeof( Common.LiveBetSettings) });
+        //nodes.Add(new SettingNode { Id = 11, Name = "Donate", UserControl = typeof(EmptyControl) });
+        //nodes.Add(new SettingNode { Id = 12, Name = "Proxy", UserControl = typeof(EmptyControl) });
+        nodes.Add(new SettingNode { Id = 13, Name = "Errors", UserControl = typeof(Common.ErrorSettings) });
+        SelectedNode = nodes[0];
+        DoormatBot.Doormat tmpInstance = new DoormatBot.Doormat();
+        string DocsPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "KryGamesBot");
+
+        if (Portable && File.Exists("personalsettings.json"))
+        {
+            tmpInstance.LoadPersonalSettings("PersonalSettings.json");
+        }
+        //Check if global settings for this account exists
+        else if (!Portable && File.Exists(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "KryGamesBot", "PersonalSettings.json")))
+        {
+            tmpInstance.LoadPersonalSettings(System.IO.Path.Combine(DocsPath, "PersonalSettings.json"));
+        }
+        //tmpInstance.LoadPersonalSettings("PersonalSettings.json");
+        Settings = tmpInstance.PersonalSettings;
+        return base.OnInitializedAsync();
+    }
+
+    protected void SelectionChanged(TreeViewNodeEventArgs e)
+    {
+        SelectedNode = e.NodeInfo.DataItem as SettingNode;
+        InvokeAsync(StateHasChanged);
+    }
+
+    async Task Save()
+    {
+        await SaveAndClose();
+    }
+    async Task SaveAndClose()
+    {
+        DoormatBot.Doormat tmpInstance = new DoormatBot.Doormat();
+        tmpInstance.PersonalSettings = Settings;
+        //save settings and close
+        if (Portable)
+            tmpInstance.SavePersonalSettings("PersonalSettings.json");
+        else
+        {
+            string docspath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\";
+            if (!Directory.Exists(docspath))
+            {
+                Directory.CreateDirectory(docspath);
+            }
+            tmpInstance.SavePersonalSettings(docspath + "PersonalSettings.json");
+
+        }
+        await OnFinished.InvokeAsync();
+    }
+}

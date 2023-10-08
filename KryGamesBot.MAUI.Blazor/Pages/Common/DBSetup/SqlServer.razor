@@ -1,0 +1,79 @@
+﻿@implements iDatabaseForm
+
+Server <DxTextBox @bind-Text=DataSource />
+DataBase
+<DxTextBox @bind-Text=DbName />
+UserName
+<DxTextBox @bind-Text=Username />
+Password
+<DxTextBox @bind-Text=Pw Password=true />
+<br/>
+Custom Connection String: <DxTextBox @bind-Text=connectionString />
+@code {
+    private string dataSource;
+
+    public string DataSource
+    {
+        get { return dataSource; }
+        set { dataSource = value;  }
+    }
+
+    private string dbName;
+
+    public string DbName
+    {
+        get { return dbName; }
+        set { dbName = value;  }
+    }
+
+    private string username;
+
+    public string Username
+    {
+        get { return username; }
+        set { username = value;  }
+    }
+
+    private string pw;
+
+    public string Pw
+    {
+        get { return pw; }
+        set { pw = value;  }
+    }
+    string connectionString = "";
+
+    public string ConnectionString()
+    {
+        if (string.IsNullOrWhiteSpace(connectionString))
+            return $"Data Source={DataSource};Initial Catalog={dbName};User Id={Username};Password={pw};persist security info=true;";
+        else
+            return connectionString;
+    }
+
+    public virtual string Provider()
+    {
+        return "MSSQL";
+    }
+
+    public bool Validate()
+    {
+        if (string.IsNullOrWhiteSpace(connectionString))
+        {
+            if (DataSource != null && DbName != null && Pw != null && Username != null)
+            {
+                //attempt to make a connection
+                return true;//if not valid
+                             //else return true;
+            }
+        }
+        else
+        {
+            //attempt to make a connection
+            return true;//if not valid
+                         //else return true;
+        }
+        return false;
+
+    }
+}

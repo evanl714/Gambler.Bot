@@ -1,0 +1,40 @@
+﻿@using DoormatBot.Helpers;
+@using static DoormatBot.Helpers.PersonalSettings;
+
+@implements KryGamesBot.MAUI.Blazor.Interfaces.ISettingScreen;
+
+<h3>ErrorSettings</h3>
+<DxGrid Data="Settings.ErrorSettings"
+        EditMode="GridEditMode.EditRow"
+        EditorRenderMode="GridEditorRenderMode.Integrated"        
+        AllowSort=false
+        PageSize="30"
+        VirtualScrollingEnabled=true
+        EditModelSaving="Grid_EditModelSaving">
+    <Columns>
+        <DxGridCommandColumn Width="80px" DeleteButtonVisible=false />
+        <DxGridDataColumn FieldName="Type" DisplayFormat="n8" ReadOnly=true />
+        <DxGridDataColumn FieldName="Action" />
+    </Columns>
+</DxGrid>
+@code {
+    [Parameter]
+    public PersonalSettings Settings { get; set; }
+    
+
+    public List<ErrorActions> Actions = new List<ErrorActions>();
+
+    protected override Task OnInitializedAsync()
+    {
+        foreach (ErrorActions x in Enum.GetValues(typeof(ErrorActions)))
+        {
+            Actions.Add(x);
+        }
+        return base.OnInitializedAsync();
+    }
+    async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
+    {
+        (e.DataItem as ErrorSetting).Action = (e.EditModel as ErrorSetting).Action;
+    }
+    
+}

@@ -19,7 +19,9 @@ number of bets
 <DxTimeEdit @bind-Time="ProjectedRemaining" />-->
 <DxButton Text="Save" Click="Save"/>
 <SessionStats @ref="sesseionStats1" Stats="CurrentSimulation.Stats" />
+@* <ProfitChart @ref="chart"/> *@
 @code {
+    //ProfitChart chart;
     SessionStats sesseionStats1 = new SessionStats();
     long NumberOfBets = 0;
     decimal StartingBalance = 0m;
@@ -51,20 +53,21 @@ number of bets
         CurrentSimulation.OnBetSimulated += CurrentSimulation_OnBetSimulated;
         SimTimer.Start();
         CurrentSimulation.Start();
-        //sesseionStats1.Stats = CurrentSimulation.Stats;
+        //sesseionStats1 = CurrentSimulation.Stats;
         EnableStart = false;
+        await InvokeAsync(StateHasChanged);
     }
     private void CurrentSimulation_OnBetSimulated(object sender, BetFinisedEventArgs e)
     {
-        //Bets.Add(e.NewBet.Profit);
+        /*Bets.Add(e.NewBet.Profit);
         if (Bets.Count > 0 && Bets.Count % 100 == 0)
         {
-            /*if (chrt.Enabled)
-                {
-                chrt.AddRange(Bets);
+            if (chart.Enabled)
+            {
+                chart.AddRange(Bets);
                 Bets = new List<decimal>();
-            }*/
-        }
+            }
+        }*/
     }
     private void Tmp_OnSimulationComplete(object sender, EventArgs e)
     {

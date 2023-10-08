@@ -1,4 +1,6 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+@import url('switcher-resources/themes.css');
+@import url('switcher-resources/theme-switcher.css');  
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -144,7 +146,7 @@ flex-wrap: wrap;
     
 }
 
-h4.stat {
+h5.stat {
     display: inline-block;
     margin-right: 1rem;
 }
@@ -153,23 +155,36 @@ p.stat {
     display: inline-block;    
 }
 
-div.InstanceContainer{
-    display: flex;
-}
-
 div.instanceStatsColumn {
     max-width: 20rem;
     flex: 1 1 auto;
 }
-
+html, body {
+    height: 100%;
+    margin: 0;
+}
+div.main {
+    flex: 1; /* Grow to take up remaining space */
+    overflow: auto; /* Enable scrolling for div.main content */
+    box-sizing: border-box;
+}
+#app {
+    height: 100%;
+    overflow: hidden; /* Hide overflow from #app */
+    display: flex; /* Use flexbox to make div.main take up remaining height */
+    flex-direction: column;
+}
 div.instanceMainColumn {
 }
 div.StrategyColumn {
     max-width: 50rem;
+    min-width: 30rem;
     flex: 1 1 auto;
     display: flex;
     flex-flow: column;
-    height: 100%;
+    max-height: inherit;
+    box-sizing: border-box;
+    overflow:hidden;
 }
 
 .settingEdit{
@@ -186,6 +201,7 @@ div.StrategyColumn {
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
+    overflow:auto;
 }
 .stratTabs {
     flex: 1 1 auto;
@@ -199,3 +215,22 @@ div.StrategyColumn {
 .LiveBetsGrid{
     max-height:50vh;
 }
+
+
+.InstanceContainer{
+    display:flex;
+    margin:0;
+    width:100%;
+    height:calc(100% - 30px);
+    overflow:hidden;
+}
+
+
+
+.statsColumn {
+    flex: 1 1 auto;
+    max-height:100%;
+    overflow:auto;
+    min-width:20rem;
+}
+
