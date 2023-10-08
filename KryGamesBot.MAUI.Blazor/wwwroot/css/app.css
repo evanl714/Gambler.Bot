@@ -221,7 +221,7 @@ div.StrategyColumn {
     display:flex;
     margin:0;
     width:100%;
-    height:calc(100% - 30px);
+    height:calc(100% - 50px);
     overflow:hidden;
 }
 
@@ -234,3 +234,6 @@ div.StrategyColumn {
     min-width:20rem;
 }
 
+.statusBar{
+    height:20px
+}

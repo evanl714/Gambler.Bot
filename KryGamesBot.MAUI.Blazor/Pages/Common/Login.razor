@@ -17,12 +17,17 @@
     </div>
     <DxButton Text="Back" Click="BackClicked" />
     <DxButton Text="View Site" Click="ViewSite" />
-    <DxButton Text="Log In" Click="LogInClicked" />
+    <DxButton Click="LogInClicked">
+        <DxWaitIndicator Visible="LoggingIng" />
+        Log In
+    </DxButton>
     <DxButton Text="Skip" Click="SkipClicked" />
 </div>
 
 
 @code {
+    string LogInTest = "Log In";
+    bool LoggingIng = false;
     bool hideErrors = true;
     string errorText = "";
     [Parameter]
@@ -68,6 +73,8 @@
 
     public async Task LogInClicked(MouseEventArgs args)
     {
+        LoggingIng = true;
+        LogInTest = "Logging in";
         List < LoginParamValue> values = new List<LoginParamValue>();
         foreach (string x in LoginParams.Keys)
         {
@@ -89,5 +96,17 @@
 
         }
         SelectedSite.LogIn(values.ToArray());
+    }
+
+    public async Task LoginFinished(bool Success)
+    {
+        if (!Success)
+        {
+            hideErrors = false;
+            errorText = "Login Failed";
+
+            LoggingIng = false;
+            LogInTest = "Log In";
+        }
     }
 }

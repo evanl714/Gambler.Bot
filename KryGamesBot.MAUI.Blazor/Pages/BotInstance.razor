@@ -76,12 +76,14 @@
         </div>
     
 </div>
-
+<div class="statusBar">
+    @statusMessage
+</div>
 
 
 <DxPopup HeaderText="@("Log in " + botIns.CurrentSite?.SiteName )"
 @bind-Visible="@LoginPopupVisible" >
-    <Login SelectedSite="@botIns.CurrentSite" OnBackClicked="Login_OnBackClicked" OnSkipClicked="Login_OnSkipClicked" />
+    <Login @ref=LoginControl SelectedSite="@botIns.CurrentSite" OnBackClicked="Login_OnBackClicked" OnSkipClicked="Login_OnSkipClicked" />
 </DxPopup>
 <DxPopup HeaderText="Simulate"
 @bind-Visible="@simvisible">
@@ -89,6 +91,8 @@
 </DxPopup>
 
 @code {
+    Login LoginControl;
+    string statusMessage = "";
     bool simvisible = false;
     int ActiveTabIndex { get; set; } = 0;
     DynamicComponent dcLiveBets;
@@ -109,7 +113,7 @@
     string PersonalSettingsFile = "";
     string InstanceName = "";
     bool bbtnSimulatorIsEnabled = true;
-    //StatusBar.Content = $"Stopping: {e.Message}";
+    //statusMessage = $"Stopping: {e.Message}";
     bool btnStartIsEnabled = true;
     bool btnResumeIsEnabled = true;
     public bool BotInsNotRunning { get => botIns?.Running ?? false; }
@@ -297,7 +301,8 @@
         }
         else
         {
-            //LoginControl.LoginFailed();
+            statusMessage = "Login failed";
+            LoginControl.LoginFinished(false);
         }
     }
 
@@ -438,7 +443,7 @@
     void BotIns_OnSiteNotify(object sender, DoormatCore.Sites.GenericEventArgs e)
     {   
         //Figure out how to do a status bar kind of thing....
-        //StatusBar.Content = e.Message;
+        statusMessage= e.Message;
 
     }
     private void BotIns_OnStopped(object sender, DoormatCore.Sites.GenericEventArgs e)
@@ -446,7 +451,7 @@
         //throw new NotImplementedException();
 
         bbtnSimulatorIsEnabled = true;
-        //StatusBar.Content = $"Stopping: {e.Message}";
+        statusMessage = $"Stopping: {e.Message}";
         btnStartIsEnabled = true;
         btnResumeIsEnabled = true;
 
@@ -455,14 +460,14 @@
     {
 
         bbtnSimulatorIsEnabled = false;
-        //StatusBar.Content = $"Bot Started.";
+        statusMessage = $"Bot Started.";
         btnStartIsEnabled = false;
         btnResumeIsEnabled = false;
 
     }
     private void BotIns_OnSiteAction(object sender, DoormatCore.Sites.GenericEventArgs e)
     {   
-        //StatusBar.Content = e.Message;
+        statusMessage = e.Message;
     }
 
     private void BotIns_OnNotification(object sender, DoormatCore.Helpers.NotificationEventArgs e)
@@ -473,11 +478,11 @@
             case DoormatCore.Helpers.TriggerAction.Alarm:
             case DoormatCore.Helpers.TriggerAction.Chime:
             case DoormatCore.Helpers.TriggerAction.Email: break;
-            case DoormatCore.Helpers.TriggerAction.Popup: //StatusBar.Content = "Something happened that triggered a notification.";
+            case DoormatCore.Helpers.TriggerAction.Popup: statusMessage = "Something happened that triggered a notification.";
                 break;
 
         }
-        //StatusBar.Content = e.NotificationTrigger.Action = DoormatCore.Helpers.TriggerAction.;
+        //statusMessage = e.NotificationTrigger.Action = DoormatCore.Helpers.TriggerAction.;
     }
 
     private void BotIns_OnGameChanged(object sender, EventArgs e)
@@ -505,7 +510,7 @@
     }
     private void BotIns_OnSiteError(object sender, DoormatCore.Sites.ErrorEventArgs e)
     {
-        //StatusBar.Content = "Error! " + e.Message;
+        statusMessage = "Error! " + e.Message;
 
     }
 
