@@ -1,6 +1,7 @@
 ﻿@using DoormatBot;
 @using DoormatBot.Strategies;
 @using DoormatCore.Helpers;
+@using DoormatCore.Sites;
 @using KryGamesBot.MAUI.Blazor.Classes;
 @using KryGamesBot.MAUI.Blazor.Interfaces;
 @using KryGamesBot.MAUI.Blazor.Pages.Common
@@ -9,10 +10,13 @@
 @using System.Reflection;
 @using System.Text.Json;
 @implements IDisposable;
+@inject IJSRuntime jsruntime;
+
 <PageTitle>@title</PageTitle>
 <div class="@(ShowSiteSelect?"":"visually-hidden")">
 <SelectSite Sites="@Doormat.Sites" OnSiteSelected="SiteSelected" />
 </div>
+
 
 <div class="@(ShowInstance?"InstanceContainer":"visually-hidden")">
 
@@ -27,7 +31,24 @@
             <DynamicComponent Type="@(LiveBetViewType)" @ref="dcLiveBets" />
         </div>
     <div class="StrategyColumn">
-            <div class="settingTabContainer">
+        <DxTabs CssClass="stratTabs" ScrollMode="TabsScrollMode.NoScroll" @bind-ActiveTabIndex="@ActiveTabIndex">
+            <DxTab Text="Strategy">
+
+            </DxTab>
+            <DxTab Text="Reset Settings">
+
+            </DxTab>
+            <DxTab Text="Advanced settings">
+
+            </DxTab>
+            <DxTab Text="Custom Triggers">
+
+            </DxTab>
+            <DxTab Text="Manual Betting">
+
+            </DxTab>
+        </DxTabs>
+        <div class="settingTabContainer">
                 @switch (ActiveTabIndex)
                 {
                     case 0:
@@ -56,23 +77,7 @@
                         break;
                 }
             </div>
-            <DxTabs CssClass="stratTabs" ScrollMode="TabsScrollMode.NoScroll" @bind-ActiveTabIndex="@ActiveTabIndex">
-                <DxTab Text="Strategy">
-
-                </DxTab>
-                <DxTab Text="Reset Settings">
-
-                </DxTab>
-                <DxTab Text="Advanced settings">
-
-                </DxTab>
-                <DxTab Text="Custom Triggers">
-
-                </DxTab>
-                <DxTab Text="Manual Betting">
-
-                </DxTab>
-            </DxTabs>
+            
         </div>
     
 </div>
@@ -91,6 +96,8 @@
 </DxPopup>
 
 @code {
+    WebView siteoverride = new WebView();
+    bool showoverride = true;
     Login LoginControl;
     string statusMessage = "";
     bool simvisible = false;
@@ -99,7 +106,7 @@
     DynamicComponent dcManualBet;
     DynamicComponent dcStrategy;
     ProfitChart _profitChart;
-    SiteStats _siteStats;
+    Common.SiteStats _siteStats;
     SessionStats _sessionStats;    
     Type LiveBetViewType = typeof(DiceLiveBetsControl);
     Type ManualBetType = typeof(ManualDiceBet);
@@ -131,11 +138,12 @@
         botIns.OnSiteError += BotIns_OnSiteError;
         botIns.OnSiteLoginFinished += BotIns_OnSiteLoginFinished;
         botIns.OnSiteNotify += BotIns_OnSiteNotify;
-
+        botIns.OnBypassRequired += BotIns_OnBypassRequired;    
         botIns.OnSiteStatsUpdated += BotIns_OnSiteStatsUpdated;
         botIns.OnStarted += BotIns_OnStarted;
         botIns.OnStopped += BotIns_OnStopped;
         botIns.OnStrategyChanged += BotIns_OnStrategyChanged;
+        siteoverride.Source = "https://primedice.com";
         //botIns.OnSiteRegisterFinished += BotIns_OnSiteRegisterFinished;
 
 
@@ -151,7 +159,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        
+
         await base.OnInitializedAsync();
         LoadPersonalSettings();
         //(dcManualBet.Instance as ManualDiceBet).PlaceBet = new EventCallback<PlaceBetEventArgs>(this, ManualBetPlaced);
@@ -176,7 +184,7 @@
             PersonalSettingsFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json";
         }
         botIns.LoadPersonalSettings(PersonalSettingsFile);
-    
+
     }
 
 
@@ -413,7 +421,26 @@
             });
         File.WriteAllText(FileLocation, Settings);
     }
+    void BotIns_OnBypassRequired(object sender, BypassRequiredArgs args)
+    {
+        MainPage.SetBypass(args.URL);
+        Thread.Sleep(5000);
+        var cookies = MainPage.GetBypass();
+        //var tmp = siteoverride.Cookies;
+        args.Cookie = cookies;
 
+    }
+
+    async Task Navigate(string url)
+    {
+       await Task.Run(() =>
+        {
+            siteoverride.HeightRequest = 1080;
+            siteoverride.WidthRequest = 1920;
+            siteoverride.Source = url
+            ;
+        });
+    }
     async Task Start()
     {
 

@@ -69,8 +69,8 @@
             EndPageIndex = Math.Min(itemsCount, StartPageIndex + PageSize) - 1;
             int itemsOnPage = EndPageIndex - StartPageIndex + 1;
             ColCount = isXSmallScreen ? SmallScreenColCount : MediumScreenColCount;
-            double rowCount = itemsOnPage / ColCount;
-            RowCount = (int)Math.Floor(rowCount);
+            double rowCount = (double)itemsOnPage / (double)ColCount;
+            RowCount = (int)Math.Ceiling(rowCount);
         }
         public int StartPageIndex { get; private set; }
         public int EndPageIndex { get; private set; }

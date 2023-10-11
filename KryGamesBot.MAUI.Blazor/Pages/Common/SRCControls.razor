@@ -1,100 +1,106 @@
 ﻿@using DoormatBot.Helpers;
-<div>
-<h3>General</h3>
+<div class="settingsBorder">
+    <div class="groupHeader">
+<h4>General</h4>
+    </div>
     <div class="settingContainer">
         <DxCheckBox CssClass="settingEdit" LabelPosition="LabelPosition.Right" @bind-Checked="@BetSettings.EnableStopAfterBets">Stop After</DxCheckBox>
-        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.StopAfterBets" Enabled="@BetSettings.EnableStopAfterBets" MinValue="1" MaxValue="1000000" Increment="1" /> Bets
+        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.StopAfterBets" Enabled="@BetSettings.EnableStopAfterBets" MinValue="1" MaxValue="1000000" Increment="1"></DxSpinEdit><span class="settingLabel">Bets</span>
     </div>
     <div class="settingContainer">
         <DxCheckBox CssClass="settingEdit" LabelPosition="LabelPosition.Right" @bind-Checked="@BetSettings.EnableResetAfterBets">Reset After</DxCheckBox>
-        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.StopAfterBets" Enabled="@BetSettings.EnableResetAfterBets" MinValue="1" MaxValue="1000000" Increment="1" /> Bets
+        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.StopAfterBets" Enabled="@BetSettings.EnableResetAfterBets" MinValue="1" MaxValue="1000000" Increment="1" /> <span class="settingLabel">Bets</span>
 </div>
 </div>
-<div>
-<h3>On Loss</h3>
+<div class="settingsBorder">
+    <div class="groupHeader">
+<h4>On Loss</h4>
+    </div>
     <div class="settingContainer">
         <DxCheckBox CssClass="settingEdit" LabelPosition="LabelPosition.Right" @bind-Checked="@BetSettings.EnableResetAfterLoseStreak">Reset After</DxCheckBox>
-        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.ResetAfterLoseStreak" Enabled="@BetSettings.EnableResetAfterLoseStreak" MinValue="1" MaxValue="1000000" Increment="1" /> Losses in a row
+        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.ResetAfterLoseStreak" Enabled="@BetSettings.EnableResetAfterLoseStreak" MinValue="1" MaxValue="1000000" Increment="1" /> <span class="settingLabel">Losses in a row</span>
 </div>
     <div class="settingContainer">
         <DxCheckBox CssClass="settingEdit" LabelPosition="LabelPosition.Right" @bind-Checked="@BetSettings.EnableResetAfterLosses">Reset After every</DxCheckBox>
-        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.ResetAfterLosses" Enabled="@BetSettings.EnableResetAfterLosses" MinValue="1" MaxValue="1000000" Increment="1" /> losses
+        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.ResetAfterLosses" Enabled="@BetSettings.EnableResetAfterLosses" MinValue="1" MaxValue="1000000" Increment="1" /> <span class="settingLabel">losses</span>
 </div>
     <div class="settingContainer">
         <DxCheckBox CssClass="settingEdit" LabelPosition="LabelPosition.Right" @bind-Checked="@BetSettings.EnableResetAfterBtcStreakLoss">Reset After</DxCheckBox>
-        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.ResetAfterBtcStreakLoss" Enabled="@BetSettings.EnableResetAfterBtcStreakLoss" MinValue="1" MaxValue="1000000" Increment="1" /> Value lost in a row
+        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.ResetAfterBtcStreakLoss" Enabled="@BetSettings.EnableResetAfterBtcStreakLoss" MinValue="1" MaxValue="1000000" Increment="1" /> <span class="settingLabel">Value lost in a row</span>
 </div>
     <div class="settingContainer">
         <DxCheckBox CssClass="settingEdit" LabelPosition="LabelPosition.Right" @bind-Checked="@BetSettings.EnableResetAfterBtcLoss">Reset After every</DxCheckBox>
-        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.ResetAfterBtcLoss" Enabled="@BetSettings.EnableResetAfterBtcLoss" MinValue="1" MaxValue="1000000" Increment="1" /> Value lost
+        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.ResetAfterBtcLoss" Enabled="@BetSettings.EnableResetAfterBtcLoss" MinValue="1" MaxValue="1000000" Increment="1" /> <span class="settingLabel">Value lost</span>
 </div>
     <div class="settingContainer">
         <DxCheckBox CssClass="settingEdit" LabelPosition="LabelPosition.Right" @bind-Checked="@BetSettings.EnableResetLossFromMaxProfit">Reset After</DxCheckBox>
-        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.ResetLossFromMaxProfit" Enabled="@BetSettings.EnableResetLossFromMaxProfit" MinValue="1" MaxValue="1000000" Increment="1" /> Loss since max profit
+        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.ResetLossFromMaxProfit" Enabled="@BetSettings.EnableResetLossFromMaxProfit" MinValue="1" MaxValue="1000000" Increment="1" /> <span class="settingLabel">Loss since max profit</span>
 </div>
     <div class="settingContainer">
         <DxCheckBox CssClass="settingEdit" LabelPosition="LabelPosition.Right" @bind-Checked="@BetSettings.EnableStopAfterLoseStreak">Stop After</DxCheckBox>
-        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.StopAfterLoseStreak" Enabled="@BetSettings.EnableStopAfterLoseStreak" MinValue="1" MaxValue="1000000" Increment="1" /> losses in a row
+        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.StopAfterLoseStreak" Enabled="@BetSettings.EnableStopAfterLoseStreak" MinValue="1" MaxValue="1000000" Increment="1" /> <span class="settingLabel">losses in a row</span>
 </div>
     <div class="settingContainer">
         <DxCheckBox CssClass="settingEdit" LabelPosition="LabelPosition.Right" @bind-Checked="@BetSettings.EnableStopAfterLosses">Stop After</DxCheckBox>
-        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.StopAfterLosses" Enabled="@BetSettings.EnableStopAfterLosses" MinValue="1" MaxValue="1000000" Increment="1" /> Losses
+        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.StopAfterLosses" Enabled="@BetSettings.EnableStopAfterLosses" MinValue="1" MaxValue="1000000" Increment="1" /><span class="settingLabel"> Losses</span>
 </div>
     <div class="settingContainer">
         <DxCheckBox CssClass="settingEdit" LabelPosition="LabelPosition.Right" @bind-Checked="@BetSettings.EnableStopAfterBtcLoseStreak">Stop After</DxCheckBox>
-        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.StopAfterBtcLoseStreak" Enabled="@BetSettings.EnableStopAfterBtcLoseStreak" MinValue="1" MaxValue="1000000" Increment="1" /> value lost in a row
+        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.StopAfterBtcLoseStreak" Enabled="@BetSettings.EnableStopAfterBtcLoseStreak" MinValue="1" MaxValue="1000000" Increment="1" /><span class="settingLabel"> value lost in a row</span>
 </div>
     <div class="settingContainer">
         <DxCheckBox CssClass="settingEdit" LabelPosition="LabelPosition.Right" @bind-Checked="@BetSettings.EnableStopAfterBtcLoss">Stop After</DxCheckBox>
-        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.StopAfterBtcLoss" Enabled="@BetSettings.EnableStopAfterBtcLoss" MinValue="1" MaxValue="1000000" Increment="1" /> value lost
+        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.StopAfterBtcLoss" Enabled="@BetSettings.EnableStopAfterBtcLoss" MinValue="1" MaxValue="1000000" Increment="1" /><span class="settingLabel"> value lost</span>
 </div>
     <div class="settingContainer">
         <DxCheckBox CssClass="settingEdit" LabelPosition="LabelPosition.Right" @bind-Checked="@BetSettings.EnableStopLossFromMaxProfit">Stop After</DxCheckBox>
-        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.StopLossFromMaxProfit" Enabled="@BetSettings.EnableStopLossFromMaxProfit" MinValue="1" MaxValue="1000000" Increment="1" /> value lost since max profit
+        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.StopLossFromMaxProfit" Enabled="@BetSettings.EnableStopLossFromMaxProfit" MinValue="1" MaxValue="1000000" Increment="1" /> <span class="settingLabel">value lost since max profit</span>
 </div>
     
 </div>
-<div>
-    <h3>On Win</h3>
+<div class="settingsBorder">
+    <div class="groupHeader">
+    <h4>On Win</h4>
+    </div>
     <div class="settingContainer">
         <DxCheckBox CssClass="settingEdit" LabelPosition="LabelPosition.Right" @bind-Checked="@BetSettings.EnableResetAfterLoseStreak">Reset After</DxCheckBox>
-        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.ResetAfterLoseStreak" Enabled="@BetSettings.EnableResetAfterLoseStreak" MinValue="1" MaxValue="1000000" Increment="1" /> Wins in a row
+        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.ResetAfterLoseStreak" Enabled="@BetSettings.EnableResetAfterLoseStreak" MinValue="1" MaxValue="1000000" Increment="1" /> <span class="settingLabel">Wins in a row</span>
     </div>
     <div class="settingContainer">
         <DxCheckBox CssClass="settingEdit" LabelPosition="LabelPosition.Right" @bind-Checked="@BetSettings.EnableResetAfterWins">Reset After every</DxCheckBox>
-        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.ResetAfterWins" Enabled="@BetSettings.EnableResetAfterWins" MinValue="1" MaxValue="1000000" Increment="1" /> Wins
+        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.ResetAfterWins" Enabled="@BetSettings.EnableResetAfterWins" MinValue="1" MaxValue="1000000" Increment="1" /> <span class="settingLabel">Wins</span>
     </div>
     <div class="settingContainer">
         <DxCheckBox CssClass="settingEdit" LabelPosition="LabelPosition.Right" @bind-Checked="@BetSettings.EnableResetAfterBtcStreakWin">Reset After</DxCheckBox>
-        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.ResetAfterBtcStreakWin" Enabled="@BetSettings.EnableResetAfterBtcStreakWin" MinValue="1" MaxValue="1000000" Increment="1" /> Value lost in a row
+        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.ResetAfterBtcStreakWin" Enabled="@BetSettings.EnableResetAfterBtcStreakWin" MinValue="1" MaxValue="1000000" Increment="1" /><span class="settingLabel"> Value lost in a row</span>
     </div>
     <div class="settingContainer">
         <DxCheckBox CssClass="settingEdit" LabelPosition="LabelPosition.Right" @bind-Checked="@BetSettings.EnableResetAfterBtcWin">Reset After every</DxCheckBox>
-        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.ResetAfterBtcWin" Enabled="@BetSettings.EnableResetAfterBtcWin" MinValue="1" MaxValue="1000000" Increment="1" /> Value lost
+        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.ResetAfterBtcWin" Enabled="@BetSettings.EnableResetAfterBtcWin" MinValue="1" MaxValue="1000000" Increment="1" /> <span class="settingLabel">Value lost</span>
     </div>
     <div class="settingContainer">
         <DxCheckBox CssClass="settingEdit" LabelPosition="LabelPosition.Right" @bind-Checked="@BetSettings.EnableResetWinFromMinProfit">Reset After</DxCheckBox>
-        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.ResetWinFromMinProfit" Enabled="@BetSettings.EnableResetWinFromMinProfit" MinValue="1" MaxValue="1000000" Increment="1" /> Win since max profit
+        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.ResetWinFromMinProfit" Enabled="@BetSettings.EnableResetWinFromMinProfit" MinValue="1" MaxValue="1000000" Increment="1" /> <span class="settingLabel">Win since max profit</span>
     </div>
     <div class="settingContainer">
         <DxCheckBox CssClass="settingEdit" LabelPosition="LabelPosition.Right" @bind-Checked="@BetSettings.EnableStopAfterLoseStreak">Stop After</DxCheckBox>
-        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.StopAfterLoseStreak" Enabled="@BetSettings.EnableStopAfterLoseStreak" MinValue="1" MaxValue="1000000" Increment="1" /> Wins in a row
+        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.StopAfterLoseStreak" Enabled="@BetSettings.EnableStopAfterLoseStreak" MinValue="1" MaxValue="1000000" Increment="1" /><span class="settingLabel"> Wins in a row</span>
     </div>
     <div class="settingContainer">
         <DxCheckBox CssClass="settingEdit" LabelPosition="LabelPosition.Right" @bind-Checked="@BetSettings.EnableStopAfterWins">Stop After</DxCheckBox>
-        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.StopAfterWins" Enabled="@BetSettings.EnableStopAfterWins" MinValue="1" MaxValue="1000000" Increment="1" /> Wins
+        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.StopAfterWins" Enabled="@BetSettings.EnableStopAfterWins" MinValue="1" MaxValue="1000000" Increment="1" /><span class="settingLabel"> Wins</span>
     </div>
     <div class="settingContainer">
         <DxCheckBox CssClass="settingEdit" LabelPosition="LabelPosition.Right" @bind-Checked="@BetSettings.EnableStopAfterBtcLoseStreak">Stop After</DxCheckBox>
-        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.StopAfterBtcLoseStreak" Enabled="@BetSettings.EnableStopAfterBtcLoseStreak" MinValue="1" MaxValue="1000000" Increment="1" /> value lost in a row
+        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.StopAfterBtcLoseStreak" Enabled="@BetSettings.EnableStopAfterBtcLoseStreak" MinValue="1" MaxValue="1000000" Increment="1" /> <span class="settingLabel">value lost in a row</span>
     </div>
     <div class="settingContainer">
         <DxCheckBox CssClass="settingEdit" LabelPosition="LabelPosition.Right" @bind-Checked="@BetSettings.EnableStopAfterBtcWin">Stop After</DxCheckBox>
-        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.StopAfterBtcWin" Enabled="@BetSettings.EnableStopAfterBtcWin" MinValue="1" MaxValue="1000000" Increment="1" /> value lost
+        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.StopAfterBtcWin" Enabled="@BetSettings.EnableStopAfterBtcWin" MinValue="1" MaxValue="1000000" Increment="1" /><span class="settingLabel"> value lost</span>
     </div>
     <div class="settingContainer">
         <DxCheckBox CssClass="settingEdit" LabelPosition="LabelPosition.Right" @bind-Checked="@BetSettings.EnableStopWinFromMinProfit">Stop After</DxCheckBox>
-        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.StopWinFromMinProfit" Enabled="@BetSettings.EnableStopWinFromMinProfit" MinValue="1" MaxValue="1000000" Increment="1" /> value lost since max profit
+        <DxSpinEdit CssClass="settingEdit" @bind-Value="@BetSettings.StopWinFromMinProfit" Enabled="@BetSettings.EnableStopWinFromMinProfit" MinValue="1" MaxValue="1000000" Increment="1" /> <span class="settingLabel">value lost since max profit</span>
     </div>
 
 </div>

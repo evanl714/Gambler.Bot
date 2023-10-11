@@ -153,6 +153,7 @@ h5.stat {
 
 p.stat {
     display: inline-block;    
+    margin-bottom: auto
 }
 
 div.instanceStatsColumn {
@@ -189,8 +190,8 @@ div.StrategyColumn {
 
 .settingEdit{
     min-width:4rem;
-    max-width:8rem;
-    margin: 0 1rem;
+    max-width:10rem;
+    margin:  0.25rem;
 }
 
 .settingContainer{
@@ -204,7 +205,7 @@ div.StrategyColumn {
     overflow:auto;
 }
 .stratTabs {
-    flex: 1 1 auto;
+    /*flex: 1 1 auto;*/
 }
 
 
@@ -232,8 +233,32 @@ div.StrategyColumn {
     max-height:100%;
     overflow:auto;
     min-width:20rem;
+    padding:0.5rem;
 }
 
 .statusBar{
     height:20px
+}
+
+.settingsBorder{
+    border : 1px solid #ced4da;
+    margin : 0.2rem 0.2rem;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+}
+
+div.groupHeader {
+    align-content:center;
+    background-color: #e9ecef;
+    margin: -0.5rem -0.5rem 0.5rem -0.5rem;
+    padding:0.05rem;
+    text-align:center;
+}
+h4.groupHeader {
+   margin: 0 auto;
+}
+
+.settingLabel {
+    height: fit-content;
+    margin: auto 0;
 }

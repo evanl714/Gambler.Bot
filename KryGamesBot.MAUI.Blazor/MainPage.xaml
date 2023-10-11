@@ -5,12 +5,16 @@
              x:Class="KryGamesBot.MAUI.Blazor.MainPage"
             xmlns:blazorweb="clr-namespace:Microsoft.AspNetCore.Components.Web;assembly=Microsoft.AspNetCore.Components.Web"
              BackgroundColor="{DynamicResource PageBackgroundColor}" NavigationPage.HasNavigationBar="False">
-
-    <BlazorWebView  x:Name="blazorWebView" HostPage="wwwroot/index.html">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <WebView Grid.Row="0" x:Name="wvBypass" Source="https://google.com"></WebView>
+    <BlazorWebView Grid.Row="0"  x:Name="blazorWebView" HostPage="wwwroot/index.html">
         <BlazorWebView.RootComponents>
             <RootComponent Selector="head::after" ComponentType="{x:Type blazorweb:HeadOutlet}" />
             <RootComponent Selector="#app" ComponentType="{x:Type local:Main}" />
         </BlazorWebView.RootComponents>
     </BlazorWebView>
-
+    </Grid>
 </ContentPage>

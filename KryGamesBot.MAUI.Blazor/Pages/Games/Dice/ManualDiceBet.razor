@@ -2,50 +2,36 @@
 @using KryGamesBot.MAUI.Blazor.Interfaces;
 @implements iPlaceBet;
 <h3>ManualDiceBet</h3>
-<DxGridLayout>
-    <Rows>
-        <DxGridLayoutRow />
-        <DxGridLayoutRow />
-        <DxGridLayoutRow />
-        <DxGridLayoutRow />
-    </Rows>
-    <Columns>
-        <DxGridLayoutColumn/>
-        <DxGridLayoutColumn />
-    </Columns>
-    <Items>
-        <DxGridLayoutItem Row="0" Column="0">
-            <Template>
-            Bet <DxSpinEdit @bind-Value="@Amount" />
-            </Template>
-        </DxGridLayoutItem>
-        <DxGridLayoutItem Row="1" Column="0">
-            <Template>
-            Chance <DxSpinEdit @bind-Value="@Chance" />
-            </Template>
-        </DxGridLayoutItem>
-        <DxGridLayoutItem Row="2" Column="0">
-            <Template>
-            Payout <DxSpinEdit @bind-Value="@Payout" />
-            </Template>
-        </DxGridLayoutItem>
-        <DxGridLayoutItem Row="3" Column="0">
-            <Template>
-            Profit <DxSpinEdit @bind-Value="@Profit" />
-            </Template>
-        </DxGridLayoutItem>
-        <DxGridLayoutItem Row="0" Column="1" RowSpan="2">
-            <Template>
-            <DxButton Text="Bet High" Click="BetHigh_Click"/>
-            </Template>
-        </DxGridLayoutItem>
-        <DxGridLayoutItem Row="2" Column="1" RowSpan="2">
-            <Template>
+
+<div class="settingContainer">
+    <div>
+    <div class="settingContainer">
+        <div class="settingContainer">
+<span class="settingLabel">Bet</span>
+<DxSpinEdit @bind-Value="@Amount" />
+            </div>
+            <div class="settingContainer">
+                
+<span class="settingLabel">Chance</span>
+<DxSpinEdit @bind-Value="@Chance" />
+</div>
+        </div>
+        <div class="settingContainer">
+<span class="settingLabel">Payout</span>
+<DxSpinEdit @bind-Value="@Payout" />
+
+<span class="settingLabel">Profit</span>
+<DxSpinEdit @bind-Value="@Profit" />
+</div>
+    </div>
+
+    <div>
+    <DxButton Text="Bet High" Click="BetHigh_Click"/>
+           
             <DxButton Text="Bet Low" Click="BetLow_Click"/>
-            </Template>
-        </DxGridLayoutItem>
-    </Items>
-</DxGridLayout>
+    </div>
+</div>
+            
 @code {
     private decimal amount;
 
