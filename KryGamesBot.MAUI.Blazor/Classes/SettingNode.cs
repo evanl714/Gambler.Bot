@@ -12,7 +12,7 @@ namespace KryGamesBot.MAUI.Blazor.Classes
         public int? ParentId { get; set; }
         public string Name { get; set; }
         public Type UserControl { get; set; }
-
+        public Dictionary<string, object> ComponentParameters { get; set; }
 
     }
 }

@@ -1,4 +1,5 @@
 ﻿@using DoormatBot.Helpers;
+@using DoormatCore.Helpers;
 @using KryGamesBot.MAUI.Blazor.Pages.Common.DBSetup;
 @implements KryGamesBot.MAUI.Blazor.Interfaces.ISettingScreen;
 
@@ -15,7 +16,7 @@ Password: <DxTextBox Password=true @bind-Text="Password" />
     Type DatabaseType = null;
     DynamicComponent DatabaseSetupComponent;
     public string Password { get; set; }
-    
+
     [Parameter]
     public PersonalSettings Settings { get; set; }
 
@@ -32,9 +33,25 @@ Password: <DxTextBox Password=true @bind-Text="Password" />
         return base.OnInitializedAsync();
     }
 
-    public void TestConnection(MouseEventArgs args)
+    public async Task TestConnection(MouseEventArgs args)
     {
-        
+        try
+        {
+            string Provider = (DatabaseSetupComponent.Instance as iDatabaseForm).Provider();            
+            string constring = (DatabaseSetupComponent.Instance as iDatabaseForm).ConnectionString();
+
+            var type = typeof(PersistentBase);
+            var types = AppDomain.CurrentDomain.GetAssemblies()
+                    .SelectMany(s => s.GetTypes())
+                    .Where(p => type.IsAssignableFrom(p) && p != typeof(PersistentBase)).ToList();
+            DoormatCore.Storage.SQLBase.OpenConnection(constring, Provider, types);
+            Settings.Provider = DatabaseType.ToString();
+            UpdateSettings();
+        }
+        catch (Exception e)
+        {
+            
+        }
     }
 
     

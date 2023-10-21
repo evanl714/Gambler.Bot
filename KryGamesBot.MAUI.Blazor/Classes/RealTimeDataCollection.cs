@@ -11,13 +11,14 @@ namespace KryGamesBot.MAUI.Blazor.Classes
 {
     public class RealTimeDataCollection : ObservableCollection<SimpleDataPoint>
     {
-        public void AddRange(IList<SimpleDataPoint> items)
+        public void AddRange(IList<SimpleDataPoint> items, bool notify = true)
         {
-            foreach (SimpleDataPoint item in items)
-                Items.Add(item);
+            for (int i = 0; i < items.Count; i++)
+                Items.Add(items[i]);
+            if (notify)
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, (IList)items, Items.Count - items.Count));
         }
-        public void RemoveRangeAt(int startingIndex, int count)
+        public void RemoveRangeAt(int startingIndex, int count, bool notify = true)
         {
             var removedItems = new List<SimpleDataPoint>(count);
             for (int i = 0; i < count; i++)
@@ -25,7 +26,7 @@ namespace KryGamesBot.MAUI.Blazor.Classes
                 removedItems.Add(Items[startingIndex]);
                 Items.RemoveAt(startingIndex);
             }
-            if (count > 0)
+            if (count > 0 && notify)
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, removedItems, startingIndex));
         }
     }

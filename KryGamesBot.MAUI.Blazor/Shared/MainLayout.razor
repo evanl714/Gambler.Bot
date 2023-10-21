@@ -1,4 +1,6 @@
-﻿@inherits LayoutComponentBase
+﻿@using KryGamesBot.MAUI.Blazor.Services;
+@inherits LayoutComponentBase;
+@inject IThemeService themeService;
 <HeadContent>
     
     @foreach (var item in _activeTheme.StylesheetLinkUrl)
@@ -6,10 +8,23 @@
         <link href="@item" rel="stylesheet" />
     }
 </HeadContent>
-<div class="main">
+<div class="container-fluid main">
     @Body
 </div>
 @code {
     bool _themeSwitcherShown = false;
-    public static ThemeItem _activeTheme = ThemeItem.Default;
+    public ThemeItem _activeTheme = ThemeItem.Default;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _activeTheme =  themeService.CurrentTheme;
+        themeService.OnThemeChanged += OnThemeChanged;
+    }
+
+    public void OnThemeChanged(object sender, EventArgs e)
+    {
+        _activeTheme = themeService.CurrentTheme;
+        InvokeAsync(StateHasChanged);
+    }
 }

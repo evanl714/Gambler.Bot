@@ -1,6 +1,11 @@
 ﻿@using DoormatBot.Helpers;
 @using KryGamesBot.MAUI.Blazor.Classes;
+@using KryGamesBot.MAUI.Blazor.Services;
+@using System.Text.Json;
+@inject IThemeService ThemeService;
 <h3>CommonSettings</h3>
+<div class="container-fluid d-flex" style="height: 500px">
+<div class="col-3">
 <DxTreeView Data="nodes" AllowSelectNodes="true" SelectionChanged="@SelectionChanged">
     <DataMappings>
         <DxTreeViewDataMapping Text="Name"
@@ -8,11 +13,37 @@
                                ParentKey="ParentId" />
     </DataMappings>
 </DxTreeView>
-<DynamicComponent Type="@(SelectedNode?.UserControl)" />
+</div>
+    <div class="col-9">
+        <DynamicComponent Type="@(SelectedNode?.UserControl)" Parameters="@(SelectedNode.ComponentParameters)" />
+
+</div>
+</div>
 <DxButton Text="Save" Click="Save"/>
+
 @code {
+
+    private PersonalSettings settings;
     [Parameter]
-    public PersonalSettings Settings { get; set; }
+    public PersonalSettings Settings
+    {
+        get { return settings; }
+        set 
+        { 
+            settings = value; 
+            foreach (SettingNode node in nodes)
+            {
+                if (node.ComponentParameters!=null)
+                {
+                    if (node.ComponentParameters.ContainsKey("Settings"))
+                    {
+                        node.ComponentParameters["Settings"] = settings;
+                    }
+                }
+            }
+        }
+    }
+    
 
     [Parameter]
     public bool Portable { get; set; }
@@ -27,17 +58,51 @@
 
     protected override Task OnInitializedAsync()
     {
+        if (UISettings.Settings == null)
+        {
+            UISettings.Settings = new UISettings();
+        }        
         nodes.Add(new SettingNode { Id = 1, Name = "Skin", UserControl = typeof(ThemeSwitcherSideView) });
-        nodes.Add(new SettingNode { Id = 2, Name = "KeePass", UserControl = typeof(EmptyControl) });
-        nodes.Add(new SettingNode { Id = 3, Name = "Storage", UserControl = typeof(EmptyControl) });
-        nodes.Add(new SettingNode { Id = 4, Name = "Bets", ParentId = 3, UserControl = typeof(Common.DatabaseSetup) });
-        nodes.Add(new SettingNode { Id = 5, Name = "Strategies", ParentId = 3, UserControl = typeof(EmptyControl) });
-        // nodes.Add(new SettingNode { Id = 6, Name = "Notifications", UserControl = typeof(Common.Notifications) });
+        //nodes.Add(new SettingNode { Id = 2, Name = "KeePass", UserControl = typeof(EmptyControl) });
+        //nodes.Add(new SettingNode { Id = 3, Name = "Storage", UserControl = typeof(EmptyControl) });
+        nodes.Add(new SettingNode
+            {
+                Id = 4,
+                Name = "Bet storage",
+                UserControl = typeof(Common.DatabaseSetup),
+                ComponentParameters = new Dictionary<string, object>{
+            {
+                "Settings", Settings
+            }
+        }
+            });
+        //nodes.Add(new SettingNode { Id = 5, Name = "Strategies", ParentId = 3, UserControl = typeof(EmptyControl) });
+        //nodes.Add(new SettingNode { Id = 6, Name = "Notifications", UserControl = typeof(Common.Notifications) });
         //nodes.Add(new SettingNode { Id = 7, Name = "Updates", UserControl = typeof(EmptyControl)  });
-        nodes.Add(new SettingNode { Id = 8, Name = "Live Bets", UserControl = typeof( Common.LiveBetSettings) });
+        nodes.Add(new SettingNode
+            {
+                Id = 8,
+                Name = "Live Bets",
+                UserControl = typeof(Common.LiveBetSettings),
+                ComponentParameters = new Dictionary<string, object>{
+            {
+                "Settings", Settings
+            }
+        }
+            });
         //nodes.Add(new SettingNode { Id = 11, Name = "Donate", UserControl = typeof(EmptyControl) });
         //nodes.Add(new SettingNode { Id = 12, Name = "Proxy", UserControl = typeof(EmptyControl) });
-        nodes.Add(new SettingNode { Id = 13, Name = "Errors", UserControl = typeof(Common.ErrorSettings) });
+        nodes.Add(new SettingNode
+            {
+                Id = 13,
+                Name = "Errors",
+                UserControl = typeof(Common.ErrorSettings),
+                ComponentParameters = new Dictionary<string, object>{
+            {
+                "Settings", Settings
+            }
+        }
+            });
         SelectedNode = nodes[0];
         DoormatBot.Doormat tmpInstance = new DoormatBot.Doormat();
         string DocsPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "KryGamesBot");
@@ -70,9 +135,13 @@
     {
         DoormatBot.Doormat tmpInstance = new DoormatBot.Doormat();
         tmpInstance.PersonalSettings = Settings;
+        UISettings.Settings.ThemeName = ThemeService.CurrentTheme.Name;
         //save settings and close
         if (Portable)
+        {
             tmpInstance.SavePersonalSettings("PersonalSettings.json");
+            File.WriteAllText("UISettings.json", JsonSerializer.Serialize(UISettings.Settings));
+        }
         else
         {
             string docspath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\";
@@ -81,8 +150,10 @@
                 Directory.CreateDirectory(docspath);
             }
             tmpInstance.SavePersonalSettings(docspath + "PersonalSettings.json");
-
+            
+            File.WriteAllText(Path.Combine(docspath + "UISettings.json"), JsonSerializer.Serialize(UISettings.Settings));
         }
+        
         await OnFinished.InvokeAsync();
     }
 }

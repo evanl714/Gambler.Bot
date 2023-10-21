@@ -1,4 +1,6 @@
 ﻿@using DoormatBot.Helpers;
+@using KryGamesBot.MAUI.Blazor.Services;
+@inject IThemeService ThemeService;
 <h3>KryGamesBot Setup</h3>
 @switch (step)
 {
@@ -81,8 +83,8 @@
 @code {
     ThemeItem _activeTheme 
     {
-        get => MainLayout._activeTheme; 
-        set => MainLayout._activeTheme = value; 
+        get => ThemeService.CurrentTheme;
+        set => ThemeService.SetTheme(value);
     }
     PersonalSettings settings = new PersonalSettings();
     DatabaseSetup dbSetup;

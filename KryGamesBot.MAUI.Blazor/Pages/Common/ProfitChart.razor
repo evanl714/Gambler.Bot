@@ -1,8 +1,6 @@
 ﻿@using KryGamesBot.MAUI.Blazor.Classes;
-<h3>ProfitChart</h3>
-<DxButton Text="Reset Chart" Click="btnReset_Click"/>
-<DxButton Text="@freezeContent" Click="btnFreeze_Click" />
-<DxChart Data="@DataPoints" CustomizeSeriesPoint="PerpareColour"  >
+
+<DxChart Data="@DataPoints" CustomizeSeriesPoint="PerpareColour" Height="100%" >
     <DxChartLineSeries         
         ArgumentField="@((SimpleDataPoint s) => s.Argument)"
         ValueField="@(s => s.Value)"
@@ -32,7 +30,10 @@
     </DxChartArgumentAxis>
     <DxChartLegend Visible="false"></DxChartLegend>
 </DxChart>
-
+<div class="position-absolute float-right">
+    <DxButton Text="Reset Chart" Click="btnReset_Click" />
+    <DxButton Text="@freezeContent" Click="btnFreeze_Click" />
+</div>
 @code {
     public bool Enabled { get; set; } = true;
     int ChartItems = 0;
@@ -60,19 +61,19 @@
         {
             string color = win?"Green":"Red" ;
             string color2 = win ? "Red" : "Green";
-           
+
             if (ChartItems >= 1)
             {
                 if (previousColor != color)//set a null for the previous spot so it can skip the point
                 {
                     DataPoints.Add(new SimpleDataPoint(ChartItems, (double)(ChartProfit), color));
-                    
+
                 }
             }
 
             ChartProfit += Profit;
             DataPoints.Add(new SimpleDataPoint(++ChartItems, (double)ChartProfit, color));
-            
+
             if (ChartItems >= 1)
             {
                 if (previousColor != color)//set a null for the previous spot so it can skip the point
@@ -83,19 +84,31 @@
             }
 
             previousColor = color;
-            //profitChart.AddPoint(ChartItems++, (double)Profit);
-            while (DataPoints.Count > (MaxItems > 0 ? MaxItems : UISettings.Settings.ChartBets))
+            double livebets = UISettings.Settings.ChartBets;
+            double maxvalue = DataPoints[DataPoints.Count - 1].Argument;
+            double minPoint = maxvalue - livebets;
+            if (minPoint > DataPoints[0].Argument)
             {
-                DataPoints.RemoveRangeAt(0, (DataPoints.Count - (MaxItems > 0 ? MaxItems : UISettings.Settings.ChartBets)) + 1);
+                int index = 0;
+                int counter = 0;
+                double currentPoint = DataPoints[counter].Argument;
+                while (currentPoint < minPoint + 2)
+                {
+                    if (currentPoint < minPoint)
+                    {
+                        index = counter;
+                    }
+                    counter++;                    
+                    currentPoint = DataPoints[counter].Argument;
+                }
+                DataPoints.RemoveRangeAt(0, index);
             }
-
         }
     }
 
     public void AddRange(List<decimal> points)
     {
-
-        DataPoints.AddRange(points.Select(m => new SimpleDataPoint(ChartItems++, (double)(ChartProfit += m), m>0?"Green":"Red")).ToList());
+        DataPoints.AddRange(points.Select(m => new SimpleDataPoint(ChartItems++, (double)(ChartProfit += m), "Green")).ToList(), false);
         while (DataPoints.Count > (MaxItems > 0 ? MaxItems : UISettings.Settings.ChartBets))
         {
             DataPoints.RemoveRangeAt(0, (DataPoints.Count - (MaxItems > 0 ? MaxItems : UISettings.Settings.ChartBets)) + 1);

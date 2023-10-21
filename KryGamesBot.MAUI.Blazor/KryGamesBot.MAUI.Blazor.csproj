@@ -127,7 +127,7 @@
 
     <ItemGroup>
       <Folder Include="Data\" />
-      <Folder Include="Services\" />
+      <Folder Include="wwwroot\js\" />
     </ItemGroup>
 
     <ItemGroup>

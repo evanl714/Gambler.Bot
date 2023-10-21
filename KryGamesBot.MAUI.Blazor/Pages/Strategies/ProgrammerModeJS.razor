@@ -5,12 +5,13 @@
 @code {
      public ProgrammerModeJS():base()
     {
-        
+        SetLanguage();
     }
     protected override void SetLanguage()
     {
         LanguageName = "javascript";
         FileExtension = "js";
         TemplateName = "JSTemplate.js";
+        DisplayName = "JS";
     }
 }

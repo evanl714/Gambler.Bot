@@ -17,7 +17,7 @@
                 <dxlc:LayoutGroup Orientation="Vertical"  View="GroupBox" Header="Multiplier Settings">
                     <dxlc:LayoutGroup Orientation="Horizontal">
                     <dxlc:LayoutItem Label="Multiplier">
-                            <dxe:SpinEdit DisplayFormatString="0.00000" EditValue="{Binding Strategy.Multiplier}" />
+                            <dxe:SpinEdit DisplayFormatString="0.00000" EditValue="{Binding Strategy.BaseMultiplier}" />
                     </dxlc:LayoutItem>
                     <dxlc:LayoutItem Label="% Increase">
                             <dxe:SpinEdit DisplayFormatString="0.00000"  />
@@ -116,7 +116,7 @@
                 <dxlc:LayoutGroup Orientation="Vertical"  View="GroupBox" Header="Multiplier Settings">
                     <dxlc:LayoutGroup Orientation="Horizontal">
                         <dxlc:LayoutItem Label="Multiplier">
-                            <dxe:SpinEdit DisplayFormatString="0.00000" EditValue="{Binding Strategy.WinMultiplier}" />
+                            <dxe:SpinEdit DisplayFormatString="0.00000" EditValue="{Binding Strategy.WinBaseMultiplier}" />
                         </dxlc:LayoutItem>
                         <dxlc:LayoutItem Label="% Increase">
                             <dxe:SpinEdit DisplayFormatString="0.00000"  />

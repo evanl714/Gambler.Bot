@@ -175,8 +175,11 @@ div.main {
     display: flex; /* Use flexbox to make div.main take up remaining height */
     flex-direction: column;
 }
+
+
 div.instanceMainColumn {
 }
+
 div.StrategyColumn {
     max-width: 50rem;
     min-width: 30rem;
@@ -202,7 +205,8 @@ div.StrategyColumn {
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
-    overflow:auto;
+    overflow: auto;
+    height: calc(100% - 100px);
 }
 .stratTabs {
     /*flex: 1 1 auto;*/
@@ -261,4 +265,97 @@ h4.groupHeader {
 .settingLabel {
     height: fit-content;
     margin: auto 0;
+}
+.startButton{
+
+}
+.stopButton {
+}
+.resumeButton {
+}
+.stopWinButton {
+}
+.mobileNav{
+    display:none;
+}
+.gutter {
+    background-color: #eee;
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
+
+    .gutter.gutter-horizontal {
+        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+        cursor: col-resize;
+    }
+@media only screen and (max-width: 768px) {
+    #app {
+        display: block;
+        height: auto;
+        overflow: auto;
+    }
+
+    html, body {
+        height: auto;
+        margin: 0;
+    }
+
+    .InstanceContainer {
+        display: block;
+        margin: 0;
+        width: auto;
+        height: auto;
+        overflow: auto;
+    }
+
+    div.StrategyColumn {
+        max-width: auto;
+        min-width: auto;
+        flex: 1 1 auto;
+        display: block;
+        box-sizing: border-box;
+        overflow: auto;
+    }
+
+    .startButton {
+        position: fixed;
+        left: 0px;
+        bottom: 5px;
+        z-index: 10;
+        margin: 1%;
+        width: 23%;
+    }
+
+    .resumeButton {
+        position: fixed;
+        left: 25%;
+        bottom: 5px;
+        z-index: 10;
+        margin: 1%;
+        width: 23%;
+    }
+
+    .stopButton {
+        position: fixed;
+        left: 50%;
+        bottom: 5px;
+        z-index: 10;
+        margin: 1%;
+        width: 23%;
+    }
+
+
+
+    .stopWinButton {
+        position: fixed;
+        left: 75%;
+        bottom: 5px;
+        z-index: 10;
+        margin: 1%;
+        width: 23%;
+    }
+
+    .mobileNav {
+        display: none;
+    }
 }

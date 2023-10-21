@@ -9,8 +9,13 @@
 @using KryGamesBot.MAUI.Blazor.Pages.Strategies;
 @using System.Reflection;
 @using System.Text.Json;
+@using KryGamesBot.MAUI.Blazor.Services;
 @implements IDisposable;
 @inject IJSRuntime jsruntime;
+@inject IInstanceService InstanceService;
+
+<DxLayoutBreakpoint DeviceSize="DeviceSize.Small"  @bind-IsActive="@IsSmallScreen" />
+<DxLayoutBreakpoint DeviceSize="DeviceSize.XSmall" @bind-IsActive="@IsXSmallScreen" />
 
 <PageTitle>@title</PageTitle>
 <div class="@(ShowSiteSelect?"":"visually-hidden")">
@@ -18,20 +23,9 @@
 </div>
 
 
-<div class="@(ShowInstance?"InstanceContainer":"visually-hidden")">
-
-        <div class="statsColumn">
-            <DxButton Text="Log Out"/>
-            <DxButton Text="Simulate" Click="Simulate"/>
-            <SiteStats stats="@botIns?.CurrentSite?.Stats" @ref=_siteStats/>
-            <SessionStats Stats="@botIns?.Stats" @ref="_sessionStats" />
-        </div>
-        <div class="statsColumn">
-            <ProfitChart @ref="_profitChart" />                
-            <DynamicComponent Type="@(LiveBetViewType)" @ref="dcLiveBets" />
-        </div>
-    <div class="StrategyColumn">
-        <DxTabs CssClass="stratTabs" ScrollMode="TabsScrollMode.NoScroll" @bind-ActiveTabIndex="@ActiveTabIndex">
+<div class="@(ShowInstance?"InstanceContainer":"visually-hidden")" >
+    <div class="col-md-3 order-3 border m-1 p-1" id="split-0">
+        <DxTabs CssClass="stratTabs" ScrollMode="TabsScrollMode.NoScroll"  @bind-ActiveTabIndex="@ActiveTabIndex">
             <DxTab Text="Strategy">
 
             </DxTab>
@@ -47,56 +41,108 @@
             <DxTab Text="Manual Betting">
 
             </DxTab>
+            <DxTab Text="Console">
+
+            </DxTab>
+            @if (IsMobile)
+            {
+                <DxTab Text="Chart">
+
+                </DxTab>
+                <DxTab Text="Bets">
+
+                </DxTab>
+                <DxTab Text="Site Stats">
+
+                </DxTab>
+                <DxTab Text="Session Stats">
+
+                </DxTab>
+            }           
+
         </DxTabs>
         <div class="settingTabContainer">
-                @switch (ActiveTabIndex)
-                {
-                    case 0:
+            @switch (ActiveTabIndex)
+            {
+                case 0:
                     <div>
-                        <DxComboBox Data="botIns.Strategies.Keys" ValueChanged="@((string e)=>(StrategySelected(e)))" Value="@botIns.Strategy.StrategyName" />
+                        <DxComboBox Data="botIns?.Strategies.Keys" ValueChanged="@((string e)=>(StrategySelected(e)))" Value="@botIns?.Strategy.StrategyName" />
                     </div>
-                    <div>
-                                <DxButton Text="Start" Click="Start" Enabled="btnStartIsEnabled" />
-                        <DxButton Text="Resume" Click="Resume" Enabled="btnResumeIsEnabled" />                                        
-                        <DxButton Text="Stop" Click="Stop" />
-                        <DxButton Text="Stop On Win" Click="StopOnWin" />
-                    </div>
-                            <DynamicComponent Type="@(StrategyType)" @ref="dcStrategy" Parameters="@(new Dictionary<string, object>(){{"BotInstance", botIns }})" />                                    
-                        break;
-                    case 1:
-                        <SRCControls BetSettings="@botIns?.BetSettings" />
-                        break;
-                    case 2:
-                        <AdvancedSettings BetSettings="@botIns?.BetSettings" />
-                        break;
-                    case 3:
-                            <Triggers BetSettings="@botIns?.BetSettings" />
-                            break;
-                    case 4:
-                        <DynamicComponent Type="@(ManualBetType)" @ref="dcManualBet" Parameters="@(new Dictionary<string, object>(){{"PlaceBet", new EventCallback<PlaceBetEventArgs>(this, ManualBetPlaced) }})" />
-                        break;
-                }
-            </div>
-            
+
+                    <DynamicComponent Type="@(StrategyType)" @ref="dcStrategy" Parameters="@(new Dictionary<string, object>(){{"BotInstance", botIns }})" />
+                    break;
+                case 1:
+                    <SRCControls BetSettings="@botIns?.BetSettings" />
+                    break;
+                case 2:
+                    <AdvancedSettings BetSettings="@botIns?.BetSettings" />
+                    break;
+                case 3:
+                    <Triggers BetSettings="@botIns?.BetSettings" />
+                    break;
+                case 4:
+                    <DynamicComponent Type="@(ManualBetType)" @ref="dcManualBet" Parameters="@(new Dictionary<string, object>(){{"PlaceBet", new EventCallback<PlaceBetEventArgs>(this, ManualBetPlaced) }})" />
+                    break;
+                case 5:
+                    <ProgrammerConsole @ref=StratConsole Strategy="@(botIns?.Strategy is ProgrammerMode prog? prog: null)" />
+                    break;
+
+            }
+
         </div>
-    
+        <div >
+            <DxButton CssClass="startButton" Text="Start" Click="Start" Enabled="btnStartIsEnabled" />
+            <DxButton CssClass="resumeButton" Text="Resume" Click="Resume" Enabled="btnResumeIsEnabled" />
+            <DxButton CssClass="stopButton" Text="Stop" Click="Stop" />
+            <DxButton CssClass="stopWinButton" Text="Stop On Win" Click="StopOnWin" />
+        </div>
+    </div>
+    <div class="col-md-6 order-2  m-1" id="split-1">
+        @if (!IsMobile || ActiveTabIndex == 6)
+        {
+            <div class="@(IsMobile?"":"h-50") position-relative border">
+                <ProfitChart @ref="_profitChart" />
+            </div>
+        }
+        @if (!IsMobile || ActiveTabIndex == 7)
+        {
+            <div class="@(IsMobile?"":"h-50") border">
+                <DynamicComponent Type="@(LiveBetViewType)" @ref="dcLiveBets" />
+            </div>
+        }
+    </div>
+    <div class="col-md-3 order-1  m-1" id="split-2">
+        <DxButton Text="Log Out"/>
+        <DxButton Text="Simulate" Click="Simulate" /> 
+        @if (!IsMobile || ActiveTabIndex == 8)
+        {
+            <SiteStats stats="@botIns?.CurrentSite?.Stats" @ref=_siteStats />
+        }
+        @if (!IsMobile || ActiveTabIndex == 9)
+        {
+            <SessionStats Stats="@botIns?.Stats" @ref="_sessionStats" />
+        }
+    </div>
+
+
+
 </div>
 <div class="statusBar">
     @statusMessage
 </div>
 
 
-<DxPopup HeaderText="@("Log in " + botIns.CurrentSite?.SiteName )"
+<DxPopup HeaderText="@("Log in " + botIns?.CurrentSite?.SiteName )"
 @bind-Visible="@LoginPopupVisible" >
-    <Login @ref=LoginControl SelectedSite="@botIns.CurrentSite" OnBackClicked="Login_OnBackClicked" OnSkipClicked="Login_OnSkipClicked" />
+    <Login @ref=LoginControl SelectedSite="@botIns?.CurrentSite" OnBackClicked="Login_OnBackClicked" OnSkipClicked="Login_OnSkipClicked" />
 </DxPopup>
 <DxPopup HeaderText="Simulate"
-@bind-Visible="@simvisible">
-    <Simulation BetSettings="botIns.BetSettings" CurrentSite="botIns.CurrentSite" Strategy="botIns.Strategy" />
+@bind-Visible="@simvisible" MinWidth="400" Width="50%">
+    <Simulation BetSettings="botIns?.BetSettings" CurrentSite="botIns?.CurrentSite" Strategy="botIns?.Strategy" />
 </DxPopup>
 
 @code {
-    WebView siteoverride = new WebView();
+    int MobileTab = 0;
     bool showoverride = true;
     Login LoginControl;
     string statusMessage = "";
@@ -107,13 +153,13 @@
     DynamicComponent dcStrategy;
     ProfitChart _profitChart;
     Common.SiteStats _siteStats;
-    SessionStats _sessionStats;    
+    SessionStats _sessionStats;
     Type LiveBetViewType = typeof(DiceLiveBetsControl);
     Type ManualBetType = typeof(ManualDiceBet);
     Type StrategyType = typeof(ManualDiceBet);
-    bool ShowSiteSelect = true;
-    bool ShowInstance = false;
-    Doormat botIns = new Doormat();
+    bool ShowSiteSelect = false;
+    bool ShowInstance = true;
+    Doormat botIns;
     bool LoginPopupVisible = false;
     string title = "Select site";
     string BetSettingsFile = "";
@@ -124,8 +170,23 @@
     bool btnStartIsEnabled = true;
     bool btnResumeIsEnabled = true;
     public bool BotInsNotRunning { get => botIns?.Running ?? false; }
-    public BotInstance()
+    bool IsXSmallScreen;
+    bool IsSmallScreen;
+    bool IsMobile { get => IsXSmallScreen || IsSmallScreen; }
+    ProgrammerConsole StratConsole;
+    [Parameter]
+    public string InstanceKey { get; set;}
+
+
+
+    protected override async Task OnInitializedAsync()
     {
+        botIns = InstanceService.GetInstance(InstanceKey);
+        if (botIns == null )
+        {
+            botIns = new Doormat();
+            InstanceService.AddInstance(InstanceKey, botIns);
+        }
         botIns.CompileSites();
         botIns.GetStrats();
 
@@ -134,16 +195,16 @@
         botIns.OnGameChanged += BotIns_OnGameChanged;
         botIns.OnNotification += BotIns_OnNotification;
         botIns.OnSiteAction += BotIns_OnSiteAction;
-        botIns.OnSiteBetFinished += BotIns_OnSiteBetFinished;        
+        botIns.OnSiteBetFinished += BotIns_OnSiteBetFinished;
         botIns.OnSiteError += BotIns_OnSiteError;
         botIns.OnSiteLoginFinished += BotIns_OnSiteLoginFinished;
         botIns.OnSiteNotify += BotIns_OnSiteNotify;
-        botIns.OnBypassRequired += BotIns_OnBypassRequired;    
+        botIns.OnBypassRequired += BotIns_OnBypassRequired;
         botIns.OnSiteStatsUpdated += BotIns_OnSiteStatsUpdated;
         botIns.OnStarted += BotIns_OnStarted;
         botIns.OnStopped += BotIns_OnStopped;
         botIns.OnStrategyChanged += BotIns_OnStrategyChanged;
-        siteoverride.Source = "https://primedice.com";
+        //siteoverride.Source = "https://primedice.com";
         //botIns.OnSiteRegisterFinished += BotIns_OnSiteRegisterFinished;
 
 
@@ -154,11 +215,6 @@
         }*/
         //Check if global settings for this account exists
 
-
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
 
         await base.OnInitializedAsync();
         LoadPersonalSettings();
@@ -172,6 +228,11 @@
             LoginPopupVisible = true;
             ShowSiteSelect = false;
             ShowInstance = true;
+        }
+        else
+        {
+            ShowSiteSelect = true;
+            ShowInstance = false;
         }
     }
 
@@ -190,8 +251,8 @@
 
     public void Dispose()
     {
-        botIns.StopStrategy("Application Closing");
-        if (botIns.CurrentSite != null)
+        botIns?.StopStrategy("Application Closing");
+        if (botIns?.CurrentSite != null)
             botIns.CurrentSite.Disconnect();
         string path = "";
         /*if (MainWindow.Portable)
@@ -200,7 +261,7 @@
         {
             path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\";
         }
-        botIns.SaveBetSettings(path + InstanceName + ".betset");
+        botIns?.SaveBetSettings(path + InstanceName + ".betset");
         //dlmMainLayout.SaveLayoutToXml(path + InstanceName + ".layout");
         SaveINstanceSettings(path + InstanceName + ".siteset");
     }
@@ -342,6 +403,7 @@
         }
         await InvokeAsync( StateHasChanged);
         (dcStrategy?.Instance as iStrategy)?.SetStrategy(botIns?.Strategy);
+        StratConsole?.SetStrategy(botIns?.Strategy);
         //await InvokeAsync(StateHasChanged);
     }
 
@@ -414,10 +476,10 @@
     {
         string Settings = JsonSerializer.Serialize<InstanceSettings>(new InstanceSettings
             {
-                Site = botIns.CurrentSite?.GetType()?.Name,
+                Site = botIns?.CurrentSite?.GetType()?.Name,
                 AutoLogin = false,
-                Game = botIns.CurrentGame.ToString(),
-                Currency = botIns.CurrentSite?.CurrentCurrency
+                Game = botIns?.CurrentGame.ToString(),
+                Currency = botIns?.CurrentSite?.CurrentCurrency
             });
         File.WriteAllText(FileLocation, Settings);
     }
@@ -427,20 +489,11 @@
         Thread.Sleep(5000);
         var cookies = MainPage.GetBypass();
         //var tmp = siteoverride.Cookies;
-        args.Cookie = cookies;
+        args.Config = cookies;
 
     }
 
-    async Task Navigate(string url)
-    {
-       await Task.Run(() =>
-        {
-            siteoverride.HeightRequest = 1080;
-            siteoverride.WidthRequest = 1920;
-            siteoverride.Source = url
-            ;
-        });
-    }
+
     async Task Start()
     {
 
@@ -471,7 +524,7 @@
     {   
         //Figure out how to do a status bar kind of thing....
         statusMessage= e.Message;
-
+        InvokeAsync(StateHasChanged);
     }
     private void BotIns_OnStopped(object sender, DoormatCore.Sites.GenericEventArgs e)
     {

@@ -1,5 +1,5 @@
 ﻿@inject IJSRuntime JSRuntime
-
+@inject KryGamesBot.MAUI.Blazor.Services.IThemeService ThemeService
 
     <nav id="themesMenu">
         <ul class="nav nav-pills">
@@ -24,9 +24,17 @@
     static readonly Dictionary<string, string[]> GroupedThemes = new() {
         ["DevExpress Themes"] = Utils.DevExpressThemes,
         ["Bootstrap Themes"] = new[] {
-            "default", "cerulean", "cyborg", "flatly", "journal", "litera", "lumen", "lux", "pulse", "simplex", "solar", "superhero", "united", "yeti"
-        }
+            "default", "cerulean", "cyborg", "flatly", "journal", "litera", "lumen", "lux", "pulse", "simplex", "solar", "superhero", "united", "yeti", "sbadmin"
+    }
     };
+
+    protected override Task OnInitializedAsync()
+    {
+        ActiveTheme = ThemeService.CurrentTheme;
+        return base.OnInitializedAsync();
+
+    }
+
 
     [Parameter] public ThemeItem ActiveTheme { get; set; }
     [Parameter] public EventCallback<ThemeItem> ActiveThemeChanged { get; set; }
@@ -40,8 +48,9 @@
                 });
             await Task.WhenAll(
                 ActiveThemeChanged.InvokeAsync(themeItem)
-                //VisibleChanged.InvokeAsync(false)
+            //VisibleChanged.InvokeAsync(false)
             );
+            ThemeService.SetTheme(themeItem);
         }
     }
 }

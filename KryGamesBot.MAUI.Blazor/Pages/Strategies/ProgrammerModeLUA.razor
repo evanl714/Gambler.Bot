@@ -7,7 +7,7 @@
 @using System.Text;
 @implements iStrategy;
 
-<h3>Programmer Mode - @LanguageName</h3>
+<h3>Programmer Mode - @DisplayName</h3>
 <div>
 <DxButton Text="New" Click="New"/>
 <DxButton Text="Open" Click="Open"/>
@@ -31,12 +31,13 @@
 	protected string FileExtension { get; set; } = "lua";
 	protected string LanguageName { get; set; } = "lua";
 	protected string TemplateName { get; set; } = "LUATemplate.lua";
-
+	protected string DisplayName { get; set; } = "LUA";
 	protected virtual void SetLanguage()
 	{
 		FileExtension = "lua";
 		LanguageName = "lua";
 		TemplateName = "LUATemplate.lua";
+		DisplayName = "LUA";
 	}
 
 	string content = "";

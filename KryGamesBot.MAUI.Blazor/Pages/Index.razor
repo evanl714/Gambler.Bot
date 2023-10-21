@@ -15,7 +15,7 @@
             </Items>
         
         </DxToolbar>
-        <BotInstance />
+        <BotInstance InstanceKey="Default"/>
     </ChildContent>
     <ErrorContent Context="Exception">
         <div>
@@ -24,10 +24,10 @@
     </ErrorContent>
 </ErrorBoundary>
     
-<DxPopup Visible="@showSettings" Title="Settings" ShowCloseButton="true"  CloseOnEscape="true">
+<DxPopup @bind-Visible="@showSettings" Title="Settings" ShowCloseButton="true"  CloseOnEscape="true" MinWidth="400" Width="50%">
     <CommonSettings Portable=Portable OnFinished="SettingsFinished"/>
 </DxPopup>
-<DxPopup Visible="@showWizard" Title="Welcome to KryGamesBot" ShowCloseButton="true" CloseOnEscape="true">
+<DxPopup @bind-Visible="@showWizard" Title="Welcome to KryGamesBot" ShowCloseButton="true" CloseOnEscape="true" MinWidth="400" Width="50%">
     <KryGamesBot.MAUI.Blazor.Pages.Common.FirstRunWizard OnFinished="WizardFinished" />
 </DxPopup>
 @code {

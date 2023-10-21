@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using DevExpress.Blazor;
 using CommunityToolkit.Maui;
+using KryGamesBot.MAUI.Blazor.Services;
 
 namespace KryGamesBot.MAUI.Blazor
 {
@@ -18,9 +19,10 @@ namespace KryGamesBot.MAUI.Blazor
                 .UseMauiCommunityToolkit(); ;
 
             builder.Services.AddMauiBlazorWebView();
-            
+            builder.Services.AddSingleton<IThemeService, ThemeService>();
+            builder.Services.AddSingleton<IInstanceService, InstanceService>();
 
-			builder.Services.AddDevExpressBlazor(configure => configure.BootstrapVersion = BootstrapVersion.v5);
+            builder.Services.AddDevExpressBlazor(configure => configure.BootstrapVersion = BootstrapVersion.v5);
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
 		builder.Logging.AddDebug();

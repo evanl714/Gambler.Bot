@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using DoormatCore.Helpers;
+using System.Net;
 
 namespace KryGamesBot.MAUI.Blazor
 {
@@ -9,7 +10,13 @@ namespace KryGamesBot.MAUI.Blazor
         {
             instance = this;
             InitializeComponent();
-            
+            wvBypass.Navigated += WvBypass_Navigated;
+        }
+
+        private void WvBypass_Navigated(object sender, WebNavigatedEventArgs e)
+        {
+            //listen here for navigation events to finish the request
+            GetAgent();
         }
 
         internal static void SetBypass(string URL)
@@ -18,31 +25,59 @@ namespace KryGamesBot.MAUI.Blazor
             {
                 instance.Dispatcher.DispatchAsync(() =>
                 {
-                    if (instance.wvBypass.Cookies == null)
-                        instance.wvBypass.Cookies = new CookieContainer();
+                    //if (instance.wvBypass.Cookies == null)
+                    instance.wvBypass.Cookies = new CookieContainer();
                     if (instance.wvBypass.Source.ToString() != URL)
                         instance.wvBypass.Source = URL;
                     else
                         instance.wvBypass.Reload();
-                    instance.ZIndex = 10;
+                    
+                    instance.wvBypass.ZIndex = 10;
                 });
                 return;
             }
             instance.wvBypass.Source = URL;
         }
-        internal static CookieContainer GetBypass()
+        static string agent = "";
+        static async Task GetAgent()
+        {
+            if (string.IsNullOrWhiteSpace(agent))
+            {
+                agent = await instance.wvBypass.EvaluateJavaScriptAsync("navigator.userAgent");
+                if (agent.StartsWith("\\"))
+                    agent = agent.Substring(1);
+                if (agent.EndsWith("\\"))
+                    agent = agent.Substring(0, agent.Length - 1);
+                if (agent.StartsWith("\""))
+                    agent = agent.Substring(1);
+            }
+        }
+        internal static BrowserConfig GetBypass()
         {
             if (instance.Dispatcher.IsDispatchRequired)
             {
-                
-                return instance.Dispatcher.DispatchAsync<CookieContainer>(() =>
+                return instance.Dispatcher.DispatchAsync<BrowserConfig>(async () =>
                 {
-                    instance.ZIndex = -1;
-                    return  instance.wvBypass.Cookies;
+                    try
+                    {
+                        instance.wvBypass.ZIndex = -1;
+                        while (agent == "")
+                            Thread.Sleep(10);
+                        string result = agent;
+                        return new BrowserConfig { Cookies = instance.wvBypass.Cookies, UserAgent = agent };
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                    return new BrowserConfig { Cookies = instance.wvBypass.Cookies, UserAgent = agent };
                 }).Result;
                 
             }
-            return instance.wvBypass.Cookies;
+            
+            instance.wvBypass.ZIndex = -1;
+
+            return new BrowserConfig { Cookies = instance.wvBypass.Cookies, UserAgent = agent };
         }
         protected override void OnHandlerChanged()
         {/*

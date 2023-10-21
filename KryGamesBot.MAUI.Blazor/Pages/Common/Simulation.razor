@@ -1,30 +1,42 @@
 ﻿@using System.Diagnostics;
+@using CommunityToolkit.Maui.Storage;
 @using DoormatBot.Helpers;
 @using DoormatBot.Strategies;
 @using DoormatCore.Sites;
 <h3>Simulation</h3>
-Starting Balance
+<div class="container-fluid d-flex">
+<div class="col">
+    Starting Balance
 <DxSpinEdit @bind-Value=StartingBalance/>
 number of bets
 <DxSpinEdit @bind-Value=NumberOfBets />
+<DxCheckBox @bind-Checked="GenerateSeeds">Generate Seeds</DxCheckBox>
 <DxButton Text="Start" Click="Start" Enabled=EnableStart/>
-
-<DxTextBox @bind-Text="CurrentSimulation.serverseed" />
-<DxTextBox @bind-Text="CurrentSimulation.serverseedhash" />
-<DxTextBox @bind-Text="CurrentSimulation.clientseed" />
-<DxSpinEdit @bind-Value="CurrentSimulation.Balance" ReadOnly=true />
-<DxSpinEdit @bind-Value="Progress" ReadOnly=true />
-<!--<DxTimeEdit @bind-Time="TimeRunning" />
-<DxTimeEdit @bind-Time="ProjectedTime" />
-<DxTimeEdit @bind-Time="ProjectedRemaining" />-->
-<DxButton Text="Save" Click="Save"/>
+<div>
+            Server seed: <DxTextBox @bind-Text="CurrentSimulation.serverseed" ReadOnly=true />
+            Server Seed Hash: <DxTextBox @bind-Text="CurrentSimulation.serverseedhash" ReadOnly=true />
+            Client seed: <DxTextBox @bind-Text="CurrentSimulation.clientseed" ReadOnly=true />
+Balance: <DxSpinEdit @bind-Value="CurrentSimulation.Balance" ReadOnly=true />
+Progress: <DxSpinEdit @bind-Value="Progress" ReadOnly=true DisplayFormat="p3" />
+            Time Running: <DxTimeEdit @bind-Time="@TimeRunning" ReadOnly=true />
+            Projected Time: <DxTimeEdit @bind-Time="@ProjectedTime" ReadOnly=true />
+Projected Remaining: <DxTimeEdit @bind-Time="@ProjectedRemaining" ReadOnly=true />
+        <DxButton Text="Save Bets" @bind-Enabled="@EnableSave" Click="Save" />
+        </div>
+    </div>
+    <div class="col">
 <SessionStats @ref="sesseionStats1" Stats="CurrentSimulation.Stats" />
-@* <ProfitChart @ref="chart"/> *@
+    </div>
+</div>
+<DxCheckBox CheckType="CheckType.Switch" @bind-Checked="@ChartEnabled" Enabled=false >Enable Chart</DxCheckBox>
+<div class=@(ChartEnabled?"":"visually-hidden")>
+ <ProfitChart @ref="chart"/> 
+ </div>
 @code {
-    //ProfitChart chart;
+    ProfitChart chart;
     SessionStats sesseionStats1 = new SessionStats();
-    long NumberOfBets = 0;
-    decimal StartingBalance = 0m;
+    long NumberOfBets = 100000;
+    decimal StartingBalance = 1m;
     Stopwatch SimTimer = new Stopwatch();
     [Parameter]
     public BaseSite CurrentSite { get; set; }
@@ -32,11 +44,13 @@ number of bets
     public BaseStrategy Strategy { get; set; }
     [Parameter]
     public InternalBetSettings BetSettings { get; set; }
-
-    private DoormatBot.Helpers.Simulation CurrentSimulation = new DoormatBot.Helpers.Simulation(0,0,null,null,null,"",false);
-
-    bool EnableStart = true;
     bool EnableSave = false;
+    private DoormatBot.Helpers.Simulation CurrentSimulation = new DoormatBot.Helpers.Simulation(0,0,null,null,null,"",false);
+    bool GenerateSeeds = true;
+    bool EnableStart = true;
+    bool enableChart = false;
+    bool ChartEnabled = false;
+
     public decimal Progress { get; set; }
     public TimeSpan TimeRunning { get; set; } = new TimeSpan();
     public TimeSpan ProjectedTime { get; set; } = new TimeSpan();
@@ -52,23 +66,35 @@ number of bets
         CurrentSimulation.OnSimulationComplete += Tmp_OnSimulationComplete;
         CurrentSimulation.OnBetSimulated += CurrentSimulation_OnBetSimulated;
         SimTimer.Start();
+        if (GenerateSeeds)
+        {
+            CurrentSimulation.GenerateSeeds();
+        }
         CurrentSimulation.Start();
         //sesseionStats1 = CurrentSimulation.Stats;
         EnableStart = false;
         await InvokeAsync(StateHasChanged);
     }
+
     private void CurrentSimulation_OnBetSimulated(object sender, BetFinisedEventArgs e)
     {
-        /*Bets.Add(e.NewBet.Profit);
-        if (Bets.Count > 0 && Bets.Count % 100 == 0)
+
+        if (ChartEnabled)
         {
-            if (chart.Enabled)
+            Bets.Add(e.NewBet.Profit);
+
+            if (Bets.Count > 0 && Bets.Count % 100 == 0)
             {
-                chart.AddRange(Bets);
+                var bets = Bets;
                 Bets = new List<decimal>();
+                if (chart.Enabled)
+                {
+                    chart.AddRange(bets);
+                }
             }
-        }*/
+        }
     }
+
     private void Tmp_OnSimulationComplete(object sender, EventArgs e)
     {
 
@@ -87,9 +113,10 @@ number of bets
         EnableStart = true;
         InvokeAsync(StateHasChanged);
     }
+
     private void Tmp_OnSimulationWriting(object sender, EventArgs e)
     {
-        
+
         DoormatBot.Helpers.Simulation tmp = sender as DoormatBot.Helpers.Simulation;
         //Console.WriteLine("Simulation Progress: " + tmp.TotalBetsPlaced + " bets of " + tmp.Bets);
 
@@ -104,10 +131,16 @@ number of bets
             ProjectedRemaining = TimeSpan.FromMilliseconds((double)totaltime - ElapsedMilliseconds);
             sesseionStats1.RefreshStats();
         }
-        
+        InvokeAsync(StateHasChanged);
     }
+
     async Task Save()
     {
-        
+        CancellationTokenSource src = new CancellationTokenSource();
+        var fileSaverResult = await FileSaver.Default.SaveAsync( DateTime.Now.ToString("yyyyMMddHHmmss")+ ".csv", CurrentSimulation.GetStream(), src.Token);
+        if (fileSaverResult.IsSuccessful)
+        {
+            CurrentSimulation.DeleteLog();
+        }
     }
 }

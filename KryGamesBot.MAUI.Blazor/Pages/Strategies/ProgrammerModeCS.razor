@@ -3,14 +3,15 @@
     base.BuildRenderTree(__builder);
 }
 @code {
-     public ProgrammerModeCS():base()
+    public ProgrammerModeCS():base()
     {
-        
+        SetLanguage();
     }
     protected override void SetLanguage()
     {
         LanguageName = "csharp";
         FileExtension = "cs";
         TemplateName = "CSTemplate.cs";
+        DisplayName = "C#";
     }
 }

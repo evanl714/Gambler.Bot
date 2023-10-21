@@ -4,9 +4,6 @@
 @using KryGamesBot.MAUI.Blazor.Interfaces;
 
 @implements iLiveBet;
-
-<h3>DiceLiveBetsControl</h3>
-
 <DxGrid CssClass="LiveBetsGrid" Data="Bets" CustomizeElement="Grid_CustomizeElement" PageSize="100" VirtualScrollingEnabled=true>
     <Columns>
         <DxGridDataColumn FieldName="BetID" />
@@ -44,7 +41,7 @@
 
     void SyncedAddBet(Bet newBet)
     {
-        while (Bets.Count > UISettings.Settings.LiveBets + 1)
+        while (Bets.Count >= UISettings.Settings.LiveBets )
         {
 
             //System.Threading.Thread.Sleep(10);

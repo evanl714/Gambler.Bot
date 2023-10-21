@@ -1,0 +1,71 @@
+﻿@using DoormatBot.Strategies;
+<div>
+<div id="scrollbox" style="height: calc(100% - 90px); overflow: scroll;">
+    
+    @foreach (var item in _messages)
+    {           
+        <pre>@item</pre>  
+    }
+    
+</div>
+<hr />
+<DxTextBox Enabled="@(Strategy!=null)" />
+</div>
+@code {
+    List<string> _messages = new List<string>();
+    string command = "";
+
+
+    private ProgrammerMode _strategy;
+
+    [Parameter]
+    public ProgrammerMode Strategy
+    {
+        get { return _strategy; }
+        set 
+        { 
+            if (_strategy!=null)
+            {
+                _strategy.OnPrint -= Strategy_OnPrint;
+                _strategy.OnScriptError -= Strategy_OnScriptError;
+            }
+            _strategy = value; 
+            if (_strategy != null)
+            {
+                _strategy.OnPrint += Strategy_OnPrint;
+                _strategy.OnScriptError += Strategy_OnScriptError;
+            }
+
+        }
+    }
+
+    public void SetStrategy(BaseStrategy Strat)
+    {
+        if (Strat is ProgrammerMode prog)
+            Strategy = prog;
+        else
+            Strategy = null;
+    }
+
+
+    private void Strategy_OnScriptError(object sender, DoormatBot.Strategies.PrintEventArgs e)
+    {
+        Print(e.Message);
+    }
+
+    private void Strategy_OnPrint(object sender, DoormatBot.Strategies.PrintEventArgs e)
+    {
+        Print(e.Message);
+    }
+
+    async Task Print(string message)
+    {
+        _messages.Add(message);
+        while (_messages.Count > 1000)
+        {
+            _messages.RemoveAt(0);
+        }
+        InvokeAsync(StateHasChanged);
+    }
+
+}
