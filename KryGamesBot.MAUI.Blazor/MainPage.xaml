@@ -9,7 +9,7 @@
         <Grid.RowDefinitions>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <WebView Grid.Row="0" x:Name="wvBypass" Source="https://bot.seuntjie.com"></WebView>
+        <WebView Grid.Row="0" x:Name="wvBypass" Source="https://bot.seuntjie.com" IsVisible="False" ></WebView>
     <BlazorWebView Grid.Row="0"  x:Name="blazorWebView" HostPage="wwwroot/index.html">
         <BlazorWebView.RootComponents>
             <RootComponent Selector="head::after" ComponentType="{x:Type blazorweb:HeadOutlet}" />

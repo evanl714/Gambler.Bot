@@ -1,0 +1,91 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="KryGamesBot.Avalonia.Views.Common.SelectSiteView"
+			 xmlns:vm="using:KryGamesBot.Avalonia.ViewModels.Common"
+			 x:DataType="vm:SelectSiteViewModel"
+			 xmlns:bot="using:DoormatCore.Helpers"
+			 >
+	<UserControl.DataContext>
+		<vm:SelectSiteViewModel/>
+	</UserControl.DataContext>
+	<UserControl.Resources>
+		
+	</UserControl.Resources>
+	<ScrollViewer>
+	<StackPanel HorizontalAlignment="Center">
+		
+		<DataGrid ItemsSource="{Binding Sites}" >
+			<DataGrid.Columns>
+				<DataGridTemplateColumn  >
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate DataType="vm:AvaSitesList">
+							<Border BorderBrush="LightGray"
+        BorderThickness="1"
+        CornerRadius="3" Margin="5" Background="DarkGray">
+							<Grid PointerEntered="PointerEntered"
+								  PointerExited="PointerExited"
+								  >
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="128" />
+									<ColumnDefinition Width="256" />
+									<ColumnDefinition Width="512" />
+									<ColumnDefinition Width="*"  />
+									<ColumnDefinition Width="*"  />
+								</Grid.ColumnDefinitions>
+								
+								<Image Margin="5" Grid.Column="0" Source="{Binding Image}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+								<TextBlock Margin="5" Grid.Column="1"
+									TextAlignment="Center" 
+									Text="{Binding Site.Name}"
+									FontSize="36"
+									FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"
+									/>
+								<ItemsControl Padding="5,0,0,0" Margin="5" Grid.Column="2" ItemsSource="{Binding Currencies}" VerticalAlignment="Center" HorizontalAlignment="Center">
+									<ItemsControl.ItemsPanel>
+										<ItemsPanelTemplate>
+											<WrapPanel Orientation="Horizontal"/>
+										</ItemsPanelTemplate>
+									</ItemsControl.ItemsPanel>
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<Border Width="32" Height="32" Margin="-5,5,0,5">												
+												<Svg Path="{Binding Image}" />
+											</Border>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+
+								<ItemsControl Margin="5" Grid.Column="3" ItemsSource="{Binding Games}" VerticalAlignment="Center" HorizontalAlignment="Center">
+									<ItemsControl.ItemsPanel>
+										<ItemsPanelTemplate>
+											<WrapPanel Orientation="Horizontal"/>
+										</ItemsPanelTemplate>
+									</ItemsControl.ItemsPanel>
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<Border Width="32" Height="32" Margin="5,5,5,5">
+												<Svg Path="{Binding Image}" />
+											</Border>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+								<StackPanel Grid.Column="4" Orientation="Vertical">
+									<Button Margin="5" Width="250" FontSize="18" Content="{Binding SelectString}" Background="Green" HorizontalContentAlignment="Center" />
+									<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+										<Button Margin="5" Content="Simulate" HorizontalAlignment="Left" />
+										<Button Margin="5" Content="Visit Site" HorizontalAlignment="Right" />
+									</StackPanel>
+								</StackPanel>
+							</Grid>
+							</Border>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn >
+			</DataGrid.Columns>
+		</DataGrid>		
+	</StackPanel>
+	</ScrollViewer>
+</UserControl>

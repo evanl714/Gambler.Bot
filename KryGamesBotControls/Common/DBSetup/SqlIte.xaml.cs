@@ -41,7 +41,7 @@ namespace KryGamesBotControls.Common.DBSetup
 
         public string ConnectionString()
         {
-            return $"Data Source={FileName};Version=3;Compress=True;";
+            return $"Data Source={FileName}";
         }
 
         public string Provider()
