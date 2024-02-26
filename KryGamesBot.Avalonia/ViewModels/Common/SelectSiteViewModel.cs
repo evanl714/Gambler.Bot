@@ -1,4 +1,5 @@
-﻿using Avalonia.Media.Imaging;
+﻿using Avalonia.Controls.Utils;
+using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Svg;
 using DoormatBot;
@@ -8,10 +9,12 @@ using Svg.Skia;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using static IronPython.Modules._ast;
 
 namespace KryGamesBot.Avalonia.ViewModels.Common
@@ -23,16 +26,53 @@ namespace KryGamesBot.Avalonia.ViewModels.Common
         public string Text { get; set; }
 
         public List<string> strings { get; set; } = new List<string> { "1", "2", "three", "fuck", "you" };
+
+        public event EventHandler<SitesList> SelectedSiteChanged;
+        public bool BypassLogIn { get; set; } = false;
+
         public SelectSiteViewModel()
         {
             Text = "fuckl you";
             Doormat botIns = new Doormat();
             botIns.CompileSites();
             botIns.GetStrats();
-
+            LoginCommand = ReactiveCommand.Create<object>(LogIn);
+            SimulateCommand = ReactiveCommand.Create<object>(Simulate);
+            ViewSiteCommand = ReactiveCommand.Create<object>(ViewSite);
             Sites = new ObservableCollection<AvaSitesList>(Doormat.Sites.Select(x=>new AvaSitesList(x) ));
+            
         }
 
+
+        public ICommand LoginCommand { get; }
+
+        void LogIn(object site)
+        {
+            if (site is AvaSitesList Site)
+            {
+                BypassLogIn = false;
+                SelectedSiteChanged.Invoke(this, Site.Site);
+            }
+        }
+        public ICommand SimulateCommand { get; }
+
+        void Simulate(object site)
+        {
+            if (site is AvaSitesList Site)
+            {
+                BypassLogIn = true;
+                SelectedSiteChanged.Invoke(this, Site.Site);
+            }
+        }
+        public ICommand ViewSiteCommand { get; }
+
+        void ViewSite(object site)
+        {
+            if (site is AvaSitesList Site)
+            {
+                Process.Start( new ProcessStartInfo { FileName= Site.Site.URL, UseShellExecute = true });
+            }
+        }
     }
 
     public class AvaSitesList

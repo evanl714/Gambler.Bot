@@ -17,7 +17,7 @@
 	<ScrollViewer>
 	<StackPanel HorizontalAlignment="Center">
 		
-		<DataGrid ItemsSource="{Binding Sites}" >
+		<DataGrid ItemsSource="{Binding Sites}" x:Name="grdSites" Tag="{Binding}" >
 			<DataGrid.Columns>
 				<DataGridTemplateColumn  >
 					<DataGridTemplateColumn.CellTemplate>
@@ -73,10 +73,22 @@
 									</ItemsControl.ItemTemplate>
 								</ItemsControl>
 								<StackPanel Grid.Column="4" Orientation="Vertical">
-									<Button Margin="5" Width="250" FontSize="18" Content="{Binding SelectString}" Background="Green" HorizontalContentAlignment="Center" />
+									<Button Margin="5" 
+											Width="250" 
+											FontSize="18" 
+											Content="{Binding SelectString}" 
+											Background="Green" 
+											HorizontalContentAlignment="Center" 
+											Command="{Binding $parent[DataGrid].((vm:SelectSiteViewModel)DataContext).LoginCommand}"
+													CommandParameter="{Binding}" />
+									
 									<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-										<Button Margin="5" Content="Simulate" HorizontalAlignment="Left" />
-										<Button Margin="5" Content="Visit Site" HorizontalAlignment="Right" />
+										<Button Margin="5" Content="Simulate" HorizontalAlignment="Left" 
+												Command="{Binding $parent[DataGrid].((vm:SelectSiteViewModel)DataContext).SimulateCommand}"
+													CommandParameter="{Binding}" />
+										<Button Margin="5" Content="Visit Site" HorizontalAlignment="Right" 
+												Command="{Binding $parent[DataGrid].((vm:SelectSiteViewModel)DataContext).ViewSiteCommand}"
+													CommandParameter="{Binding}" />
 									</StackPanel>
 								</StackPanel>
 							</Grid>

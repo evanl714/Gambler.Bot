@@ -8,5 +8,6 @@ namespace KryGamesBot.Avalonia.ViewModels
 {
     public class MainViewModel:ViewModelBase
     {
+
     }
 }
