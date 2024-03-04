@@ -3,29 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KryGamesBot", "KryGamesBot\KryGamesBot.csproj", "{CFF72DDF-072E-4F30-A099-0CE16DCB29EE}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KryGamesBotControls", "KryGamesBotControls\KryGamesBotControls.csproj", "{BEF60D35-44BD-4164-B443-A786AFD2F438}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doormat.Bot", "..\DoormatBot\Doormat.Bot\Doormat.Bot.csproj", "{F93DAEFA-B263-4D9A-BE45-2044AB93CB82}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeePassLibNetStd", "..\DoormatBot\KeePassLib\KeePassLibNetStd.csproj", "{66A8BF95-8798-47CF-8785-6134F6B771C4}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoormatCore", "..\Doormat\Doormat\Doormat\DoormatCore.csproj", "{35104049-E7EF-4642-B139-B0033C1040B2}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KryGamesBot.MAUI.Blazor", "KryGamesBot.MAUI.Blazor\KryGamesBot.MAUI.Blazor.csproj", "{3D93AFE0-03C4-4EDB-A338-B89F355EE348}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KryGamesBot.Avalonia", "KryGamesBot.Avalonia\KryGamesBot.Avalonia.csproj", "{A5B3AC98-FD45-405C-862E-1125D219F98F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platforms", "Platforms", "{8F9C7DF7-1122-4418-B30A-416B9F531FE5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KryGamesBot.Android", "WebTest\WebTest.Android\KryGamesBot.Android.csproj", "{92A42846-B116-4C1F-BFD9-06F22C02A23A}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KryGamesBot.Browser", "WebTest\WebTest.Browser\KryGamesBot.Browser.csproj", "{5BB87A59-6779-4CF0-A014-5B982E9201D8}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KryGamesBot.Desktop", "WebTest\WebTest.Desktop\KryGamesBot.Desktop.csproj", "{E39202E4-5FB0-42D4-A1CB-C60B6D0D6434}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KryGamesBot.iOS", "WebTest\WebTest.iOS\KryGamesBot.iOS.csproj", "{10E7A3F9-B7A3-4FEE-A207-7E0E50BED67C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,65 +19,28 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CFF72DDF-072E-4F30-A099-0CE16DCB29EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CFF72DDF-072E-4F30-A099-0CE16DCB29EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CFF72DDF-072E-4F30-A099-0CE16DCB29EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CFF72DDF-072E-4F30-A099-0CE16DCB29EE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BEF60D35-44BD-4164-B443-A786AFD2F438}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BEF60D35-44BD-4164-B443-A786AFD2F438}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BEF60D35-44BD-4164-B443-A786AFD2F438}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BEF60D35-44BD-4164-B443-A786AFD2F438}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F93DAEFA-B263-4D9A-BE45-2044AB93CB82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F93DAEFA-B263-4D9A-BE45-2044AB93CB82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F93DAEFA-B263-4D9A-BE45-2044AB93CB82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F93DAEFA-B263-4D9A-BE45-2044AB93CB82}.Release|Any CPU.Build.0 = Release|Any CPU
-		{66A8BF95-8798-47CF-8785-6134F6B771C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{66A8BF95-8798-47CF-8785-6134F6B771C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{66A8BF95-8798-47CF-8785-6134F6B771C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{66A8BF95-8798-47CF-8785-6134F6B771C4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{35104049-E7EF-4642-B139-B0033C1040B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{35104049-E7EF-4642-B139-B0033C1040B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35104049-E7EF-4642-B139-B0033C1040B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35104049-E7EF-4642-B139-B0033C1040B2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{92A42846-B116-4C1F-BFD9-06F22C02A23A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{92A42846-B116-4C1F-BFD9-06F22C02A23A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{92A42846-B116-4C1F-BFD9-06F22C02A23A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{92A42846-B116-4C1F-BFD9-06F22C02A23A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{92A42846-B116-4C1F-BFD9-06F22C02A23A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{92A42846-B116-4C1F-BFD9-06F22C02A23A}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{5BB87A59-6779-4CF0-A014-5B982E9201D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5BB87A59-6779-4CF0-A014-5B982E9201D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5BB87A59-6779-4CF0-A014-5B982E9201D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5BB87A59-6779-4CF0-A014-5B982E9201D8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E39202E4-5FB0-42D4-A1CB-C60B6D0D6434}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E39202E4-5FB0-42D4-A1CB-C60B6D0D6434}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E39202E4-5FB0-42D4-A1CB-C60B6D0D6434}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E39202E4-5FB0-42D4-A1CB-C60B6D0D6434}.Release|Any CPU.Build.0 = Release|Any CPU
-		{10E7A3F9-B7A3-4FEE-A207-7E0E50BED67C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{10E7A3F9-B7A3-4FEE-A207-7E0E50BED67C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{10E7A3F9-B7A3-4FEE-A207-7E0E50BED67C}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{10E7A3F9-B7A3-4FEE-A207-7E0E50BED67C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{10E7A3F9-B7A3-4FEE-A207-7E0E50BED67C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{10E7A3F9-B7A3-4FEE-A207-7E0E50BED67C}.Release|Any CPU.Deploy.0 = Release|Any CPU																		
-		{3D93AFE0-03C4-4EDB-A338-B89F355EE348}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3D93AFE0-03C4-4EDB-A338-B89F355EE348}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3D93AFE0-03C4-4EDB-A338-B89F355EE348}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{3D93AFE0-03C4-4EDB-A338-B89F355EE348}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3D93AFE0-03C4-4EDB-A338-B89F355EE348}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3D93AFE0-03C4-4EDB-A338-B89F355EE348}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{A5B3AC98-FD45-405C-862E-1125D219F98F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A5B3AC98-FD45-405C-862E-1125D219F98F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5B3AC98-FD45-405C-862E-1125D219F98F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5B3AC98-FD45-405C-862E-1125D219F98F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E39202E4-5FB0-42D4-A1CB-C60B6D0D6434}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E39202E4-5FB0-42D4-A1CB-C60B6D0D6434}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E39202E4-5FB0-42D4-A1CB-C60B6D0D6434}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E39202E4-5FB0-42D4-A1CB-C60B6D0D6434}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{92A42846-B116-4C1F-BFD9-06F22C02A23A} = {8F9C7DF7-1122-4418-B30A-416B9F531FE5}
-		{5BB87A59-6779-4CF0-A014-5B982E9201D8} = {8F9C7DF7-1122-4418-B30A-416B9F531FE5}
 		{E39202E4-5FB0-42D4-A1CB-C60B6D0D6434} = {8F9C7DF7-1122-4418-B30A-416B9F531FE5}
-		{10E7A3F9-B7A3-4FEE-A207-7E0E50BED67C} = {8F9C7DF7-1122-4418-B30A-416B9F531FE5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7387205E-CA7B-4592-8D90-8FBF3CF2F584}
