@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KryGamesBot.Ava.ViewModels
+namespace KryGamesBot.Ava.ViewModels.Common
 {
-    public class MainViewModel:ViewModelBase
+    internal class AdvancedViewModel:ViewModelBase
     {
-
     }
 }

@@ -1,7 +1,6 @@
 ﻿using DevExpress.Xpf.LayoutControl;
 using DoormatBot.Helpers;
 using KryGamesBotControls.Common.DBSetup;
-using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

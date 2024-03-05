@@ -1,25 +1,44 @@
 ﻿using DoormatBot;
-using ExCSS;
-using KryGamesBot.Avalonia.ViewModels.Common;
+using KryGamesBot.Ava.Classes.BetsPanel;
+using KryGamesBot.Ava.ViewModels.Common;
+using KryGamesBot.Ava.ViewModels.Games.Dice;
 using ReactiveUI;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using static IronPython.Modules._ast;
 
-namespace KryGamesBot.Avalonia.ViewModels
+namespace KryGamesBot.Ava.ViewModels
 {
-    public class InstanceViewModel
+    public class InstanceViewModel:ViewModelBase
     {
         public SelectSiteViewModel SelectSite { get; set; }
         public bool IsSelectSiteViewVisible { get; set; }
         Doormat botIns = new Doormat();
         public Interaction<LoginViewModel, LoginViewModel?> ShowDialog { get; }
+        private bool showSites=true;
+        public ProfitChartViewModel ChartData { get; set; }
+        public SiteStatsViewModel SiteStatsData { get; set; }
+        public SessionStatsViewModel SessionStatsData { get; set; }
 
+        iLiveBet _liveBets = new DiceLiveBetViewModel();
+        public iLiveBet LiveBets { get => _liveBets; set { _liveBets = value; this.RaisePropertyChanged(); } }
+
+        iPlaceBet _placeBetVM = new DicePlaceBetViewModel();
+        public iPlaceBet PlaceBetVM { get=> _placeBetVM; set { _placeBetVM = value; this.RaisePropertyChanged(); } } 
+
+        public bool ShowSites
+        {
+            get { return showSites; }
+            set { showSites = value; this.RaisePropertyChanged(); this.RaisePropertyChanged(nameof(ShowBot)); }
+        }
+
+       
+        public bool ShowBot
+        {
+            get { return !ShowSites; }
+            
+        }
+        
 
         public InstanceViewModel()
         {
@@ -27,6 +46,24 @@ namespace KryGamesBot.Avalonia.ViewModels
             SelectSite.SelectedSiteChanged += SelectSite_SelectedSiteChanged;
             IsSelectSiteViewVisible = true;
             ShowDialog = new Interaction<LoginViewModel, LoginViewModel?>();
+            botIns.OnGameChanged += BotIns_OnGameChanged;
+        }
+
+        private void BotIns_OnGameChanged(object? sender, EventArgs e)
+        {
+            switch (botIns.CurrentGame)
+            {
+                case DoormatCore.Games.Games.Crash:
+                case DoormatCore.Games.Games.Roulette:
+                case DoormatCore.Games.Games.Plinko:
+                    break;
+                case
+                    DoormatCore.Games.Games.Dice:
+                    PlaceBetVM = new DicePlaceBetViewModel();
+                    LiveBets = new DiceLiveBetViewModel();
+                        break;
+
+            }
         }
 
         private void SelectSite_SelectedSiteChanged(object? sender, DoormatCore.Helpers.SitesList e)
@@ -36,9 +73,17 @@ namespace KryGamesBot.Avalonia.ViewModels
 
         async Task ShowLogin()
         {
-            var store = new LoginViewModel();
-
+            var store = new LoginViewModel(botIns.CurrentSite);
+            store.LoginFinished = LoginFinished;
             var result = await ShowDialog.Handle(store);
+        }
+
+        private void LoginFinished(bool ChangeScreens)
+        {
+            if (ChangeScreens)
+            {
+                ShowSites = false;
+            }
         }
 
         void SiteChanged(DoormatCore.Sites.BaseSite NewSite, string currency, string game)
@@ -49,7 +94,7 @@ namespace KryGamesBot.Avalonia.ViewModels
             object curGame = DoormatCore.Games.Games.Dice;
             if (game != null && Enum.TryParse(typeof(DoormatCore.Games.Games), game, out curGame) && Array.IndexOf(botIns.CurrentSite.SupportedGames, (DoormatCore.Games.Games)curGame) >= 0)
                 botIns.CurrentGame = (DoormatCore.Games.Games)curGame;
-            ShowLogin().Wait();
+            ShowLogin();//.Wait();
             /*LoginControl.CurrentSite = botIns.CurrentSite;
             lciSelectSite1.Visibility = Visibility.Collapsed;
             lciLoginControl.Visibility = Visibility.Visible;

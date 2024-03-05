@@ -1,0 +1,35 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:vm="using:KryGamesBot.Ava.ViewModels.Common"
+			       x:DataType="vm:SiteStatsViewModel"
+             x:Class="KryGamesBot.Ava.Views.Common.SiteStatsView" >
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="150"/>
+      <ColumnDefinition/>
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition />
+      <RowDefinition />
+      <RowDefinition />
+      <RowDefinition />
+      <RowDefinition />
+      <RowDefinition />
+    </Grid.RowDefinitions>
+    <TextBlock Grid.Column="0" Grid.Row="0">Balance</TextBlock>
+    <TextBlock Grid.Column="0" Grid.Row="01">Profit</TextBlock>
+    <TextBlock Grid.Column="0" Grid.Row="02">Wagered</TextBlock>
+    <TextBlock Grid.Column="0" Grid.Row="03">Wins</TextBlock>
+    <TextBlock Grid.Column="0" Grid.Row="04">Losses</TextBlock>
+    <TextBlock Grid.Column="0" Grid.Row="05">Total Bets</TextBlock>
+    <TextBlock Grid.Column="1" Grid.Row="0"  Text="{Binding Stats.Balance}"></TextBlock>
+    <TextBlock Grid.Column="1" Grid.Row="01" Text="{Binding Stats.Profit}"></TextBlock>
+    <TextBlock Grid.Column="1" Grid.Row="02" Text="{Binding Stats.Wagered}"></TextBlock>
+    <TextBlock Grid.Column="1" Grid.Row="03" Text="{Binding Stats.Wins}"></TextBlock>
+    <TextBlock Grid.Column="1" Grid.Row="04" Text="{Binding Stats.Losses}"></TextBlock>
+    <TextBlock Grid.Column="1" Grid.Row="05" Text="{Binding Stats.Bets}"></TextBlock>
+  </Grid>
+</UserControl>

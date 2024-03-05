@@ -1,0 +1,104 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:vm="using:KryGamesBot.Ava.ViewModels.Common"
+			       x:DataType="vm:SessionStatsViewModel"
+             x:Class="KryGamesBot.Ava.Views.Common.SessionStatsView">
+  <TabControl>
+    <TabItem Header="Basic">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Column="0" Grid.Row="0" Text="Time Running" />
+        <TextBlock Grid.Column="0" Grid.Row="1" Text="Profit" />
+        <TextBlock Grid.Column="0" Grid.Row="2" Text="Wagered" />
+        <TextBlock Grid.Column="0" Grid.Row="3" Text="Bets" />
+        <TextBlock Grid.Column="0" Grid.Row="4" Text="Wins" />
+        <TextBlock Grid.Column="0" Grid.Row="5" Text="Losses" />
+        <TextBlock Grid.Column="0" Grid.Row="6" Text="Best streak" />
+        <TextBlock Grid.Column="0" Grid.Row="7" Text="Worst streak" />
+        <TextBlock Grid.Column="0" Grid.Row="8" Text="Profit/hour" />
+        <TextBlock Grid.Column="0" Grid.Row="9" Text="Profit/day" />
+        <TextBlock Grid.Column="0" Grid.Row="10" Text="Current streak" />
+        <TextBlock Grid.Column="0" Grid.Row="11" Text="Avg profit/bet" />
+        <TextBlock Grid.Column="0" Grid.Row="12" Text="Luck" />
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="0" Text="{Binding Stats.RunningTimeSpan}" />
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="1"  Text="{Binding Stats.Profit}" />
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="2"  Text="{Binding Stats.Wagered}" />
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="3"  Text="{Binding Stats.Bets}" />
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="4"  Text="{Binding Stats.Wins}" />
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="5"  Text="{Binding Stats.Losses}" />
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="6"  Text="{Binding Stats.BestStreak}" />
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="7"  Text="{Binding Stats.WorstStreak}" />
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="8"  Text="{Binding Stats.ProfitPerHour}" />
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="9"  Text="{Binding Stats.ProfitPer24Hour}" />
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="10" Text="{Binding Stats.CurrentStreak}" />
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="11" Text="{Binding Stats.ProfitPerBet}" />
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="12" Text="{Binding Stats.Luck}" />
+      </Grid>
+    </TabItem>
+    <TabItem Header="More">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Column="0" Grid.Row="0" Text="Avg streak" />
+        <TextBlock Grid.Column="0" Grid.Row="1" Text="Avg win streak" />
+        <TextBlock Grid.Column="0" Grid.Row="2" Text="Avg Lose streak" />
+        <TextBlock Grid.Column="0" Grid.Row="3" Text="3 best streaks" />
+        <TextBlock Grid.Column="0" Grid.Row="6" Text="3 worst streak" />
+        <TextBlock Grid.Column="0" Grid.Row="9" Text="Largest bet" />
+        <TextBlock Grid.Column="0" Grid.Row="10" Text="Largest win" />
+        <TextBlock Grid.Column="0" Grid.Row="11" Text="largest loss" />
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="0"  Text="{Binding Stats.AvgStreak}" />
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="1"  Text="{Binding Stats.AvgWin}" />
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="2"  Text="{Binding Stats.AvgLoss}" />
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="3"  Text="{Binding Stats.BestStreak}" />
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="4"  Text="{Binding Stats.BestStreak2}" />
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="5"  Text="{Binding Stats.BestStreak3}" />
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="6"  Text="{Binding Stats.WorstStreak}" />
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="7"  Text="{Binding Stats.WorstStreak2}" />
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="8"  Text="{Binding Stats.WorstStreak3}" />
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="9"  Text="{Binding Stats.LargestBet}" />
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="10" Text="{Binding Stats.LargestWin}" />
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="11" Text="{Binding Stats.LargestLoss}" />
+      </Grid>
+    </TabItem>
+    
+  </TabControl>
+</UserControl>

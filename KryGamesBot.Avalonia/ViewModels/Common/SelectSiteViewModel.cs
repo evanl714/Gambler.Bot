@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using static IronPython.Modules._ast;
 
-namespace KryGamesBot.Avalonia.ViewModels.Common
+namespace KryGamesBot.Ava.ViewModels.Common
 {
     public class SelectSiteViewModel:ViewModelBase
     {
@@ -80,7 +80,7 @@ namespace KryGamesBot.Avalonia.ViewModels.Common
         public AvaSitesList(SitesList site)
         {
             Site = site;
-            image = new Bitmap(AssetLoader.Open(new Uri($"avares://KryGamesBot.Avalonia/Assets/Images/Sites/{Site.Name.ToLower()}.png")));
+            image = new Bitmap(AssetLoader.Open(new Uri($"avares://KryGamesBot.Ava/Assets/Images/Sites/{Site.Name.ToLower()}.png")));
             Currencies = site.Currencies.Select(x => new AvaCurrency (x)).ToList();
             Games = site.SupportedGames.Select(x => new AvaGame(x.ToString())).ToList();
         }
@@ -106,7 +106,7 @@ namespace KryGamesBot.Avalonia.ViewModels.Common
             Currency = currency;
             Image = $"Assets/Images/Currencies/{Currency.ToLower()}.svg";
             /*Image = new SKSvg();
-            Uri image = new Uri($"avares://KryGamesBot.Avalonia/Assets/Images/Currencies/{Currency.ToLower()}.svg");
+            Uri image = new Uri($"avares://KryGamesBot.Ava/Assets/Images/Currencies/{Currency.ToLower()}.svg");
             if (AssetLoader.Exists(image))
             {
                 var asset = AssetLoader.Open(image);
@@ -129,7 +129,7 @@ namespace KryGamesBot.Avalonia.ViewModels.Common
             Game = game;
             Image = $"Assets/Images/Games/{Game.ToLower()}.svg";
             /*Image = new SKSvg();
-            Uri image = new Uri($"avares://KryGamesBot.Avalonia/Assets/Images/Currencies/{Currency.ToLower()}.svg");
+            Uri image = new Uri($"avares://KryGamesBot.Ava/Assets/Images/Currencies/{Currency.ToLower()}.svg");
             if (AssetLoader.Exists(image))
             {
                 var asset = AssetLoader.Open(image);

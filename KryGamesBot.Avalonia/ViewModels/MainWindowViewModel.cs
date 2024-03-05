@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace KryGamesBot.Avalonia.ViewModels
+namespace KryGamesBot.Ava.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {

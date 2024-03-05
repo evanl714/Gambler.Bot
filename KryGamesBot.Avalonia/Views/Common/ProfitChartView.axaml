@@ -3,16 +3,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="KryGamesBot.Ava.Views.MainView"
-			 xmlns:views="using:KryGamesBot.Ava.Views">
-
-	<Grid>
-		<Grid.RowDefinitions>			
-			<RowDefinition Height="*"></RowDefinition>
-		</Grid.RowDefinitions>
-		<WebView x:Name="wvBypass" Grid.Row="0" IsVisible="false" />
-
-		<views:InstanceView Grid.Row="0"/>
-	
-</Grid>
+             xmlns:vm="using:KryGamesBot.Ava.ViewModels.Common"
+			       x:DataType="vm:ProfitChartViewModel"
+             x:Class="KryGamesBot.Ava.Views.Common.ProfitChartView" 
+             xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia">
+  <lvc:CartesianChart
+        Series="{Binding Series}"
+        Title="{Binding Title}">
+  </lvc:CartesianChart>
 </UserControl>

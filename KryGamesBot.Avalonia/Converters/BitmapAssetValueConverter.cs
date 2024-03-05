@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 
-namespace KryGamesBot.Avalonia.Converters
+namespace KryGamesBot.Ava.Converters
 {
     public class BitmapAssetValueConverter : IValueConverter
     {

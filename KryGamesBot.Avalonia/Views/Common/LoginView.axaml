@@ -3,22 +3,38 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="KryGamesBot.Avalonia.Views.Common.LoginView"
-			 xmlns:vm="using:KryGamesBot.Avalonia.ViewModels.Common"
+             x:Class="KryGamesBot.Ava.Views.Common.LoginView"
+			 xmlns:vm="using:KryGamesBot.Ava.ViewModels.Common"
 			 x:DataType="vm:LoginViewModel"
+        xmlns:login="using:DoormatCore.Sites"
+        SizeToContent="WidthAndHeight"
+        Title="{Binding Title}" WindowStartupLocation="CenterOwner"
 			 >
 
-	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition />
-		</Grid.RowDefinitions>
-		<StackPanel x:Name="stkLoginControls" Grid.Row="0">
+  <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+    <ItemsControl IsEnabled="{Binding CanLogIn}"  Width="300" Padding="5,0,0,0" Margin="5" Grid.Column="2" ItemsSource="{Binding LoginParams}" VerticalAlignment="Center" HorizontalAlignment="Center">
+      
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="{Binding Param.Name}"> </TextBlock>
+            <TextBox Grid.Column="1" Text="{Binding Value}"></TextBox>
+          </Grid>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+   
+    <TextBlock HorizontalAlignment="Center" IsVisible="{Binding LoggingIn}" Text="Logging in..."/>
 
-		</StackPanel>
-		<StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+    <TextBlock HorizontalAlignment="Center"  IsVisible="{Binding ShowError}" Foreground="Red" Text="Failed to log in"/>
+    <StackPanel  Orientation="Horizontal" HorizontalAlignment="Center" IsEnabled="{Binding CanLogIn}">
 			<Button Margin="5" Content="Login" Command="{Binding LoginCommand}" />
 			<Button Margin="5" Content="Cancel" Command="{Binding CancelCommand}" />
 			<Button Margin="5" Content="Skip" Command="{Binding SkipCommand}" />
 		</StackPanel>
-	</Grid>
+  </StackPanel>
 </Window>

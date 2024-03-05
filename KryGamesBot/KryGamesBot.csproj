@@ -94,8 +94,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DevExpress.Wpf.Controls" Version="23.1.5" />
-    <PackageReference Include="DevExpress.Wpf.Docking" Version="23.1.5" />
+    <PackageReference Include="DevExpress.Wpf.Controls" Version="23.2.4" />
+    <PackageReference Include="DevExpress.Wpf.Docking" Version="23.2.4" />
     <PackageReference Include="Microsoft.Packaging.Tools.Trimming" Version="1.1.0-preview1-25818-01" />
   </ItemGroup>
 

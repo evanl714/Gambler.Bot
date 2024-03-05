@@ -5,7 +5,7 @@ using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 
-namespace KryGamesBot.Avalonia.Views.Common;
+namespace KryGamesBot.Ava.Views.Common;
 
 public partial class SelectSiteView : UserControl
 {

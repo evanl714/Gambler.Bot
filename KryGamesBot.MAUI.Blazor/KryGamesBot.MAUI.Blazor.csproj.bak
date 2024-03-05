@@ -115,8 +115,8 @@
     <ItemGroup>
         <PackageReference Include="BlazorMonaco" Version="3.1.0" />
         <PackageReference Include="CommunityToolkit.Maui" Version="6.0.0" />
-        <PackageReference Include="DevExpress.Blazor" Version="23.2.4" />
-        <PackageReference Include="DevExpress.Blazor.Themes" Version="23.2.4" />
+        <PackageReference Include="DevExpress.Blazor" Version="23.1.5" />
+        <PackageReference Include="DevExpress.Blazor.Themes" Version="23.1.5" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
     </ItemGroup>
 

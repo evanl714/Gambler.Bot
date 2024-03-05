@@ -15,7 +15,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KryGamesBot.Avalonia.Views;
+namespace KryGamesBot.Ava.Views;
 
 public partial class MainView : UserControl
 {

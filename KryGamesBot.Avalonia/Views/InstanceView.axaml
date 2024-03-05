@@ -3,15 +3,67 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="KryGamesBot.Avalonia.Views.InstanceView" 
+             x:Class="KryGamesBot.Ava.Views.InstanceView" 
 			 x:DataType="vm:InstanceViewModel"
-			 xmlns:vm="using:KryGamesBot.Avalonia.ViewModels"
-			 xmlns:common="using:KryGamesBot.Avalonia.Views.Common"
+			 xmlns:vm="using:KryGamesBot.Ava.ViewModels"
+             xmlns:local="using:KryGamesBot.Ava.Views"
+			 xmlns:common="using:KryGamesBot.Ava.Views.Common" xmlns:dice="using:KryGamesBot.Ava.Views.Games.Dice"
+             xmlns:diceVM="using:KryGamesBot.Ava.ViewModels.Games.Dice"
+             Tag="{Binding}"
 			 >
 	<UserControl.DataContext>
 		<vm:InstanceViewModel/>
 	</UserControl.DataContext>
 	<Grid>
-		<common:SelectSiteView DataContext="{Binding SelectSite}"   />
+		<common:SelectSiteView DataContext="{Binding SelectSite}" IsVisible="{Binding $parent[local:InstanceView].((vm:InstanceViewModel)Tag).ShowSites}"  />
+    <Grid IsVisible="{Binding ShowBot}">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"></ColumnDefinition>
+        <ColumnDefinition Width="5"></ColumnDefinition>
+        <ColumnDefinition Width="4*"></ColumnDefinition>
+        <ColumnDefinition Width="5"></ColumnDefinition>
+        <ColumnDefinition Width="2*"></ColumnDefinition>
+      </Grid.ColumnDefinitions>
+      <GridSplitter Grid.Column="1" Background="DarkGray" ResizeDirection="Columns"/>
+      <GridSplitter Grid.Column="3" Background="DarkGray" ResizeDirection="Columns"/>
+      <StackPanel Grid.Column="0">
+        <common:SiteStatsView Grid.Row="0" DataContext="{Binding SiteStatsData}"/>
+        <common:SessionStatsView Grid.Row="2"/>
+      </StackPanel>
+      <Grid Grid.Column="2">
+        <Grid.RowDefinitions>
+          <RowDefinition/>
+          <RowDefinition Height="4"/>
+          <RowDefinition/>
+        </Grid.RowDefinitions>
+        <common:ProfitChartView Grid.Row="0" DataContext="{Binding ChartData}"/>
+        <GridSplitter Grid.Row="1" Background="DarkGray" ResizeDirection="Rows"/>
+        <ContentControl Grid.Row="2" Content="{Binding LiveBets}">
+          <ContentControl.DataTemplates>
+            <DataTemplate DataType="diceVM:DiceLiveBetViewModel">
+              <dice:DiceLiveBetView/>
+            </DataTemplate>
+
+          </ContentControl.DataTemplates>
+        </ContentControl>
+        
+      </Grid>
+      <Grid Grid.Column="4">
+        <TabControl>
+          <TabItem Header="Manual">
+            <ContentControl Content="{Binding PlaceBetVM}">
+              <ContentControl.DataTemplates>
+                <DataTemplate DataType="diceVM:DicePlaceBetViewModel">
+                  <dice:DiceLiveBetView/>
+                </DataTemplate>
+
+              </ContentControl.DataTemplates>
+            </ContentControl>
+          </TabItem>
+        </TabControl>
+        <TabItem Header="Strategy">
+         </TabItem>
+      </Grid>
+    </Grid>
 	</Grid>
 </UserControl>

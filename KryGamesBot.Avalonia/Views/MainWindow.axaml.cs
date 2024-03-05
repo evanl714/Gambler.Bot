@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace KryGamesBot.Avalonia.Views
+namespace KryGamesBot.Ava.Views
 {
     public partial class MainWindow : Window
     {

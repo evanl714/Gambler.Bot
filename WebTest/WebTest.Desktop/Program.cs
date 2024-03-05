@@ -1,7 +1,7 @@
 ﻿using System;
 using Avalonia;
 using Avalonia.ReactiveUI;
-using KryGamesBot.Avalonia;
+using KryGamesBot.Ava;
 using Avalonia.WebView.Desktop;
 
 namespace KryGamesBot.Desktop;

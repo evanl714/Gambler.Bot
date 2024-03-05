@@ -1,8 +1,8 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="KryGamesBot.Avalonia.App"
-             xmlns:local="using:KryGamesBot.Avalonia"
-			 xmlns:converters="using:KryGamesBot.Avalonia.Converters"
+             x:Class="KryGamesBot.Ava.App"
+             xmlns:local="using:KryGamesBot.Ava"
+			 xmlns:converters="using:KryGamesBot.Ava.Converters"
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 

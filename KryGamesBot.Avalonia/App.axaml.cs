@@ -1,11 +1,11 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using KryGamesBot.Avalonia.ViewModels;
-using KryGamesBot.Avalonia.Views;
+using KryGamesBot.Ava.ViewModels;
+using KryGamesBot.Ava.Views;
 using AvaloniaWebView;
 
-namespace KryGamesBot.Avalonia
+namespace KryGamesBot.Ava
 {
     public partial class App : Application
     {

@@ -111,11 +111,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DevExpress.Charts" Version="23.1.5" />
-    <PackageReference Include="DevExpress.Wpf.Charts" Version="23.1.5" />
-    <PackageReference Include="DevExpress.Wpf.Dialogs" Version="23.1.5" />
-    <PackageReference Include="DevExpress.Wpf.Grid" Version="23.1.5" />
-    <PackageReference Include="DevExpress.Wpf.Themes.All" Version="23.1.5" />
+    <PackageReference Include="DevExpress.Charts" Version="23.2.4" />
+    <PackageReference Include="DevExpress.Wpf.Charts" Version="23.2.4" />
+    <PackageReference Include="DevExpress.Wpf.Dialogs" Version="23.2.4" />
+    <PackageReference Include="DevExpress.Wpf.Grid" Version="23.2.4" />
+    <PackageReference Include="DevExpress.Wpf.Themes.All" Version="23.2.4" />
   </ItemGroup>
 
   <ItemGroup>

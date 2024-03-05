@@ -1,9 +1,9 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using KryGamesBot.Avalonia.ViewModels;
+using KryGamesBot.Ava.ViewModels;
 using System;
 
-namespace KryGamesBot.Avalonia
+namespace KryGamesBot.Ava
 {
     public class ViewLocator : IDataTemplate
     {

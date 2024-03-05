@@ -3,8 +3,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="KryGamesBot.Avalonia.Views.Common.SelectSiteView"
-			 xmlns:vm="using:KryGamesBot.Avalonia.ViewModels.Common"
+             x:Class="KryGamesBot.Ava.Views.Common.SelectSiteView"
+			 xmlns:vm="using:KryGamesBot.Ava.ViewModels.Common"
 			 x:DataType="vm:SelectSiteViewModel"
 			 xmlns:bot="using:DoormatCore.Helpers"
 			 >
