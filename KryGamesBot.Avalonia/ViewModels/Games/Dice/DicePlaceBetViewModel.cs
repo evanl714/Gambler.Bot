@@ -15,7 +15,7 @@ namespace KryGamesBot.Ava.ViewModels.Games.Dice
         public ICommand BetHighCommand { get; }
         public ICommand BetLowCommand { get; }
 
-        private decimal amount;
+        private decimal amount=0.00000100m;
 
         public decimal Amount
         {
@@ -23,7 +23,7 @@ namespace KryGamesBot.Ava.ViewModels.Games.Dice
             set { amount = value; this.RaisePropertyChanged(nameof(Amount)); Calculate(nameof(Amount)); }
         }
 
-        private decimal chance;
+        private decimal chance=49.5m;
 
         public decimal Chance
         {
@@ -31,7 +31,7 @@ namespace KryGamesBot.Ava.ViewModels.Games.Dice
             set { chance = value; this.RaisePropertyChanged(nameof(Chance)); Calculate(nameof(Chance)); }
         }
 
-        private decimal payout;
+        private decimal payout=2;
 
         public decimal Payout
         {
@@ -39,7 +39,7 @@ namespace KryGamesBot.Ava.ViewModels.Games.Dice
             set { payout = value; this.RaisePropertyChanged(nameof(Payout)); Calculate(nameof(Payout)); }
         }
 
-        private decimal profit;
+        private decimal profit=0.00000100m;
 
         public decimal Profit
         {
@@ -54,6 +54,7 @@ namespace KryGamesBot.Ava.ViewModels.Games.Dice
         {
             BetHighCommand = ReactiveCommand.Create(BetHigh);
             BetLowCommand = ReactiveCommand.Create(BetLow);
+            Calculate(nameof(Amount));
         }
 
         void Calculate(string s)
@@ -88,6 +89,16 @@ namespace KryGamesBot.Ava.ViewModels.Games.Dice
                     break;
             }
         }
+
+        private bool showToggle=false;
+
+        public bool ShowToggle
+        {
+            get { return showToggle; }
+            set { showToggle = value; this.RaisePropertyChanged();this.RaisePropertyChanged(nameof(ShowButton)); }
+        }
+
+        public bool ShowButton { get=>!ShowToggle; }
 
         public event EventHandler<PlaceBetEventArgs> PlaceBet;
 

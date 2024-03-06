@@ -9,7 +9,8 @@
              xmlns:local="using:KryGamesBot.Ava.Views"
 			 xmlns:common="using:KryGamesBot.Ava.Views.Common" xmlns:dice="using:KryGamesBot.Ava.Views.Games.Dice"
              xmlns:diceVM="using:KryGamesBot.Ava.ViewModels.Games.Dice"
-             Tag="{Binding}"
+             xmlns:stratVM="using:KryGamesBot.Ava.ViewModels.Strategies"xmlns:strat="using:KryGamesBot.Ava.Views.Games.Strategies.Martingale"
+xmlns:dalembert="using:KryGamesBot.Ava.Views.Games.Strategies.DAlembert" xmlns:fibonacci="using:KryGamesBot.Ava.Views.Games.Strategies.Fibonacci"            Tag="{Binding}"
 			 >
 	<UserControl.DataContext>
 		<vm:InstanceViewModel/>
@@ -48,10 +49,33 @@
         </ContentControl>
         
       </Grid>
-      <Grid Grid.Column="4">
+      <DockPanel Grid.Column="4" >
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
+          <Button Margin="5">Start</Button>
+          <Button Margin="5">Pause</Button>
+          <Button Margin="5">Stop</Button>
+          <Button Margin="5">Stop On Win</Button>
+        </StackPanel>
         <TabControl>
           <TabItem Header="Strategy">
-            <TextBlock>coming soon</TextBlock>
+            <DockPanel>
+            <ComboBox DockPanel.Dock="Top" ItemsSource="{Binding BotInstance.Strategies.Keys}" SelectedItem="{Binding SelectedStrategy}" >
+              
+            </ComboBox>
+              <ContentControl Content="{Binding StrategyVM}" VerticalAlignment="Stretch">
+                <ContentControl.DataTemplates>
+                  <DataTemplate DataType="stratVM:MartingaleViewModel">
+                    <strat:MartingaleView/>
+                  </DataTemplate>
+                  <DataTemplate DataType="stratVM:DAlembertViewModel">
+                    <dalembert:DAlembertView/>
+                  </DataTemplate>
+                  <DataTemplate DataType="stratVM:FibonacciViewModel">
+                    <fibonacci:FibonacciView/>
+                  </DataTemplate>
+                </ContentControl.DataTemplates>
+              </ContentControl>
+            </DockPanel>
           </TabItem>
           <TabItem Header="Reset Settings">
             <common:ResetSettingsView DataContext="{Binding ResetSettingsVM}"/>
@@ -78,7 +102,7 @@
           </TabItem>
         </TabControl>
         
-      </Grid>
+      </DockPanel>
     </Grid>
 	</Grid>
 </UserControl>

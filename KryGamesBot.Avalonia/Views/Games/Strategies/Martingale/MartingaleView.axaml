@@ -1,0 +1,118 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"xmlns:dice="using:KryGamesBot.Ava.Views.Games.Dice"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="450"
+             x:Class="KryGamesBot.Ava.Views.Games.Strategies.Martingale.MartingaleView"
+             xmlns:vm="using:KryGamesBot.Ava.ViewModels.Strategies"
+             x:DataType="vm:MartingaleViewModel"
+             xmlns:diceVM="using:KryGamesBot.Ava.ViewModels.Games.Dice"
+             >
+  <ScrollViewer>
+  <StackPanel Orientation="Vertical">
+    <ContentControl Content="{Binding PlaceBetVM}">
+      <ContentControl.DataTemplates>
+        <DataTemplate DataType="dice:DicePlaceBetView">
+          <dice:DicePlaceBetView/>
+        </DataTemplate>
+      </ContentControl.DataTemplates>
+    </ContentControl>
+  <TabControl>
+      <TabItem Header="On Loss">
+        <StackPanel Orientation="Vertical">
+        <Border Padding="3" Margin="3" BorderBrush="DarkGray" BorderThickness="1">
+          <StackPanel>
+            <Border Background="DarkGray" Margin="0,0,0,5">
+              <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Margin="5" FontSize="16" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Text="Multiplier Settings" VerticalAlignment="Center"/>
+              </StackPanel>
+            </Border>
+            <Grid RowDefinitions="*,*,*,*,*,*" ColumnDefinitions="*,*">
+              <TextBlock Text="Muliplier" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+              <NumericUpDown Value="{Binding Strategy.BaseMultiplier}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" FormatString="n5"/>
+              <TextBlock Text="% Increase" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
+              <NumericUpDown Value="{Binding Strategy.BaseMultiplier}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" FormatString="p5"/>
+              <TextBlock Text="Muliply Mode" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
+              <ComboBox SelectedValue="{Binding Strategy.MultiplierMode}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch"/>
+              <TextBlock Text="Max Multiplies" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
+              <NumericUpDown Value="{Binding Strategy.MaxMultiplies}" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" FormatString="n0"/>
+              <TextBlock Text="Change after" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"/>
+              <NumericUpDown Value="{Binding Strategy.Devidecounter}" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" FormatString="n0"/>
+              <TextBlock Text="Modifier" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"/>
+              <NumericUpDown Value="{Binding Strategy.Devider}" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Stretch" FormatString="n5"/>
+            </Grid>
+          </StackPanel>
+        </Border>
+          <Grid RowDefinitions="*,*,*,*,*,*" ColumnDefinitions="*,2*,2*,2*">
+            <CheckBox IsChecked="{Binding Strategy.EnableChangeLoseStreak}" Grid.Column="0" Grid.Row="0" />
+            <TextBlock Grid.Column="1" Grid.Row="0" VerticalAlignment="Center">After</TextBlock>
+            <NumericUpDown Value="{Binding Strategy.ChangeLoseStreak}" Grid.Column="2" Grid.Row="0" Grid.ColumnSpan="2"/>
+            <TextBlock Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Center">losses in a row, change Bet to</TextBlock>
+            <NumericUpDown Value="{Binding Strategy.ChangeLoseStreakTo}" Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2"/>
+
+            <CheckBox IsChecked="{Binding Strategy.EnableChangeChanceLose}" Grid.Column="0" Grid.Row="2" />
+            <TextBlock Grid.Column="1" Grid.Row="2" VerticalAlignment="Center">After</TextBlock>
+            <NumericUpDown Value="{Binding Strategy.ChangeChanceLoseStreak}" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2"/>
+            <TextBlock Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" VerticalAlignment="Center">losses in a row, change Chance to</TextBlock>
+            <NumericUpDown Value="{Binding Strategy.ChangeChanceLoseTo}" Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="2"/>
+
+            <TextBlock Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="1" VerticalAlignment="Center">Multiply every</TextBlock>
+            <NumericUpDown Value="{Binding Strategy.StretchLoss}" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2"/>
+            <TextBlock Grid.Column="3" Grid.Row="4" Grid.ColumnSpan="1" VerticalAlignment="Center">Losses</TextBlock>
+
+            <TextBlock Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="3" VerticalAlignment="Center">Reset after first loss</TextBlock>
+            <CheckBox IsChecked="{Binding Strategy.EnableFirstResetLoss}" Grid.Column="3" Grid.Row="5"/>
+          </Grid>
+        </StackPanel>
+      </TabItem>
+    <TabItem Header="On Win">
+      <StackPanel Orientation="Vertical">
+        <Border Padding="3" Margin="3" BorderBrush="DarkGray" BorderThickness="1">
+          <StackPanel>
+            <Border Background="DarkGray" Margin="0,0,0,5">
+              <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Margin="5" FontSize="16" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Text="Multiplier Settings" VerticalAlignment="Center"/>
+              </StackPanel>
+            </Border>
+            <Grid RowDefinitions="*,*,*,*,*,*" ColumnDefinitions="*,*">
+              <TextBlock Text="Muliplier" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+              <NumericUpDown Value="{Binding Strategy.WinBaseMultiplier}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" FormatString="n5"/>
+              <TextBlock Text="% Increase" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
+              <NumericUpDown Value="{Binding Strategy.WinBaseMultiplier}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" FormatString="p5"/>
+              <TextBlock Text="Muliply Mode" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
+              <ComboBox SelectedValue="{Binding Strategy.WinMultiplierMode}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch"/>
+              <TextBlock Text="Max Multiplies" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
+              <NumericUpDown Value="{Binding Strategy.WinMaxMultiplies}" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" FormatString="n0"/>
+              <TextBlock Text="Change after" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"/>
+              <NumericUpDown Value="{Binding Strategy.WinDevideCounter}" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" FormatString="n0"/>
+              <TextBlock Text="Modifier" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"/>
+              <NumericUpDown Value="{Binding Strategy.WinDevider}" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Stretch" FormatString="n5"/>
+            </Grid>
+          </StackPanel>
+        </Border>
+        <Grid RowDefinitions="*,*,*,*,*,*" ColumnDefinitions="*,2*,2*,2*">
+          <CheckBox IsChecked="{Binding Strategy.EnableChangeWinStreak}" Grid.Column="0" Grid.Row="0" />
+          <TextBlock Grid.Column="1" Grid.Row="0" VerticalAlignment="Center">After</TextBlock>
+          <NumericUpDown Value="{Binding Strategy.ChangeWinStreak}" Grid.Column="2" Grid.Row="0" Grid.ColumnSpan="2"/>
+          <TextBlock Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Center">wins in a row, change Bet to</TextBlock>
+          <NumericUpDown Value="{Binding Strategy.ChangeWinStreakTo}" Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2"/>
+
+          <CheckBox IsChecked="{Binding Strategy.EnableChangeChanceWin}" Grid.Column="0" Grid.Row="2" />
+          <TextBlock Grid.Column="1" Grid.Row="2" VerticalAlignment="Center">After</TextBlock>
+          <NumericUpDown Value="{Binding Strategy.ChangeChanceWinStreak}" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2"/>
+          <TextBlock Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" VerticalAlignment="Center">wins in a row, change Chance to</TextBlock>
+          <NumericUpDown Value="{Binding Strategy.ChangeChanceWinTo}" Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="2"/>
+
+          <TextBlock Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="1" VerticalAlignment="Center">Multiply every</TextBlock>
+          <NumericUpDown Value="{Binding Strategy.StretchWin}" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2"/>
+          <TextBlock Grid.Column="3" Grid.Row="4" Grid.ColumnSpan="1" VerticalAlignment="Center">wins</TextBlock>
+
+          <TextBlock Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="3" VerticalAlignment="Center">Reset after first wins</TextBlock>
+          <CheckBox IsChecked="{Binding Strategy.EnableFirstResetWin}" Grid.Column="3" Grid.Row="5" />
+        </Grid>
+      </StackPanel>
+    </TabItem>
+    </TabControl>
+  </StackPanel>
+  </ScrollViewer>
+</UserControl>
