@@ -25,11 +25,11 @@
     <TextBlock Grid.Column="0" Grid.Row="03">Wins</TextBlock>
     <TextBlock Grid.Column="0" Grid.Row="04">Losses</TextBlock>
     <TextBlock Grid.Column="0" Grid.Row="05">Total Bets</TextBlock>
-    <TextBlock Grid.Column="1" Grid.Row="0"  Text="{Binding Stats.Balance}"></TextBlock>
-    <TextBlock Grid.Column="1" Grid.Row="01" Text="{Binding Stats.Profit}"></TextBlock>
-    <TextBlock Grid.Column="1" Grid.Row="02" Text="{Binding Stats.Wagered}"></TextBlock>
-    <TextBlock Grid.Column="1" Grid.Row="03" Text="{Binding Stats.Wins}"></TextBlock>
-    <TextBlock Grid.Column="1" Grid.Row="04" Text="{Binding Stats.Losses}"></TextBlock>
-    <TextBlock Grid.Column="1" Grid.Row="05" Text="{Binding Stats.Bets}"></TextBlock>
+    <SelectableTextBlock Grid.Column="1" Grid.Row="0"  Text="{Binding Stats.Balance, Mode=OneWay}"></SelectableTextBlock>
+    <SelectableTextBlock Grid.Column="1" Grid.Row="01" Text="{Binding Stats.Profit, Mode=OneWay}"></SelectableTextBlock>
+    <SelectableTextBlock Grid.Column="1" Grid.Row="02" Text="{Binding Stats.Wagered, Mode=OneWay}"></SelectableTextBlock>
+    <SelectableTextBlock Grid.Column="1" Grid.Row="03" Text="{Binding Stats.Wins, Mode=OneWay}"></SelectableTextBlock>
+    <SelectableTextBlock Grid.Column="1" Grid.Row="04" Text="{Binding Stats.Losses, Mode=OneWay}"></SelectableTextBlock>
+    <SelectableTextBlock Grid.Column="1" Grid.Row="05" Text="{Binding Stats.Bets, Mode=OneWay}"></SelectableTextBlock>
   </Grid>
 </UserControl>

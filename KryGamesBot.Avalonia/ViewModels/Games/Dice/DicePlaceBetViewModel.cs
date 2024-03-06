@@ -6,11 +6,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace KryGamesBot.Ava.ViewModels.Games.Dice
 {
     public class DicePlaceBetViewModel :ViewModelBase, iPlaceBet
     {
+        public ICommand BetHighCommand { get; }
+        public ICommand BetLowCommand { get; }
+
         private decimal amount;
 
         public decimal Amount
@@ -44,6 +48,13 @@ namespace KryGamesBot.Ava.ViewModels.Games.Dice
         }
 
         public decimal Edge { get; set; } = 1;
+
+
+        public DicePlaceBetViewModel()
+        {
+            BetHighCommand = ReactiveCommand.Create(BetHigh);
+            BetLowCommand = ReactiveCommand.Create(BetLow);
+        }
 
         void Calculate(string s)
         {
@@ -85,6 +96,13 @@ namespace KryGamesBot.Ava.ViewModels.Games.Dice
             PlaceBet?.Invoke(this, new PlaceBetEventArgs(new PlaceDiceBet(Amount, High, Chance)));
         }
 
-        
+        private void BetHigh()
+        {
+            Bet(true);
+        }
+        private void BetLow()
+        {
+            Bet(false);
+        }
     }
 }

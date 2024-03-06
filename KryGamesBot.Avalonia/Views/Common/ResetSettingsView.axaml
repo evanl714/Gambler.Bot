@@ -1,0 +1,155 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="800"
+             x:Class="KryGamesBot.Ava.Views.Common.ResetSettingsView"
+             xmlns:vm="using:KryGamesBot.Ava.ViewModels.Common"
+             x:DataType="vm:ResetSettingsViewModel"
+             >
+  <ScrollViewer>
+    <StackPanel Orientation="Vertical">
+      <TextBlock Grid.Row="0" Grid.Column="0" Text="Auto withdraw/Tip" HorizontalAlignment="Center"/>
+      <Border Padding="3" Margin="3" BorderBrush="DarkGray" BorderThickness="1">
+        <StackPanel>
+          <Border Background="DarkGray" Margin="0,0,0,5">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+              <TextBlock Padding="5" FontSize="16" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Text="General" VerticalAlignment="Center"/>
+            </StackPanel>
+          </Border>
+          <Grid RowDefinitions="*,*" ColumnDefinitions="25,125,2*,*">
+            <CheckBox IsChecked="{Binding BetSettings.EnableStopAfterBets}" Grid.Column="0" Grid.Row="0"/>
+            <TextBlock Grid.Column="1" Grid.Row="0" Text="Stop after" VerticalAlignment="Center"/>
+            <NumericUpDown Value="{Binding BetSettings.StopAfterBets}" Grid.Column="2" Grid.Row="0"/>
+            <TextBlock Text=" Bets" Grid.Column="3" Grid.Row="0" VerticalAlignment="Center"/>
+
+            <CheckBox IsChecked="{Binding BetSettings.EnableResetAfterBets}" Grid.Column="0" Grid.Row="1"/>
+            <TextBlock Grid.Column="1" Grid.Row="1" Text="Reset after" VerticalAlignment="Center"/>
+            <NumericUpDown Value="{Binding BetSettings.ResetAfterBets}" Grid.Column="2" Grid.Row="1"/>
+            <TextBlock Text=" Bets" Grid.Column="3" Grid.Row="1" VerticalAlignment="Center"/>
+          </Grid>
+        </StackPanel>
+      </Border>
+      <Border Padding="3" Margin="3" BorderBrush="DarkGray" BorderThickness="1">
+        <StackPanel>
+          <Border Background="DarkGray" Margin="0,0,0,5">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+              <TextBlock Padding="5" FontSize="16" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Text="On Loss" VerticalAlignment="Center"/>
+            </StackPanel>
+          </Border>
+          <Grid RowDefinitions="*,*,*,*,*,*,*,*,*,*" ColumnDefinitions="25,125,2*,*">
+            <CheckBox IsChecked="{Binding BetSettings.EnableResetAfterLoseStreak}" Grid.Column="0" Grid.Row="0"/>
+            <TextBlock Grid.Column="1" Grid.Row="0" Text="Stop after" VerticalAlignment="Center"/>
+            <NumericUpDown Value="{Binding BetSettings.ResetAfterLoseStreak}" Grid.Column="2" Grid.Row="0"/>
+            <TextBlock Text=" Losses in a row" Grid.Column="3" Grid.Row="0" VerticalAlignment="Center"/>
+
+            <CheckBox IsChecked="{Binding BetSettings.EnableResetAfterLosses}" Grid.Column="0" Grid.Row="1"/>
+            <TextBlock Grid.Column="1" Grid.Row="1" Text="Reset after every" VerticalAlignment="Center"/>
+            <NumericUpDown Value="{Binding BetSettings.ResetAfterLosses}" Grid.Column="2" Grid.Row="1"/>
+            <TextBlock Text=" Losses" Grid.Column="3" Grid.Row="1" VerticalAlignment="Center"/>
+
+            <CheckBox IsChecked="{Binding BetSettings.EnableResetAfterBtcStreakLoss}" Grid.Column="0" Grid.Row="2"/>
+            <TextBlock Grid.Column="1" Grid.Row="2" Text="Reset after" VerticalAlignment="Center"/>
+            <NumericUpDown Value="{Binding BetSettings.ResetAfterBtcStreakLoss}" Grid.Column="2" Grid.Row="2"/>
+            <TextBlock Text=" Value lost in a row" Grid.Column="3" Grid.Row="2" VerticalAlignment="Center"/>
+
+            <CheckBox IsChecked="{Binding BetSettings.EnableResetAfterBtcLoss}" Grid.Column="0" Grid.Row="3"/>
+            <TextBlock Grid.Column="1" Grid.Row="3" Text="Reset after every" VerticalAlignment="Center"/>
+            <NumericUpDown Value="{Binding BetSettings.ResetAfterBtcLoss}" Grid.Column="2" Grid.Row="3"/>
+            <TextBlock Text=" Value lost" Grid.Column="3" Grid.Row="3" VerticalAlignment="Center"/>
+
+            <CheckBox IsChecked="{Binding BetSettings.EnableResetLossFromMaxProfit}" Grid.Column="0" Grid.Row="4"/>
+            <TextBlock Grid.Column="1" Grid.Row="4" Text="Reset after" VerticalAlignment="Center"/>
+            <NumericUpDown Value="{Binding BetSettings.ResetLossFromMaxProfit}" Grid.Column="2" Grid.Row="4"/>
+            <TextBlock Text=" Loss since max profit" Grid.Column="3" Grid.Row="4" VerticalAlignment="Center"/>
+
+            <CheckBox IsChecked="{Binding BetSettings.EnableStopAfterLoseStreak}" Grid.Column="0" Grid.Row="5"/>
+            <TextBlock Grid.Column="1" Grid.Row="5" Text="Stop after" VerticalAlignment="Center"/>
+            <NumericUpDown Value="{Binding BetSettings.StopAfterLoseStreak}" Grid.Column="2" Grid.Row="5"/>
+            <TextBlock Text=" Losses in a row" Grid.Column="3" Grid.Row="5" VerticalAlignment="Center"/>
+
+            <CheckBox IsChecked="{Binding BetSettings.EnableStopAfterLosses}" Grid.Column="0" Grid.Row="6"/>
+            <TextBlock Grid.Column="1" Grid.Row="6" Text="Stop after" VerticalAlignment="Center"/>
+            <NumericUpDown Value="{Binding BetSettings.StopAfterLosses}" Grid.Column="2" Grid.Row="6"/>
+            <TextBlock Text=" losses" Grid.Column="3" Grid.Row="6" VerticalAlignment="Center"/>
+
+            <CheckBox IsChecked="{Binding BetSettings.EnableStopAfterBtcLoseStreak}" Grid.Column="0" Grid.Row="7"/>
+            <TextBlock Grid.Column="1" Grid.Row="7" Text="Stop after" VerticalAlignment="Center"/>
+            <NumericUpDown Value="{Binding BetSettings.StopAfterBtcLoseStreak}" Grid.Column="2" Grid.Row="7"/>
+            <TextBlock Text=" Value lost in a row" Grid.Column="3" Grid.Row="7" VerticalAlignment="Center"/>
+
+            <CheckBox IsChecked="{Binding BetSettings.EnableStopAfterBtcLoss}" Grid.Column="0" Grid.Row="8"/>
+            <TextBlock Grid.Column="1" Grid.Row="8" Text="Stop after" VerticalAlignment="Center"/>
+            <NumericUpDown Value="{Binding BetSettings.StopAfterBtcLoss}" Grid.Column="2" Grid.Row="8"/>
+            <TextBlock Text=" value lost" Grid.Column="3" Grid.Row="8" VerticalAlignment="Center"/>
+
+            <CheckBox IsChecked="{Binding BetSettings.EnableStopLossFromMaxProfit}" Grid.Column="0" Grid.Row="9"/>
+            <TextBlock Grid.Column="1" Grid.Row="9" Text="Stop after" VerticalAlignment="Center"/>
+            <NumericUpDown Value="{Binding BetSettings.StopLossFromMaxProfit}" Grid.Column="2" Grid.Row="9"/>
+            <TextBlock Text=" value lost since max profit" Grid.Column="3" Grid.Row="9" VerticalAlignment="Center"/>
+          </Grid>
+        </StackPanel>
+      </Border>
+      <Border Padding="3" Margin="3" BorderBrush="DarkGray" BorderThickness="1">
+        <StackPanel>
+          <Border Background="DarkGray" Margin="0,0,0,5">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+              <TextBlock Padding="5" FontSize="16" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Text="On Win" VerticalAlignment="Center"/>
+            </StackPanel>
+          </Border>
+          <Grid RowDefinitions="*,*,*,*,*,*,*,*,*,*" ColumnDefinitions="25,125,2*,*">
+            <CheckBox IsChecked="{Binding BetSettings.EnableResetAfterWinStreak}" Grid.Column="0" Grid.Row="0"/>
+            <TextBlock Grid.Column="1" Grid.Row="0" Text="Stop after" VerticalAlignment="Center"/>
+            <NumericUpDown Value="{Binding BetSettings.ResetAfterWinStreak}" Grid.Column="2" Grid.Row="0"/>
+            <TextBlock Text=" Wins in a row" Grid.Column="3" Grid.Row="0" VerticalAlignment="Center"/>
+
+            <CheckBox IsChecked="{Binding BetSettings.EnableResetAfterWins}" Grid.Column="0" Grid.Row="1"/>
+            <TextBlock Grid.Column="1" Grid.Row="1" Text="Reset after every" VerticalAlignment="Center"/>
+            <NumericUpDown Value="{Binding BetSettings.ResetAfterWins}" Grid.Column="2" Grid.Row="1"/>
+            <TextBlock Text=" Wins" Grid.Column="3" Grid.Row="1" VerticalAlignment="Center"/>
+
+            <CheckBox IsChecked="{Binding BetSettings.EnableResetAfterBtcStreakWin}" Grid.Column="0" Grid.Row="2"/>
+            <TextBlock Grid.Column="1" Grid.Row="2" Text="Reset after" VerticalAlignment="Center"/>
+            <NumericUpDown Value="{Binding BetSettings.ResetAfterBtcStreakWin}" Grid.Column="2" Grid.Row="2"/>
+            <TextBlock Text=" Value won in a row" Grid.Column="3" Grid.Row="2" VerticalAlignment="Center"/>
+
+            <CheckBox IsChecked="{Binding BetSettings.EnableResetAfterBtcWin}" Grid.Column="0" Grid.Row="3"/>
+            <TextBlock Grid.Column="1" Grid.Row="3" Text="Reset after every" VerticalAlignment="Center"/>
+            <NumericUpDown Value="{Binding BetSettings.ResetAfterBtcWin}" Grid.Column="2" Grid.Row="3"/>
+            <TextBlock Text=" Value won" Grid.Column="3" Grid.Row="3" VerticalAlignment="Center"/>
+
+            <CheckBox IsChecked="{Binding BetSettings.EnableResetWinFromMinProfit}" Grid.Column="0" Grid.Row="4"/>
+            <TextBlock Grid.Column="1" Grid.Row="4" Text="Reset after" VerticalAlignment="Center"/>
+            <NumericUpDown Value="{Binding BetSettings.ResetWinFromMinProfit}" Grid.Column="2" Grid.Row="4"/>
+            <TextBlock Text=" won since max profit" Grid.Column="3" Grid.Row="4" VerticalAlignment="Center"/>
+
+            <CheckBox IsChecked="{Binding BetSettings.EnableStopAfterWinStreak}" Grid.Column="0" Grid.Row="5"/>
+            <TextBlock Grid.Column="1" Grid.Row="5" Text="Stop after" VerticalAlignment="Center"/>
+            <NumericUpDown Value="{Binding BetSettings.StopAfterWinStreak}" Grid.Column="2" Grid.Row="5"/>
+            <TextBlock Text=" Wins in a row" Grid.Column="3" Grid.Row="5" VerticalAlignment="Center"/>
+
+            <CheckBox IsChecked="{Binding BetSettings.EnableStopAfterWins}" Grid.Column="0" Grid.Row="6"/>
+            <TextBlock Grid.Column="1" Grid.Row="6" Text="Stop after" VerticalAlignment="Center"/>
+            <NumericUpDown Value="{Binding BetSettings.StopAfterWins}" Grid.Column="2" Grid.Row="6"/>
+            <TextBlock Text=" Wins" Grid.Column="3" Grid.Row="6" VerticalAlignment="Center"/>
+
+            <CheckBox IsChecked="{Binding BetSettings.EnableStopAfterBtcLoseStreak}" Grid.Column="0" Grid.Row="7"/>
+            <TextBlock Grid.Column="1" Grid.Row="7" Text="Stop after" VerticalAlignment="Center"/>
+            <NumericUpDown Value="{Binding BetSettings.StopAfterBtcLoseStreak}" Grid.Column="2" Grid.Row="7"/>
+            <TextBlock Text=" Value won in a row" Grid.Column="3" Grid.Row="7" VerticalAlignment="Center"/>
+
+            <CheckBox IsChecked="{Binding BetSettings.EnableStopAfterBtcWin}" Grid.Column="0" Grid.Row="8"/>
+            <TextBlock Grid.Column="1" Grid.Row="8" Text="Stop after" VerticalAlignment="Center"/>
+            <NumericUpDown Value="{Binding BetSettings.StopAfterBtcWin}" Grid.Column="2" Grid.Row="8"/>
+            <TextBlock Text=" value won" Grid.Column="3" Grid.Row="8" VerticalAlignment="Center"/>
+
+            <CheckBox IsChecked="{Binding BetSettings.EnableStopWinFromMinProfit}" Grid.Column="0" Grid.Row="9"/>
+            <TextBlock Grid.Column="1" Grid.Row="9" Text="Stop after" VerticalAlignment="Center"/>
+            <NumericUpDown Value="{Binding BetSettings.StopWinFromMinProfit}" Grid.Column="2" Grid.Row="9"/>
+            <TextBlock Text=" value won since max profit" Grid.Column="3" Grid.Row="9" VerticalAlignment="Center"/>
+          </Grid>
+        </StackPanel>
+      </Border>
+      </StackPanel>
+    </ScrollViewer>
+</UserControl>

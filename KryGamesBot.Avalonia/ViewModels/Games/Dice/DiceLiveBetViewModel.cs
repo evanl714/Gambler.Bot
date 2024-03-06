@@ -1,5 +1,6 @@
 ﻿using Avalonia.Threading;
 using DoormatCore.Games;
+using DoormatCore.Helpers;
 using IronPython.Runtime;
 using KryGamesBot.Ava.Classes;
 using KryGamesBot.Ava.Classes.BetsPanel;
@@ -19,18 +20,32 @@ namespace KryGamesBot.Ava.ViewModels.Games.Dice
 
         public void AddBet(Bet newBet)
         {
-            
-            //if (Bets.CanRemove)
-            while (Bets.Count > UISettings.Settings.LiveBets + 1)
+            try
             {
+                if (Dispatcher.UIThread.CheckAccess())
+                {
 
-                //System.Threading.Thread.Sleep(10);
-                //Bets.Remove(Bets.list);
-                Bets.RemoveAt(Bets.Count - 1);
+
+                    //if (Bets.CanRemove)
+                    while (Bets.Count > UISettings.Settings.LiveBets + 1)
+                    {
+
+                        //System.Threading.Thread.Sleep(10);
+                        //Bets.Remove(Bets.list);
+                        Bets.RemoveAt(Bets.Count - 1);
+                    }
+
+                    Bets.Insert(0, newBet as DiceBet);
+                }
+                else
+                {
+                    Dispatcher.UIThread.Invoke(() => AddBet(newBet));
+                }
             }
-
-            Bets.Insert(0,newBet as DiceBet);
-            
+            catch (Exception e)
+            {
+                Logger.DumpLog(e);
+            }
             
         }
     }

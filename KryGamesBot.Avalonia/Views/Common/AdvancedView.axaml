@@ -2,7 +2,119 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="800"
+             xmlns:vm="using:KryGamesBot.Ava.ViewModels.Common"
+             x:DataType="vm:AdvancedViewModel"
              x:Class="KryGamesBot.Ava.Views.Common.AdvancedView">
-  Welcome to Avalonia!
+  <ScrollViewer>
+  <StackPanel Orientation="Vertical">
+    <TextBlock Grid.Row="0" Grid.Column="0" Text="Auto withdraw/Tip" HorizontalAlignment="Center"/>
+    <Border Padding="3" Margin="3" BorderBrush="DarkGray" BorderThickness="1">
+      <StackPanel>
+        <Border Background="DarkGray" Margin="0,0,0,5">
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding BetSettings.EnableUpperLimit }" />
+            <TextBlock FontSize="16" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Text="Upper limit" VerticalAlignment="Center"/>
+          </StackPanel>
+        </Border>
+        <Grid RowDefinitions="*,*,*,*,*" ColumnDefinitions="*,2*">
+          <TextBlock Grid.Row="0" Grid.Column="0" Text="When" VerticalAlignment="Center"/>
+          <ComboBox SelectedValue="{Binding BetSettings.UpperLimitCompare}" Margin="1" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch"/>
+          <TextBlock Grid.Row="1" Grid.Column="0" Text="Is more than" VerticalAlignment="Center"/>
+          <NumericUpDown Value="{Binding BetSettings.UpperLimit}" Margin="1" Grid.Row="1" Grid.Column="1"/>
+          <TextBlock Grid.Row="2" Grid.Column="0" Text="Then" VerticalAlignment="Center"/>
+          <ComboBox SelectedValue="{Binding BetSettings.UpperLimitAction}" Margin="1" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch"/>
+          <TextBlock Grid.Row="3" Grid.Column="0" Text="This amount" VerticalAlignment="Center"/>
+          <NumericUpDown  Value="{Binding BetSettings.UpperLimitActionAmount}" Margin="1" Grid.Row="3" Grid.Column="1"/>
+          <TextBlock Grid.Row="4" Grid.Column="0" Text="To" VerticalAlignment="Center"/>
+          <TextBox Text="{Binding BetSettings.UpperLimitAddress}" Margin="1" Grid.Row="4" Grid.Column="1"/>
+        </Grid>
+      </StackPanel>
+    </Border>
+    <Border Padding="3" Margin="3" BorderBrush="DarkGray" BorderThickness="1">
+      <StackPanel>
+        <Border Background="DarkGray" Margin="0,0,0,5">
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <CheckBox IsChecked="{Binding BetSettings.EnableLowerLimit}" Grid.Row="0" Grid.Column="1" />
+            <TextBlock FontSize="16" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Text="Lower limit" VerticalAlignment="Center"/>
+          </StackPanel>
+        </Border>
+        <Grid RowDefinitions="*,*,*,*,*" ColumnDefinitions="*,2*">
+          <TextBlock Grid.Row="0" Grid.Column="0" Text="When" VerticalAlignment="Center"/>
+          <ComboBox SelectedValue="{Binding BetSettings.LowerLimitCompare}" Margin="1" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch"/>
+          <TextBlock Grid.Row="1" Grid.Column="0" Text="Is less than" VerticalAlignment="Center"/>
+          <NumericUpDown Value="{Binding BetSettings.LowerLimit}" Margin="1" Grid.Row="1" Grid.Column="1"/>
+          <TextBlock Grid.Row="2" Grid.Column="0" Text="Then" VerticalAlignment="Center"/>
+          <ComboBox SelectedValue="{Binding BetSettings.LowerLimit}" Margin="1" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch"/>
+          <TextBlock Grid.Row="3" Grid.Column="0" Text="This amount" VerticalAlignment="Center"/>
+          <NumericUpDown Value="{Binding BetSettings.LowerLimitActionAmount}" Margin="1" Grid.Row="3" Grid.Column="1"/>
+          <TextBlock Grid.Row="4" Grid.Column="0" Text="To" VerticalAlignment="Center"/>
+          <TextBox Text="{Binding BetSettings.LowerLimitAddress}" Margin="1" Grid.Row="4" Grid.Column="1"/>
+        </Grid>
+      </StackPanel>
+    </Border>
+    <Border Padding="3" Margin="3" BorderBrush="DarkGray" BorderThickness="1">
+      <StackPanel>
+        <Border Background="DarkGray" Margin="0,0,0,5">         
+            <TextBlock Padding="6" HorizontalAlignment="Center" FontSize="16" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Text="Reset Seed" VerticalAlignment="Center"/>
+        </Border>
+        <Grid RowDefinitions="*,*,*,*,*,*,*" ColumnDefinitions="25,80,3*,2*">
+          <CheckBox IsChecked="{Binding BetSettings.EnableResetSeedBets}" Margin="1" Grid.Row="0" Grid.Column="0"/>
+          <TextBlock VerticalAlignment="Center" Text="after every" Margin="1" Grid.Row="0" Grid.Column="1"/>
+          <NumericUpDown Value="{Binding BetSettings.ResetSeedBets}" Margin="1" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch"/>
+          <TextBlock VerticalAlignment="Center" Text="Bets" Margin="1" Grid.Row="0" Grid.Column="3"/>
+
+          <CheckBox IsChecked="{Binding BetSettings.EnableResetSeedWins}" Margin="1" Grid.Row="1" Grid.Column="0"/>
+          <TextBlock VerticalAlignment="Center" Text="after every" Margin="1" Grid.Row="1" Grid.Column="1"/>
+          <NumericUpDown Value="{Binding BetSettings.ResetSeedWins}" Margin="1" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Stretch"/>
+          <TextBlock VerticalAlignment="Center" Text="Wins" Margin="1" Grid.Row="1" Grid.Column="3"/>
+
+          <CheckBox IsChecked="{Binding BetSettings.EnableResetSeedWinStreak}" Margin="1" Grid.Row="2" Grid.Column="0"/>
+          <TextBlock VerticalAlignment="Center" Text="after every" Margin="1" Grid.Row="2" Grid.Column="1"/>
+          <NumericUpDown Value="{Binding BetSettings.ResetSeedWinStreak}" Margin="1" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Stretch"/>
+          <TextBlock VerticalAlignment="Center" Text="Wins in a row" Margin="1" Grid.Row="2" Grid.Column="3"/>
+
+          <CheckBox IsChecked="{Binding BetSettings.EnableResetSeedLosses}" Margin="1" Grid.Row="3" Grid.Column="0"/>
+          <TextBlock VerticalAlignment="Center" Text="after every" Margin="1" Grid.Row="3" Grid.Column="1"/>
+          <NumericUpDown Value="{Binding BetSettings.ResetSeedLosses}" Margin="1" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Stretch"/>
+          <TextBlock VerticalAlignment="Center" Text="Losses" Margin="1" Grid.Row="3" Grid.Column="3"/>
+
+          <CheckBox IsChecked="{Binding BetSettings.EnableResetSeedLossStreak}" Margin="1" Grid.Row="4" Grid.Column="0"/>
+          <TextBlock VerticalAlignment="Center" Text="after every" Margin="1" Grid.Row="4" Grid.Column="1"/>
+          <NumericUpDown Value="{Binding BetSettings.ResetSeedLossStreak}" Margin="1" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Stretch"/>
+          <TextBlock VerticalAlignment="Center" Text="Losses in a row" Margin="1" Grid.Row="4" Grid.Column="3"/>
+
+          <CheckBox IsChecked="{Binding BetSettings.EnableResetSeedProfit}" Margin="1" Grid.Row="5" Grid.Column="0"/>
+          <TextBlock VerticalAlignment="Center" Text="after every" Margin="1" Grid.Row="5" Grid.Column="1"/>
+          <NumericUpDown Value="{Binding BetSettings.ResetSeedProfit}" Margin="1" Grid.Row="5" Grid.Column="2" HorizontalAlignment="Stretch"/>
+          <TextBlock VerticalAlignment="Center" Text="Profit" Margin="1" Grid.Row="5" Grid.Column="3"/>
+
+          <CheckBox IsChecked="{Binding BetSettings.EnableResetSeedLoss}" Margin="1" Grid.Row="6" Grid.Column="0"/>
+          <TextBlock VerticalAlignment="Center" Text="after every" Margin="1" Grid.Row="6" Grid.Column="1"/>
+          <NumericUpDown Value="{Binding BetSettings.ResetSeedLoss}" Margin="1" Grid.Row="6" Grid.Column="2" HorizontalAlignment="Stretch"/>
+          <TextBlock VerticalAlignment="Center" Text="Loss" Margin="1" Grid.Row="6" Grid.Column="3"/>
+        </Grid>
+        
+      </StackPanel>
+    </Border>
+    <Border Padding="3" Margin="3" BorderBrush="DarkGray" BorderThickness="1">
+      <StackPanel>
+        <Border Background="DarkGray" Margin="0,0,0,5">
+
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <CheckBox IsChecked="{Binding BetSettings.EnableBotSpeed}"  />
+            <TextBlock FontSize="16" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Text="Bot speed" VerticalAlignment="Center"/>
+          </StackPanel>
+        </Border>
+        <Grid RowDefinitions="*,*" ColumnDefinitions="2*,*">
+          <NumericUpDown Value="{Binding BetSettings.BotSpeed}" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch"/>
+          <TextBlock Grid.Row="0" Grid.Column="1">Bets per second"</TextBlock>
+          <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+            By default, the bot bets as fast as it can. The bot speed setting should only be enabled if you intend to slow down the betting speed or if you are getting errors from the site.
+          </TextBlock>
+        </Grid>
+      </StackPanel>
+    </Border>
+  </StackPanel>
+  </ScrollViewer>
 </UserControl>

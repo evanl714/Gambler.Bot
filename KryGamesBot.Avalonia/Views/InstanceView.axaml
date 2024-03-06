@@ -50,19 +50,34 @@
       </Grid>
       <Grid Grid.Column="4">
         <TabControl>
+          <TabItem Header="Strategy">
+            <TextBlock>coming soon</TextBlock>
+          </TabItem>
+          <TabItem Header="Reset Settings">
+            <common:ResetSettingsView DataContext="{Binding ResetSettingsVM}"/>
+          </TabItem>
+          <TabItem Header="Advanced Settings">
+            <common:AdvancedView DataContext="{Binding AdvancedSettingsVM}"/>
+          </TabItem>
+          <TabItem Header="Custom Triggers">
+            <TextBlock>coming soon</TextBlock>
+          </TabItem>
+          
           <TabItem Header="Manual">
-            <ContentControl Content="{Binding PlaceBetVM}">
+            <ContentControl Content="{Binding PlaceBetVM}" VerticalAlignment="Top">
               <ContentControl.DataTemplates>
                 <DataTemplate DataType="diceVM:DicePlaceBetViewModel">
-                  <dice:DiceLiveBetView/>
+                  <dice:DicePlaceBetView/>
                 </DataTemplate>
 
               </ContentControl.DataTemplates>
             </ContentControl>
           </TabItem>
+          <TabItem Header="Console">
+            <TextBlock>coming soon</TextBlock>
+          </TabItem>
         </TabControl>
-        <TabItem Header="Strategy">
-         </TabItem>
+        
       </Grid>
     </Grid>
 	</Grid>

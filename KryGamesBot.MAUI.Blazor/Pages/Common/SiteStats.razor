@@ -6,7 +6,7 @@
 </div>
 <div>
 <h5 class="stat">Profit</h5>
-        <p class="stat @(stats.Profit>=0?"text-success":"text-danger" )">@stats?.Profit.ToString("n8")</p>
+        <p class="stat @((stats?.Profit??0)>=0?"text-success":"text-danger" )">@stats?.Profit.ToString("n8")</p>
 </div>
 <div>
 <h5 class="stat">Wagered</h5>
@@ -30,7 +30,7 @@
     [Parameter]
     public DoormatCore.Sites.SiteStats stats { get; set; }
 
-public SiteStats()
+    public SiteStats()
     {
         
     }

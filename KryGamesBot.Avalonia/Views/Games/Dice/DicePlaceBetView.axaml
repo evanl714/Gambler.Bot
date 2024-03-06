@@ -11,10 +11,10 @@
     <TextBlock Grid.Column="0" Grid.Row="1" >Chance</TextBlock>
     <TextBlock Grid.Column="0" Grid.Row="2" >Payout</TextBlock>
     <TextBlock Grid.Column="0" Grid.Row="3" >Profit</TextBlock>
-    <NumericUpDown Grid.Column="1" Grid.Row="0" />
-    <NumericUpDown Grid.Column="1" Grid.Row="1"/>
-    <NumericUpDown Grid.Column="1" Grid.Row="2"/>
-    <NumericUpDown Grid.Column="1" Grid.Row="3"/>
-    <Button Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" Content="Bet High" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalAlignment="Stretch"/>
-    <Button Grid.Column="2" Grid.Row="2" Grid.RowSpan="2" Content="Bet Low" VerticalContentAlignment="Center" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/></Grid>
+    <NumericUpDown Value="{Binding Amount}" Minimum="0" Maximum="9999999999" Grid.Column="1" Grid.Row="0" FormatString="n8" />
+    <NumericUpDown Value="{Binding Chance}" Minimum="0" Maximum="99.9999" Grid.Column="1" Grid.Row="1" FormatString="n5"/>
+    <NumericUpDown Value="{Binding Payout}" Minimum="0" Maximum="9999999999" Grid.Column="1" Grid.Row="2" FormatString="n8"/>
+    <NumericUpDown Value="{Binding Profit}" Minimum="0" Maximum="9999999999" Grid.Column="1" Grid.Row="3" FormatString="n8"/>
+    <Button Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" Content="Bet High" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalAlignment="Stretch" Command="{Binding BetHighCommand}"/>
+    <Button Grid.Column="2" Grid.Row="2" Grid.RowSpan="2" Content="Bet Low" VerticalContentAlignment="Center" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Command="{Binding BetLowCommand}"/></Grid>
 </UserControl>

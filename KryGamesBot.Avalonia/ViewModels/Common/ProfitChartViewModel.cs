@@ -50,20 +50,21 @@ namespace KryGamesBot.Ava.ViewModels.Common
                new LineSeries<SimpleDataPoint>
                {
                    Values = DataPoints,
-                   Fill = null
+                   Fill = null,
+                   Mapping = (sample, index) => new(sample.Argument, sample.Value)
                } };
             
         }
 
-        public void AddPoint(decimal Profit)
+        public void AddPoint(decimal BetProfit)
         {
             if (Enabled)
             {
                 if (!Dispatcher.UIThread.CheckAccess())
-                    Dispatcher.UIThread.Invoke(()=> { AddPoint(Profit); });
+                    Dispatcher.UIThread.Invoke(()=> { AddPoint(BetProfit); });
                 else
                 {
-                    ChartProfit += Profit;
+                    ChartProfit += BetProfit;
                     DataPoints.Add(new SimpleDataPoint(ChartItems++, (double)ChartProfit));
                     //profitChart.AddPoint(ChartItems++, (double)Profit);
                     while (DataPoints.Count > (MaxItems > 0 ? MaxItems : UISettings.Settings.ChartBets))
