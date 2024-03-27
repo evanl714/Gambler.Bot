@@ -12,6 +12,37 @@ namespace KryGamesBot.Ava.ViewModels.Games.Dice
 {
     public class DicePlaceBetViewModel :ViewModelBase, iPlaceBet
     {
+        private bool _showAmount=true;
+
+        public bool ShowAmount
+        {
+            get { return _showAmount; }
+            set { _showAmount = value; this.RaisePropertyChanged(); }
+        }
+        private bool _showChance = true;
+
+        public bool ShowChance
+        {
+            get { return _showChance; }
+            set { _showChance = value; this.RaisePropertyChanged(); }
+        }
+
+        private bool _highChecked;
+
+        public bool HighChecked
+        {
+            get { return _highChecked; }
+            set { _highChecked = value; this.RaisePropertyChanged(); this.RaisePropertyChanged(nameof(LowChecked)); }
+        }
+
+       
+
+        public bool LowChecked
+        {
+            get { return !HighChecked; }
+            set { HighChecked = !value; }
+        }
+
         public ICommand BetHighCommand { get; }
         public ICommand BetLowCommand { get; }
 

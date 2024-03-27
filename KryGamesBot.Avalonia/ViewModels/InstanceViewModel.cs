@@ -69,6 +69,8 @@ namespace KryGamesBot.Ava.ViewModels
         {
             if (botIns.Strategy.StrategyName != name && !string.IsNullOrWhiteSpace(BetSettingsFile))
             {
+                StrategyVM?.Saving();
+
                 botIns.SaveBetSettings(BetSettingsFile);
                 var Settings = botIns.LoadBetSettings(BetSettingsFile, false);
                 IEnumerable<PropertyInfo> Props = Settings.GetType().GetProperties().Where(m => typeof(DoormatBot.Strategies.BaseStrategy).IsAssignableFrom(m.PropertyType));
@@ -155,6 +157,7 @@ namespace KryGamesBot.Ava.ViewModels
                 case "Martingale": tmpStrat = new MartingaleViewModel(); break;
                 case "D'Alembert": tmpStrat = new DAlembertViewModel(); break;
                 case "Fibonacci": tmpStrat = new FibonacciViewModel(); break;
+                case "Labouchere": tmpStrat = new LabouchereViewModel(); break;
                 default: tmpStrat = null; break; ;
             }
             if (tmpStrat != null)

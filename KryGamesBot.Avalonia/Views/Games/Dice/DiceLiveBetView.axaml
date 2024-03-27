@@ -9,7 +9,7 @@
              >
   <DataGrid ItemsSource="{Binding Bets}" IsReadOnly="True"  >
     <DataGrid.Columns>
-      <DataGridTextColumn Binding="{Binding BetID}" Header="Get Id"/>
+      <DataGridTextColumn Binding="{Binding BetID}" Header="Bet Id"/>
       <DataGridTextColumn Binding="{Binding DateValue}" Header="Time"/>
       <DataGridTextColumn Binding="{Binding TotalAmount}" Header="Amount"/>
       <DataGridTextColumn Binding="{Binding High}" Header="High"/>

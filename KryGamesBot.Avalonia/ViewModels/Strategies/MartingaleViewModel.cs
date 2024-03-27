@@ -87,6 +87,7 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
             {
                 dice.Amount = mart.Amount;
                 dice.Chance = mart.Chance;
+                dice.ShowAmount = false;
             }
         }
         public void Saving()

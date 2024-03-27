@@ -1,0 +1,78 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="450"
+             x:Class="KryGamesBot.Ava.Views.Games.Strategies.PresetList.PresetListView"
+             xmlns:vm="using:KryGamesBot.Ava.ViewModels.Strategies"
+xmlns:dice="using:KryGamesBot.Ava.Views.Games.Dice"
+             x:DataType="vm:PresetListViewModel"
+             >
+  <StackPanel Orientation="Vertical">
+    <ContentControl Content="{Binding PlaceBetVM}">
+      <ContentControl.DataTemplates>
+        <DataTemplate DataType="dice:DicePlaceBetView">
+          <dice:DicePlaceBetView/>
+        </DataTemplate>
+      </ContentControl.DataTemplates>
+    </ContentControl>
+    <Border Padding="3" Margin="3" BorderBrush="DarkGray" BorderThickness="1">
+      <StackPanel>
+        <Border Background="DarkGray" Margin="0,0,0,5">
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBlock Margin="5" FontSize="16" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Text="When end of list is reached" VerticalAlignment="Center"/>
+          </StackPanel>
+        </Border>
+        <StackPanel>
+          <ComboBox/>
+          <StackPanel Orientation="Horizontal">
+            <NumericUpDown>
+            
+            </NumericUpDown>
+            <TextBlock VerticalAlignment="Center">Steps backward</TextBlock>
+          </StackPanel>
+        </StackPanel>
+      </StackPanel>
+    </Border>
+    <Border Padding="3" Margin="3" BorderBrush="DarkGray" BorderThickness="1">
+      <StackPanel>
+        <Border Background="DarkGray" Margin="0,0,0,5">
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBlock Margin="5" FontSize="16" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Text="On Loss" VerticalAlignment="Center"/>
+          </StackPanel>
+        </Border>
+        <StackPanel>
+          <ComboBox/>
+          <StackPanel Orientation="Horizontal">
+            <NumericUpDown>
+
+            </NumericUpDown>
+            <TextBlock VerticalAlignment="Center">Steps forward</TextBlock>
+          </StackPanel>
+
+
+        </StackPanel>
+      </StackPanel>
+    </Border>
+    <Border Padding="3" Margin="3" BorderBrush="DarkGray" BorderThickness="1">
+      <StackPanel>
+        <Border Background="DarkGray" Margin="0,0,0,5">
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBlock Margin="5" FontSize="16" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Text="On Win" VerticalAlignment="Center"/>
+          </StackPanel>
+        </Border>
+        <StackPanel>
+          <ComboBox/>
+          <StackPanel Orientation="Horizontal">
+            <NumericUpDown>
+
+            </NumericUpDown>
+            <TextBlock VerticalAlignment="Center">Steps backward</TextBlock>
+          </StackPanel>
+
+
+        </StackPanel>
+      </StackPanel>
+    </Border>
+  </StackPanel>
+</UserControl>

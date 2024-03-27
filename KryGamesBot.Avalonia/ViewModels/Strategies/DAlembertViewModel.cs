@@ -14,9 +14,9 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
 {
     internal class DAlembertViewModel:ViewModelBase, IStrategy
     {
-		private Labouchere _strategy;
+		private DAlembert _strategy;
 
-		public Labouchere Strategy
+		public DAlembert Strategy
 		{
 			get { return _strategy; }
 			set { _strategy = value; this.RaisePropertyChanged(); }
@@ -77,14 +77,15 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
         {
             if (Strategy == null)
                 throw new ArgumentNullException();
-            if (!(Strategy is Labouchere mart))
+            if (!(Strategy is DAlembert mart))
                 throw new ArgumentException("Must be martingale to use thise viewmodel");
 
             this.Strategy = mart;
             if (PlaceBetVM is DicePlaceBetViewModel dice)
             {
                 dice.Amount = mart.Amount;
-                dice.Chance = mart.Chance;
+                dice.Chance = mart.Chance; 
+                dice.ShowAmount = false;
             }
         }
         public void Saving()

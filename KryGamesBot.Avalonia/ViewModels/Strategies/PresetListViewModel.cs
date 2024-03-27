@@ -12,11 +12,11 @@ using System.Threading.Tasks;
 
 namespace KryGamesBot.Ava.ViewModels.Strategies
 {
-    internal class FibonacciViewModel : ViewModelBase, IStrategy
+    public class PresetListViewModel : ViewModelBase, IStrategy
     {
-        private Fibonacci _strategy;
+        private PresetList _strategy;
 
-        public Fibonacci Strategy
+        public PresetList Strategy
         {
             get { return _strategy; }
             set { _strategy = value; this.RaisePropertyChanged(); }
@@ -77,7 +77,7 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
         {
             if (Strategy == null)
                 throw new ArgumentNullException();
-            if (!(Strategy is Fibonacci mart))
+            if (!(Strategy is PresetList mart))
                 throw new ArgumentException("Must be martingale to use thise viewmodel");
 
             this.Strategy = mart;
