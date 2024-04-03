@@ -11,7 +11,7 @@
              xmlns:diceVM="using:KryGamesBot.Ava.ViewModels.Games.Dice"
              xmlns:stratVM="using:KryGamesBot.Ava.ViewModels.Strategies"
 xmlns:strat="using:KryGamesBot.Ava.Views.Games.Strategies.Martingale"
-xmlns:dalembert="using:KryGamesBot.Ava.Views.Games.Strategies.DAlembert" xmlns:fibonacci="using:KryGamesBot.Ava.Views.Games.Strategies.Fibonacci" xmlns:labouchere="using:KryGamesBot.Ava.Views.Games.Strategies.Labouchere"           Tag="{Binding}"
+xmlns:dalembert="using:KryGamesBot.Ava.Views.Games.Strategies.DAlembert" xmlns:fibonacci="using:KryGamesBot.Ava.Views.Games.Strategies.Fibonacci" xmlns:labouchere="using:KryGamesBot.Ava.Views.Games.Strategies.Labouchere" xmlns:PresetList="using:DoormatBot.Strategies" xmlns:presetlist="using:KryGamesBot.Ava.Views.Games.Strategies.PresetList"         Tag="{Binding}"
 			 >
 	<UserControl.DataContext>
 		<vm:InstanceViewModel/>
@@ -77,6 +77,9 @@ xmlns:dalembert="using:KryGamesBot.Ava.Views.Games.Strategies.DAlembert" xmlns:f
                   <DataTemplate DataType="stratVM:LabouchereViewModel">
                     <labouchere:LabouchereView/>
                   </DataTemplate>
+					<DataTemplate DataType="stratVM:PresetListViewModel">
+						<presetlist:PresetListView/>
+					</DataTemplate>
                 </ContentControl.DataTemplates>
               </ContentControl>
             </DockPanel>

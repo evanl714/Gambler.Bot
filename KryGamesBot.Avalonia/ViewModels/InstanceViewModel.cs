@@ -158,6 +158,7 @@ namespace KryGamesBot.Ava.ViewModels
                 case "D'Alembert": tmpStrat = new DAlembertViewModel(); break;
                 case "Fibonacci": tmpStrat = new FibonacciViewModel(); break;
                 case "Labouchere": tmpStrat = new LabouchereViewModel(); break;
+                case "PresetList": tmpStrat = new PresetListViewModel(); break;
                 default: tmpStrat = null; break; ;
             }
             if (tmpStrat != null)

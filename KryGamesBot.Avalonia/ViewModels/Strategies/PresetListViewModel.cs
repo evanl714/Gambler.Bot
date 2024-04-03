@@ -4,11 +4,11 @@ using KryGamesBot.Ava.Classes.Strategies;
 using KryGamesBot.Ava.ViewModels.Games.Dice;
 using ReactiveUI;
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Input;
+using static DoormatBot.Strategies.PresetList;
 
 namespace KryGamesBot.Ava.ViewModels.Strategies
 {
@@ -31,13 +31,41 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
             set { _placeBetVM = value; this.RaisePropertyChanged(); }
         }
 
+        private ObservableCollection<PresetDiceBet> _betList;
+
+        public ObservableCollection<PresetDiceBet> BetList
+        {
+            get { return _betList; }
+            set { _betList = value; }
+        }
 
         public DoormatCore.Games.Games Game
         {
             get { return _game; }
             set { _game = value; this.RaisePropertyChanged(); }
         }
+        private int _selectedIndex;
 
+        public int SelectedIndex
+        {
+            get { return _selectedIndex; }
+            set { _selectedIndex = value; }
+        }
+
+        public PresetListViewModel()
+        {
+            AddCommand = ReactiveCommand.Create(Add);
+        }
+
+        public ICommand AddCommand { get; set; }
+        void Add()
+        {
+            int insertindex = SelectedIndex + 1;
+            if (insertindex >= BetList.Count)
+                BetList.Add(new PresetDiceBet { Amount = 0 });
+            else
+                BetList.Insert(SelectedIndex + 1, new PresetDiceBet { Amount = 0 });
+        }
 
         public void GameChanged(DoormatCore.Games.Games newGame)
         {
@@ -81,6 +109,7 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
                 throw new ArgumentException("Must be martingale to use thise viewmodel");
 
             this.Strategy = mart;
+            BetList = new ObservableCollection<PresetDiceBet>(mart.PresetBets);
             if (PlaceBetVM is DicePlaceBetViewModel dice)
             {
                 dice.Amount = mart.Amount;
@@ -90,7 +119,7 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
         }
         public void Saving()
         {
-
+            Strategy.PresetBets = new BindingList<PresetDiceBet>(BetList);
         }
         public bool TopAlign()
         {

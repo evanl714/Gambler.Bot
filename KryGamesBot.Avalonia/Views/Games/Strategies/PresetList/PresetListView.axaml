@@ -9,13 +9,18 @@ xmlns:dice="using:KryGamesBot.Ava.Views.Games.Dice"
              x:DataType="vm:PresetListViewModel"
              >
   <StackPanel Orientation="Vertical">
-    <ContentControl Content="{Binding PlaceBetVM}">
-      <ContentControl.DataTemplates>
-        <DataTemplate DataType="dice:DicePlaceBetView">
-          <dice:DicePlaceBetView/>
-        </DataTemplate>
-      </ContentControl.DataTemplates>
-    </ContentControl>
+   
+	  <Button HorizontalAlignment="Left" Command="{Binding AddCommand}">Add</Button>
+
+	  <DataGrid ItemsSource="{Binding BetList}" MinHeight="200">
+		  <DataGrid.Columns>
+			  <DataGridTextColumn Header="Amount" Binding="{Binding Amount}"></DataGridTextColumn>
+			  <DataGridTextColumn Header="High" Binding="{Binding High}"></DataGridTextColumn>
+			  <DataGridTextColumn Header="Switch" Binding="{Binding Switch}"></DataGridTextColumn>
+			  <DataGridTextColumn Header="Chance" Binding="{Binding Chance}"></DataGridTextColumn>
+			 
+			</DataGrid.Columns>
+	  </DataGrid>
     <Border Padding="3" Margin="3" BorderBrush="DarkGray" BorderThickness="1">
       <StackPanel>
         <Border Background="DarkGray" Margin="0,0,0,5">
