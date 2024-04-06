@@ -32,7 +32,7 @@ xmlns:dalembert="using:KryGamesBot.Ava.Views.Games.Strategies.DAlembert" xmlns:f
       <StackPanel Grid.Column="0">
 		  <ComboBox ItemsSource="{Binding Currencies}" SelectedIndex="{Binding CurrentCurrency}" />
         <common:SiteStatsView Grid.Row="0" DataContext="{Binding SiteStatsData}"/>
-        <common:SessionStatsView Grid.Row="2"/>
+        <common:SessionStatsView Grid.Row="2" DataContext="{Binding SessionStatsData}" />
       </StackPanel>
       <Grid Grid.Column="2">
         <Grid.RowDefinitions>

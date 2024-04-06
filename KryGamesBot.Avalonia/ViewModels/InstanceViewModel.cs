@@ -1,4 +1,5 @@
-﻿using DoormatBot;
+﻿using Avalonia.Threading;
+using DoormatBot;
 using DoormatBot.Strategies;
 using DoormatBot.Strategies.PresetListModels;
 using KryGamesBot.Ava.Classes;
@@ -16,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -44,7 +46,7 @@ namespace KryGamesBot.Ava.ViewModels
         public int? CurrentCurrency
         {
             get { return BotInstance?.CurrentSite?.Currency; }
-            set { if (BotInstance?.CurrentSite!=null) BotInstance.CurrentSite.Currency = value??0; }
+            set { if (BotInstance?.CurrentSite!=null) BotInstance.CurrentSite.Currency = (value>=0?value:0)??0; }
         }
 
         iLiveBet _liveBets = new DiceLiveBetViewModel();
@@ -140,6 +142,7 @@ namespace KryGamesBot.Ava.ViewModels
             tmp.OnStopped += BotIns_OnStopped;
             tmp.OnStrategyChanged += BotIns_OnStrategyChanged;
             tmp.OnSiteLoginFinished += BotIns_OnSiteLoginFinished;
+            tmp.OnBypassRequired += Tmp_OnBypassRequired;
             BotInstance = tmp;
             botIns.CurrentGame = DoormatCore.Games.Games.Dice;
             /*if (MainWindow.Portable && File.Exists("personalsettings.json"))
@@ -156,6 +159,11 @@ namespace KryGamesBot.Ava.ViewModels
            
             LoadSettings("default");
             
+        }
+
+        private void Tmp_OnBypassRequired(object? sender, DoormatCore.Sites.BypassRequiredArgs e)
+        {
+            e.Config = MainView.GetBypass(e);
         }
 
         private void BotIns_OnSiteLoginFinished(object sender, DoormatCore.Sites.LoginFinishedEventArgs e)
@@ -194,10 +202,18 @@ namespace KryGamesBot.Ava.ViewModels
 
         private void BotIns_OnStopped(object? sender, DoormatCore.Sites.GenericEventArgs e)
         {
-            throw new NotImplementedException();
-        }
+            //if (!Dispatcher.CheckAccess())
+            //    Dispatcher.Invoke(new Action<object, DoormatCore.Sites.GenericEventArgs>(BotIns_OnStopped), sender, e);
+            //else
+            //{
+            //    bbtnSimulator.IsEnabled = true;
+            //    StatusBar.Content = $"Stopping: {e.Message}";
+            //    btcStart.IsEnabled = true;
+            //    btnResume.IsEnabled = true;
 
-        private void BotIns_OnStarted(object? sender, EventArgs e)
+            //}
+        }
+            private void BotIns_OnStarted(object? sender, EventArgs e)
         {
             SessionStatsData.Stats = botIns.Stats;
             SessionStatsData.RaisePropertyChanged(nameof(SessionStatsData.Stats));
@@ -206,7 +222,7 @@ namespace KryGamesBot.Ava.ViewModels
         private void BotIns_OnSiteBetFinished(object sender, DoormatCore.Sites.BetFinisedEventArgs e)
         {
             SiteStatsData.StatsUpdated(botIns.CurrentSite.Stats);
-            SessionStatsData.RaisePropertyChanged(nameof(SessionStatsData.Stats));
+            SessionStatsData.StatsUpdated(botIns.Stats);
             ChartData.AddPoint(e.NewBet.Profit);
             LiveBets.AddBet(e.NewBet);
         }
@@ -329,7 +345,7 @@ namespace KryGamesBot.Ava.ViewModels
             //}
             if (File.Exists(path + Name + ".siteset"))
             {
-                //LoadInstanceSettings(path + Name + ".siteset");
+                LoadInstanceSettings(path + Name + ".siteset");
 
             }
             if (File.Exists(BetSettingsFile))
@@ -350,38 +366,38 @@ namespace KryGamesBot.Ava.ViewModels
             //do all of this async to the gui somewhow?
         }
 
-        //void LoadInstanceSettings(string FileLocation)
-        //{
-        //    string Settings = "";
-        //    using (StreamReader sr = new StreamReader(FileLocation))
-        //    {
-        //        Settings = sr.ReadToEnd();
-        //    }
-        //    InstanceSettings tmp = JsonSerializer.Deserialize<InstanceSettings>(Settings);
-        //    //botIns.ga
+        void LoadInstanceSettings(string FileLocation)
+        {
+            string Settings = "";
+            using (StreamReader sr = new StreamReader(FileLocation))
+            {
+                Settings = sr.ReadToEnd();
+            }
+            InstanceSettings tmp = JsonSerializer.Deserialize<InstanceSettings>(Settings);
+            //botIns.ga
 
-        //    var tmpsite = Doormat.Sites.FirstOrDefault(m => m.Name == tmp.Site);
-        //    if (tmpsite != null)
-        //    {
-        //        botIns.CurrentSite = Activator.CreateInstance(tmpsite.SiteType()) as DoormatCore.Sites.BaseSite;
-        //        SiteChanged(botIns.CurrentSite, tmp.Currency, tmp.Game);
-        //    }
-        //    if (tmp.Game != null)
-        //        botIns.CurrentGame = Enum.Parse<DoormatCore.Games.Games>(tmp.Game);
+            var tmpsite = Doormat.Sites.FirstOrDefault(m => m.Name == tmp.Site);
+            if (tmpsite != null)
+            {
+                botIns.CurrentSite = Activator.CreateInstance(tmpsite.SiteType()) as DoormatCore.Sites.BaseSite;
+                SiteChanged(botIns.CurrentSite, tmp.Currency, tmp.Game);
+            }
+            if (tmp.Game != null)
+                botIns.CurrentGame = Enum.Parse<DoormatCore.Games.Games>(tmp.Game);
 
-        //}
+        }
 
-        //void SaveINstanceSettings(string FileLocation)
-        //{
-        //    string Settings = JsonSerializer.Serialize<InstanceSettings>(new InstanceSettings
-        //    {
-        //        Site = botIns.CurrentSite?.GetType()?.Name,
-        //        AutoLogin = false,
-        //        Game = botIns.CurrentGame.ToString(),
-        //        Currency = botIns.CurrentSite?.CurrentCurrency
-        //    });
-        //    File.WriteAllText(FileLocation, Settings);
-        //}
+        void SaveINstanceSettings(string FileLocation)
+        {
+            string Settings = JsonSerializer.Serialize<InstanceSettings>(new InstanceSettings
+            {
+                Site = botIns.CurrentSite?.GetType()?.Name,
+                AutoLogin = false,
+                Game = botIns.CurrentGame.ToString(),
+                Currency = botIns.CurrentSite?.CurrentCurrency
+            });
+            File.WriteAllText(FileLocation, Settings);
+        }
 
         public ICommand StartCommand { get; set; }
         void Start()
@@ -410,6 +426,17 @@ namespace KryGamesBot.Ava.ViewModels
         void StopOnWin()
         {
             botIns.StopOnWin = true;
+        }
+
+        public void OnClosing()
+        {
+            botIns.StopStrategy("Application Closing");
+            if (botIns.CurrentSite != null)
+                botIns.CurrentSite.Disconnect();
+            string path = "";            
+            path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\";            
+            botIns.SaveBetSettings(path + InstanceName + ".betset");
+            SaveINstanceSettings(path + InstanceName + ".siteset");
         }
     }
 }

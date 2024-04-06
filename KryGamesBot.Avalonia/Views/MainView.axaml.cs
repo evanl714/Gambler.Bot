@@ -6,6 +6,7 @@ using Avalonia.Threading;
 using DoormatBot;
 using DoormatCore.Helpers;
 using DoormatCore.Sites;
+using DryIoc;
 using Esprima.Ast;
 using System;
 using System.Collections;
@@ -54,17 +55,14 @@ public partial class MainView : UserControl
 
     }
 
-    private void Bot_OnBypassRequired(object? sender, BypassRequiredArgs e)
-    {
-        e.Config = MainView.GetBypass();
-    }
-
     static string agent = "";
     static async Task GetAgent()
     {
         if (string.IsNullOrWhiteSpace(agent))
         {
             agent = await _instance.wvBypass.ExecuteScriptAsync("navigator.userAgent");
+            if (agent == null)
+                return;
             if (agent.StartsWith("\\"))
                 agent = agent.Substring(1);
             if (agent.EndsWith("\\"))
@@ -75,18 +73,27 @@ public partial class MainView : UserControl
                 agent = agent.Substring(0, agent.Length - 1);
         }
     }
-    internal BrowserConfig internalGetBypass()
+
+    static BrowserConfig _conf = null;
+
+    internal void internalGetBypass(BypassRequiredArgs e)
     {
        
-            return Dispatcher.UIThread.InvokeAsync<BrowserConfig>(async () =>
-            {
+        
+        Dispatcher.UIThread.InvokeAsync(async () =>
+        {
+            wvBypass.ZIndex = -1;
+            wvBypass.IsVisible = true;
+            wvBypass.Url = new Uri(e.URL);
+            await Task.Delay(5000);
                 var bc = new BrowserConfig();
                 CookieContainer cs = new CookieContainer();
                 try
                 {
-                    wvBypass.ZIndex = -1;
+                    
                     await GetAgent();
                     string result = agent;
+                   
                     var tmp = await wvBypass.PlatformWebView.ExecuteScriptAsync("document.cookie");
                     var obj = wvBypass.PlatformWebView.PlatformViewContext;
                     var type2 = obj.GetType();
@@ -99,7 +106,7 @@ public partial class MainView : UserControl
                         properties = CoreWebView2.GetType().GetProperties();
                         object CookieMan = CoreWebView2.GetType().GetProperty("CookieManager").GetValue(CoreWebView2);
                         var method = CookieMan.GetType().GetMethod("GetCookiesAsync");//.Invoke(CookieMan, null);
-                        var cookies = await method.InvokeAsync(CookieMan, new object[] { "https://primedice.com" });
+                        var cookies = await method.InvokeAsync(CookieMan, new object[] { e.URL });
                         foreach (object c in cookies as IList)
                         {
                             System.Net.Cookie svalue = (System.Net.Cookie)c.GetType().GetMethod("ToSystemNetCookie").Invoke(c, null);
@@ -108,14 +115,18 @@ public partial class MainView : UserControl
                     }
                     bc.UserAgent = agent;
                     bc.Cookies = cs;
-                    return bc;
+                    _conf= bc;
                 }
                 catch (Exception e)
                 {
 
                 }
-                return new BrowserConfig { Cookies = cs, UserAgent = agent };
-            }).Result;
+                finally
+                {
+                    wvBypass.IsVisible = false;
+                }
+                _conf = new BrowserConfig { Cookies = cs, UserAgent = agent };
+            });
 
         
 
@@ -124,9 +135,12 @@ public partial class MainView : UserControl
         return new BrowserConfig { Cookies = wvBypass.Cookies, UserAgent = agent };*/
     }
 
-    internal static BrowserConfig GetBypass()
+    internal static BrowserConfig GetBypass(BypassRequiredArgs e)
     {
-        return _instance.internalGetBypass();
+        _conf = null;
+        _instance.internalGetBypass(e);
+        while (_conf == null) { Thread.Sleep(100); }
+        return _conf;
     }
 }
 public static class ExtensionMethods

@@ -41,19 +41,19 @@
         <TextBlock Grid.Column="0" Grid.Row="10" Text="Current streak" />
         <TextBlock Grid.Column="0" Grid.Row="11" Text="Avg profit/bet" />
         <TextBlock Grid.Column="0" Grid.Row="12" Text="Luck" />
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="0" Text="{Binding Stats.RunningTimeSpan}" />
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="1"  Text="{Binding Stats.Profit}" />
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="2"  Text="{Binding Stats.Wagered}" />
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="3"  Text="{Binding Stats.Bets}" />
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="4"  Text="{Binding Stats.Wins}" />
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="5"  Text="{Binding Stats.Losses}" />
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="6"  Text="{Binding Stats.BestStreak}" />
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="7"  Text="{Binding Stats.WorstStreak}" />
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="8"  Text="{Binding Stats.ProfitPerHour}" />
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="9"  Text="{Binding Stats.ProfitPer24Hour}" />
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="10" Text="{Binding Stats.CurrentStreak}" />
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="11" Text="{Binding Stats.ProfitPerBet}" />
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="12" Text="{Binding Stats.Luck}" />
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Stats.RunningTimeSpan , Mode=OneWay}" />
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="1"  Text="{Binding Stats.Profit, Mode=OneWay}" />
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="2"  Text="{Binding Stats.Wagered, Mode=OneWay}" />
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="3"  Text="{Binding Stats.Bets, Mode=OneWay}" />
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="4"  Text="{Binding Stats.Wins, Mode=OneWay}" />
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="5"  Text="{Binding Stats.Losses, Mode=OneWay}" />
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="6"  Text="{Binding Stats.BestStreak, Mode=OneWay}" />
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="7"  Text="{Binding Stats.WorstStreak, Mode=OneWay}" />
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="8"  Text="{Binding Stats.ProfitPerHour, Mode=OneWay}" />
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="9"  Text="{Binding Stats.ProfitPer24Hour, Mode=OneWay}" />
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="10" Text="{Binding Stats.CurrentStreak, Mode=OneWay}" />
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="11" Text="{Binding Stats.ProfitPerBet, Mode=OneWay}" />
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="12" Text="{Binding Stats.Luck, Mode=OneWay}" />
       </Grid>
     </TabItem>
     <TabItem Header="More">
@@ -85,18 +85,18 @@
         <TextBlock Grid.Column="0" Grid.Row="9" Text="Largest bet" />
         <TextBlock Grid.Column="0" Grid.Row="10" Text="Largest win" />
         <TextBlock Grid.Column="0" Grid.Row="11" Text="largest loss" />
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="0"  Text="{Binding Stats.AvgStreak}" />
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="1"  Text="{Binding Stats.AvgWin}" />
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="2"  Text="{Binding Stats.AvgLoss}" />
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="3"  Text="{Binding Stats.BestStreak}" />
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="4"  Text="{Binding Stats.BestStreak2}" />
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="5"  Text="{Binding Stats.BestStreak3}" />
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="6"  Text="{Binding Stats.WorstStreak}" />
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="7"  Text="{Binding Stats.WorstStreak2}" />
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="8"  Text="{Binding Stats.WorstStreak3}" />
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="9"  Text="{Binding Stats.LargestBet}" />
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="10" Text="{Binding Stats.LargestWin}" />
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="11" Text="{Binding Stats.LargestLoss}" />
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="0"  Text="{Binding Stats.AvgStreak, Mode=OneWay}" />
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="1"  Text="{Binding Stats.AvgWin, Mode=OneWay}" />
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="2"  Text="{Binding Stats.AvgLoss, Mode=OneWay}" />
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="3"  Text="{Binding Stats.BestStreak, Mode=OneWay}" />
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="4"  Text="{Binding Stats.BestStreak2, Mode=OneWay}" />
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="5"  Text="{Binding Stats.BestStreak3, Mode=OneWay}" />
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="6"  Text="{Binding Stats.WorstStreak, Mode=OneWay}" />
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="7"  Text="{Binding Stats.WorstStreak2, Mode=OneWay}" />
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="8"  Text="{Binding Stats.WorstStreak3, Mode=OneWay}" />
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="9"  Text="{Binding Stats.LargestBet, Mode=OneWay}" />
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="10" Text="{Binding Stats.LargestWin, Mode=OneWay}" />
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="11" Text="{Binding Stats.LargestLoss, Mode=OneWay}" />
       </Grid>
     </TabItem>
     

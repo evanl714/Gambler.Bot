@@ -8,6 +8,6 @@ namespace KryGamesBot.Ava.ViewModels
 {
     public class MainViewModel:ViewModelBase
     {
-
+        
     }
 }
