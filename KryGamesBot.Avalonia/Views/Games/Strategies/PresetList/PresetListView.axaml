@@ -9,8 +9,12 @@ xmlns:dice="using:KryGamesBot.Ava.Views.Games.Dice"
              x:DataType="vm:PresetListViewModel"
              >
   <StackPanel Orientation="Vertical">
-   
-	  <Button HorizontalAlignment="Left" Command="{Binding AddCommand}">Add</Button>
+
+	  <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+		  <Button HorizontalAlignment="Left" Command="{Binding AddCommand}">Add</Button>
+		  <Button HorizontalAlignment="Left"  Command="{Binding OpenCommand}">Open</Button>
+		  <Button HorizontalAlignment="Right"  Command="{Binding SaveCommand}">Save</Button>
+	  </StackPanel>
 
 	  <DataGrid ItemsSource="{Binding BetList}" MinHeight="200">
 		  <DataGrid.Columns>
@@ -18,7 +22,18 @@ xmlns:dice="using:KryGamesBot.Ava.Views.Games.Dice"
 			  <DataGridTextColumn Header="High" Binding="{Binding High}"></DataGridTextColumn>
 			  <DataGridTextColumn Header="Switch" Binding="{Binding Switch}"></DataGridTextColumn>
 			  <DataGridTextColumn Header="Chance" Binding="{Binding Chance}"></DataGridTextColumn>
-			 
+			  <DataGridTemplateColumn>
+				  <DataGridTemplateColumn.CellTemplate>
+					  <DataTemplate >
+						  <StackPanel Orientation="Horizontal">
+							  <Button Content="R" Command="{Binding $parent[DataGrid].((vm:LabouchereViewModel)DataContext).RemoveCommand}" />
+							  <Button Content="U" Command="{Binding $parent[DataGrid].((vm:LabouchereViewModel)DataContext).MoveUpCommand}"/>
+							  <Button Content="D" Command="{Binding $parent[DataGrid].((vm:LabouchereViewModel)DataContext).MoveDownCommand}"/>
+						  </StackPanel>
+					  </DataTemplate>
+				  </DataGridTemplateColumn.CellTemplate>
+
+			  </DataGridTemplateColumn>		 
 			</DataGrid.Columns>
 	  </DataGrid>
     <Border Padding="3" Margin="3" BorderBrush="DarkGray" BorderThickness="1">
@@ -29,12 +44,12 @@ xmlns:dice="using:KryGamesBot.Ava.Views.Games.Dice"
           </StackPanel>
         </Border>
         <StackPanel>
-          <ComboBox/>
-          <StackPanel Orientation="Horizontal">
-            <NumericUpDown>
+			<ComboBox ItemsSource="{Binding Options}" SelectedItem="{Binding OnFinishAction}"/>
+          <StackPanel Orientation="Horizontal"  IsVisible="{Binding ShowFinishSteps}">
+            <NumericUpDown Value="{Binding Strategy.EndStep}">
             
             </NumericUpDown>
-            <TextBlock VerticalAlignment="Center">Steps backward</TextBlock>
+            <TextBlock VerticalAlignment="Center"> Steps backward</TextBlock>
           </StackPanel>
         </StackPanel>
       </StackPanel>
@@ -47,12 +62,12 @@ xmlns:dice="using:KryGamesBot.Ava.Views.Games.Dice"
           </StackPanel>
         </Border>
         <StackPanel>
-          <ComboBox/>
-          <StackPanel Orientation="Horizontal">
-            <NumericUpDown>
+          <ComboBox ItemsSource="{Binding Options}" SelectedItem="{Binding OnLossAction}"/>
+          <StackPanel Orientation="Horizontal" IsVisible="{Binding ShowLossSteps}">
+            <NumericUpDown Value="{Binding Strategy.LossStep}">
 
             </NumericUpDown>
-            <TextBlock VerticalAlignment="Center">Steps forward</TextBlock>
+            <TextBlock VerticalAlignment="Center"> Steps forward</TextBlock>
           </StackPanel>
 
 
@@ -67,12 +82,12 @@ xmlns:dice="using:KryGamesBot.Ava.Views.Games.Dice"
           </StackPanel>
         </Border>
         <StackPanel>
-          <ComboBox/>
-          <StackPanel Orientation="Horizontal">
-            <NumericUpDown>
+			<ComboBox ItemsSource="{Binding Options}" SelectedItem="{Binding OnWinAction}"/>
+          <StackPanel Orientation="Horizontal"  IsVisible="{Binding ShowWinSteps}">
+            <NumericUpDown Value="{Binding Strategy.WinStep}">
 
             </NumericUpDown>
-            <TextBlock VerticalAlignment="Center">Steps backward</TextBlock>
+            <TextBlock VerticalAlignment="Center"> Steps backward</TextBlock>
           </StackPanel>
 
 

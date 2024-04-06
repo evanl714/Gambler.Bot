@@ -178,6 +178,10 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
         {
 
         }
+        public void Dispose()
+        {
+            _placeBetVM = null;
+        }
     }
 
     public class LabListItem:ViewModelBase

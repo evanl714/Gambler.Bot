@@ -113,11 +113,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="BlazorMonaco" Version="3.1.0" />
-        <PackageReference Include="CommunityToolkit.Maui" Version="6.0.0" />
+        <PackageReference Include="BlazorMonaco" Version="3.2.0" />
+        <PackageReference Include="CommunityToolkit.Maui" Version="8.0.1" />
         <PackageReference Include="DevExpress.Blazor" Version="23.2.4" />
         <PackageReference Include="DevExpress.Blazor.Themes" Version="23.2.4" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -622,6 +622,18 @@
       <None Include="wwwroot\Images\Sites\stake.PNG" />
       <None Include="wwwroot\Images\Sites\windice.png" />
       <None Include="wwwroot\Images\Sites\wolfbet.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Update="Microsoft.AspNetCore.Components.WebView.Maui" Version="8.0.14" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Update="Microsoft.Maui.Controls" Version="8.0.14" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Update="Microsoft.Maui.Controls.Compatibility" Version="8.0.14" />
     </ItemGroup>
 
 </Project>

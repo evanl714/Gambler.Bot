@@ -1,4 +1,5 @@
 ﻿using DoormatBot.Strategies;
+using DoormatBot.Strategies.PresetListModels;
 using KryGamesBot.Ava.Classes.BetsPanel;
 using KryGamesBot.Ava.Classes.Strategies;
 using KryGamesBot.Ava.ViewModels.Games.Dice;
@@ -6,14 +7,46 @@ using ReactiveUI;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Input;
-using static DoormatBot.Strategies.PresetList;
 
 namespace KryGamesBot.Ava.ViewModels.Strategies
 {
     public class PresetListViewModel : ViewModelBase, IStrategy
     {
+        public string[] Options { get; set; } = new string[] { "Step","Reset","Stop" };
+        
+        public string OnLossAction 
+        { 
+            get=>Strategy.LossAction; set 
+            {
+                Strategy.LossAction = value;
+                this.RaisePropertyChanged();
+                this.RaisePropertyChanged(nameof(ShowLossSteps));
+            } 
+        }
+        public string OnWinAction
+        {
+            get => Strategy.WinAction; set
+            {
+                Strategy.WinAction = value;
+                this.RaisePropertyChanged();
+                this.RaisePropertyChanged(nameof(ShowWinSteps));
+            }
+        }
+        public string OnFinishAction
+        {
+            get => Strategy.EndAction; set
+            {
+                Strategy.EndAction = value;
+                this.RaisePropertyChanged();
+                this.RaisePropertyChanged(nameof(ShowFinishSteps));
+            }
+        }
+
+        public bool ShowLossSteps { get => OnLossAction=="Step"; }
+        public bool ShowWinSteps { get => OnWinAction == "Step"; }
+        public bool ShowFinishSteps { get => OnFinishAction == "Step"; }
+
         private PresetList _strategy;
 
         public PresetList Strategy
@@ -22,14 +55,6 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
             set { _strategy = value; this.RaisePropertyChanged(); }
         }
         private DoormatCore.Games.Games _game;
-
-        private iPlaceBet _placeBetVM;
-
-        public iPlaceBet PlaceBetVM
-        {
-            get { return _placeBetVM; }
-            set { _placeBetVM = value; this.RaisePropertyChanged(); }
-        }
 
         private ObservableCollection<PresetDiceBet> _betList;
 
@@ -54,7 +79,12 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
 
         public PresetListViewModel()
         {
+            MoveUpCommand = ReactiveCommand.Create(MoveUp);
+            MoveDownCommand = ReactiveCommand.Create(MoveDown);
+            RemoveCommand = ReactiveCommand.Create(Remove);
             AddCommand = ReactiveCommand.Create(Add);
+            OpenCommand = ReactiveCommand.Create(Open);
+            SaveCommand = ReactiveCommand.Create(Save);
         }
 
         public ICommand AddCommand { get; set; }
@@ -69,20 +99,7 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
 
         public void GameChanged(DoormatCore.Games.Games newGame)
         {
-            if (PlaceBetVM != null && PlaceBetVM is INotifyPropertyChanged notify)
-            {
-                notify.PropertyChanged -= Notify2_PropertyChanged;
-            }
-            Game = newGame;
-            switch (Game)
-            {
-                case DoormatCore.Games.Games.Dice: PlaceBetVM = new DicePlaceBetViewModel { ShowToggle = true }; break;
-                default: PlaceBetVM = null; break;
-            }
-            if (PlaceBetVM != null && PlaceBetVM is INotifyPropertyChanged notify2)
-            {
-                notify2.PropertyChanged += Notify2_PropertyChanged;
-            }
+           
         }
 
         private void Notify2_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -110,12 +127,7 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
 
             this.Strategy = mart;
             BetList = new ObservableCollection<PresetDiceBet>(mart.PresetBets);
-            if (PlaceBetVM is DicePlaceBetViewModel dice)
-            {
-                dice.Amount = mart.Amount;
-                dice.Chance = mart.Chance;
-                dice.ShowAmount = false;
-            }
+           
         }
         public void Saving()
         {
@@ -124,6 +136,54 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
         public bool TopAlign()
         {
             return true;
+        }
+
+        public ICommand MoveUpCommand { get; set; }
+        void MoveUp()
+        {
+            if (SelectedIndex > 0)
+            {
+                int tmpindex = SelectedIndex;
+                PresetDiceBet tmp = BetList[tmpindex - 1];
+                BetList[tmpindex - 1] = BetList[tmpindex];
+                BetList[tmpindex] = tmp;
+                SelectedIndex = tmpindex;
+            }
+        }
+
+        public ICommand MoveDownCommand { get; set; }
+        void MoveDown()
+        {
+            if (SelectedIndex < BetList.Count - 1)
+            {
+                int tmpindex = SelectedIndex;
+                PresetDiceBet tmp = BetList[tmpindex];
+                BetList[tmpindex] = BetList[tmpindex + 1];
+                BetList[tmpindex + 1] = tmp;
+                SelectedIndex = tmpindex;
+            }
+        }
+
+        public ICommand RemoveCommand { get; set; }
+        void Remove()
+        {
+            BetList.RemoveAt(SelectedIndex);
+        }
+
+        public ICommand OpenCommand { get; set; }
+        void Open()
+        {
+
+        }
+
+        public ICommand SaveCommand { get; set; }
+        void Save()
+        {
+
+        }
+        public void Dispose()
+        {
+            
         }
     }
 }

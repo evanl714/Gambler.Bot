@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KryGamesBot.Ava.Classes.Strategies
 {
-    public interface IStrategy
+    public interface IStrategy:IDisposable
     {        
         void GameChanged(DoormatCore.Games.Games newGame);
         void SetStrategy(DoormatBot.Strategies.BaseStrategy Strategy);

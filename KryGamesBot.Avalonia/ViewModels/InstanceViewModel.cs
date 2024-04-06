@@ -1,5 +1,6 @@
 ﻿using DoormatBot;
 using DoormatBot.Strategies;
+using DoormatBot.Strategies.PresetListModels;
 using KryGamesBot.Ava.Classes;
 using KryGamesBot.Ava.Classes.BetsPanel;
 using KryGamesBot.Ava.Classes.Strategies;
@@ -16,6 +17,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace KryGamesBot.Ava.ViewModels
 {
@@ -33,6 +35,17 @@ namespace KryGamesBot.Ava.ViewModels
         public ProfitChartViewModel ChartData { get; set; } = new ProfitChartViewModel();
         public SiteStatsViewModel SiteStatsData { get; set; } = new SiteStatsViewModel();
         public SessionStatsViewModel SessionStatsData { get; set; } = new SessionStatsViewModel();
+        
+
+        public string[] Currencies
+        {
+            get { return BotInstance?.CurrentSite?.Currencies; }
+        }
+        public int? CurrentCurrency
+        {
+            get { return BotInstance?.CurrentSite?.Currency; }
+            set { if (BotInstance?.CurrentSite!=null) BotInstance.CurrentSite.Currency = value??0; }
+        }
 
         iLiveBet _liveBets = new DiceLiveBetViewModel();
         public iLiveBet LiveBets { get => _liveBets; set { _liveBets = value; this.RaisePropertyChanged(); } }
@@ -106,6 +119,11 @@ namespace KryGamesBot.Ava.ViewModels
 
         public InstanceViewModel()
         {
+            StartCommand = ReactiveCommand.Create(Start);
+            StopCommand = ReactiveCommand.Create(Stop);
+            ResumeCommand = ReactiveCommand.Create(Resume);
+            StopOnWinCommand = ReactiveCommand.Create(StopOnWin);
+
             var tmp =  new Doormat();
             SelectSite = new SelectSiteViewModel();
             SelectSite.SelectedSiteChanged += SelectSite_SelectedSiteChanged;
@@ -159,6 +177,10 @@ namespace KryGamesBot.Ava.ViewModels
                 case "Fibonacci": tmpStrat = new FibonacciViewModel(); break;
                 case "Labouchere": tmpStrat = new LabouchereViewModel(); break;
                 case "PresetList": tmpStrat = new PresetListViewModel(); break;
+                case "ProgrammerLUA": tmpStrat = new ProgrammerModeLUAViewModel(); break;
+                case "ProgrammerCS": tmpStrat = new ProgrammerModeCSViewModel(); break;
+                case "ProgrammerJS": tmpStrat = new ProgrammerModeCSViewModel(); break;
+                case "ProgrammerPython": tmpStrat = new ProgrammerModePYViewModel(); break;
                 default: tmpStrat = null; break; ;
             }
             if (tmpStrat != null)
@@ -166,6 +188,7 @@ namespace KryGamesBot.Ava.ViewModels
                 tmpStrat.SetStrategy(BotInstance.Strategy);
                 tmpStrat.GameChanged(BotInstance.CurrentGame);
             }
+            StrategyVM?.Dispose();
             StrategyVM = tmpStrat;
         }
 
@@ -253,6 +276,8 @@ namespace KryGamesBot.Ava.ViewModels
             object curGame = DoormatCore.Games.Games.Dice;
             if (game != null && Enum.TryParse(typeof(DoormatCore.Games.Games), game, out curGame) && Array.IndexOf(botIns.CurrentSite.SupportedGames, (DoormatCore.Games.Games)curGame) >= 0)
                 botIns.CurrentGame = (DoormatCore.Games.Games)curGame;
+            this.RaisePropertyChanged(nameof(Currencies));
+            this.RaisePropertyChanged(nameof(CurrentCurrency));
             ShowLogin();//.Wait();
             /*LoginControl.CurrentSite = botIns.CurrentSite;
             lciSelectSite1.Visibility = Visibility.Collapsed;
@@ -358,12 +383,33 @@ namespace KryGamesBot.Ava.ViewModels
         //    File.WriteAllText(FileLocation, Settings);
         //}
 
+        public ICommand StartCommand { get; set; }
+        void Start()
+        {
+            if (!botIns.Running)
+            {
+                StrategyVM?.Saving();
+                botIns.SaveBetSettings(BetSettingsFile);
+                botIns.Start();
+            }           
+        }
 
+        public ICommand StopCommand { get; set; }
+        void Stop()
+        {
+            botIns.StopStrategy("Stop button clicked");
+        }
 
+        public ICommand ResumeCommand { get; set; }
+        void Resume()
+        {
+            botIns.Resume();
+        }
 
-
-
-
-
+        public ICommand StopOnWinCommand { get; set; }
+        void StopOnWin()
+        {
+            botIns.StopOnWin = true;
+        }
     }
 }

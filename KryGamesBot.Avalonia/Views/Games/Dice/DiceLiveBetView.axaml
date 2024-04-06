@@ -12,8 +12,8 @@
       <DataGridTextColumn Binding="{Binding BetID}" Header="Bet Id"/>
       <DataGridTextColumn Binding="{Binding DateValue}" Header="Time"/>
       <DataGridTextColumn Binding="{Binding TotalAmount}" Header="Amount"/>
-      <DataGridTextColumn Binding="{Binding High}" Header="High"/>
-      <DataGridCheckBoxColumn Binding="{Binding Chance}" Header="Chance"/>
+		<DataGridCheckBoxColumn Binding="{Binding High}" Header="High"/>
+		<DataGridTextColumn Binding="{Binding Chance}" Header="Chance"/>
       <DataGridTextColumn Binding="{Binding Roll}" Header="Roll"/>
       <DataGridTextColumn Binding="{Binding Profit}" Header="Profit"/>
       <DataGridTextColumn Binding="{Binding Nonce}" Header="Nonce"/>

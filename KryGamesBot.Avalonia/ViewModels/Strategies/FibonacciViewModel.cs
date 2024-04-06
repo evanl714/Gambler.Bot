@@ -96,5 +96,9 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
         {
             return true;
         }
+        public void Dispose()
+        {
+            _placeBetVM = null;
+        }
     }
 }

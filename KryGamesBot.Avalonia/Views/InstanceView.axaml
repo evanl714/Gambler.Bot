@@ -10,7 +10,8 @@
 			 xmlns:common="using:KryGamesBot.Ava.Views.Common" xmlns:dice="using:KryGamesBot.Ava.Views.Games.Dice"
              xmlns:diceVM="using:KryGamesBot.Ava.ViewModels.Games.Dice"
              xmlns:stratVM="using:KryGamesBot.Ava.ViewModels.Strategies"
-xmlns:strat="using:KryGamesBot.Ava.Views.Games.Strategies.Martingale"
+			 xmlns:strat="using:KryGamesBot.Ava.Views.Games.Strategies"
+xmlns:mart="using:KryGamesBot.Ava.Views.Games.Strategies.Martingale"
 xmlns:dalembert="using:KryGamesBot.Ava.Views.Games.Strategies.DAlembert" xmlns:fibonacci="using:KryGamesBot.Ava.Views.Games.Strategies.Fibonacci" xmlns:labouchere="using:KryGamesBot.Ava.Views.Games.Strategies.Labouchere" xmlns:PresetList="using:DoormatBot.Strategies" xmlns:presetlist="using:KryGamesBot.Ava.Views.Games.Strategies.PresetList"         Tag="{Binding}"
 			 >
 	<UserControl.DataContext>
@@ -29,6 +30,7 @@ xmlns:dalembert="using:KryGamesBot.Ava.Views.Games.Strategies.DAlembert" xmlns:f
       <GridSplitter Grid.Column="1" Background="DarkGray" ResizeDirection="Columns"/>
       <GridSplitter Grid.Column="3" Background="DarkGray" ResizeDirection="Columns"/>
       <StackPanel Grid.Column="0">
+		  <ComboBox ItemsSource="{Binding Currencies}" SelectedIndex="{Binding CurrentCurrency}" />
         <common:SiteStatsView Grid.Row="0" DataContext="{Binding SiteStatsData}"/>
         <common:SessionStatsView Grid.Row="2"/>
       </StackPanel>
@@ -52,10 +54,10 @@ xmlns:dalembert="using:KryGamesBot.Ava.Views.Games.Strategies.DAlembert" xmlns:f
       </Grid>
       <DockPanel Grid.Column="4" >
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
-          <Button Margin="5">Start</Button>
-          <Button Margin="5">Pause</Button>
-          <Button Margin="5">Stop</Button>
-          <Button Margin="5">Stop On Win</Button>
+          <Button Margin="5" Command="{Binding StartCommand}">Start</Button>
+          <Button Margin="5"  Command="{Binding ResumeCommand}">Resume</Button>
+          <Button Margin="5" Command="{Binding StopCommand}">Stop</Button>
+          <Button Margin="5" Command="{Binding StopOnWinCommand}">Stop On Win</Button>
         </StackPanel>
         <TabControl>
           <TabItem Header="Strategy">
@@ -66,7 +68,7 @@ xmlns:dalembert="using:KryGamesBot.Ava.Views.Games.Strategies.DAlembert" xmlns:f
               <ContentControl Content="{Binding StrategyVM}" VerticalAlignment="Stretch">
                 <ContentControl.DataTemplates>
                   <DataTemplate DataType="stratVM:MartingaleViewModel">
-                    <strat:MartingaleView/>
+                    <mart:MartingaleView/>
                   </DataTemplate>
                   <DataTemplate DataType="stratVM:DAlembertViewModel">
                     <dalembert:DAlembertView/>
@@ -79,6 +81,18 @@ xmlns:dalembert="using:KryGamesBot.Ava.Views.Games.Strategies.DAlembert" xmlns:f
                   </DataTemplate>
 					<DataTemplate DataType="stratVM:PresetListViewModel">
 						<presetlist:PresetListView/>
+					</DataTemplate>
+					<DataTemplate DataType="stratVM:ProgrammerModeCSViewModel">
+						<strat:ProgrammerModeCSView/>
+					</DataTemplate>
+					<DataTemplate DataType="stratVM:ProgrammerModeLUAViewModel">
+						<strat:ProgrammerModeLuaView/>
+					</DataTemplate>
+					<DataTemplate DataType="stratVM:ProgrammerModeJSViewModel">
+						<strat:ProgrammerModeJSView/>
+					</DataTemplate>
+					<DataTemplate DataType="stratVM:ProgrammerModePYViewModel">
+						<strat:ProgrammerModePyView/>
 					</DataTemplate>
                 </ContentControl.DataTemplates>
               </ContentControl>
