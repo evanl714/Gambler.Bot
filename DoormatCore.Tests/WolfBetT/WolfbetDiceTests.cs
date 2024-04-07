@@ -5,14 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DoormatCore.Tests
+namespace DoormatCore.Tests.WolfBetT
 {
-    public class BitvestTests:BaseSiteTests, IClassFixture<Bitvest>
+    public class WolfbetDiceTests:DiceTests, IClassFixture<WolfBet>
     {
-        public BitvestTests(Bitvest fixure) :base(fixure)
+        public WolfbetDiceTests(WolfBet site):base(site)
         {
             
         }
-        
     }
 }

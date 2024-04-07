@@ -17,14 +17,11 @@ namespace DoormatCore.Tests
 
         public BaseSiteTests(BaseSite site)
         {
-            var totp = new Totp(Base32Encoding.ToBytes("PV3GWNKFEN3SGLSTJE4U6Z3MPJAESMKIM5AUKVTMENVS4RKBJYYA"));
-
-            string value = totp.ComputeTotp(DateTime.UtcNow);
             _site = site;
             _site.OnBrowserBypassRequired += _site_OnBrowserBypassRequired;
         }
 
-        LoginParamValue[] GetParams(bool with2fa, [CallerMemberName] string callerName = "")
+        internal static LoginParamValue[] GetParams(string Sitename, [CallerMemberName] string callerName = "")
         {
             var config = new ConfigurationBuilder()
             .AddUserSecrets<BaseSiteTests>()
@@ -34,7 +31,7 @@ namespace DoormatCore.Tests
             {
                 string loginthings = File.ReadAllText(file);
                 SiteLogins[] logins = JsonSerializer.Deserialize<SiteLogins[]>(loginthings);
-                LoginParamValue[] values = logins.FirstOrDefault(x => x.site.ToLower() == _site.SiteName.ToLower() && x.test.ToLower() == callerName.ToLower())?.loginParams;
+                LoginParamValue[] values = logins.FirstOrDefault(x => x.site.ToLower() == Sitename.ToLower() && x.test.ToLower() == callerName.ToLower())?.loginParams;
                 foreach (var x in values)
                 {
                     if (x.Param.Name.ToLower()=="2fa code")
@@ -119,7 +116,7 @@ namespace DoormatCore.Tests
 
             DateTime start = DateTime.Now;
 
-            _site.LogIn(GetParams(false));
+            _site.LogIn(GetParams(_site.SiteName));
 
             while (!finished && (DateTime.Now-start).TotalSeconds<30)
             {
@@ -153,7 +150,7 @@ namespace DoormatCore.Tests
 
             DateTime start = DateTime.Now;
 
-            _site.LogIn(GetParams(false));
+            _site.LogIn(GetParams(_site.SiteName));
 
             while (!finished && (DateTime.Now - start).TotalSeconds < 30)
             {
@@ -180,7 +177,7 @@ namespace DoormatCore.Tests
 
             DateTime start = DateTime.Now;
 
-            _site.LogIn(GetParams(false));
+            _site.LogIn(GetParams(_site.SiteName));
 
             while (!finished && (DateTime.Now - start).TotalSeconds < 30)
             {
@@ -213,7 +210,7 @@ namespace DoormatCore.Tests
 
             DateTime start = DateTime.Now;
 
-            _site.LogIn(GetParams(false));
+            _site.LogIn(GetParams(_site.SiteName));
 
             while (!finished && (DateTime.Now - start).TotalSeconds < 30)
             {
@@ -245,7 +242,7 @@ namespace DoormatCore.Tests
 
             DateTime start = DateTime.Now;
 
-            _site.LogIn(GetParams(false));
+            _site.LogIn(GetParams(_site.SiteName));
 
             while (!finished && (DateTime.Now - start).TotalSeconds < 30)
             {

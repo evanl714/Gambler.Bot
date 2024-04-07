@@ -6,14 +6,14 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DoormatCore.Tests
+namespace DoormatCore.Tests.WolfBetT
 {
     [TestCaseOrderer("DoormatCore.Tests.Code.AlphabeticalOrderer", "DoormatCore.Tests")]
     public class WolfbetTests : BaseSiteTests, IClassFixture<WolfBet>
     {
         public WolfbetTests(WolfBet fixure) : base(fixure)
         {
-             
+
         }
 
         [Fact]

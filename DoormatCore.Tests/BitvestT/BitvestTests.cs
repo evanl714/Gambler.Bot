@@ -5,13 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DoormatCore.Tests
+namespace DoormatCore.Tests.BitvestT
 {
-    public class DuckDiceTests : BaseSiteTests, IClassFixture<DuckDice>
+    public class BitvestTests : BaseSiteTests, IClassFixture<Bitvest>
     {
-        public DuckDiceTests(DuckDice fixure) : base(fixure)
+        public BitvestTests(Bitvest fixure) : base(fixure)
         {
 
         }
+
     }
 }

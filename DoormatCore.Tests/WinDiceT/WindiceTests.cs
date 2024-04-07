@@ -6,13 +6,13 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DoormatCore.Tests
+namespace DoormatCore.Tests.WinDiceT
 {
     public class WindiceTests : BaseSiteTests, IClassFixture<WinDice>
     {
         public WindiceTests(WinDice fixure) : base(fixure)
         {
-             
+
         }
 
         [Fact]
