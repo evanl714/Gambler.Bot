@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KryGamesBot.MAUI.Blazor", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{84486CF5-B4E9-4118-BF6D-21E998DD3017}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoormatCore.Tests", "DoormatCore.Tests\DoormatCore.Tests.csproj", "{2F192F27-1DB6-4A9B-81F0-21637E407304}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoormatCore.Tests", "..\Doormat\Doormat\DoormatCore.Tests\DoormatCore.Tests.csproj", "{2F192F27-1DB6-4A9B-81F0-21637E407304}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
