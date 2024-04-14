@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KryGamesBot.MAUI.Blazor", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{84486CF5-B4E9-4118-BF6D-21E998DD3017}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoormatCore.Tests", "..\Doormat\Doormat\DoormatCore.Tests\DoormatCore.Tests.csproj", "{2F192F27-1DB6-4A9B-81F0-21637E407304}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoormatCore.Tests", "..\Doormat\Doormat\DoormatCore.Tests\DoormatCore.Tests.csproj", "{2F192F27-1DB6-4A9B-81F0-21637E407304}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoormatBot.Tests", "..\DoormatBot\DoormatBot.Tests\DoormatBot.Tests.csproj", "{3B0AEC00-331F-4B16-BD26-560960952DBF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{2F192F27-1DB6-4A9B-81F0-21637E407304}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F192F27-1DB6-4A9B-81F0-21637E407304}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F192F27-1DB6-4A9B-81F0-21637E407304}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B0AEC00-331F-4B16-BD26-560960952DBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B0AEC00-331F-4B16-BD26-560960952DBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B0AEC00-331F-4B16-BD26-560960952DBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B0AEC00-331F-4B16-BD26-560960952DBF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +76,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{E39202E4-5FB0-42D4-A1CB-C60B6D0D6434} = {8F9C7DF7-1122-4418-B30A-416B9F531FE5}
 		{2F192F27-1DB6-4A9B-81F0-21637E407304} = {84486CF5-B4E9-4118-BF6D-21E998DD3017}
+		{3B0AEC00-331F-4B16-BD26-560960952DBF} = {84486CF5-B4E9-4118-BF6D-21E998DD3017}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7387205E-CA7B-4592-8D90-8FBF3CF2F584}
