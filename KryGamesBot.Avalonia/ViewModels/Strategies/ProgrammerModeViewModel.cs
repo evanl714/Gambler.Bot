@@ -3,6 +3,7 @@ using Avalonia.Threading;
 using DoormatBot.Strategies;
 using DoormatCore.Helpers;
 using KryGamesBot.Ava.Classes.Strategies;
+using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -39,9 +40,11 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
         public DoormatBot.Strategies.ProgrammerMode Strat { get; private set; }
         DateTime LastChanged = DateTime.Now;
         FileSystemWatcher FileWatcher;
+        private readonly ILogger _logger;
 
-        public ProgrammerModeViewModel()
+        public ProgrammerModeViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
         {
+            _logger = logger;
             saveFile = new Interaction<FilePickerSaveOptions, string>();
             openFile = new Interaction<FilePickerOpenOptions, string>();
             NewCommand = ReactiveCommand.Create(New);
@@ -98,7 +101,7 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
                 }
                 catch (Exception e)
                 {
-                    Logger.DumpLog(e);
+                    _logger?.LogError(e.ToString());
                 }
                 this.RaisePropertyChanged(nameof(fileName));
             }
@@ -154,7 +157,7 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
                 }
                 catch (Exception e)
                 {
-                    Logger.DumpLog(e);
+                    _logger?.LogError(e.ToString());
                 }
                 Strat.FileName = FileName;
                 LoadDocument();
@@ -190,7 +193,7 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
             }
             catch (Exception e)
             {
-                Logger.DumpLog(e);
+                _logger?.LogError(e.ToString());
             }
             finally
             {
@@ -218,7 +221,7 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
             }
             catch (Exception e)
             {
-                Logger.DumpLog(e);
+                _logger?.LogError(e.ToString());
             }
             finally
             {

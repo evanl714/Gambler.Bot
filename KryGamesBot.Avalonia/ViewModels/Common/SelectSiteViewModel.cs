@@ -30,10 +30,9 @@ namespace KryGamesBot.Ava.ViewModels.Common
         public event EventHandler<SitesList> SelectedSiteChanged;
         public bool BypassLogIn { get; set; } = false;
 
-        public SelectSiteViewModel()
+        public SelectSiteViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
         {
-            Text = "fuckl you";
-            Doormat botIns = new Doormat();
+            Doormat botIns = new Doormat(_logger);
             botIns.CompileSites();
             botIns.GetStrats();
             LoginCommand = ReactiveCommand.Create<object>(LogIn);

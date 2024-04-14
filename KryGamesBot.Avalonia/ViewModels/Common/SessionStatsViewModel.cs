@@ -21,7 +21,7 @@ namespace KryGamesBot.Ava.ViewModels.Common
 
         public string name { get; set; }
 
-        public SessionStatsViewModel()
+        public SessionStatsViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
         {
             name=Guid.NewGuid().ToString();
         }

@@ -8,6 +8,10 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
 {
     public class ProgrammerModeCSViewModel:ProgrammerModeViewModel
     {
+        public ProgrammerModeCSViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
+        {
+            
+        }
         protected override void SetLanguage()
         {
             

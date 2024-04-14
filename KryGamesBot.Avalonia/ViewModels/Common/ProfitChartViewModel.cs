@@ -43,7 +43,7 @@ namespace KryGamesBot.Ava.ViewModels.Common
             set { _freezeText = value; this.RaisePropertyChanged(); }
         }
 
-        public ProfitChartViewModel()
+        public ProfitChartViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
         {
             FreezeText = "Freeze Chart";
             Series = new ISeries[] {

@@ -14,9 +14,7 @@
 xmlns:mart="using:KryGamesBot.Ava.Views.Games.Strategies.Martingale"
 xmlns:dalembert="using:KryGamesBot.Ava.Views.Games.Strategies.DAlembert" xmlns:fibonacci="using:KryGamesBot.Ava.Views.Games.Strategies.Fibonacci" xmlns:labouchere="using:KryGamesBot.Ava.Views.Games.Strategies.Labouchere" xmlns:PresetList="using:DoormatBot.Strategies" xmlns:presetlist="using:KryGamesBot.Ava.Views.Games.Strategies.PresetList"         Tag="{Binding}"
 			 >
-	<UserControl.DataContext>
-		<vm:InstanceViewModel/>
-	</UserControl.DataContext>
+	
 	<Grid>
 		<common:SelectSiteView DataContext="{Binding SelectSite}" IsVisible="{Binding $parent[local:InstanceView].((vm:InstanceViewModel)Tag).ShowSites}"  />
     <Grid IsVisible="{Binding ShowBot}">

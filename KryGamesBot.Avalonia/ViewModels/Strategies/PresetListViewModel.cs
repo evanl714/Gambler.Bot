@@ -77,7 +77,7 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
             set { _selectedIndex = value; }
         }
 
-        public PresetListViewModel()
+        public PresetListViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
         {
             MoveUpCommand = ReactiveCommand.Create(MoveUp);
             MoveDownCommand = ReactiveCommand.Create(MoveDown);

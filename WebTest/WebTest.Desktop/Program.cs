@@ -17,10 +17,14 @@ class Program
 
     // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
-        => AppBuilder.Configure<App>()
-            .UsePlatformDetect()
-            .WithInterFont()
-            .LogToTrace()
-            .UseReactiveUI()
-            .UseDesktopWebView();
+    {
+
+       return  AppBuilder.Configure<App>()
+              .UsePlatformDetect()
+              .LogToTrace(Avalonia.Logging.LogEventLevel.Debug)
+              .WithInterFont()
+              .LogToTrace()
+              .UseReactiveUI()
+              .UseDesktopWebView();
+    }
 }

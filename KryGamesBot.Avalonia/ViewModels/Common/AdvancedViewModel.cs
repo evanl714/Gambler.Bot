@@ -20,5 +20,9 @@ namespace KryGamesBot.Ava.ViewModels.Common
         List<string> Actions = new List<string> { "Withdraw", "Tip", "Stop" };
         List<string> Compares = new List<string> { "Profit", "Balance" };
 
+        public AdvancedViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
+        {
+            
+        }
     }
 }

@@ -4,7 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="KryGamesBot.Ava.Views.MainView"
-			 xmlns:views="using:KryGamesBot.Ava.Views">
+			 xmlns:views="using:KryGamesBot.Ava.Views"
+			 xmlns:vm="using:KryGamesBot.Ava.ViewModels"
+			 x:DataType="vm:MainViewModel"
+			 >
 
 	<Grid>
 		<Grid.RowDefinitions>			
@@ -12,7 +15,13 @@
 		</Grid.RowDefinitions>
 		<WebView x:Name="wvBypass" Grid.Row="0" IsVisible="false" />
 
-		<views:InstanceView Grid.Row="0"/>
+		<ContentControl Content="{Binding Instance}">
+			<ContentControl.DataTemplates>
+				<DataTemplate DataType="vm:InstanceViewModel">
+					<views:InstanceView/>
+				</DataTemplate>
+			</ContentControl.DataTemplates>
+		</ContentControl>
 	
 </Grid>
 </UserControl>

@@ -34,10 +34,10 @@ namespace KryGamesBot.Ava.ViewModels
         public Doormat? BotInstance { get => botIns; set { botIns = value; this.RaisePropertyChanged(); } }
         public Interaction<LoginViewModel, LoginViewModel?> ShowDialog { get; }
         private bool showSites=true;
-        public ProfitChartViewModel ChartData { get; set; } = new ProfitChartViewModel();
-        public SiteStatsViewModel SiteStatsData { get; set; } = new SiteStatsViewModel();
-        public SessionStatsViewModel SessionStatsData { get; set; } = new SessionStatsViewModel();
-        
+        public ProfitChartViewModel ChartData { get; set; }// = new ProfitChartViewModel();
+        public SiteStatsViewModel SiteStatsData { get; set; }// = new SiteStatsViewModel();
+        public SessionStatsViewModel SessionStatsData { get; set; }// = new SessionStatsViewModel();
+
 
         public string[] Currencies
         {
@@ -49,7 +49,7 @@ namespace KryGamesBot.Ava.ViewModels
             set { if (BotInstance?.CurrentSite!=null) BotInstance.CurrentSite.Currency = (value>=0?value:0)??0; }
         }
 
-        iLiveBet _liveBets = new DiceLiveBetViewModel();
+        iLiveBet _liveBets;
         public iLiveBet LiveBets { get => _liveBets; set { _liveBets = value; this.RaisePropertyChanged(); } }
         private IStrategy _strategyVM;
 
@@ -59,10 +59,10 @@ namespace KryGamesBot.Ava.ViewModels
             set { _strategyVM = value; this.RaisePropertyChanged(); }
         }
 
-        public AdvancedViewModel AdvancedSettingsVM { get; set; } = new AdvancedViewModel();
-        public ResetSettingsViewModel ResetSettingsVM { get; set; } = new ResetSettingsViewModel();
+        public AdvancedViewModel AdvancedSettingsVM { get; set; }// = new AdvancedViewModel();
+        public ResetSettingsViewModel ResetSettingsVM { get; set; }// = new ResetSettingsViewModel();
 
-        iPlaceBet _placeBetVM = new DicePlaceBetViewModel();
+        iPlaceBet _placeBetVM=null;// = new DicePlaceBetViewModel();
         public iPlaceBet PlaceBetVM { get=> _placeBetVM; set { _placeBetVM = value; this.RaisePropertyChanged(); } } 
 
         public bool ShowSites
@@ -119,20 +119,28 @@ namespace KryGamesBot.Ava.ViewModels
             
         }
 
-        public InstanceViewModel()
+        public InstanceViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
         {
+            AdvancedSettingsVM= new AdvancedViewModel(_logger);
+            ResetSettingsVM = new ResetSettingsViewModel(_logger);
+            ChartData = new ProfitChartViewModel(_logger);
+            SiteStatsData = new SiteStatsViewModel(_logger);
+            SessionStatsData = new SessionStatsViewModel(_logger);
+
+
             StartCommand = ReactiveCommand.Create(Start);
             StopCommand = ReactiveCommand.Create(Stop);
             ResumeCommand = ReactiveCommand.Create(Resume);
             StopOnWinCommand = ReactiveCommand.Create(StopOnWin);
 
-            var tmp =  new Doormat();
-            SelectSite = new SelectSiteViewModel();
+            var tmp =  new Doormat(_logger);
+            SelectSite = new SelectSiteViewModel(_logger);
             SelectSite.SelectedSiteChanged += SelectSite_SelectedSiteChanged;
             IsSelectSiteViewVisible = true;
             ShowDialog = new Interaction<LoginViewModel, LoginViewModel?>();
-            tmp.Strategy = new Martingale();
+            tmp.Strategy = new Martingale(_logger);
             tmp.GetStrats();
+            PlaceBetVM = new DicePlaceBetViewModel(_logger);
             PlaceBetVM.PlaceBet += PlaceBetVM_PlaceBet;
             tmp.OnGameChanged += BotIns_OnGameChanged;
             tmp.OnNotification += BotIns_OnNotification;
@@ -180,15 +188,15 @@ namespace KryGamesBot.Ava.ViewModels
             //this needs to set the istrategy property to the appropriate viewmodel
             switch(BotInstance.Strategy?.StrategyName)
             {
-                case "Martingale": tmpStrat = new MartingaleViewModel(); break;
-                case "D'Alembert": tmpStrat = new DAlembertViewModel(); break;
-                case "Fibonacci": tmpStrat = new FibonacciViewModel(); break;
-                case "Labouchere": tmpStrat = new LabouchereViewModel(); break;
-                case "PresetList": tmpStrat = new PresetListViewModel(); break;
-                case "ProgrammerLUA": tmpStrat = new ProgrammerModeLUAViewModel(); break;
-                case "ProgrammerCS": tmpStrat = new ProgrammerModeCSViewModel(); break;
-                case "ProgrammerJS": tmpStrat = new ProgrammerModeCSViewModel(); break;
-                case "ProgrammerPython": tmpStrat = new ProgrammerModePYViewModel(); break;
+                case "Martingale": tmpStrat = new MartingaleViewModel(_logger); break;
+                case "D'Alembert": tmpStrat = new DAlembertViewModel(_logger); break;
+                case "Fibonacci": tmpStrat = new FibonacciViewModel(_logger); break;
+                case "Labouchere": tmpStrat = new LabouchereViewModel(_logger); break;
+                case "PresetList": tmpStrat = new PresetListViewModel(_logger); break;
+                case "ProgrammerLUA": tmpStrat = new ProgrammerModeLUAViewModel(_logger); break;
+                case "ProgrammerCS": tmpStrat = new ProgrammerModeCSViewModel(_logger); break;
+                case "ProgrammerJS": tmpStrat = new ProgrammerModeCSViewModel(_logger); break;
+                case "ProgrammerPython": tmpStrat = new ProgrammerModePYViewModel(_logger); break;
                 default: tmpStrat = null; break; ;
             }
             if (tmpStrat != null)
@@ -250,8 +258,8 @@ namespace KryGamesBot.Ava.ViewModels
                     break;
                 case
                     DoormatCore.Games.Games.Dice:
-                    PlaceBetVM = new DicePlaceBetViewModel();
-                    LiveBets = new DiceLiveBetViewModel();
+                    PlaceBetVM = new DicePlaceBetViewModel(_logger);
+                    LiveBets = new DiceLiveBetViewModel(_logger);
                         break;
 
             }
@@ -266,12 +274,12 @@ namespace KryGamesBot.Ava.ViewModels
 
         private void SelectSite_SelectedSiteChanged(object? sender, DoormatCore.Helpers.SitesList e)
         {
-            SiteChanged(Activator.CreateInstance(e.SiteType()) as DoormatCore.Sites.BaseSite, e.SelectedCurrency?.Name, e.SelectedGame?.Name);
+            SiteChanged(Activator.CreateInstance(e.SiteType(),_logger) as DoormatCore.Sites.BaseSite, e.SelectedCurrency?.Name, e.SelectedGame?.Name);
         }
 
         async Task ShowLogin()
         {
-            var store = new LoginViewModel(botIns.CurrentSite);
+            var store = new LoginViewModel(botIns.CurrentSite, _logger);
             store.LoginFinished = LoginFinished;
             var result = await ShowDialog.Handle(store);
         }
@@ -358,7 +366,7 @@ namespace KryGamesBot.Ava.ViewModels
 
 
                 };
-                botIns.Strategy = new DoormatBot.Strategies.Martingale();
+                botIns.Strategy = new DoormatBot.Strategies.Martingale(_logger);
             }
             this.RaisePropertyChanged(nameof(SelectedStrategy));
             //load instance settings: site, currency, game, account, password if keepass is active and logged in.
@@ -379,7 +387,7 @@ namespace KryGamesBot.Ava.ViewModels
             var tmpsite = Doormat.Sites.FirstOrDefault(m => m.Name == tmp.Site);
             if (tmpsite != null)
             {
-                botIns.CurrentSite = Activator.CreateInstance(tmpsite.SiteType()) as DoormatCore.Sites.BaseSite;
+                botIns.CurrentSite = Activator.CreateInstance(tmpsite.SiteType(),_logger) as DoormatCore.Sites.BaseSite;
                 SiteChanged(botIns.CurrentSite, tmp.Currency, tmp.Game);
             }
             if (tmp.Game != null)

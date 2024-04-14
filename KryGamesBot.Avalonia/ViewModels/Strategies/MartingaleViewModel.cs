@@ -40,7 +40,10 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
             set { _game = value; this.RaisePropertyChanged(); }
         }
 
-
+        public MartingaleViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
+        {
+            
+        }
         public void GameChanged(DoormatCore.Games.Games newGame)
         {
             if (PlaceBetVM!=null && PlaceBetVM is INotifyPropertyChanged notify)
@@ -50,7 +53,7 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
             Game = newGame;
             switch (Game)
             {
-                case DoormatCore.Games.Games.Dice: PlaceBetVM = new DicePlaceBetViewModel { ShowToggle = true };break;
+                case DoormatCore.Games.Games.Dice: PlaceBetVM = new DicePlaceBetViewModel(_logger) { ShowToggle = true };break;
                 default: PlaceBetVM = null; break;
             }
             if (PlaceBetVM != null && PlaceBetVM is INotifyPropertyChanged notify2)

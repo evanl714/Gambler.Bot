@@ -17,5 +17,9 @@ namespace KryGamesBot.Ava.ViewModels.Common
 			set { _betSettings = value; }
 		}
 
-	}
+        public ResetSettingsViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
+        {
+            
+        }
+    }
 }

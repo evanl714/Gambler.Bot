@@ -56,7 +56,7 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
         }
 
 
-        public LabouchereViewModel()
+        public LabouchereViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
         {
             MoveUpCommand = ReactiveCommand.Create(MoveUp);
             MoveDownCommand = ReactiveCommand.Create(MoveDown);
@@ -75,7 +75,7 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
             Game = newGame;
             switch (Game)
             {
-                case DoormatCore.Games.Games.Dice: PlaceBetVM = new DicePlaceBetViewModel { ShowToggle = true }; break;
+                case DoormatCore.Games.Games.Dice: PlaceBetVM = new DicePlaceBetViewModel(_logger) { ShowToggle = true }; break;
                 default: PlaceBetVM = null; break;
             }
             if (PlaceBetVM != null && PlaceBetVM is INotifyPropertyChanged notify2)
@@ -114,7 +114,7 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
                 dice.Chance = mart.Chance;
                 dice.ShowAmount = false;
             }
-            BetList = new ObservableCollection<LabListItem>(mart.BetList.Select(x=> new LabListItem { Item=x }));
+            BetList = new ObservableCollection<LabListItem>(mart.BetList.Select(x=> new LabListItem(_logger) { Item=x }));
         }
         public void Saving()
         {
@@ -162,9 +162,9 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
         {
             int insertindex = SelectedIndex + 1;
             if (insertindex >= BetList.Count)
-                BetList.Add(new LabListItem { Item = 0 });
+                BetList.Add(new LabListItem(_logger) { Item = 0 });
             else
-                BetList.Insert(SelectedIndex+1, new LabListItem { Item = 0 });
+                BetList.Insert(SelectedIndex+1, new LabListItem(_logger) { Item = 0 });
         }
 
         public ICommand OpenCommand { get; set; }
@@ -186,6 +186,10 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
 
     public class LabListItem:ViewModelBase
     {
+        public LabListItem(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
+        {
+            
+        }
         private decimal item;
 
         public decimal Item

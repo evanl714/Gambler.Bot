@@ -1,5 +1,6 @@
 ﻿using Avalonia.Threading;
 using DoormatCore.Sites;
+using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -96,7 +97,7 @@ namespace KryGamesBot.Ava.ViewModels.Common
         }
 
 
-        public LoginViewModel()
+        public LoginViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
         {
                 
         
@@ -108,7 +109,7 @@ namespace KryGamesBot.Ava.ViewModels.Common
         }
 
 
-        public LoginViewModel(BaseSite site): this()
+        public LoginViewModel(BaseSite site, ILogger logger): this(logger)
         {
             Site = site;
             LoginParams = site.LoginParams.Select(x => new LoginParamValue { Param = x }).ToList();

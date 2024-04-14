@@ -19,7 +19,11 @@ namespace KryGamesBot.Ava.ViewModels.Common
 			set { _stats = value; this.RaisePropertyChanged(); }
 		}
 
-		public void StatsUpdated(SiteStats stats)
+        public SiteStatsViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
+        {
+            
+        }
+        public void StatsUpdated(SiteStats stats)
 		{
 			Stats = CopyHelper.CreateCopy(stats);
         }

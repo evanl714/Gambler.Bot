@@ -81,7 +81,7 @@ namespace KryGamesBot.Ava.ViewModels.Games.Dice
         public decimal Edge { get; set; } = 1;
 
 
-        public DicePlaceBetViewModel()
+        public DicePlaceBetViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
         {
             BetHighCommand = ReactiveCommand.Create(BetHigh);
             BetLowCommand = ReactiveCommand.Create(BetLow);

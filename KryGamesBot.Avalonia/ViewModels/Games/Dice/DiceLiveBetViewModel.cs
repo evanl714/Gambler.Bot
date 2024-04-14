@@ -4,6 +4,7 @@ using DoormatCore.Helpers;
 using IronPython.Runtime;
 using KryGamesBot.Ava.Classes;
 using KryGamesBot.Ava.Classes.BetsPanel;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,6 +18,11 @@ namespace KryGamesBot.Ava.ViewModels.Games.Dice
     {
         public event EventHandler<ViewBetEventArgs> BetClicked;
         public ObservableCollection<DiceBet> Bets { get; set; } = new ObservableCollection<DiceBet>();
+        
+        public DiceLiveBetViewModel(ILogger logger):base(logger)
+        {
+            
+        }
 
         public void AddBet(Bet newBet)
         {
@@ -44,7 +50,7 @@ namespace KryGamesBot.Ava.ViewModels.Games.Dice
             }
             catch (Exception e)
             {
-                Logger.DumpLog(e);
+                _logger?.LogError(e.ToString());
             }
             
         }

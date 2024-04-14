@@ -67,7 +67,8 @@ namespace KryGamesBotControls.Common
         private void SimpleButton_Click(object sender, RoutedEventArgs e)
         {
             chrt.Reset();
-            CurrentSimulation = new DoormatBot.Helpers.Simulation(txtBalance.Value, (long)txtBets.Value, CurrentSite, Strategy, BetSettings,"tmp.sim",true);
+            CurrentSimulation = new DoormatBot.Helpers.Simulation(null);
+            CurrentSimulation.Initialize(txtBalance.Value, (long)txtBets.Value, CurrentSite, Strategy, BetSettings,"tmp.sim",true);
             btnSaveFile.IsEnabled = false;
             CurrentSimulation.OnSimulationWriting += Tmp_OnSimulationWriting;
             CurrentSimulation.OnSimulationComplete += Tmp_OnSimulationComplete;
