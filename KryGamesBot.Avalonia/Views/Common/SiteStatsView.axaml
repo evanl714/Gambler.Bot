@@ -5,7 +5,11 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:vm="using:KryGamesBot.Ava.ViewModels.Common"
 			       x:DataType="vm:SiteStatsViewModel"
-             x:Class="KryGamesBot.Ava.Views.Common.SiteStatsView" >
+             x:Class="KryGamesBot.Ava.Views.Common.SiteStatsView" 
+			 xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+			  xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+xmlns:behaviours="using:KryGamesBot.Ava.Behaviours"
+			 >
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="150"/>
@@ -25,11 +29,47 @@
     <TextBlock Grid.Column="0" Grid.Row="03">Wins</TextBlock>
     <TextBlock Grid.Column="0" Grid.Row="04">Losses</TextBlock>
     <TextBlock Grid.Column="0" Grid.Row="05">Total Bets</TextBlock>
-    <SelectableTextBlock Grid.Column="1" Grid.Row="0"  Text="{Binding Stats.Balance, Mode=OneWay}"></SelectableTextBlock>
-    <SelectableTextBlock Grid.Column="1" Grid.Row="01" Text="{Binding Stats.Profit, Mode=OneWay}"></SelectableTextBlock>
-    <SelectableTextBlock Grid.Column="1" Grid.Row="02" Text="{Binding Stats.Wagered, Mode=OneWay}"></SelectableTextBlock>
-    <SelectableTextBlock Grid.Column="1" Grid.Row="03" Text="{Binding Stats.Wins, Mode=OneWay}"></SelectableTextBlock>
-    <SelectableTextBlock Grid.Column="1" Grid.Row="04" Text="{Binding Stats.Losses, Mode=OneWay}"></SelectableTextBlock>
-    <SelectableTextBlock Grid.Column="1" Grid.Row="05" Text="{Binding Stats.Bets, Mode=OneWay}"></SelectableTextBlock>
+    <SelectableTextBlock Grid.Column="1" Grid.Row="0" >
+		<i:Interaction.Behaviors>
+			<behaviours:NumberFormatBehaviour Mask="n8"  Text="{Binding Stats.Balance, Mode=OneWay}"/>
+		</i:Interaction.Behaviors>
+	</SelectableTextBlock>
+    <SelectableTextBlock Grid.Column="1" Grid.Row="01" >
+		<i:Interaction.Behaviors>
+			<behaviours:NumberFormatBehaviour Mask="n8"  Text="{Binding Stats.Profit, Mode=OneWay}"/>
+			<ia:DataTriggerBehavior Binding="{Binding Stats.Profit}"
+                                ComparisonCondition="GreaterThan"
+                                Value="0">
+				<ia:ChangePropertyAction PropertyName="Foreground"
+										 Value="Green" />
+			</ia:DataTriggerBehavior>
+			<ia:DataTriggerBehavior Binding="{Binding Stats.Profit}"
+						  ComparisonCondition="LessThan"
+						  Value="0">
+				<ia:ChangePropertyAction PropertyName="Foreground"
+										 Value="{DynamicResource SystemErrorTextColor}" />
+			</ia:DataTriggerBehavior>
+		</i:Interaction.Behaviors>
+	</SelectableTextBlock>
+    <SelectableTextBlock Grid.Column="1" Grid.Row="02" >
+		<i:Interaction.Behaviors>
+			<behaviours:NumberFormatBehaviour Mask="n8"  Text="{Binding Stats.Wagered, Mode=OneWay}"/>
+		</i:Interaction.Behaviors>
+	</SelectableTextBlock>
+    <SelectableTextBlock Grid.Column="1" Grid.Row="03"  Foreground="Green" >
+		<i:Interaction.Behaviors>
+			<behaviours:NumberFormatBehaviour Mask="n0"  Text="{Binding Stats.Wins, Mode=OneWay}"/>
+		</i:Interaction.Behaviors>
+	</SelectableTextBlock>
+    <SelectableTextBlock Grid.Column="1" Grid.Row="04"  Foreground="{DynamicResource SystemErrorTextColor}" >
+		<i:Interaction.Behaviors>
+			<behaviours:NumberFormatBehaviour Mask="n0"  Text="{Binding Stats.Losses, Mode=OneWay}"/>
+		</i:Interaction.Behaviors>
+	</SelectableTextBlock>
+    <SelectableTextBlock Grid.Column="1" Grid.Row="05"  >
+		<i:Interaction.Behaviors>
+			<behaviours:NumberFormatBehaviour Mask="n0"  Text="{Binding Stats.Bets, Mode=OneWay}"/>
+		</i:Interaction.Behaviors>
+	</SelectableTextBlock>
   </Grid>
 </UserControl>

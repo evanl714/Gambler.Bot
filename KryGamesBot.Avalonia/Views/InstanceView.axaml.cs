@@ -16,8 +16,11 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
     public InstanceView()
     {
         InitializeComponent();
-        this.WhenActivated(action =>
+        if (!Design.IsDesignMode)
+        {
+            this.WhenActivated(action =>
          action(ViewModel!.ShowDialog.RegisterHandler(DoShowDialogAsync)));
+        }
         this.AttachedToVisualTree += OnAttachedToVisualTree;
         this.DetachedFromVisualTree += OnDetachedFromVisualTree;
 
@@ -52,5 +55,9 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
     {
         // Handle window closing logic here
         ViewModel.OnClosing();
+    }
+
+    private void Binding(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
     }
 }

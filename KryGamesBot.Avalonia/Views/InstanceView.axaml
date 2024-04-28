@@ -11,36 +11,75 @@
              xmlns:diceVM="using:KryGamesBot.Ava.ViewModels.Games.Dice"
              xmlns:stratVM="using:KryGamesBot.Ava.ViewModels.Strategies"
 			 xmlns:strat="using:KryGamesBot.Ava.Views.Games.Strategies"
+			 xmlns:system="using:System"
 xmlns:mart="using:KryGamesBot.Ava.Views.Games.Strategies.Martingale"
 xmlns:dalembert="using:KryGamesBot.Ava.Views.Games.Strategies.DAlembert" xmlns:fibonacci="using:KryGamesBot.Ava.Views.Games.Strategies.Fibonacci" xmlns:labouchere="using:KryGamesBot.Ava.Views.Games.Strategies.Labouchere" xmlns:PresetList="using:DoormatBot.Strategies" xmlns:presetlist="using:KryGamesBot.Ava.Views.Games.Strategies.PresetList"         Tag="{Binding}"
 			 >
 	
 	<Grid>
 		<common:SelectSiteView DataContext="{Binding SelectSite}" IsVisible="{Binding $parent[local:InstanceView].((vm:InstanceViewModel)Tag).ShowSites}"  />
-    <Grid IsVisible="{Binding ShowBot}">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*"></ColumnDefinition>
-        <ColumnDefinition Width="5"></ColumnDefinition>
+   
+		<DockPanel IsVisible="{Binding ShowBot}">
+		<Menu DockPanel.Dock="Top">
+			<MenuItem Header="File">
+				<MenuItem Header="Save"/>
+				<MenuItem Header="Load"/>
+				<MenuItem Header="Exit"/>
+			</MenuItem>
+			<MenuItem Header="View">
+				<CheckBox Content="Live Charts" IsChecked="{Binding ShowChart}"/>
+				<CheckBox Content="Live Bets" IsChecked="{Binding ShowLiveBets}"/>
+				<CheckBox Content="Stats" IsChecked="{Binding ShowStats}"/>
+				<Line/>
+				<MenuItem Header="Simulate" Command="{Binding SimulateCommand}"/>
+				<MenuItem Header="Bet History"/>
+				<MenuItem Header="Roll verifier"/>
+				<MenuItem Header="Settings"/>
+				
+			</MenuItem>
+			<MenuItem Header="Site">
+				<MenuItem Header="Log out" Command="{Binding LogOutCommand}"/>
+				<MenuItem Header="Change Site"  Command="{Binding ChangeSiteCommand}"/>				
+			</MenuItem>
+			<ComboBox ItemsSource="{Binding Currencies}" SelectedIndex="{Binding CurrentCurrency}" />
+			<ComboBox ItemsSource="{Binding Games}" SelectedIndex="{Binding CurrentGame}" />
+			<MenuItem Header="Help">
+				<MenuItem Header="Setup Wizard"/>
+				<MenuItem Header="Beginners Guide"/>
+				<MenuItem Header="Frequently Asked Questions"/>
+				<MenuItem Header="About"/>
+				<MenuItem Header="Source code"/>
+			</MenuItem>
+
+		</Menu>
+			<Grid >
+      <Grid.ColumnDefinitions>        
         <ColumnDefinition Width="4*"></ColumnDefinition>
         <ColumnDefinition Width="5"></ColumnDefinition>
         <ColumnDefinition Width="2*"></ColumnDefinition>
       </Grid.ColumnDefinitions>
-      <GridSplitter Grid.Column="1" Background="DarkGray" ResizeDirection="Columns"/>
-      <GridSplitter Grid.Column="3" Background="DarkGray" ResizeDirection="Columns"/>
-      <StackPanel Grid.Column="0">
-		  <ComboBox ItemsSource="{Binding Currencies}" SelectedIndex="{Binding CurrentCurrency}" />
-        <common:SiteStatsView Grid.Row="0" DataContext="{Binding SiteStatsData}"/>
-        <common:SessionStatsView Grid.Row="2" DataContext="{Binding SessionStatsData}" />
+		<Grid.RowDefinitions>
+			<RowDefinition Height="2*" MinHeight="250" MaxHeight="300"></RowDefinition>
+			<RowDefinition Height="5"></RowDefinition>
+			<RowDefinition Height="5*"></RowDefinition>
+		</Grid.RowDefinitions>
+      <GridSplitter Grid.Column="1" Grid.RowSpan="3" Background="DarkGray" ResizeDirection="Columns"/>
+		<GridSplitter Grid.Column="0" Grid.Row="1" Background="DarkGray" ResizeDirection="Rows"/>
+      <StackPanel IsVisible="{Binding ShowStats}" Grid.Column="0" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Stretch">		  			  
+        <common:SiteStatsView VerticalAlignment="Top" HorizontalAlignment="Stretch" MinWidth="300" Grid.Row="0" DataContext="{Binding SiteStatsData}"/>		  
+        <common:SessionStatsView  MinWidth="600" Grid.Row="2" DataContext="{Binding SessionStatsData}" VerticalAlignment="Top" HorizontalAlignment="Stretch" />
       </StackPanel>
-      <Grid Grid.Column="2">
-        <Grid.RowDefinitions>
-          <RowDefinition/>
-          <RowDefinition Height="4"/>
-          <RowDefinition/>
-        </Grid.RowDefinitions>
+      <Grid Grid.Column="0" Grid.Row="2">
+		  <Grid.RowDefinitions>
+			  <RowDefinition />
+			  <RowDefinition Height="4"/>
+			  <RowDefinition/>
+		  </Grid.RowDefinitions>
+		  <Border IsVisible="{Binding ShowChart}" >
         <common:ProfitChartView Grid.Row="0" DataContext="{Binding ChartData}"/>
+		  </Border>
         <GridSplitter Grid.Row="1" Background="DarkGray" ResizeDirection="Rows"/>
-        <ContentControl Grid.Row="2" Content="{Binding LiveBets}">
+        <ContentControl Grid.Row="2" Content="{Binding LiveBets}"  IsVisible="{Binding ShowLiveBets}">
           <ContentControl.DataTemplates>
             <DataTemplate DataType="diceVM:DiceLiveBetViewModel">
               <dice:DiceLiveBetView/>
@@ -50,7 +89,7 @@ xmlns:dalembert="using:KryGamesBot.Ava.Views.Games.Strategies.DAlembert" xmlns:f
         </ContentControl>
         
       </Grid>
-      <DockPanel Grid.Column="4" >
+      <DockPanel Grid.Column="2" Grid.RowSpan="3" >
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
           <Button Margin="5" Command="{Binding StartCommand}">Start</Button>
           <Button Margin="5"  Command="{Binding ResumeCommand}">Resume</Button>
@@ -102,7 +141,7 @@ xmlns:dalembert="using:KryGamesBot.Ava.Views.Games.Strategies.DAlembert" xmlns:f
           <TabItem Header="Advanced Settings">
             <common:AdvancedView DataContext="{Binding AdvancedSettingsVM}"/>
           </TabItem>
-          <TabItem Header="Custom Triggers">
+          <TabItem Header="Custom Triggers" IsEnabled="False">
             <TextBlock>coming soon</TextBlock>
           </TabItem>
           
@@ -116,12 +155,15 @@ xmlns:dalembert="using:KryGamesBot.Ava.Views.Games.Strategies.DAlembert" xmlns:f
               </ContentControl.DataTemplates>
             </ContentControl>
           </TabItem>
-          <TabItem Header="Console">
+          <TabItem Header="Console" IsEnabled="False">
             <TextBlock>coming soon</TextBlock>
           </TabItem>
         </TabControl>
         
       </DockPanel>
-    </Grid>
+			</Grid>
+		</DockPanel>
+    
+		
 	</Grid>
 </UserControl>

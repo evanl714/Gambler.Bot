@@ -5,21 +5,21 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:vm="using:KryGamesBot.Ava.ViewModels.Common"
 			       x:DataType="vm:SessionStatsViewModel"
-             x:Class="KryGamesBot.Ava.Views.Common.SessionStatsView">
+             x:Class="KryGamesBot.Ava.Views.Common.SessionStatsView"
+			 xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+			 xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+xmlns:behaviours="using:KryGamesBot.Ava.Behaviours"
+			 >
   <TabControl>
     <TabItem Header="Basic">
-      <Grid>
+      <Grid VerticalAlignment="Top">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="2*"/>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-          <RowDefinition/>
-          <RowDefinition/>
-          <RowDefinition/>
-          <RowDefinition/>
-          <RowDefinition/>
-          <RowDefinition/>
           <RowDefinition/>
           <RowDefinition/>
           <RowDefinition/>
@@ -30,30 +30,155 @@
         </Grid.RowDefinitions>
         <TextBlock Grid.Column="0" Grid.Row="0" Text="Time Running" />
         <TextBlock Grid.Column="0" Grid.Row="1" Text="Profit" />
-        <TextBlock Grid.Column="0" Grid.Row="2" Text="Wagered" />
-        <TextBlock Grid.Column="0" Grid.Row="3" Text="Bets" />
-        <TextBlock Grid.Column="0" Grid.Row="4" Text="Wins" />
-        <TextBlock Grid.Column="0" Grid.Row="5" Text="Losses" />
-        <TextBlock Grid.Column="0" Grid.Row="6" Text="Best streak" />
-        <TextBlock Grid.Column="0" Grid.Row="7" Text="Worst streak" />
-        <TextBlock Grid.Column="0" Grid.Row="8" Text="Profit/hour" />
-        <TextBlock Grid.Column="0" Grid.Row="9" Text="Profit/day" />
-        <TextBlock Grid.Column="0" Grid.Row="10" Text="Current streak" />
-        <TextBlock Grid.Column="0" Grid.Row="11" Text="Avg profit/bet" />
-        <TextBlock Grid.Column="0" Grid.Row="12" Text="Luck" />
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Stats.RunningTimeSpan , Mode=OneWay}" />
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="1"  Text="{Binding Stats.Profit, Mode=OneWay}" />
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="2"  Text="{Binding Stats.Wagered, Mode=OneWay}" />
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="3"  Text="{Binding Stats.Bets, Mode=OneWay}" />
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="4"  Text="{Binding Stats.Wins, Mode=OneWay}" />
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="5"  Text="{Binding Stats.Losses, Mode=OneWay}" />
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="6"  Text="{Binding Stats.BestStreak, Mode=OneWay}" />
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="7"  Text="{Binding Stats.WorstStreak, Mode=OneWay}" />
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="8"  Text="{Binding Stats.ProfitPerHour, Mode=OneWay}" />
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="9"  Text="{Binding Stats.ProfitPer24Hour, Mode=OneWay}" />
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="10" Text="{Binding Stats.CurrentStreak, Mode=OneWay}" />
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="11" Text="{Binding Stats.ProfitPerBet, Mode=OneWay}" />
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="12" Text="{Binding Stats.Luck, Mode=OneWay}" />
+        <TextBlock Grid.Column="2" Grid.Row="1" Text="Wagered" />
+        <TextBlock Grid.Column="0" Grid.Row="2" Text="Bets" />
+		  <TextBlock Grid.Column="2" Grid.Row="2" Text="Current streak" />
+        <TextBlock Grid.Column="0" Grid.Row="3" Text="Wins" />
+        <TextBlock Grid.Column="2" Grid.Row="3" Text="Losses" />
+        <TextBlock Grid.Column="0" Grid.Row="4" Text="Best streak" />
+        <TextBlock Grid.Column="2" Grid.Row="4" Text="Worst streak" />
+        <TextBlock Grid.Column="0" Grid.Row="5" Text="Profit/hour" />
+		  <TextBlock Grid.Column="2" Grid.Row="5" Text="Avg profit/bet" />
+        <TextBlock Grid.Column="0" Grid.Row="6" Text="Profit/day" />
+        <TextBlock Grid.Column="2" Grid.Row="6" Text="Luck" />
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="0" >
+			  <i:Interaction.Behaviors>
+				  <behaviours:NumberFormatBehaviour Mask="d\,hh\:mm\:ss"  Text="{Binding Stats.RunningTimeSpan , Mode=OneWay}" />
+			  </i:Interaction.Behaviors>
+		  </SelectableTextBlock>
+		  <SelectableTextBlock x:Name="lblProfit" Grid.Column="1" Grid.Row="1"  >
+			  <i:Interaction.Behaviors>
+				  <behaviours:NumberFormatBehaviour Mask="n8"  Text="{Binding Stats.Profit, Mode=OneWay}"/>
+				  <ia:DataTriggerBehavior Binding="{Binding Stats.Profit}"
+                                ComparisonCondition="GreaterThan"
+                                Value="0">
+					  <ia:ChangePropertyAction PropertyName="Foreground"
+											   Value="Green" />
+				  </ia:DataTriggerBehavior>
+				  <ia:DataTriggerBehavior Binding="{Binding Stats.Profit}"
+                                ComparisonCondition="LessThan"
+                                Value="0">
+					  <ia:ChangePropertyAction PropertyName="Foreground"
+											   Value="{DynamicResource SystemErrorTextColor}" />
+				  </ia:DataTriggerBehavior>
+			  </i:Interaction.Behaviors>
+			  
+		  </SelectableTextBlock>
+		  <SelectableTextBlock Grid.Column="3" Grid.Row="1"  >
+			  <i:Interaction.Behaviors>
+				  <behaviours:NumberFormatBehaviour Mask="n8" Text="{Binding Stats.Wagered, Mode=OneWay}"/>
+			  </i:Interaction.Behaviors>
+		  </SelectableTextBlock>
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="2"  >
+			  <i:Interaction.Behaviors>
+				  <behaviours:NumberFormatBehaviour Mask="n0" Text="{Binding Stats.Bets, Mode=OneWay}" />
+			  </i:Interaction.Behaviors>
+		  </SelectableTextBlock>
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="3"  Foreground="Green"  >
+			  <i:Interaction.Behaviors>
+				  <behaviours:NumberFormatBehaviour Mask="n0" Text="{Binding Stats.Wins, Mode=OneWay}"/>
+			  </i:Interaction.Behaviors>
+		  </SelectableTextBlock>
+		  <SelectableTextBlock Grid.Column="3" Grid.Row="3" Foreground="{DynamicResource SystemErrorTextColor}"  >
+			  <i:Interaction.Behaviors>
+				  <behaviours:NumberFormatBehaviour Mask="n0" Text="{Binding Stats.Losses, Mode=OneWay}"/>
+			  </i:Interaction.Behaviors>
+		  </SelectableTextBlock>
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="4" Foreground="Green" >
+			  <i:Interaction.Behaviors>
+				  <behaviours:NumberFormatBehaviour Mask="n0" Text="{Binding Stats.BestStreak, Mode=OneWay}" />
+			  </i:Interaction.Behaviors>
+		  </SelectableTextBlock>
+		  <SelectableTextBlock Grid.Column="3" Grid.Row="4" Foreground="{DynamicResource SystemErrorTextColor}"  >
+			  <i:Interaction.Behaviors>
+				  <behaviours:NumberFormatBehaviour Mask="n0" Text="{Binding Stats.WorstStreak, Mode=OneWay}"/>
+			  </i:Interaction.Behaviors>
+		  </SelectableTextBlock>
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="5"   >
+			  <i:Interaction.Behaviors>
+				  <behaviours:NumberFormatBehaviour Mask="n8" Text="{Binding Stats.ProfitPerHour, Mode=OneWay}"/>
+				  <ia:DataTriggerBehavior Binding="{Binding Stats.ProfitPerHour}"
+                                ComparisonCondition="GreaterThan"
+                                Value="0">
+					  <ia:ChangePropertyAction PropertyName="Foreground"
+											   Value="Green" />
+				  </ia:DataTriggerBehavior>
+				  <ia:DataTriggerBehavior Binding="{Binding Stats.ProfitPerHour}"
+                                ComparisonCondition="LessThan"
+                                Value="0">
+					  <ia:ChangePropertyAction PropertyName="Foreground"
+											   Value="{DynamicResource SystemErrorTextColor}"/>
+				  </ia:DataTriggerBehavior>
+			  </i:Interaction.Behaviors>
+		  </SelectableTextBlock>
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="6"   >
+			  <i:Interaction.Behaviors>
+				  <behaviours:NumberFormatBehaviour Mask="n8" Text="{Binding Stats.ProfitPer24Hour, Mode=OneWay}"/>
+				  <ia:DataTriggerBehavior Binding="{Binding Stats.ProfitPer24Hour}"
+                                ComparisonCondition="GreaterThan"
+                                Value="0">
+					  <ia:ChangePropertyAction PropertyName="Foreground"
+											   Value="Green" />
+				  </ia:DataTriggerBehavior>
+				  <ia:DataTriggerBehavior Binding="{Binding Stats.ProfitPer24Hour}"
+                                ComparisonCondition="LessThan"
+                                Value="0">
+					  <ia:ChangePropertyAction PropertyName="Foreground"
+											   Value="{DynamicResource SystemErrorTextColor}"/>
+				  </ia:DataTriggerBehavior>
+			  </i:Interaction.Behaviors>
+		  </SelectableTextBlock>
+		  <SelectableTextBlock Grid.Column="3" Grid.Row="2"  >
+			  <i:Interaction.Behaviors>
+				  <behaviours:NumberFormatBehaviour Mask="n0" Text="{Binding Stats.CurrentStreak, Mode=OneWay}" />
+				  <ia:DataTriggerBehavior Binding="{Binding Stats.CurrentStreak}"
+                                ComparisonCondition="GreaterThan"
+                                Value="0">
+					  <ia:ChangePropertyAction PropertyName="Foreground" 
+											   Value="Green" />
+				  </ia:DataTriggerBehavior>
+				  <ia:DataTriggerBehavior Binding="{Binding Stats.CurrentStreak}"
+                                ComparisonCondition="LessThan"
+                                Value="0">
+					  <ia:ChangePropertyAction PropertyName="Foreground"
+											   Value="{DynamicResource SystemErrorTextColor}"/>
+				  </ia:DataTriggerBehavior>
+			  </i:Interaction.Behaviors>
+		  </SelectableTextBlock>
+		  <SelectableTextBlock Grid.Column="3" Grid.Row="5"  >
+			  <i:Interaction.Behaviors>
+				  <behaviours:NumberFormatBehaviour Mask="n8" Text="{Binding Stats.ProfitPerBet, Mode=OneWay}" />
+				  <ia:DataTriggerBehavior Binding="{Binding Stats.ProfitPerBet}"
+                                ComparisonCondition="GreaterThan"
+                                Value="0">
+					  <ia:ChangePropertyAction PropertyName="Foreground"
+											   Value="Green" />
+				  </ia:DataTriggerBehavior>
+				  <ia:DataTriggerBehavior Binding="{Binding Stats.ProfitPerBet}"
+                                ComparisonCondition="LessThan"
+                                Value="0">
+					  <ia:ChangePropertyAction PropertyName="Foreground"
+											   Value="{DynamicResource SystemErrorTextColor}"/>
+				  </ia:DataTriggerBehavior>
+			  </i:Interaction.Behaviors>
+		  </SelectableTextBlock>
+		  <SelectableTextBlock Grid.Column="3" Grid.Row="6" >
+			  <i:Interaction.Behaviors>
+				  <behaviours:NumberFormatBehaviour Mask="n5" Text="{Binding Stats.Luck, Mode=OneWay}" />
+				  <ia:DataTriggerBehavior Binding="{Binding Stats.Luck}"
+                                ComparisonCondition="GreaterThan"
+                                Value="0">
+					  <ia:ChangePropertyAction PropertyName="Foreground"
+											   Value="Green" />
+				  </ia:DataTriggerBehavior>
+				  <ia:DataTriggerBehavior Binding="{Binding Stats.Luck}"
+                                ComparisonCondition="LessThan"
+                                Value="0">
+					  <ia:ChangePropertyAction PropertyName="Foreground"
+											   Value="{DynamicResource SystemErrorTextColor}"/>
+				  </ia:DataTriggerBehavior>
+			  </i:Interaction.Behaviors>
+		  </SelectableTextBlock>
       </Grid>
     </TabItem>
     <TabItem Header="More">
@@ -61,6 +186,8 @@
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="2*"/>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
           <RowDefinition/>
@@ -79,24 +206,84 @@
         </Grid.RowDefinitions>
         <TextBlock Grid.Column="0" Grid.Row="0" Text="Avg streak" />
         <TextBlock Grid.Column="0" Grid.Row="1" Text="Avg win streak" />
-        <TextBlock Grid.Column="0" Grid.Row="2" Text="Avg Lose streak" />
-        <TextBlock Grid.Column="0" Grid.Row="3" Text="3 best streaks" />
-        <TextBlock Grid.Column="0" Grid.Row="6" Text="3 worst streak" />
-        <TextBlock Grid.Column="0" Grid.Row="9" Text="Largest bet" />
-        <TextBlock Grid.Column="0" Grid.Row="10" Text="Largest win" />
-        <TextBlock Grid.Column="0" Grid.Row="11" Text="largest loss" />
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="0"  Text="{Binding Stats.AvgStreak, Mode=OneWay}" />
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="1"  Text="{Binding Stats.AvgWin, Mode=OneWay}" />
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="2"  Text="{Binding Stats.AvgLoss, Mode=OneWay}" />
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="3"  Text="{Binding Stats.BestStreak, Mode=OneWay}" />
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="4"  Text="{Binding Stats.BestStreak2, Mode=OneWay}" />
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="5"  Text="{Binding Stats.BestStreak3, Mode=OneWay}" />
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="6"  Text="{Binding Stats.WorstStreak, Mode=OneWay}" />
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="7"  Text="{Binding Stats.WorstStreak2, Mode=OneWay}" />
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="8"  Text="{Binding Stats.WorstStreak3, Mode=OneWay}" />
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="9"  Text="{Binding Stats.LargestBet, Mode=OneWay}" />
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="10" Text="{Binding Stats.LargestWin, Mode=OneWay}" />
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="11" Text="{Binding Stats.LargestLoss, Mode=OneWay}" />
+        <TextBlock Grid.Column="2" Grid.Row="1" Text="Avg Lose streak" />
+        <TextBlock Grid.Column="0" Grid.Row="2" Text="3 best streaks" />
+        <TextBlock Grid.Column="2" Grid.Row="2" Text="3 worst streak" />
+        <TextBlock Grid.Column="0" Grid.Row="5" Text="Largest bet" />
+        <TextBlock Grid.Column="0" Grid.Row="6" Text="Largest win" />
+        <TextBlock Grid.Column="2" Grid.Row="6" Text="largest loss" />
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="0"  >
+			  <i:Interaction.Behaviors>
+				  <behaviours:NumberFormatBehaviour Mask="n5"  Text="{Binding Stats.AvgStreak, Mode=OneWay}"/>
+				  <ia:DataTriggerBehavior Binding="{Binding Stats.AvgStreak}"
+                                ComparisonCondition="GreaterThan"
+                                Value="0">
+					  <ia:ChangePropertyAction PropertyName="Foreground"
+											   Value="Green" />
+				  </ia:DataTriggerBehavior>
+				  <ia:DataTriggerBehavior Binding="{Binding Stats.AvgStreak}"
+                                ComparisonCondition="LessThan"
+                                Value="0">
+					  <ia:ChangePropertyAction PropertyName="Foreground"
+											   Value="{DynamicResource SystemErrorTextColor}"/>
+				  </ia:DataTriggerBehavior>
+			  </i:Interaction.Behaviors>
+		  </SelectableTextBlock>
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="1"  Foreground="Green" >
+			  <i:Interaction.Behaviors>
+				  <behaviours:NumberFormatBehaviour Mask="n8"  Text="{Binding Stats.AvgWin, Mode=OneWay}"/>
+			  </i:Interaction.Behaviors>
+		  </SelectableTextBlock>
+		  <SelectableTextBlock Grid.Column="3" Grid.Row="1" Foreground="{DynamicResource SystemErrorTextColor}"  >
+			  <i:Interaction.Behaviors>
+				  <behaviours:NumberFormatBehaviour Mask="n8"  Text="{Binding Stats.AvgLoss, Mode=OneWay}"/>
+			  </i:Interaction.Behaviors>
+		  </SelectableTextBlock>
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="2"  Foreground="Green"  >
+			  <i:Interaction.Behaviors>
+				  <behaviours:NumberFormatBehaviour Mask="n0"  Text="{Binding Stats.BestStreak, Mode=OneWay}"/>
+			  </i:Interaction.Behaviors>
+		  </SelectableTextBlock>
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="3" Foreground="Green" >
+			  <i:Interaction.Behaviors>
+				  <behaviours:NumberFormatBehaviour Mask="n0"  Text="{Binding Stats.BestStreak2, Mode=OneWay}"/>
+			  </i:Interaction.Behaviors>
+		  </SelectableTextBlock>
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="4"  Foreground="Green"  >
+			  <i:Interaction.Behaviors>
+				  <behaviours:NumberFormatBehaviour Mask="n0"  Text="{Binding Stats.BestStreak3, Mode=OneWay}"/>
+			  </i:Interaction.Behaviors>
+		  </SelectableTextBlock>
+		  <SelectableTextBlock Grid.Column="3" Grid.Row="2" Foreground="{DynamicResource SystemErrorTextColor}" >
+			  <i:Interaction.Behaviors>
+				  <behaviours:NumberFormatBehaviour Mask="n0"  Text="{Binding Stats.WorstStreak, Mode=OneWay}"/>
+			  </i:Interaction.Behaviors>
+		  </SelectableTextBlock>
+		  <SelectableTextBlock Grid.Column="3" Grid.Row="3" Foreground="{DynamicResource SystemErrorTextColor}"  >
+			  <i:Interaction.Behaviors>
+				  <behaviours:NumberFormatBehaviour Mask="n0"  Text="{Binding Stats.WorstStreak2, Mode=OneWay}"/>
+			  </i:Interaction.Behaviors>
+		  </SelectableTextBlock>
+		  <SelectableTextBlock Grid.Column="3" Grid.Row="4" Foreground="{DynamicResource SystemErrorTextColor}"  >
+			  <i:Interaction.Behaviors>
+				  <behaviours:NumberFormatBehaviour Mask="n0"  Text="{Binding Stats.WorstStreak3, Mode=OneWay}"/>
+			  </i:Interaction.Behaviors>
+		  </SelectableTextBlock>
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="5"   >
+			  <i:Interaction.Behaviors>
+				  <behaviours:NumberFormatBehaviour Mask="n8"  Text="{Binding Stats.LargestBet, Mode=OneWay}"/>
+			  </i:Interaction.Behaviors>
+		  </SelectableTextBlock>
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="6" Foreground="Green" >
+			  <i:Interaction.Behaviors>
+				  <behaviours:NumberFormatBehaviour Mask="n8"  Text="{Binding Stats.LargestWin, Mode=OneWay}"/>
+			  </i:Interaction.Behaviors>
+		  </SelectableTextBlock>
+		  <SelectableTextBlock Grid.Column="3" Grid.Row="6" Foreground="{DynamicResource SystemErrorTextColor}" >
+			  <i:Interaction.Behaviors>
+				  <behaviours:NumberFormatBehaviour Mask="n8"  Text="{Binding Stats.LargestLoss, Mode=OneWay}"/>
+			  </i:Interaction.Behaviors>
+		  </SelectableTextBlock>
       </Grid>
     </TabItem>
     

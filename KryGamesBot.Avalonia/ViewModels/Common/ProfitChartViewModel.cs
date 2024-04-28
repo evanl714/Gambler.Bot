@@ -2,7 +2,10 @@
 using KryGamesBot.Ava.Classes;
 using KryGamesBot.Ava.Classes.Charts;
 using LiveChartsCore;
+using LiveChartsCore.Drawing;
+using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.Drawing;
 using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore.SkiaSharpView.VisualElements;
 using ReactiveUI;
@@ -12,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace KryGamesBot.Ava.ViewModels.Common
 {
@@ -25,7 +29,7 @@ namespace KryGamesBot.Ava.ViewModels.Common
         public LabelVisual Title { get; set; } =
         new LabelVisual
         {
-            Text = "My chart title",
+            Text = "Profit over bets",
             TextSize = 25,
             Padding = new LiveChartsCore.Drawing.Padding(15),
             Paint = new SolidColorPaint(SKColors.DarkSlateGray)
@@ -35,37 +39,71 @@ namespace KryGamesBot.Ava.ViewModels.Common
         decimal ChartProfit = 0;
         delegate void dAddPoint(decimal profit);
         public bool Enabled { get; set; } = true;
-        private string _freezeText;
+        private string _freezeText= "Freeze";
 
         public string FreezeText
         {
             get { return _freezeText; }
             set { _freezeText = value; this.RaisePropertyChanged(); }
         }
-
+        
         public ProfitChartViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
         {
+            ResetCommand = ReactiveCommand.Create(Reset);
+            FreezeCommand = ReactiveCommand.Create(ToggleFreeze);
             FreezeText = "Freeze Chart";
-            Series = new ISeries[] {
+            LineSeries<SimpleDataPoint> series =
                new LineSeries<SimpleDataPoint>
                {
                    Values = DataPoints,
-                   Fill = null,
-                   Mapping = (sample, index) => new(sample.Argument, sample.Value)
-               } };
+                   Fill= null,
+                   Stroke = new SolidColorPaint(SKColors.LightBlue, 1),
+                   Mapping = (sample, index) => new(sample.Argument, sample.Value),
+                   GeometrySize = 3,
+                   LineSmoothness = 0,
+
+
+               };
+            series.PointMeasured += Series_PointMeasured;
+            series.PointCreated += Series_PointCreated; ;
+               Series = new ISeries[] { series };
             
         }
 
-        public void AddPoint(decimal BetProfit)
+        private void Series_PointCreated(LiveChartsCore.Kernel.ChartPoint<SimpleDataPoint, LiveChartsCore.SkiaSharpView.Drawing.Geometries.CircleGeometry, LiveChartsCore.SkiaSharpView.Drawing.Geometries.LabelGeometry> obj)
+        {
+            foreach ( var x in obj.Context.Entity.MetaData.ChartPoints)
+            {
+                
+            }
+        }
+
+        private void Series_PointMeasured(LiveChartsCore.Kernel.ChartPoint<SimpleDataPoint, LiveChartsCore.SkiaSharpView.Drawing.Geometries.CircleGeometry, LiveChartsCore.SkiaSharpView.Drawing.Geometries.LabelGeometry> obj)
+        {
+            //if going up: green
+            if (obj.Model.Win)
+            {                
+                obj.Visual.Fill = new SolidColorPaint(SKColors.Green);
+                obj.Visual.Stroke = new SolidColorPaint(SKColors.Green);
+                
+            }
+            else
+            { //if going down: red
+                obj.Visual.Fill = new SolidColorPaint(SKColors.Red);
+                obj.Visual.Stroke = new SolidColorPaint(SKColors.Red);
+            }
+        }
+
+        public void AddPoint(decimal BetProfit, bool win)
         {
             if (Enabled)
             {
                 if (!Dispatcher.UIThread.CheckAccess())
-                    Dispatcher.UIThread.Invoke(()=> { AddPoint(BetProfit); });
+                    Dispatcher.UIThread.Invoke(()=> { AddPoint(BetProfit, win); });
                 else
                 {
                     ChartProfit += BetProfit;
-                    DataPoints.Add(new SimpleDataPoint(ChartItems++, (double)ChartProfit));
+                    DataPoints.Add(new SimpleDataPoint(ChartItems++, (double)ChartProfit, win));
                     //profitChart.AddPoint(ChartItems++, (double)Profit);
                     while (DataPoints.Count > (MaxItems > 0 ? MaxItems : UISettings.Settings.ChartBets))
                     {
@@ -80,14 +118,15 @@ namespace KryGamesBot.Ava.ViewModels.Common
                 Dispatcher.UIThread.Invoke(() => { AddRange(points); });
             else
             {
-                DataPoints.AddRange(points.Select(m => new SimpleDataPoint(ChartItems++, (double)(ChartProfit += m))).ToList());
+                DataPoints.AddRange(points.Select(m => new SimpleDataPoint(ChartItems++, (double)(ChartProfit += m), m>0)).ToList());
                 while (DataPoints.Count > (MaxItems > 0 ? MaxItems : UISettings.Settings.ChartBets))
                 {
                     DataPoints.RemoveRangeAt(0, (DataPoints.Count - (MaxItems > 0 ? MaxItems : UISettings.Settings.ChartBets)) + 1);
                 }
             }
         }
-        
+
+        public ICommand ResetCommand { get; }
         public void Reset()
         {
             bool OriginalEnabled = Enabled;
@@ -98,15 +137,17 @@ namespace KryGamesBot.Ava.ViewModels.Common
             Enabled = OriginalEnabled;
         }
 
-        
 
+        public ICommand FreezeCommand { get; }
         private void ToggleFreeze()
         {
             Enabled = !Enabled;
             if (Enabled)
-                FreezeText = "Freeze Chart";
+                FreezeText = "Freeze";
             else
-                FreezeText = "Resume Chart";
+                FreezeText = "Resume";
         }
     }
+
+    
 }

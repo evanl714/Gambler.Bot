@@ -57,7 +57,7 @@ namespace KryGamesBot
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            DoormatCore.Helpers.Logger.DumpLog(e.ExceptionObject as Exception);
+            //.DumpLog(e.ExceptionObject as Exception);
         }
 
         public void AddNew()

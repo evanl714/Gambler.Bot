@@ -7,8 +7,15 @@
 			       x:DataType="vm:ProfitChartViewModel"
              x:Class="KryGamesBot.Ava.Views.Common.ProfitChartView" 
              xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia">
-  <lvc:CartesianChart
-        Series="{Binding Series}"
-        Title="{Binding Title}">
-  </lvc:CartesianChart>
+	<Grid>
+		<lvc:CartesianChart
+			Series="{Binding Series}"
+			Title="{Binding Title}">
+
+		</lvc:CartesianChart>
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+			<Button Content="{Binding FreezeText}" Command="{Binding FreezeCommand}" />
+			<Button Content="Reset" Command="{Binding ResetCommand}" />
+		</StackPanel>
+	</Grid>
 </UserControl>

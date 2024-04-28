@@ -2,6 +2,7 @@
 using DoormatBot;
 using DoormatBot.Strategies;
 using DoormatBot.Strategies.PresetListModels;
+using DoormatCore.Games;
 using KryGamesBot.Ava.Classes;
 using KryGamesBot.Ava.Classes.BetsPanel;
 using KryGamesBot.Ava.Classes.Strategies;
@@ -37,6 +38,30 @@ namespace KryGamesBot.Ava.ViewModels
         public ProfitChartViewModel ChartData { get; set; }// = new ProfitChartViewModel();
         public SiteStatsViewModel SiteStatsData { get; set; }// = new SiteStatsViewModel();
         public SessionStatsViewModel SessionStatsData { get; set; }// = new SessionStatsViewModel();
+        private bool showChart=true;
+
+        public bool ShowChart
+        {
+            get { return showChart; }
+            set { showChart = value; this.RaisePropertyChanged(); }
+        }
+
+        private bool showLiveBets=true;
+
+        public bool ShowLiveBets
+        {
+            get { return showLiveBets; }
+            set { showLiveBets = value; this.RaisePropertyChanged(); }
+        }
+        private bool showStats = true;
+
+        public bool ShowStats
+        {
+            get { return showStats; }
+            set { showStats = value; this.RaisePropertyChanged(); }
+        }
+
+
 
 
         public string[] Currencies
@@ -46,7 +71,16 @@ namespace KryGamesBot.Ava.ViewModels
         public int? CurrentCurrency
         {
             get { return BotInstance?.CurrentSite?.Currency; }
-            set { if (BotInstance?.CurrentSite!=null) BotInstance.CurrentSite.Currency = (value>=0?value:0)??0; }
+            set { if (BotInstance?.CurrentSite!=null) BotInstance.CurrentSite.Currency = (value>=0?value:0)??0; this.RaisePropertyChanged(); }
+        }
+        public DoormatCore.Games.Games[] Games
+        {
+            get { return BotInstance?.CurrentSite?.SupportedGames; }
+        }
+        public int? CurrentGame
+        {
+            get { return Array.IndexOf(BotInstance?.CurrentSite?.SupportedGames, BotInstance?.CurrentGame); }
+            set { if (BotInstance?.CurrentSite != null) BotInstance.CurrentGame = BotInstance?.CurrentSite?.SupportedGames[(value >= 0 ? value : 0)??0] ?? DoormatCore.Games.Games.Dice; }
         }
 
         iLiveBet _liveBets;
@@ -132,6 +166,14 @@ namespace KryGamesBot.Ava.ViewModels
             StopCommand = ReactiveCommand.Create(Stop);
             ResumeCommand = ReactiveCommand.Create(Resume);
             StopOnWinCommand = ReactiveCommand.Create(StopOnWin);
+
+            LogOutCommand = ReactiveCommand.Create(LogOut);
+            ChangeSiteCommand = ReactiveCommand.Create(ChangeSite);
+            SimulateCommand = ReactiveCommand.Create(Simulate);
+
+            ExitCommand = ReactiveCommand.Create(Exit);
+            OpenCommand = ReactiveCommand.Create(Open);
+            SaveCommand = ReactiveCommand.Create(Save);
 
             var tmp =  new Doormat(_logger);
             SelectSite = new SelectSiteViewModel(_logger);
@@ -231,7 +273,7 @@ namespace KryGamesBot.Ava.ViewModels
         {
             SiteStatsData.StatsUpdated(botIns.CurrentSite.Stats);
             SessionStatsData.StatsUpdated(botIns.Stats);
-            ChartData.AddPoint(e.NewBet.Profit);
+            ChartData.AddPoint(e.NewBet.Profit,e.NewBet.IsWin);
             LiveBets.AddBet(e.NewBet);
         }
 
@@ -434,6 +476,49 @@ namespace KryGamesBot.Ava.ViewModels
         void StopOnWin()
         {
             botIns.StopOnWin = true;
+        }
+        public ICommand LogOutCommand { get; set; }
+        void LogOut()
+        {
+            botIns.StopStrategy("Logging Out");
+            botIns.CurrentSite.Disconnect();
+            ShowLogin();
+        }
+
+        public ICommand ChangeSiteCommand { get; set; }
+        void ChangeSite()
+        {
+            botIns.StopStrategy("Logging Out");
+            botIns.CurrentSite.Disconnect();
+            ShowSites = true;
+        }
+
+        public ICommand SimulateCommand { get; }
+
+        void Simulate()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ICommand ExitCommand { get; }
+
+        void Exit()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ICommand OpenCommand { get; }
+
+        void Open()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ICommand SaveCommand { get; }
+
+        void Save()
+        {
+            throw new NotImplementedException();
         }
 
         public void OnClosing()

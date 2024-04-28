@@ -30,11 +30,13 @@ namespace KryGamesBot.Ava.Classes.Charts
 
         public double Argument { get; private set; }
         public double Value { get; private set; }
+        public bool Win { get; set; }
 
-        public SimpleDataPoint(double arg, double val)
+        public SimpleDataPoint(double arg, double val, bool win)
         {
             Argument = arg;
             Value = val;
+            Win = win;
         }
     }
 }
