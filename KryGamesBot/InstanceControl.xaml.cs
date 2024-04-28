@@ -30,7 +30,7 @@ namespace KryGamesBot
     {
         string BetSettingsFile = "";
         string PersonalSettingsFile = "";
-        public Doormat botIns = new Doormat();
+        public Doormat botIns = new Doormat(null);
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler<RenameEventArgs> Rename;

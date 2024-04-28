@@ -96,7 +96,7 @@ namespace KryGamesBot
             dlmMainMainLayout.LayoutItemRestored += DlmMainMainLayout_LayoutItemRestored1;
             string DocsPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\";
             
-            DoormatBot.Doormat tmpInstance = new DoormatBot.Doormat();
+            DoormatBot.Doormat tmpInstance = new DoormatBot.Doormat(null);
             tmpInstance.NeedConstringPassword += TmpInstance_NeedConstringPassword;
             tmpInstance.NeedKeepassPassword += TmpInstance_NeedKeepassPassword;
             //check if there's a local settings file
@@ -307,7 +307,7 @@ namespace KryGamesBot
         private void bchk_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
         {
             GlobalSettings tmp = new GlobalSettings();
-            Doormat botins = new Doormat();
+            Doormat botins = new Doormat(null);
             botins.LoadPersonalSettings(Path + "personalsettings.json");
             tmp.Settings = botins.PersonalSettings;
             //tmp.Settings = personal settings instance being used?

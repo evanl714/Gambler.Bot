@@ -10,9 +10,9 @@
   <ScrollViewer>
     <StackPanel Orientation="Vertical">
       <TextBlock Grid.Row="0" Grid.Column="0" Text="Auto withdraw/Tip" HorizontalAlignment="Center"/>
-      <Border Padding="3" Margin="3" BorderBrush="DarkGray" BorderThickness="1">
+      <Border Padding="3" Margin="3" BorderBrush="{DynamicResource SystemChromeGrayColor}" BorderThickness="1">
         <StackPanel>
-          <Border Background="DarkGray" Margin="0,0,0,5">
+          <Border Background="{DynamicResource SystemChromeGrayColor}" Margin="0,0,0,5">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
               <TextBlock Padding="5" FontSize="16" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Text="General" VerticalAlignment="Center"/>
             </StackPanel>
@@ -30,9 +30,9 @@
           </Grid>
         </StackPanel>
       </Border>
-      <Border Padding="3" Margin="3" BorderBrush="DarkGray" BorderThickness="1">
+      <Border Padding="3" Margin="3" BorderBrush="{DynamicResource SystemChromeGrayColor}" BorderThickness="1">
         <StackPanel>
-          <Border Background="DarkGray" Margin="0,0,0,5">
+          <Border Background="{DynamicResource SystemChromeGrayColor}" Margin="0,0,0,5">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
               <TextBlock Padding="5" FontSize="16" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Text="On Loss" VerticalAlignment="Center"/>
             </StackPanel>
@@ -90,9 +90,9 @@
           </Grid>
         </StackPanel>
       </Border>
-      <Border Padding="3" Margin="3" BorderBrush="DarkGray" BorderThickness="1">
+      <Border Padding="3" Margin="3" BorderBrush="{DynamicResource SystemChromeGrayColor}" BorderThickness="1">
         <StackPanel>
-          <Border Background="DarkGray" Margin="0,0,0,5">
+          <Border Background="{DynamicResource SystemChromeGrayColor}" Margin="0,0,0,5">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
               <TextBlock Padding="5" FontSize="16" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Text="On Win" VerticalAlignment="Center"/>
             </StackPanel>

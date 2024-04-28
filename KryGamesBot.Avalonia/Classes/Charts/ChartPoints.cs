@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using LiveChartsCore.Kernel;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
 
 namespace KryGamesBot.Ava.Classes.Charts
 {
@@ -25,18 +27,22 @@ namespace KryGamesBot.Ava.Classes.Charts
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, removedItems, startingIndex));
         }
     }
-    public class SimpleDataPoint
+    public class SimpleDataPoint : IChartEntity
     {
 
         public double Argument { get; private set; }
         public double Value { get; private set; }
         public bool Win { get; set; }
+        public ChartEntityMetaData? MetaData { get ; set ; }
+        public Coordinate Coordinate { get ; set; }
 
         public SimpleDataPoint(double arg, double val, bool win)
         {
             Argument = arg;
             Value = val;
             Win = win;
+            Coordinate = new Coordinate(arg, val);
+            
         }
     }
 }

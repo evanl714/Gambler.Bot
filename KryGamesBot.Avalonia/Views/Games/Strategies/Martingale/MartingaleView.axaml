@@ -20,9 +20,9 @@
   <TabControl>
       <TabItem Header="On Loss">
         <StackPanel Orientation="Vertical">
-        <Border Padding="3" Margin="3" BorderBrush="DarkGray" BorderThickness="1">
+        <Border Padding="3" Margin="3" BorderBrush="{DynamicResource SystemChromeGrayColor}" BorderThickness="1">
           <StackPanel>
-            <Border Background="DarkGray" Margin="0,0,0,5">
+            <Border Background="{DynamicResource SystemChromeGrayColor}" Margin="0,0,0,5">
               <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <TextBlock Margin="5" FontSize="16" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Text="Multiplier Settings" VerticalAlignment="Center"/>
               </StackPanel>
@@ -67,9 +67,9 @@
       </TabItem>
     <TabItem Header="On Win">
       <StackPanel Orientation="Vertical">
-        <Border Padding="3" Margin="3" BorderBrush="DarkGray" BorderThickness="1">
+        <Border Padding="3" Margin="3" BorderBrush="{DynamicResource SystemChromeGrayColor}" BorderThickness="1">
           <StackPanel>
-            <Border Background="DarkGray" Margin="0,0,0,5">
+            <Border Background="{DynamicResource SystemChromeGrayColor}" Margin="0,0,0,5">
               <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <TextBlock Margin="5" FontSize="16" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Text="Multiplier Settings" VerticalAlignment="Center"/>
               </StackPanel>

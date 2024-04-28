@@ -10,6 +10,7 @@
     <Folder Include="Models\" />
     <AvaloniaResource Include="Assets\**" />
     <Folder Include="Services\" />
+    <Folder Include="Views\Windows\" />
   </ItemGroup>
 
   

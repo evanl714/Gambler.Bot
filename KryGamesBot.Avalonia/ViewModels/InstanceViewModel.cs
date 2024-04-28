@@ -3,6 +3,7 @@ using DoormatBot;
 using DoormatBot.Strategies;
 using DoormatBot.Strategies.PresetListModels;
 using DoormatCore.Games;
+using DryIoc;
 using KryGamesBot.Ava.Classes;
 using KryGamesBot.Ava.Classes.BetsPanel;
 using KryGamesBot.Ava.Classes.Strategies;
@@ -21,6 +22,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using static IronPython.Modules._ast;
 
 namespace KryGamesBot.Ava.ViewModels
 {
@@ -34,6 +36,7 @@ namespace KryGamesBot.Ava.ViewModels
         private Doormat botIns;
         public Doormat? BotInstance { get => botIns; set { botIns = value; this.RaisePropertyChanged(); } }
         public Interaction<LoginViewModel, LoginViewModel?> ShowDialog { get; }
+        public Interaction<SimulationViewModel, SimulationViewModel?> ShowSimulation { get; }
         private bool showSites=true;
         public ProfitChartViewModel ChartData { get; set; }// = new ProfitChartViewModel();
         public SiteStatsViewModel SiteStatsData { get; set; }// = new SiteStatsViewModel();
@@ -153,6 +156,24 @@ namespace KryGamesBot.Ava.ViewModels
             
         }
 
+        private string _status;
+
+        public string StatusMessage
+        {
+            get { return _status; }
+            set { _status = value; this.RaisePropertyChanged(); }
+        }
+
+        private string lastAction;
+
+        public string LastAction
+        {
+            get { return lastAction; }
+            set { lastAction = value; this.RaisePropertyChanged(); }
+        }
+
+
+
         public InstanceViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
         {
             AdvancedSettingsVM= new AdvancedViewModel(_logger);
@@ -180,6 +201,7 @@ namespace KryGamesBot.Ava.ViewModels
             SelectSite.SelectedSiteChanged += SelectSite_SelectedSiteChanged;
             IsSelectSiteViewVisible = true;
             ShowDialog = new Interaction<LoginViewModel, LoginViewModel?>();
+            ShowSimulation = new Interaction<SimulationViewModel, SimulationViewModel?>();
             tmp.Strategy = new Martingale(_logger);
             tmp.GetStrats();
             PlaceBetVM = new DicePlaceBetViewModel(_logger);
@@ -193,6 +215,8 @@ namespace KryGamesBot.Ava.ViewModels
             tmp.OnStrategyChanged += BotIns_OnStrategyChanged;
             tmp.OnSiteLoginFinished += BotIns_OnSiteLoginFinished;
             tmp.OnBypassRequired += Tmp_OnBypassRequired;
+            tmp.OnSiteNotify += Tmp_OnSiteNotify;
+            tmp.OnSiteError += Tmp_OnSiteError;
             BotInstance = tmp;
             botIns.CurrentGame = DoormatCore.Games.Games.Dice;
             /*if (MainWindow.Portable && File.Exists("personalsettings.json"))
@@ -209,6 +233,26 @@ namespace KryGamesBot.Ava.ViewModels
            
             LoadSettings("default");
             
+        }
+
+        private void Tmp_OnSiteError(object sender, DoormatCore.Sites.ErrorEventArgs e)
+        {
+            if (!Dispatcher.UIThread.CheckAccess())
+                Dispatcher.UIThread.Invoke(() => { Tmp_OnSiteError(sender, e); });
+            else
+            {
+                StatusMessage = e.Message;
+            }
+        }
+
+        private void Tmp_OnSiteNotify(object sender, DoormatCore.Sites.GenericEventArgs e)
+        {
+            if (!Dispatcher.UIThread.CheckAccess())
+                Dispatcher.UIThread.Invoke(() => { Tmp_OnSiteNotify(sender, e); });
+            else
+            {
+                StatusMessage = e.Message;
+            }
         }
 
         private void Tmp_OnBypassRequired(object? sender, DoormatCore.Sites.BypassRequiredArgs e)
@@ -262,6 +306,7 @@ namespace KryGamesBot.Ava.ViewModels
             //    btnResume.IsEnabled = true;
 
             //}
+            StatusMessage = "Stopping: "+ e.Message;
         }
             private void BotIns_OnStarted(object? sender, EventArgs e)
         {
@@ -279,12 +324,19 @@ namespace KryGamesBot.Ava.ViewModels
 
         private void BotIns_OnSiteAction(object sender, DoormatCore.Sites.GenericEventArgs e)
         {
-            throw new NotImplementedException();
+            LastAction = e.Message;
         }
 
         private void BotIns_OnNotification(object? sender, DoormatCore.Helpers.NotificationEventArgs e)
         {
             throw new NotImplementedException();
+            switch (e.NotificationTrigger.Action)
+            {
+                case DoormatCore.Helpers.TriggerAction.Alarm: break;
+                case DoormatCore.Helpers.TriggerAction.Chime: break;
+                case DoormatCore.Helpers.TriggerAction.Email: break;
+                case DoormatCore.Helpers.TriggerAction.Popup: break;                
+            }
         }
 
         private void BotIns_OnGameChanged(object? sender, EventArgs e)
@@ -495,9 +547,13 @@ namespace KryGamesBot.Ava.ViewModels
 
         public ICommand SimulateCommand { get; }
 
-        void Simulate()
+        async Task Simulate()
         {
-            throw new NotImplementedException();
+            SimulationViewModel simControl = new SimulationViewModel(_logger);
+            simControl.CurrentSite = botIns.CurrentSite;
+            simControl.Strategy = botIns.Strategy;
+            simControl.BetSettings = botIns.BetSettings;
+            await ShowSimulation.Handle(simControl);
         }
 
         public ICommand ExitCommand { get; }

@@ -19,7 +19,11 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
         if (!Design.IsDesignMode)
         {
             this.WhenActivated(action =>
-         action(ViewModel!.ShowDialog.RegisterHandler(DoShowDialogAsync)));
+            {
+                ViewModel!.ShowSimulation.RegisterHandler(DoShowSimulation);
+                ViewModel!.ShowDialog.RegisterHandler(DoShowDialogAsync);
+
+            });
         }
         this.AttachedToVisualTree += OnAttachedToVisualTree;
         this.DetachedFromVisualTree += OnDetachedFromVisualTree;
@@ -33,6 +37,19 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
         var ParentWindow = this.FindAncestorOfType<Window>();
         var result = await dialog.ShowDialog<LoginViewModel?>(ParentWindow);
         interaction.SetOutput(result);
+    }
+    private async Task DoShowSimulation(InteractionContext<SimulationViewModel,
+                                        SimulationViewModel?> interaction)
+    {
+        
+        
+        var ParentWindow = this.FindAncestorOfType<Window>();
+        ReactiveWindow< SimulationViewModel> window = new();
+        window.DataContext = interaction.Input;
+        var dialog = new SimulationView();
+        window.Content = dialog;
+        dialog.DataContext = interaction.Input;
+        window.Show();
     }
     private void OnAttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e)
     {

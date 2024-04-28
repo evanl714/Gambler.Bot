@@ -9,9 +9,9 @@
   <ScrollViewer>
   <StackPanel Orientation="Vertical">
     <TextBlock Grid.Row="0" Grid.Column="0" Text="Auto withdraw/Tip" HorizontalAlignment="Center"/>
-    <Border Padding="3" Margin="3" BorderBrush="DarkGray" BorderThickness="1">
+    <Border Padding="3" Margin="3" BorderBrush="{DynamicResource SystemChromeGrayColor}" BorderThickness="1">
       <StackPanel>
-        <Border Background="DarkGray" Margin="0,0,0,5">
+        <Border Background="{DynamicResource SystemChromeGrayColor}" Margin="0,0,0,5">
           <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding BetSettings.EnableUpperLimit }" />
             <TextBlock FontSize="16" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Text="Upper limit" VerticalAlignment="Center"/>
@@ -31,9 +31,9 @@
         </Grid>
       </StackPanel>
     </Border>
-    <Border Padding="3" Margin="3" BorderBrush="DarkGray" BorderThickness="1">
+    <Border Padding="3" Margin="3" BorderBrush="{DynamicResource SystemChromeGrayColor}" BorderThickness="1">
       <StackPanel>
-        <Border Background="DarkGray" Margin="0,0,0,5">
+        <Border Background="{DynamicResource SystemChromeGrayColor}" Margin="0,0,0,5">
           <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <CheckBox IsChecked="{Binding BetSettings.EnableLowerLimit}" Grid.Row="0" Grid.Column="1" />
             <TextBlock FontSize="16" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Text="Lower limit" VerticalAlignment="Center"/>
@@ -53,9 +53,9 @@
         </Grid>
       </StackPanel>
     </Border>
-    <Border Padding="3" Margin="3" BorderBrush="DarkGray" BorderThickness="1">
+    <Border Padding="3" Margin="3" BorderBrush="{DynamicResource SystemChromeGrayColor}" BorderThickness="1">
       <StackPanel>
-        <Border Background="DarkGray" Margin="0,0,0,5">         
+        <Border Background="{DynamicResource SystemChromeGrayColor}" Margin="0,0,0,5">         
             <TextBlock Padding="6" HorizontalAlignment="Center" FontSize="16" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Text="Reset Seed" VerticalAlignment="Center"/>
         </Border>
         <Grid RowDefinitions="*,*,*,*,*,*,*" ColumnDefinitions="25,80,3*,2*">
@@ -97,9 +97,9 @@
         
       </StackPanel>
     </Border>
-    <Border Padding="3" Margin="3" BorderBrush="DarkGray" BorderThickness="1">
+    <Border Padding="3" Margin="3" BorderBrush="{DynamicResource SystemChromeGrayColor}" BorderThickness="1">
       <StackPanel>
-        <Border Background="DarkGray" Margin="0,0,0,5">
+        <Border Background="{DynamicResource SystemChromeGrayColor}" Margin="0,0,0,5">
 
           <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <CheckBox IsChecked="{Binding BetSettings.EnableBotSpeed}"  />

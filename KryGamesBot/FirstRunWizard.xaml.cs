@@ -2,6 +2,7 @@
 using DoormatBot.Helpers;
 using DoormatBot.Strategies;
 using DoormatCore.Sites;
+using KryGamesBotControls.Common;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -77,7 +78,7 @@ You're all set up and ready to start. Finish this wizard to choose the site you 
 
         private void Wizard_Cancel(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            DoormatBot.Doormat tmpInstance = new DoormatBot.Doormat();
+            DoormatBot.Doormat tmpInstance = new DoormatBot.Doormat(null);
             tmpInstance.PersonalSettings = settings;
             if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot"))
                 Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot");
@@ -136,7 +137,7 @@ You're all set up and ready to start. Finish this wizard to choose the site you 
 
         private void wzrd_Finish(object sender, CancelEventArgs e)
         {
-            DoormatBot.Doormat tmpInstance = new DoormatBot.Doormat();
+            DoormatBot.Doormat tmpInstance = new DoormatBot.Doormat(null);
             tmpInstance.PersonalSettings = settings;
             if (IsPortable)
                 tmpInstance.SavePersonalSettings("PersonalSettings.json");

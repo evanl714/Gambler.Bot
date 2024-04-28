@@ -3,6 +3,7 @@ using KryGamesBot.Ava.Classes;
 using KryGamesBot.Ava.Classes.Charts;
 using LiveChartsCore;
 using LiveChartsCore.Drawing;
+using LiveChartsCore.Kernel;
 using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Drawing;
@@ -58,7 +59,7 @@ namespace KryGamesBot.Ava.ViewModels.Common
                    Values = DataPoints,
                    Fill= null,
                    Stroke = new SolidColorPaint(SKColors.LightBlue, 1),
-                   Mapping = (sample, index) => new(sample.Argument, sample.Value),
+                   //Mapping = (sample, index) => new(sample.Argument, sample.Value),
                    GeometrySize = 3,
                    LineSmoothness = 0,
 

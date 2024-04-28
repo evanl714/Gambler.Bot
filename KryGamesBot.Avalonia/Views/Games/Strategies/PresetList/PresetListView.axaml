@@ -36,9 +36,9 @@ xmlns:dice="using:KryGamesBot.Ava.Views.Games.Dice"
 			  </DataGridTemplateColumn>		 
 			</DataGrid.Columns>
 	  </DataGrid>
-    <Border Padding="3" Margin="3" BorderBrush="DarkGray" BorderThickness="1">
+    <Border Padding="3" Margin="3" BorderBrush="{DynamicResource SystemChromeGrayColor}" BorderThickness="1">
       <StackPanel>
-        <Border Background="DarkGray" Margin="0,0,0,5">
+        <Border Background="{DynamicResource SystemChromeGrayColor}" Margin="0,0,0,5">
           <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <TextBlock Margin="5" FontSize="16" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Text="When end of list is reached" VerticalAlignment="Center"/>
           </StackPanel>
@@ -54,9 +54,9 @@ xmlns:dice="using:KryGamesBot.Ava.Views.Games.Dice"
         </StackPanel>
       </StackPanel>
     </Border>
-    <Border Padding="3" Margin="3" BorderBrush="DarkGray" BorderThickness="1">
+    <Border Padding="3" Margin="3" BorderBrush="{DynamicResource SystemChromeGrayColor}" BorderThickness="1">
       <StackPanel>
-        <Border Background="DarkGray" Margin="0,0,0,5">
+        <Border Background="{DynamicResource SystemChromeGrayColor}" Margin="0,0,0,5">
           <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <TextBlock Margin="5" FontSize="16" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Text="On Loss" VerticalAlignment="Center"/>
           </StackPanel>
@@ -74,9 +74,9 @@ xmlns:dice="using:KryGamesBot.Ava.Views.Games.Dice"
         </StackPanel>
       </StackPanel>
     </Border>
-    <Border Padding="3" Margin="3" BorderBrush="DarkGray" BorderThickness="1">
+    <Border Padding="3" Margin="3" BorderBrush="{DynamicResource SystemChromeGrayColor}" BorderThickness="1">
       <StackPanel>
-        <Border Background="DarkGray" Margin="0,0,0,5">
+        <Border Background="{DynamicResource SystemChromeGrayColor}" Margin="0,0,0,5">
           <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <TextBlock Margin="5" FontSize="16" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Text="On Win" VerticalAlignment="Center"/>
           </StackPanel>

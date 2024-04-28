@@ -43,9 +43,9 @@ xmlns:dice="using:KryGamesBot.Ava.Views.Games.Dice"
         </ContentControl.DataTemplates>
       </ContentControl>
     <CheckBox IsChecked="{Binding Strategy.chkReverseLab}" Content="Reverse Labouchere"/>
-      <Border Padding="3" Margin="3" BorderBrush="DarkGray" BorderThickness="1">
+      <Border Padding="3" Margin="3" BorderBrush="{DynamicResource SystemChromeGrayColor}" BorderThickness="1">
         <StackPanel>
-          <Border Background="DarkGray" Margin="0,0,0,5">
+          <Border Background="{DynamicResource SystemChromeGrayColor}" Margin="0,0,0,5">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
               <TextBlock Margin="5" FontSize="14" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Text="When a series completes" VerticalAlignment="Center"/>
             </StackPanel>

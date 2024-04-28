@@ -197,12 +197,7 @@ xmlns:behaviours="using:KryGamesBot.Ava.Behaviours"
           <RowDefinition/>
           <RowDefinition/>
           <RowDefinition/>
-          <RowDefinition/>
-          <RowDefinition/>
-          <RowDefinition/>
-          <RowDefinition/>
-          <RowDefinition/>
-          <RowDefinition/>
+          
         </Grid.RowDefinitions>
         <TextBlock Grid.Column="0" Grid.Row="0" Text="Avg streak" />
         <TextBlock Grid.Column="0" Grid.Row="1" Text="Avg win streak" />

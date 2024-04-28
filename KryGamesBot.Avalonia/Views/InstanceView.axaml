@@ -30,7 +30,7 @@ xmlns:dalembert="using:KryGamesBot.Ava.Views.Games.Strategies.DAlembert" xmlns:f
 				<CheckBox Content="Live Charts" IsChecked="{Binding ShowChart}"/>
 				<CheckBox Content="Live Bets" IsChecked="{Binding ShowLiveBets}"/>
 				<CheckBox Content="Stats" IsChecked="{Binding ShowStats}"/>
-				<Line/>
+				<Separator/>
 				<MenuItem Header="Simulate" Command="{Binding SimulateCommand}"/>
 				<MenuItem Header="Bet History"/>
 				<MenuItem Header="Roll verifier"/>
@@ -52,33 +52,49 @@ xmlns:dalembert="using:KryGamesBot.Ava.Views.Games.Strategies.DAlembert" xmlns:f
 			</MenuItem>
 
 		</Menu>
+			<Border  DockPanel.Dock="Bottom" Height="25" VerticalAlignment="Bottom" BorderThickness="1" BorderBrush="{DynamicResource SystemChromeGrayColor}" Padding="3">
+			<Grid VerticalAlignment="Center">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="3*" />
+					<ColumnDefinition Width="3*" />
+					<ColumnDefinition  Width="*"/>
+				</Grid.ColumnDefinitions>
+			<StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" >
+				<TextBlock Text="Status: " VerticalAlignment="Bottom"/>
+				<TextBlock Text="{Binding StatusMessage}"/>				
+			</StackPanel>
+				<StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" >					
+					<TextBlock Text="Last Action: "/>
+					<TextBlock Text="{Binding LastAction}"/>
+				</StackPanel>
+			</Grid>
+			</Border>
 			<Grid >
       <Grid.ColumnDefinitions>        
         <ColumnDefinition Width="4*"></ColumnDefinition>
-        <ColumnDefinition Width="5"></ColumnDefinition>
+        <ColumnDefinition Width="7"></ColumnDefinition>
         <ColumnDefinition Width="2*"></ColumnDefinition>
       </Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="2*" MinHeight="250" MaxHeight="300"></RowDefinition>
-			<RowDefinition Height="5"></RowDefinition>
-			<RowDefinition Height="5*"></RowDefinition>
+			<RowDefinition Height="175" MinHeight="175" MaxHeight="175" ></RowDefinition>
+			<RowDefinition Height="*"></RowDefinition>
 		</Grid.RowDefinitions>
-      <GridSplitter Grid.Column="1" Grid.RowSpan="3" Background="DarkGray" ResizeDirection="Columns"/>
-		<GridSplitter Grid.Column="0" Grid.Row="1" Background="DarkGray" ResizeDirection="Rows"/>
+      <GridSplitter Margin="3" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource SystemChromeGrayColor}" ResizeDirection="Columns"/>
+		
       <StackPanel IsVisible="{Binding ShowStats}" Grid.Column="0" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Stretch">		  			  
         <common:SiteStatsView VerticalAlignment="Top" HorizontalAlignment="Stretch" MinWidth="300" Grid.Row="0" DataContext="{Binding SiteStatsData}"/>		  
         <common:SessionStatsView  MinWidth="600" Grid.Row="2" DataContext="{Binding SessionStatsData}" VerticalAlignment="Top" HorizontalAlignment="Stretch" />
       </StackPanel>
-      <Grid Grid.Column="0" Grid.Row="2">
+      <Grid Grid.Column="0" Grid.Row="1">
 		  <Grid.RowDefinitions>
 			  <RowDefinition />
-			  <RowDefinition Height="4"/>
+			  <RowDefinition Height="7"/>
 			  <RowDefinition/>
 		  </Grid.RowDefinitions>
 		  <Border IsVisible="{Binding ShowChart}" >
         <common:ProfitChartView Grid.Row="0" DataContext="{Binding ChartData}"/>
 		  </Border>
-        <GridSplitter Grid.Row="1" Background="DarkGray" ResizeDirection="Rows"/>
+        <GridSplitter Margin="2" Grid.Row="1" Background="{DynamicResource SystemChromeGrayColor}" ResizeDirection="Rows"/>
         <ContentControl Grid.Row="2" Content="{Binding LiveBets}"  IsVisible="{Binding ShowLiveBets}">
           <ContentControl.DataTemplates>
             <DataTemplate DataType="diceVM:DiceLiveBetViewModel">
@@ -159,9 +175,11 @@ xmlns:dalembert="using:KryGamesBot.Ava.Views.Games.Strategies.DAlembert" xmlns:f
             <TextBlock>coming soon</TextBlock>
           </TabItem>
         </TabControl>
-        
+		 
       </DockPanel>
 			</Grid>
+			
+
 		</DockPanel>
     
 		
