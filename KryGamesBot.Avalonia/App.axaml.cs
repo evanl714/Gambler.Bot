@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using Microsoft.Extensions.Logging;
 using KryGamesBot.Ava.ViewModels.Common;
+using Microsoft.Extensions.Configuration;
 
 namespace KryGamesBot.Ava
 {
@@ -17,6 +18,7 @@ namespace KryGamesBot.Ava
 
         public override void Initialize()
         {
+            
             AvaloniaXamlLoader.Load(this);
         }
 

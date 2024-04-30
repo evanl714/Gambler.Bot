@@ -49,6 +49,8 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
         var dialog = new SimulationView();
         window.Content = dialog;
         dialog.DataContext = interaction.Input;
+        window.Width = 800;
+        window.Height = 450;
         window.Show();
     }
     private void OnAttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e)
@@ -76,5 +78,25 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
 
     private void Binding(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
+    }
+
+    private void OnMenuItemClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (sender is MenuItem menuItem)
+        {
+            if (menuItem.Icon is CheckBox checkBox)
+            {
+                // Toggle check state
+                checkBox.IsChecked = !checkBox.IsChecked;
+            }
+            else if (menuItem.Icon is RadioButton radioButton)
+            {
+                // Select new radio button and other radio buttons
+                // with same group name will be unselected
+                radioButton.IsChecked = true;
+            }
+        }
+           
+	
     }
 }

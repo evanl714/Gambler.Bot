@@ -2,46 +2,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="KryGamesBot.Ava.App"
              xmlns:local="using:KryGamesBot.Ava"
-			 xmlns:converters="using:KryGamesBot.Ava.Converters"
-             RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+             xmlns:converters="using:KryGamesBot.Ava.Converters"
+             RequestedThemeVariant="Default"
+
+             xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+             >
+    <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.DataTemplates>
         <local:ViewLocator/>
     </Application.DataTemplates>
-	<Application.Resources>
-		<converters:BitmapAssetValueConverter x:Key="variableImage"/>
-    
-      <ControlTheme TargetType="HeaderedContentControl" x:Key="GrouBox" >
-        <Setter Property="Template">
-          <Setter.Value>
-            <ControlTemplate>
-              <Grid>
-                <Grid.RowDefinitions>
-                  <RowDefinition Height="Auto"/>
-                  <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="Auto"/>
-                  <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Border ZIndex="1" Padding="5,0,5,0" Background="White" Margin="5,0,0,0">
-                  <TextBlock TextBlock.FontWeight="Bold" Text="{TemplateBinding Header}" />
-                </Border>
-                <Border Grid.RowSpan="2" Grid.ColumnSpan="2" Margin="0,10,0,0"
-                    BorderBrush="{TemplateBinding Background}"
-                    BorderThickness="1">
-                  <ContentPresenter Content="{TemplateBinding Content}" />
-                </Border>
-              </Grid>
-            </ControlTemplate>
-          </Setter.Value>
-        </Setter>
-      </ControlTheme>
-	</Application.Resources>
+    <Application.Resources>
+        <converters:BitmapAssetValueConverter x:Key="variableImage"/>
+
+
+    </Application.Resources>
     <Application.Styles>
         <FluentTheme DensityStyle="Normal" />
-		<StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
-		<StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml" />
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+        <StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml" />
+        <actipro:ModernTheme Includes="NativeDataGrid, Pro" />
     </Application.Styles>
 </Application>

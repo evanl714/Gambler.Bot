@@ -52,14 +52,13 @@ xmlns:behaviours="using:KryGamesBot.Ava.Behaviours"
 				  <ia:DataTriggerBehavior Binding="{Binding Stats.Profit}"
                                 ComparisonCondition="GreaterThan"
                                 Value="0">
-					  <ia:ChangePropertyAction PropertyName="Foreground"
-											   Value="Green" />
+					  <ia:ChangePropertyAction PropertyName="Classes"
+											   Value="theme-text-heading success" />
 				  </ia:DataTriggerBehavior>
 				  <ia:DataTriggerBehavior Binding="{Binding Stats.Profit}"
                                 ComparisonCondition="LessThan"
                                 Value="0">
-					  <ia:ChangePropertyAction PropertyName="Foreground"
-											   Value="{DynamicResource SystemErrorTextColor}" />
+					  <ia:ChangePropertyAction PropertyName="Classes" Value="theme-text-body danger" />
 				  </ia:DataTriggerBehavior>
 			  </i:Interaction.Behaviors>
 			  
@@ -74,22 +73,22 @@ xmlns:behaviours="using:KryGamesBot.Ava.Behaviours"
 				  <behaviours:NumberFormatBehaviour Mask="n0" Text="{Binding Stats.Bets, Mode=OneWay}" />
 			  </i:Interaction.Behaviors>
 		  </SelectableTextBlock>
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="3"  Foreground="Green"  >
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="3"  Classes="theme-text-body success"  >
 			  <i:Interaction.Behaviors>
 				  <behaviours:NumberFormatBehaviour Mask="n0" Text="{Binding Stats.Wins, Mode=OneWay}"/>
 			  </i:Interaction.Behaviors>
 		  </SelectableTextBlock>
-		  <SelectableTextBlock Grid.Column="3" Grid.Row="3" Foreground="{DynamicResource SystemErrorTextColor}"  >
+		  <SelectableTextBlock Grid.Column="3" Grid.Row="3" Classes="theme-text-body danger"  >
 			  <i:Interaction.Behaviors>
 				  <behaviours:NumberFormatBehaviour Mask="n0" Text="{Binding Stats.Losses, Mode=OneWay}"/>
 			  </i:Interaction.Behaviors>
 		  </SelectableTextBlock>
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="4" Foreground="Green" >
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="4" Classes="theme-text-body success" >
 			  <i:Interaction.Behaviors>
 				  <behaviours:NumberFormatBehaviour Mask="n0" Text="{Binding Stats.BestStreak, Mode=OneWay}" />
 			  </i:Interaction.Behaviors>
 		  </SelectableTextBlock>
-		  <SelectableTextBlock Grid.Column="3" Grid.Row="4" Foreground="{DynamicResource SystemErrorTextColor}"  >
+		  <SelectableTextBlock Grid.Column="3" Grid.Row="4" Classes="theme-text-body danger"  >
 			  <i:Interaction.Behaviors>
 				  <behaviours:NumberFormatBehaviour Mask="n0" Text="{Binding Stats.WorstStreak, Mode=OneWay}"/>
 			  </i:Interaction.Behaviors>
@@ -100,14 +99,12 @@ xmlns:behaviours="using:KryGamesBot.Ava.Behaviours"
 				  <ia:DataTriggerBehavior Binding="{Binding Stats.ProfitPerHour}"
                                 ComparisonCondition="GreaterThan"
                                 Value="0">
-					  <ia:ChangePropertyAction PropertyName="Foreground"
-											   Value="Green" />
+					  <ia:ChangePropertyAction PropertyName="Classes" Value="theme-text-body success"/>
 				  </ia:DataTriggerBehavior>
 				  <ia:DataTriggerBehavior Binding="{Binding Stats.ProfitPerHour}"
                                 ComparisonCondition="LessThan"
                                 Value="0">
-					  <ia:ChangePropertyAction PropertyName="Foreground"
-											   Value="{DynamicResource SystemErrorTextColor}"/>
+					  <ia:ChangePropertyAction  PropertyName="Classes" Value="theme-text-body danger"/>
 				  </ia:DataTriggerBehavior>
 			  </i:Interaction.Behaviors>
 		  </SelectableTextBlock>
@@ -117,14 +114,12 @@ xmlns:behaviours="using:KryGamesBot.Ava.Behaviours"
 				  <ia:DataTriggerBehavior Binding="{Binding Stats.ProfitPer24Hour}"
                                 ComparisonCondition="GreaterThan"
                                 Value="0">
-					  <ia:ChangePropertyAction PropertyName="Foreground"
-											   Value="Green" />
+					  <ia:ChangePropertyAction PropertyName="Classes" Value="theme-text-body success"/>
 				  </ia:DataTriggerBehavior>
 				  <ia:DataTriggerBehavior Binding="{Binding Stats.ProfitPer24Hour}"
                                 ComparisonCondition="LessThan"
                                 Value="0">
-					  <ia:ChangePropertyAction PropertyName="Foreground"
-											   Value="{DynamicResource SystemErrorTextColor}"/>
+					  <ia:ChangePropertyAction PropertyName="Classes" Value="theme-text-body danger" />
 				  </ia:DataTriggerBehavior>
 			  </i:Interaction.Behaviors>
 		  </SelectableTextBlock>
@@ -134,14 +129,12 @@ xmlns:behaviours="using:KryGamesBot.Ava.Behaviours"
 				  <ia:DataTriggerBehavior Binding="{Binding Stats.CurrentStreak}"
                                 ComparisonCondition="GreaterThan"
                                 Value="0">
-					  <ia:ChangePropertyAction PropertyName="Foreground" 
-											   Value="Green" />
+					  <ia:ChangePropertyAction PropertyName="Classes" Value="theme-text-body success"/>
 				  </ia:DataTriggerBehavior>
 				  <ia:DataTriggerBehavior Binding="{Binding Stats.CurrentStreak}"
                                 ComparisonCondition="LessThan"
                                 Value="0">
-					  <ia:ChangePropertyAction PropertyName="Foreground"
-											   Value="{DynamicResource SystemErrorTextColor}"/>
+					  <ia:ChangePropertyAction PropertyName="Classes" Value="theme-text-body danger" />
 				  </ia:DataTriggerBehavior>
 			  </i:Interaction.Behaviors>
 		  </SelectableTextBlock>
@@ -151,14 +144,12 @@ xmlns:behaviours="using:KryGamesBot.Ava.Behaviours"
 				  <ia:DataTriggerBehavior Binding="{Binding Stats.ProfitPerBet}"
                                 ComparisonCondition="GreaterThan"
                                 Value="0">
-					  <ia:ChangePropertyAction PropertyName="Foreground"
-											   Value="Green" />
+					  <ia:ChangePropertyAction PropertyName="Classes" Value="theme-text-body success"/>
 				  </ia:DataTriggerBehavior>
 				  <ia:DataTriggerBehavior Binding="{Binding Stats.ProfitPerBet}"
                                 ComparisonCondition="LessThan"
                                 Value="0">
-					  <ia:ChangePropertyAction PropertyName="Foreground"
-											   Value="{DynamicResource SystemErrorTextColor}"/>
+					  <ia:ChangePropertyAction PropertyName="Classes" Value="theme-text-body danger" />
 				  </ia:DataTriggerBehavior>
 			  </i:Interaction.Behaviors>
 		  </SelectableTextBlock>
@@ -168,14 +159,12 @@ xmlns:behaviours="using:KryGamesBot.Ava.Behaviours"
 				  <ia:DataTriggerBehavior Binding="{Binding Stats.Luck}"
                                 ComparisonCondition="GreaterThan"
                                 Value="0">
-					  <ia:ChangePropertyAction PropertyName="Foreground"
-											   Value="Green" />
+					  <ia:ChangePropertyAction PropertyName="Classes" Value="theme-text-body success"/>
 				  </ia:DataTriggerBehavior>
 				  <ia:DataTriggerBehavior Binding="{Binding Stats.Luck}"
                                 ComparisonCondition="LessThan"
                                 Value="0">
-					  <ia:ChangePropertyAction PropertyName="Foreground"
-											   Value="{DynamicResource SystemErrorTextColor}"/>
+					  <ia:ChangePropertyAction PropertyName="Classes" Value="theme-text-body danger" />
 				  </ia:DataTriggerBehavior>
 			  </i:Interaction.Behaviors>
 		  </SelectableTextBlock>
@@ -213,53 +202,51 @@ xmlns:behaviours="using:KryGamesBot.Ava.Behaviours"
 				  <ia:DataTriggerBehavior Binding="{Binding Stats.AvgStreak}"
                                 ComparisonCondition="GreaterThan"
                                 Value="0">
-					  <ia:ChangePropertyAction PropertyName="Foreground"
-											   Value="Green" />
+					  <ia:ChangePropertyAction PropertyName="Classes" Value="theme-text-body success"/>
 				  </ia:DataTriggerBehavior>
 				  <ia:DataTriggerBehavior Binding="{Binding Stats.AvgStreak}"
                                 ComparisonCondition="LessThan"
                                 Value="0">
-					  <ia:ChangePropertyAction PropertyName="Foreground"
-											   Value="{DynamicResource SystemErrorTextColor}"/>
+					  <ia:ChangePropertyAction PropertyName="Classes" Value="theme-text-body danger" />
 				  </ia:DataTriggerBehavior>
 			  </i:Interaction.Behaviors>
 		  </SelectableTextBlock>
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="1"  Foreground="Green" >
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="1"  Classes="theme-text-body success" >
 			  <i:Interaction.Behaviors>
 				  <behaviours:NumberFormatBehaviour Mask="n8"  Text="{Binding Stats.AvgWin, Mode=OneWay}"/>
 			  </i:Interaction.Behaviors>
 		  </SelectableTextBlock>
-		  <SelectableTextBlock Grid.Column="3" Grid.Row="1" Foreground="{DynamicResource SystemErrorTextColor}"  >
+		  <SelectableTextBlock Grid.Column="3" Grid.Row="1" Classes="theme-text-body danger"  >
 			  <i:Interaction.Behaviors>
 				  <behaviours:NumberFormatBehaviour Mask="n8"  Text="{Binding Stats.AvgLoss, Mode=OneWay}"/>
 			  </i:Interaction.Behaviors>
 		  </SelectableTextBlock>
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="2"  Foreground="Green"  >
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="2"  Classes="theme-text-body success"  >
 			  <i:Interaction.Behaviors>
 				  <behaviours:NumberFormatBehaviour Mask="n0"  Text="{Binding Stats.BestStreak, Mode=OneWay}"/>
 			  </i:Interaction.Behaviors>
 		  </SelectableTextBlock>
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="3" Foreground="Green" >
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="3" Classes="theme-text-body success" >
 			  <i:Interaction.Behaviors>
 				  <behaviours:NumberFormatBehaviour Mask="n0"  Text="{Binding Stats.BestStreak2, Mode=OneWay}"/>
 			  </i:Interaction.Behaviors>
 		  </SelectableTextBlock>
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="4"  Foreground="Green"  >
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="4"  Classes="theme-text-body success"  >
 			  <i:Interaction.Behaviors>
 				  <behaviours:NumberFormatBehaviour Mask="n0"  Text="{Binding Stats.BestStreak3, Mode=OneWay}"/>
 			  </i:Interaction.Behaviors>
 		  </SelectableTextBlock>
-		  <SelectableTextBlock Grid.Column="3" Grid.Row="2" Foreground="{DynamicResource SystemErrorTextColor}" >
+		  <SelectableTextBlock Grid.Column="3" Grid.Row="2" Classes="theme-text-body danger" >
 			  <i:Interaction.Behaviors>
 				  <behaviours:NumberFormatBehaviour Mask="n0"  Text="{Binding Stats.WorstStreak, Mode=OneWay}"/>
 			  </i:Interaction.Behaviors>
 		  </SelectableTextBlock>
-		  <SelectableTextBlock Grid.Column="3" Grid.Row="3" Foreground="{DynamicResource SystemErrorTextColor}"  >
+		  <SelectableTextBlock Grid.Column="3" Grid.Row="3" Classes="theme-text-body danger"  >
 			  <i:Interaction.Behaviors>
 				  <behaviours:NumberFormatBehaviour Mask="n0"  Text="{Binding Stats.WorstStreak2, Mode=OneWay}"/>
 			  </i:Interaction.Behaviors>
 		  </SelectableTextBlock>
-		  <SelectableTextBlock Grid.Column="3" Grid.Row="4" Foreground="{DynamicResource SystemErrorTextColor}"  >
+		  <SelectableTextBlock Grid.Column="3" Grid.Row="4" Classes="theme-text-body danger"  >
 			  <i:Interaction.Behaviors>
 				  <behaviours:NumberFormatBehaviour Mask="n0"  Text="{Binding Stats.WorstStreak3, Mode=OneWay}"/>
 			  </i:Interaction.Behaviors>
@@ -269,12 +256,12 @@ xmlns:behaviours="using:KryGamesBot.Ava.Behaviours"
 				  <behaviours:NumberFormatBehaviour Mask="n8"  Text="{Binding Stats.LargestBet, Mode=OneWay}"/>
 			  </i:Interaction.Behaviors>
 		  </SelectableTextBlock>
-		  <SelectableTextBlock Grid.Column="1" Grid.Row="6" Foreground="Green" >
+		  <SelectableTextBlock Grid.Column="1" Grid.Row="6" Classes="theme-text-body success" >
 			  <i:Interaction.Behaviors>
 				  <behaviours:NumberFormatBehaviour Mask="n8"  Text="{Binding Stats.LargestWin, Mode=OneWay}"/>
 			  </i:Interaction.Behaviors>
 		  </SelectableTextBlock>
-		  <SelectableTextBlock Grid.Column="3" Grid.Row="6" Foreground="{DynamicResource SystemErrorTextColor}" >
+		  <SelectableTextBlock Grid.Column="3" Grid.Row="6" Classes="theme-text-body danger" >
 			  <i:Interaction.Behaviors>
 				  <behaviours:NumberFormatBehaviour Mask="n8"  Text="{Binding Stats.LargestLoss, Mode=OneWay}"/>
 			  </i:Interaction.Behaviors>

@@ -3,6 +3,8 @@ using Avalonia;
 using Avalonia.ReactiveUI;
 using KryGamesBot.Ava;
 using Avalonia.WebView.Desktop;
+using Microsoft.Extensions.Configuration;
+using KryGamesBot.Ava.Classes;
 
 namespace KryGamesBot.Desktop;
 
@@ -18,8 +20,12 @@ class Program
     // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
     {
+        var config = new ConfigurationBuilder()
+           .AddUserSecrets<Program>()
+           .Build();
 
-       return  AppBuilder.Configure<App>()
+        return  AppBuilder.Configure<App>()
+                .RegisterActiproLicense(config.GetValue<string>("ActiproLicense:Licensee"), config.GetValue<string>("ActiproLicense:LisenceKey"))
               .UsePlatformDetect()
               .LogToTrace(Avalonia.Logging.LogEventLevel.Debug)
               .WithInterFont()

@@ -3,185 +3,199 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="KryGamesBot.Ava.Views.InstanceView" 
-			 x:DataType="vm:InstanceViewModel"
-			 xmlns:vm="using:KryGamesBot.Ava.ViewModels"
+             x:Class="KryGamesBot.Ava.Views.InstanceView"
+             x:DataType="vm:InstanceViewModel"
+             xmlns:vm="using:KryGamesBot.Ava.ViewModels"
              xmlns:local="using:KryGamesBot.Ava.Views"
-			 xmlns:common="using:KryGamesBot.Ava.Views.Common" xmlns:dice="using:KryGamesBot.Ava.Views.Games.Dice"
+             xmlns:common="using:KryGamesBot.Ava.Views.Common" xmlns:dice="using:KryGamesBot.Ava.Views.Games.Dice"
              xmlns:diceVM="using:KryGamesBot.Ava.ViewModels.Games.Dice"
              xmlns:stratVM="using:KryGamesBot.Ava.ViewModels.Strategies"
-			 xmlns:strat="using:KryGamesBot.Ava.Views.Games.Strategies"
-			 xmlns:system="using:System"
-xmlns:mart="using:KryGamesBot.Ava.Views.Games.Strategies.Martingale"
-xmlns:dalembert="using:KryGamesBot.Ava.Views.Games.Strategies.DAlembert" xmlns:fibonacci="using:KryGamesBot.Ava.Views.Games.Strategies.Fibonacci" xmlns:labouchere="using:KryGamesBot.Ava.Views.Games.Strategies.Labouchere" xmlns:PresetList="using:DoormatBot.Strategies" xmlns:presetlist="using:KryGamesBot.Ava.Views.Games.Strategies.PresetList"         Tag="{Binding}"
-			 >
-	
-	<Grid>
-		<common:SelectSiteView DataContext="{Binding SelectSite}" IsVisible="{Binding $parent[local:InstanceView].((vm:InstanceViewModel)Tag).ShowSites}"  />
-   
-		<DockPanel IsVisible="{Binding ShowBot}">
-		<Menu DockPanel.Dock="Top">
-			<MenuItem Header="File">
-				<MenuItem Header="Save"/>
-				<MenuItem Header="Load"/>
-				<MenuItem Header="Exit"/>
-			</MenuItem>
-			<MenuItem Header="View">
-				<CheckBox Content="Live Charts" IsChecked="{Binding ShowChart}"/>
-				<CheckBox Content="Live Bets" IsChecked="{Binding ShowLiveBets}"/>
-				<CheckBox Content="Stats" IsChecked="{Binding ShowStats}"/>
-				<Separator/>
-				<MenuItem Header="Simulate" Command="{Binding SimulateCommand}"/>
-				<MenuItem Header="Bet History"/>
-				<MenuItem Header="Roll verifier"/>
-				<MenuItem Header="Settings"/>
-				
-			</MenuItem>
-			<MenuItem Header="Site">
-				<MenuItem Header="Log out" Command="{Binding LogOutCommand}"/>
-				<MenuItem Header="Change Site"  Command="{Binding ChangeSiteCommand}"/>				
-			</MenuItem>
-			<ComboBox ItemsSource="{Binding Currencies}" SelectedIndex="{Binding CurrentCurrency}" />
-			<ComboBox ItemsSource="{Binding Games}" SelectedIndex="{Binding CurrentGame}" />
-			<MenuItem Header="Help">
-				<MenuItem Header="Setup Wizard"/>
-				<MenuItem Header="Beginners Guide"/>
-				<MenuItem Header="Frequently Asked Questions"/>
-				<MenuItem Header="About"/>
-				<MenuItem Header="Source code"/>
-			</MenuItem>
+             xmlns:strat="using:KryGamesBot.Ava.Views.Games.Strategies"
+             xmlns:system="using:System"
+             xmlns:mart="using:KryGamesBot.Ava.Views.Games.Strategies.Martingale"
+             xmlns:dalembert="using:KryGamesBot.Ava.Views.Games.Strategies.DAlembert" xmlns:fibonacci="using:KryGamesBot.Ava.Views.Games.Strategies.Fibonacci" xmlns:labouchere="using:KryGamesBot.Ava.Views.Games.Strategies.Labouchere" xmlns:PresetList="using:DoormatBot.Strategies" xmlns:presetlist="using:KryGamesBot.Ava.Views.Games.Strategies.PresetList"         Tag="{Binding}"
+             xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+             >
 
-		</Menu>
-			<Border  DockPanel.Dock="Bottom" Height="25" VerticalAlignment="Bottom" BorderThickness="1" BorderBrush="{DynamicResource SystemChromeGrayColor}" Padding="3">
-			<Grid VerticalAlignment="Center">
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="3*" />
-					<ColumnDefinition Width="3*" />
-					<ColumnDefinition  Width="*"/>
-				</Grid.ColumnDefinitions>
-			<StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" >
-				<TextBlock Text="Status: " VerticalAlignment="Bottom"/>
-				<TextBlock Text="{Binding StatusMessage}"/>				
-			</StackPanel>
-				<StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" >					
-					<TextBlock Text="Last Action: "/>
-					<TextBlock Text="{Binding LastAction}"/>
-				</StackPanel>
-			</Grid>
-			</Border>
-			<Grid >
-      <Grid.ColumnDefinitions>        
-        <ColumnDefinition Width="4*"></ColumnDefinition>
-        <ColumnDefinition Width="7"></ColumnDefinition>
-        <ColumnDefinition Width="2*"></ColumnDefinition>
-      </Grid.ColumnDefinitions>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="175" MinHeight="175" MaxHeight="175" ></RowDefinition>
-			<RowDefinition Height="*"></RowDefinition>
-		</Grid.RowDefinitions>
-      <GridSplitter Margin="3" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource SystemChromeGrayColor}" ResizeDirection="Columns"/>
-		
-      <StackPanel IsVisible="{Binding ShowStats}" Grid.Column="0" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Stretch">		  			  
-        <common:SiteStatsView VerticalAlignment="Top" HorizontalAlignment="Stretch" MinWidth="300" Grid.Row="0" DataContext="{Binding SiteStatsData}"/>		  
-        <common:SessionStatsView  MinWidth="600" Grid.Row="2" DataContext="{Binding SessionStatsData}" VerticalAlignment="Top" HorizontalAlignment="Stretch" />
-      </StackPanel>
-      <Grid Grid.Column="0" Grid.Row="1">
-		  <Grid.RowDefinitions>
-			  <RowDefinition />
-			  <RowDefinition Height="7"/>
-			  <RowDefinition/>
-		  </Grid.RowDefinitions>
-		  <Border IsVisible="{Binding ShowChart}" >
-        <common:ProfitChartView Grid.Row="0" DataContext="{Binding ChartData}"/>
-		  </Border>
-        <GridSplitter Margin="2" Grid.Row="1" Background="{DynamicResource SystemChromeGrayColor}" ResizeDirection="Rows"/>
-        <ContentControl Grid.Row="2" Content="{Binding LiveBets}"  IsVisible="{Binding ShowLiveBets}">
-          <ContentControl.DataTemplates>
-            <DataTemplate DataType="diceVM:DiceLiveBetViewModel">
-              <dice:DiceLiveBetView/>
-            </DataTemplate>
+    <Grid>
+        <common:SelectSiteView DataContext="{Binding SelectSite}" IsVisible="{Binding $parent[local:InstanceView].((vm:InstanceViewModel)Tag).ShowSites}"  />
 
-          </ContentControl.DataTemplates>
-        </ContentControl>
-        
-      </Grid>
-      <DockPanel Grid.Column="2" Grid.RowSpan="3" >
-        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
-          <Button Margin="5" Command="{Binding StartCommand}">Start</Button>
-          <Button Margin="5"  Command="{Binding ResumeCommand}">Resume</Button>
-          <Button Margin="5" Command="{Binding StopCommand}">Stop</Button>
-          <Button Margin="5" Command="{Binding StopOnWinCommand}">Stop On Win</Button>
-        </StackPanel>
-        <TabControl>
-          <TabItem Header="Strategy">
-            <DockPanel>
-            <ComboBox DockPanel.Dock="Top" ItemsSource="{Binding BotInstance.Strategies.Keys}" SelectedItem="{Binding SelectedStrategy}" >
-              
-            </ComboBox>
-              <ContentControl Content="{Binding StrategyVM}" VerticalAlignment="Stretch">
-                <ContentControl.DataTemplates>
-                  <DataTemplate DataType="stratVM:MartingaleViewModel">
-                    <mart:MartingaleView/>
-                  </DataTemplate>
-                  <DataTemplate DataType="stratVM:DAlembertViewModel">
-                    <dalembert:DAlembertView/>
-                  </DataTemplate>
-                  <DataTemplate DataType="stratVM:FibonacciViewModel">
-                    <fibonacci:FibonacciView/>
-                  </DataTemplate>
-                  <DataTemplate DataType="stratVM:LabouchereViewModel">
-                    <labouchere:LabouchereView/>
-                  </DataTemplate>
-					<DataTemplate DataType="stratVM:PresetListViewModel">
-						<presetlist:PresetListView/>
-					</DataTemplate>
-					<DataTemplate DataType="stratVM:ProgrammerModeCSViewModel">
-						<strat:ProgrammerModeCSView/>
-					</DataTemplate>
-					<DataTemplate DataType="stratVM:ProgrammerModeLUAViewModel">
-						<strat:ProgrammerModeLuaView/>
-					</DataTemplate>
-					<DataTemplate DataType="stratVM:ProgrammerModeJSViewModel">
-						<strat:ProgrammerModeJSView/>
-					</DataTemplate>
-					<DataTemplate DataType="stratVM:ProgrammerModePYViewModel">
-						<strat:ProgrammerModePyView/>
-					</DataTemplate>
-                </ContentControl.DataTemplates>
-              </ContentControl>
-            </DockPanel>
-          </TabItem>
-          <TabItem Header="Reset Settings">
-            <common:ResetSettingsView DataContext="{Binding ResetSettingsVM}"/>
-          </TabItem>
-          <TabItem Header="Advanced Settings">
-            <common:AdvancedView DataContext="{Binding AdvancedSettingsVM}"/>
-          </TabItem>
-          <TabItem Header="Custom Triggers" IsEnabled="False">
-            <TextBlock>coming soon</TextBlock>
-          </TabItem>
-          
-          <TabItem Header="Manual">
-            <ContentControl Content="{Binding PlaceBetVM}" VerticalAlignment="Top">
-              <ContentControl.DataTemplates>
-                <DataTemplate DataType="diceVM:DicePlaceBetViewModel">
-                  <dice:DicePlaceBetView/>
-                </DataTemplate>
+        <DockPanel IsVisible="{Binding ShowBot}">
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="File">
+                    <MenuItem Header="Save"/>
+                    <MenuItem Header="Load"/>
+                    <MenuItem Header="Exit"/>
+                </MenuItem>
+                <MenuItem Header="View">
+                    <MenuItem Header="_Live Charts" Click="OnMenuItemClicked">
+                        <MenuItem.Icon>
+                            <CheckBox IsChecked="{Binding ShowChart}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="_Live Bets" Click="OnMenuItemClicked">
+                        <MenuItem.Icon>
+                            <CheckBox IsChecked="{Binding ShowLiveBets}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="_Stats" Click="OnMenuItemClicked">
+                        <MenuItem.Icon>
+                            <CheckBox IsChecked="{Binding ShowStats}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
 
-              </ContentControl.DataTemplates>
-            </ContentControl>
-          </TabItem>
-          <TabItem Header="Console" IsEnabled="False">
-            <TextBlock>coming soon</TextBlock>
-          </TabItem>
-        </TabControl>
-		 
-      </DockPanel>
-			</Grid>
-			
+                    <Separator/>
+                    <MenuItem Header="Simulate" Command="{Binding SimulateCommand}"/>
+                    <MenuItem Header="Bet History"/>
+                    <MenuItem Header="Roll verifier"/>
+                    <MenuItem Header="Settings"/>
 
-		</DockPanel>
-    
-		
-	</Grid>
+                </MenuItem>
+                <MenuItem Header="Site">
+                    <MenuItem Header="Log out" Command="{Binding LogOutCommand}"/>
+                    <MenuItem Header="Change Site"  Command="{Binding ChangeSiteCommand}"/>
+                </MenuItem>
+                <ComboBox ItemsSource="{Binding Currencies}" SelectedIndex="{Binding CurrentCurrency}" />
+                <ComboBox ItemsSource="{Binding Games}" SelectedIndex="{Binding CurrentGame}" />
+                <MenuItem Header="Help">
+                    <MenuItem Header="Setup Wizard"/>
+                    <MenuItem Header="Beginners Guide"/>
+                    <MenuItem Header="Frequently Asked Questions"/>
+                    <MenuItem Header="About"/>
+                    <MenuItem Header="Source code"/>
+                </MenuItem>
+            </Menu>
+            <Border  DockPanel.Dock="Bottom" Height="25" VerticalAlignment="Bottom" BorderThickness="1" BorderBrush="{DynamicResource SystemChromeGrayColor}" Padding="3">
+                <Grid VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition  Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" >
+                        <TextBlock Text="Status: " VerticalAlignment="Bottom"/>
+                        <TextBlock Text="{Binding StatusMessage}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" >
+                        <TextBlock Text="Last Action: "/>
+                        <TextBlock Text="{Binding LastAction}"/>
+                    </StackPanel>
+                    <actipro:ToggleThemeButton HorizontalAlignment="Right" Grid.Column="2" />
+                </Grid>
+            </Border>
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*"></ColumnDefinition>
+                    <ColumnDefinition Width="7"></ColumnDefinition>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="175" MinHeight="175" MaxHeight="175" ></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <GridSplitter Margin="3" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource SystemChromeGrayColor}" ResizeDirection="Columns"/>
+
+                <StackPanel IsVisible="{Binding ShowStats}" Grid.Column="0" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Stretch">
+                    <common:SiteStatsView VerticalAlignment="Top" HorizontalAlignment="Stretch" MinWidth="300" Grid.Row="0" DataContext="{Binding SiteStatsData}"/>
+                    <common:SessionStatsView  MinWidth="600" Grid.Row="2" DataContext="{Binding SessionStatsData}" VerticalAlignment="Top" HorizontalAlignment="Stretch" />
+                </StackPanel>
+                <Grid Grid.Column="0" Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="7"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Border IsVisible="{Binding ShowChart}" >
+                        <common:ProfitChartView Grid.Row="0" DataContext="{Binding ChartData}"/>
+                    </Border>
+                    <GridSplitter Margin="2" Grid.Row="1" Background="{DynamicResource SystemChromeGrayColor}" ResizeDirection="Rows"/>
+                    <ContentControl Grid.Row="2" Content="{Binding LiveBets}"  IsVisible="{Binding ShowLiveBets}">
+                        <ContentControl.DataTemplates>
+                            <DataTemplate DataType="diceVM:DiceLiveBetViewModel">
+                                <dice:DiceLiveBetView/>
+                            </DataTemplate>
+
+                        </ContentControl.DataTemplates>
+                    </ContentControl>
+
+                </Grid>
+                <DockPanel Grid.Column="2" Grid.RowSpan="3" >
+                    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Margin="5" Command="{Binding StartCommand}">Start</Button>
+                        <Button Margin="5"  Command="{Binding ResumeCommand}">Resume</Button>
+                        <Button Margin="5" Command="{Binding StopCommand}">Stop</Button>
+                        <Button Margin="5" Command="{Binding StopOnWinCommand}">Stop On Win</Button>
+                    </StackPanel>
+                    <TabControl>
+                        <TabItem Header="Strategy">
+                            <DockPanel>
+                                <ComboBox DockPanel.Dock="Top" ItemsSource="{Binding BotInstance.Strategies.Keys}" SelectedItem="{Binding SelectedStrategy}" >
+
+                                </ComboBox>
+                                <ContentControl Content="{Binding StrategyVM}" VerticalAlignment="Stretch">
+                                    <ContentControl.DataTemplates>
+                                        <DataTemplate DataType="stratVM:MartingaleViewModel">
+                                            <mart:MartingaleView/>
+                                        </DataTemplate>
+                                        <DataTemplate DataType="stratVM:DAlembertViewModel">
+                                            <dalembert:DAlembertView/>
+                                        </DataTemplate>
+                                        <DataTemplate DataType="stratVM:FibonacciViewModel">
+                                            <fibonacci:FibonacciView/>
+                                        </DataTemplate>
+                                        <DataTemplate DataType="stratVM:LabouchereViewModel">
+                                            <labouchere:LabouchereView/>
+                                        </DataTemplate>
+                                        <DataTemplate DataType="stratVM:PresetListViewModel">
+                                            <presetlist:PresetListView/>
+                                        </DataTemplate>
+                                        <DataTemplate DataType="stratVM:ProgrammerModeCSViewModel">
+                                            <strat:ProgrammerModeCSView/>
+                                        </DataTemplate>
+                                        <DataTemplate DataType="stratVM:ProgrammerModeLUAViewModel">
+                                            <strat:ProgrammerModeLuaView/>
+                                        </DataTemplate>
+                                        <DataTemplate DataType="stratVM:ProgrammerModeJSViewModel">
+                                            <strat:ProgrammerModeJSView/>
+                                        </DataTemplate>
+                                        <DataTemplate DataType="stratVM:ProgrammerModePYViewModel">
+                                            <strat:ProgrammerModePyView/>
+                                        </DataTemplate>
+                                    </ContentControl.DataTemplates>
+                                </ContentControl>
+                            </DockPanel>
+                        </TabItem>
+                        <TabItem Header="Reset Settings">
+                            <common:ResetSettingsView DataContext="{Binding ResetSettingsVM}"/>
+                        </TabItem>
+                        <TabItem Header="Advanced Settings">
+                            <common:AdvancedView DataContext="{Binding AdvancedSettingsVM}"/>
+                        </TabItem>
+                        <TabItem Header="Custom Triggers" IsEnabled="False">
+                            <TextBlock>coming soon</TextBlock>
+                        </TabItem>
+
+                        <TabItem Header="Manual">
+                            <ContentControl Content="{Binding PlaceBetVM}" VerticalAlignment="Top">
+                                <ContentControl.DataTemplates>
+                                    <DataTemplate DataType="diceVM:DicePlaceBetViewModel">
+                                        <dice:DicePlaceBetView/>
+                                    </DataTemplate>
+
+                                </ContentControl.DataTemplates>
+                            </ContentControl>
+                        </TabItem>
+                        <TabItem Header="Console" IsEnabled="False">
+                            <TextBlock>coming soon</TextBlock>
+                        </TabItem>
+                    </TabControl>
+
+                </DockPanel>
+            </Grid>
+
+
+        </DockPanel>
+
+
+    </Grid>
 </UserControl>

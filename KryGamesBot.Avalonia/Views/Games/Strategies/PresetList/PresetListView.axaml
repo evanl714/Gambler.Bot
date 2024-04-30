@@ -5,94 +5,98 @@
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="450"
              x:Class="KryGamesBot.Ava.Views.Games.Strategies.PresetList.PresetListView"
              xmlns:vm="using:KryGamesBot.Ava.ViewModels.Strategies"
-xmlns:dice="using:KryGamesBot.Ava.Views.Games.Dice"
+             xmlns:dice="using:KryGamesBot.Ava.Views.Games.Dice"
              x:DataType="vm:PresetListViewModel"
+             xmlns:system="using:System"
              >
-  <StackPanel Orientation="Vertical">
+    <StackPanel Orientation="Vertical">
 
-	  <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-		  <Button HorizontalAlignment="Left" Command="{Binding AddCommand}">Add</Button>
-		  <Button HorizontalAlignment="Left"  Command="{Binding OpenCommand}">Open</Button>
-		  <Button HorizontalAlignment="Right"  Command="{Binding SaveCommand}">Save</Button>
-	  </StackPanel>
-
-	  <DataGrid ItemsSource="{Binding BetList}" MinHeight="200">
-		  <DataGrid.Columns>
-			  <DataGridTextColumn Header="Amount" Binding="{Binding Amount}"></DataGridTextColumn>
-			  <DataGridTextColumn Header="High" Binding="{Binding High}"></DataGridTextColumn>
-			  <DataGridTextColumn Header="Switch" Binding="{Binding Switch}"></DataGridTextColumn>
-			  <DataGridTextColumn Header="Chance" Binding="{Binding Chance}"></DataGridTextColumn>
-			  <DataGridTemplateColumn>
-				  <DataGridTemplateColumn.CellTemplate>
-					  <DataTemplate >
-						  <StackPanel Orientation="Horizontal">
-							  <Button Content="R" Command="{Binding $parent[DataGrid].((vm:LabouchereViewModel)DataContext).RemoveCommand}" />
-							  <Button Content="U" Command="{Binding $parent[DataGrid].((vm:LabouchereViewModel)DataContext).MoveUpCommand}"/>
-							  <Button Content="D" Command="{Binding $parent[DataGrid].((vm:LabouchereViewModel)DataContext).MoveDownCommand}"/>
-						  </StackPanel>
-					  </DataTemplate>
-				  </DataGridTemplateColumn.CellTemplate>
-
-			  </DataGridTemplateColumn>		 
-			</DataGrid.Columns>
-	  </DataGrid>
-    <Border Padding="3" Margin="3" BorderBrush="{DynamicResource SystemChromeGrayColor}" BorderThickness="1">
-      <StackPanel>
-        <Border Background="{DynamicResource SystemChromeGrayColor}" Margin="0,0,0,5">
-          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <TextBlock Margin="5" FontSize="16" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Text="When end of list is reached" VerticalAlignment="Center"/>
-          </StackPanel>
-        </Border>
-        <StackPanel>
-			<ComboBox ItemsSource="{Binding Options}" SelectedItem="{Binding OnFinishAction}"/>
-          <StackPanel Orientation="Horizontal"  IsVisible="{Binding ShowFinishSteps}">
-            <NumericUpDown Value="{Binding Strategy.EndStep}">
-            
-            </NumericUpDown>
-            <TextBlock VerticalAlignment="Center"> Steps backward</TextBlock>
-          </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button HorizontalAlignment="Left" Command="{Binding AddCommand}">Add</Button>
+            <Button HorizontalAlignment="Left"  Command="{Binding OpenCommand}">Open</Button>
+            <Button HorizontalAlignment="Right"  Command="{Binding SaveCommand}">Save</Button>
         </StackPanel>
-      </StackPanel>
-    </Border>
-    <Border Padding="3" Margin="3" BorderBrush="{DynamicResource SystemChromeGrayColor}" BorderThickness="1">
-      <StackPanel>
-        <Border Background="{DynamicResource SystemChromeGrayColor}" Margin="0,0,0,5">
-          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <TextBlock Margin="5" FontSize="16" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Text="On Loss" VerticalAlignment="Center"/>
-          </StackPanel>
-        </Border>
-        <StackPanel>
-          <ComboBox ItemsSource="{Binding Options}" SelectedItem="{Binding OnLossAction}"/>
-          <StackPanel Orientation="Horizontal" IsVisible="{Binding ShowLossSteps}">
-            <NumericUpDown Value="{Binding Strategy.LossStep}">
 
-            </NumericUpDown>
-            <TextBlock VerticalAlignment="Center"> Steps forward</TextBlock>
-          </StackPanel>
+        <DataGrid ItemsSource="{Binding BetList}" MinHeight="200">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Amount" Binding="{Binding Amount}"></DataGridTextColumn>
+                <DataGridTextColumn Header="High" Binding="{Binding High}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Switch" Binding="{Binding Switch}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Chance" Binding="{Binding Chance}"></DataGridTextColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate >
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="R" Command="{Binding $parent[DataGrid].((vm:LabouchereViewModel)DataContext).RemoveCommand}" />
+                                <Button Content="U" Command="{Binding $parent[DataGrid].((vm:LabouchereViewModel)DataContext).MoveUpCommand}"/>
+                                <Button Content="D" Command="{Binding $parent[DataGrid].((vm:LabouchereViewModel)DataContext).MoveDownCommand}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Expander Margin="2"  Header="End of list" IsExpanded="True" >
+            <Expander.HeaderTemplate>
+                <DataTemplate x:DataType="system:String" >
+                    <Grid>
+                        <TextBlock Text="{Binding}" HorizontalAlignment="Center"/>
+                    </Grid>
+                </DataTemplate>
+            </Expander.HeaderTemplate>
+            <StackPanel>
+                <ComboBox ItemsSource="{Binding Options}" SelectedItem="{Binding OnFinishAction}"/>
+                <StackPanel Orientation="Horizontal"  IsVisible="{Binding ShowFinishSteps}">
+                    <NumericUpDown Value="{Binding Strategy.EndStep}">
+
+                    </NumericUpDown>
+                    <TextBlock VerticalAlignment="Center"> Steps backward</TextBlock>
+                </StackPanel>
+            </StackPanel>
+
+        </Expander>
+        <Expander Margin="2"  Header="On Loss" IsExpanded="True" >
+            <Expander.HeaderTemplate>
+                <DataTemplate x:DataType="system:String" >
+                    <Grid>
+                        <TextBlock Text="{Binding}" HorizontalAlignment="Center"/>
+                    </Grid>
+                </DataTemplate>
+            </Expander.HeaderTemplate>
+            <StackPanel>
+                <ComboBox ItemsSource="{Binding Options}" SelectedItem="{Binding OnLossAction}"/>
+                <StackPanel Orientation="Horizontal" IsVisible="{Binding ShowLossSteps}">
+                    <NumericUpDown Value="{Binding Strategy.LossStep}">
+
+                    </NumericUpDown>
+                    <TextBlock VerticalAlignment="Center"> Steps forward</TextBlock>
+                </StackPanel>
 
 
-        </StackPanel>
-      </StackPanel>
-    </Border>
-    <Border Padding="3" Margin="3" BorderBrush="{DynamicResource SystemChromeGrayColor}" BorderThickness="1">
-      <StackPanel>
-        <Border Background="{DynamicResource SystemChromeGrayColor}" Margin="0,0,0,5">
-          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <TextBlock Margin="5" FontSize="16" FontWeight="Bold" Grid.Row="0" Grid.Column="0" Text="On Win" VerticalAlignment="Center"/>
-          </StackPanel>
-        </Border>
-        <StackPanel>
-			<ComboBox ItemsSource="{Binding Options}" SelectedItem="{Binding OnWinAction}"/>
-          <StackPanel Orientation="Horizontal"  IsVisible="{Binding ShowWinSteps}">
-            <NumericUpDown Value="{Binding Strategy.WinStep}">
+            </StackPanel>
 
-            </NumericUpDown>
-            <TextBlock VerticalAlignment="Center"> Steps backward</TextBlock>
-          </StackPanel>
+        </Expander>
+        <Expander Margin="2"  Header="On Win" IsExpanded="True" >
+            <Expander.HeaderTemplate>
+                <DataTemplate x:DataType="system:String" >
+                    <Grid>
+                        <TextBlock Text="{Binding}" HorizontalAlignment="Center"/>
+                    </Grid>
+                </DataTemplate>
+            </Expander.HeaderTemplate>
+            <StackPanel>
+                <ComboBox ItemsSource="{Binding Options}" SelectedItem="{Binding OnWinAction}"/>
+                <StackPanel Orientation="Horizontal"  IsVisible="{Binding ShowWinSteps}">
+                    <NumericUpDown Value="{Binding Strategy.WinStep}">
+
+                    </NumericUpDown>
+                    <TextBlock VerticalAlignment="Center"> Steps backward</TextBlock>
+                </StackPanel>
 
 
-        </StackPanel>
-      </StackPanel>
-    </Border>
-  </StackPanel>
+            </StackPanel>
+
+        </Expander>
+    </StackPanel>
 </UserControl>

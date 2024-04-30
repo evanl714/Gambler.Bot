@@ -8,13 +8,14 @@
 			 x:DataType="vm:SimulationViewModel"
 			  xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
 			 xmlns:behaviours="using:KryGamesBot.Ava.Behaviours"
+			 xmlns:sg="clr-namespace:SpacedGridControl.Avalonia;assembly=SpacedGridControl.Avalonia"
 			 >
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition />
 			<RowDefinition />
 		</Grid.RowDefinitions>
-		<Grid Grid.Column="0">
+		<sg:SpacedGrid Margin="5" VerticalAlignment="Top" RowSpacing="3" ColumnSpacing="6" Grid.Column="0">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition/>
 				<ColumnDefinition/>
@@ -78,7 +79,7 @@
 		  </SelectableTextBlock>
 			
 			
-		</Grid>
+		</sg:SpacedGrid>
 		<common:SessionStatsView Grid.Row="1" DataContext="{Binding Stats}"  />
 	</Grid>
 </UserControl>

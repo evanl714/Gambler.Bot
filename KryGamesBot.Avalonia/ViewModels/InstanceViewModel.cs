@@ -369,6 +369,8 @@ namespace KryGamesBot.Ava.ViewModels
         private void SelectSite_SelectedSiteChanged(object? sender, DoormatCore.Helpers.SitesList e)
         {
             SiteChanged(Activator.CreateInstance(e.SiteType(),_logger) as DoormatCore.Sites.BaseSite, e.SelectedCurrency?.Name, e.SelectedGame?.Name);
+            if (SiteStatsData!=null)
+                SiteStatsData.SiteName = botIns.CurrentSite?.SiteName;   
         }
 
         async Task ShowLogin()
