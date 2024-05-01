@@ -196,7 +196,7 @@ namespace KryGamesBot.Ava.ViewModels.Common
             }
         }
 
-        void SetTriggers(List<Trigger> triggers)
+        public void SetTriggers(List<Trigger> triggers)
         {
             Load();
             Triggers = triggers;            

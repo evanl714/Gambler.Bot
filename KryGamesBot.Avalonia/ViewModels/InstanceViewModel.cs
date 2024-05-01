@@ -279,7 +279,7 @@ namespace KryGamesBot.Ava.ViewModels
         {
             AdvancedSettingsVM.BetSettings = botIns.BetSettings;
             ResetSettingsVM.BetSettings = botIns.BetSettings;
-            TriggersVM.Triggers = botIns.BetSettings?.Triggers;
+            TriggersVM.SetTriggers(botIns.BetSettings?.Triggers);
             IStrategy tmpStrat = null;
             //this needs to set the istrategy property to the appropriate viewmodel
             switch(BotInstance.Strategy?.StrategyName)
