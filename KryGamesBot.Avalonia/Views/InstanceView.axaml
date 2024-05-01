@@ -59,10 +59,13 @@
                 <ComboBox ItemsSource="{Binding Games}" SelectedIndex="{Binding CurrentGame}" />
                 <MenuItem Header="Help">
                     <MenuItem Header="Setup Wizard"/>
-                    <MenuItem Header="Beginners Guide"/>
-                    <MenuItem Header="Frequently Asked Questions"/>
-                    <MenuItem Header="About"/>
+                    <MenuItem Header="Reset to default"/>
                     <MenuItem Header="Source code"/>
+                    <MenuItem Header="Tutorials"/>
+                    <MenuItem Header="Frequently Asked Questions"/>
+                    <MenuItem Header="Contact"/>
+                    <MenuItem Header="About"/>
+
                 </MenuItem>
             </Menu>
             <Border  DockPanel.Dock="Bottom" Height="25" VerticalAlignment="Bottom" BorderThickness="1" BorderBrush="{DynamicResource SystemChromeGrayColor}" Padding="3">
@@ -171,8 +174,8 @@
                         <TabItem Header="Advanced Settings">
                             <common:AdvancedView DataContext="{Binding AdvancedSettingsVM}"/>
                         </TabItem>
-                        <TabItem Header="Custom Triggers" IsEnabled="False">
-                            <TextBlock>coming soon</TextBlock>
+                        <TabItem Header="Custom Triggers">
+                            <common:TriggersView DataContext="{Binding TriggersVM}"/>
                         </TabItem>
 
                         <TabItem Header="Manual">

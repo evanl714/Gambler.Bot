@@ -6,12 +6,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace KryGamesBot.Ava.ViewModels.Common
 {
     public class SiteStatsViewModel:ViewModelBase
     {
-		private SiteStats _stats;
+        
+
+        private SiteStats _stats;
 
 		public SiteStats Stats
 		{
@@ -40,10 +43,12 @@ namespace KryGamesBot.Ava.ViewModels.Common
         {
             
         }
+
         public void StatsUpdated(SiteStats stats)
 		{
 			Stats = CopyHelper.CreateCopy(stats);
         }
+
 		
 	}
 }

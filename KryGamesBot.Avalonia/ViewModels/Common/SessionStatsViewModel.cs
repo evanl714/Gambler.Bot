@@ -6,12 +6,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace KryGamesBot.Ava.ViewModels.Common
 {
     public class SessionStatsViewModel:ViewModelBase
     {
-		private SessionStats _sessionStats;
+        public event EventHandler OnResetStats;
+        private SessionStats _sessionStats;
 
 		public SessionStats Stats
         {
@@ -24,11 +26,18 @@ namespace KryGamesBot.Ava.ViewModels.Common
         public SessionStatsViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
         {
             name=Guid.NewGuid().ToString();
+            ResetStatsCommand = ReactiveCommand.Create(ResetStats);
         }
 
         public void StatsUpdated(SessionStats stats)
 		{
 			this.Stats = CopyHelper.CreateCopy(stats);
 		}
-	}
+        public ICommand ResetStatsCommand { get; }
+        void ResetStats()
+        {
+            OnResetStats?.Invoke(this, new EventArgs());
+
+        }
+    }
 }

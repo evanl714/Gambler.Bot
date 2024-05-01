@@ -33,14 +33,14 @@ than <DxComboBox Data="Againsts" @bind-Value="SelectedTrigger.TargetType"></DxCo
     <span>amount </span>
     <DxComboBox Data="Againsts" @bind-Value="SelectedTrigger.ValueType"></DxComboBox>
 
-    @if (SelectedTrigger?.TargetType == CompareAgainst.Value)
+        @if (SelectedTrigger?.ValueType == CompareAgainst.Value)
     {
         <div>
             <DxSpinEdit @bind-Value="SelectedTrigger.ValueValue" DisplayFormat="p2"></DxSpinEdit>
         </div>
     }
     <!--when target type is percentage -->
-    @if (SelectedTrigger?.TargetType == CompareAgainst.Percentage)
+        @if (SelectedTrigger?.ValueType == CompareAgainst.Percentage)
     {
         <div>
             <DxSpinEdit @bind-Value="SelectedTrigger.ValueValue" DisplayFormat="p2"></DxSpinEdit> of
@@ -48,7 +48,7 @@ than <DxComboBox Data="Againsts" @bind-Value="SelectedTrigger.TargetType"></DxCo
         </div>
     }
     <!--when target type is property-->
-    @if (SelectedTrigger?.TargetType == CompareAgainst.Property)
+        @if (SelectedTrigger?.ValueType == CompareAgainst.Property)
     {
         <div>
             <DxComboBox Data="Properties" @bind-Value="SelectedTrigger.ValueProperty"></DxComboBox>

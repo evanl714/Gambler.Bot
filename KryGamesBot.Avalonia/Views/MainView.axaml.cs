@@ -25,7 +25,14 @@ public partial class MainView : UserControl
     {
         InitializeComponent();
         _instance=this;
+        wvBypass.NavigationCompleted += WvBypass_NavigationCompleted;
         //PART_WebView.
+    }
+
+    private async void WvBypass_NavigationCompleted(object? sender, WebViewCore.Events.WebViewUrlLoadedEventArg e)
+    {
+        //Navigation happened here, check for cookies again.
+        await CheckCookies();
     }
 
     public async void ClickHandler(object sender, RoutedEventArgs args)
@@ -75,71 +82,92 @@ public partial class MainView : UserControl
     }
 
     static BrowserConfig _conf = null;
+    async Task CheckCookies()
+    {
+        if (args == null)
+            return;
+        var bc = new BrowserConfig();
+        CookieContainer cs = new CookieContainer();
+        bool found = false;
+        try
+        {
 
+            await GetAgent();
+            string result = agent;
+
+            var tmp = await wvBypass.PlatformWebView.ExecuteScriptAsync("document.cookie");
+            var obj = wvBypass.PlatformWebView.PlatformViewContext;
+            var type2 = obj.GetType();
+            var tmp2 = wvBypass.PlatformWebView.GetType();
+            
+            if (tmp2.FullName == "Avalonia.WebView.Windows.Core.WebView2Core")
+            {
+
+                var properties = tmp2.GetProperties();
+                object CoreWebView2 = tmp2.GetProperty("CoreWebView2").GetValue(wvBypass.PlatformWebView);
+                properties = CoreWebView2.GetType().GetProperties();
+                object CookieMan = CoreWebView2.GetType().GetProperty("CookieManager").GetValue(CoreWebView2);
+                var method = CookieMan.GetType().GetMethod("GetCookiesAsync");//.Invoke(CookieMan, null);
+                var cookies = await method.InvokeAsync(CookieMan, new object[] { args.URL });
+                
+                foreach (object c in cookies as IList)
+                {
+                    
+                    System.Net.Cookie svalue = (System.Net.Cookie)c.GetType().GetMethod("ToSystemNetCookie").Invoke(c, null);
+                    if (svalue.Name?.ToLower()==args.RequiredCookie.ToLower())
+                    {
+                        found = true;
+                    }
+                    cs.Add(svalue);
+                }
+            }
+            bc.UserAgent = agent;
+            bc.Cookies = cs;
+            if (found || cts.IsCancellationRequested)
+                _conf = bc;
+        }
+        catch (Exception e)
+        {
+
+        }
+        finally
+        {
+            wvBypass.IsVisible = false;
+        }
+        if (found || cts.IsCancellationRequested)
+            _conf = new BrowserConfig { Cookies = cs, UserAgent = agent };
+    }
+
+    static CancellationTokenSource cts;
+
+    static BypassRequiredArgs args = null;
     internal void internalGetBypass(BypassRequiredArgs e)
     {
-       
-        
         Dispatcher.UIThread.InvokeAsync(async () =>
         {
             wvBypass.ZIndex = -1;
             wvBypass.IsVisible = true;
             wvBypass.Url = new Uri(e.URL);
-            await Task.Delay(5000);
-                var bc = new BrowserConfig();
-                CookieContainer cs = new CookieContainer();
-                try
-                {
-                    
-                    await GetAgent();
-                    string result = agent;
-                   
-                    var tmp = await wvBypass.PlatformWebView.ExecuteScriptAsync("document.cookie");
-                    var obj = wvBypass.PlatformWebView.PlatformViewContext;
-                    var type2 = obj.GetType();
-                    var tmp2 = wvBypass.PlatformWebView.GetType();
-                    if (tmp2.FullName == "Avalonia.WebView.Windows.Core.WebView2Core")
-                    {
-
-                        var properties = tmp2.GetProperties();
-                        object CoreWebView2 = tmp2.GetProperty("CoreWebView2").GetValue(wvBypass.PlatformWebView);
-                        properties = CoreWebView2.GetType().GetProperties();
-                        object CookieMan = CoreWebView2.GetType().GetProperty("CookieManager").GetValue(CoreWebView2);
-                        var method = CookieMan.GetType().GetMethod("GetCookiesAsync");//.Invoke(CookieMan, null);
-                        var cookies = await method.InvokeAsync(CookieMan, new object[] { e.URL });
-                        foreach (object c in cookies as IList)
-                        {
-                            System.Net.Cookie svalue = (System.Net.Cookie)c.GetType().GetMethod("ToSystemNetCookie").Invoke(c, null);
-                            cs.Add(svalue);
-                        }
-                    }
-                    bc.UserAgent = agent;
-                    bc.Cookies = cs;
-                    _conf= bc;
-                }
-                catch (Exception e)
-                {
-
-                }
-                finally
-                {
-                    wvBypass.IsVisible = false;
-                }
-                _conf = new BrowserConfig { Cookies = cs, UserAgent = agent };
-            });
-
-        
-
-       /* wvBypass.ZIndex = -1;
-
-        return new BrowserConfig { Cookies = wvBypass.Cookies, UserAgent = agent };*/
+            await Task.Delay(5000, cts.Token);
+            if (_conf == null)
+            {
+                cts.Cancel();
+                await CheckCookies();
+            }
+                
+        });
     }
 
     internal static BrowserConfig GetBypass(BypassRequiredArgs e)
     {
+        cts = new CancellationTokenSource();
         _conf = null;
+        args = e;
         _instance.internalGetBypass(e);
+        
         while (_conf == null) { Thread.Sleep(100); }
+        args = null;
+        cts.Cancel();
         return _conf;
     }
 }

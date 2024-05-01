@@ -9,6 +9,7 @@ using KryGamesBotControls.Games;
 using KryGamesBotControls.Games.Dice;
 using KryGamesBotControls.Strategies;
 using KryGamesBotControls.Strategies.Martingale;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -329,7 +330,7 @@ namespace KryGamesBot
         private void SelectSite1_OnSiteSelected(object sender, KryGamesBotControls.Common.SiteSelectedEventArgs e)
         {
             
-            SiteChanged(Activator.CreateInstance(e.SelectedSite.SiteType()) as DoormatCore.Sites.BaseSite, e.SelectedSite.SelectedCurrency?.Name,e.SelectedSite.SelectedGame?.Name);
+            SiteChanged(Activator.CreateInstance(e.SelectedSite.SiteType(),null as ILogger) as DoormatCore.Sites.BaseSite, e.SelectedSite.SelectedCurrency?.Name,e.SelectedSite.SelectedGame?.Name);
         }
 
         void SiteChanged(DoormatCore.Sites.BaseSite NewSite, string currency, string game)

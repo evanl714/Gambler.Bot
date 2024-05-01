@@ -41,6 +41,7 @@ namespace KryGamesBot.Ava.ViewModels
         public ProfitChartViewModel ChartData { get; set; }// = new ProfitChartViewModel();
         public SiteStatsViewModel SiteStatsData { get; set; }// = new SiteStatsViewModel();
         public SessionStatsViewModel SessionStatsData { get; set; }// = new SessionStatsViewModel();
+        public TriggersViewModel TriggersVM { get; set; }
         private bool showChart=true;
 
         public bool ShowChart
@@ -181,7 +182,9 @@ namespace KryGamesBot.Ava.ViewModels
             ChartData = new ProfitChartViewModel(_logger);
             SiteStatsData = new SiteStatsViewModel(_logger);
             SessionStatsData = new SessionStatsViewModel(_logger);
+            TriggersVM = new TriggersViewModel(_logger);
 
+            SessionStatsData.OnResetStats += SessionStatsData_OnResetStats;
 
             StartCommand = ReactiveCommand.Create(Start);
             StopCommand = ReactiveCommand.Create(Stop);
@@ -235,6 +238,12 @@ namespace KryGamesBot.Ava.ViewModels
             
         }
 
+        private void SessionStatsData_OnResetStats(object? sender, EventArgs e)
+        {
+            botIns.ResetStats();
+            SessionStatsData.StatsUpdated(botIns.Stats);
+        }
+
         private void Tmp_OnSiteError(object sender, DoormatCore.Sites.ErrorEventArgs e)
         {
             if (!Dispatcher.UIThread.CheckAccess())
@@ -270,6 +279,7 @@ namespace KryGamesBot.Ava.ViewModels
         {
             AdvancedSettingsVM.BetSettings = botIns.BetSettings;
             ResetSettingsVM.BetSettings = botIns.BetSettings;
+            TriggersVM.Triggers = botIns.BetSettings?.Triggers;
             IStrategy tmpStrat = null;
             //this needs to set the istrategy property to the appropriate viewmodel
             switch(BotInstance.Strategy?.StrategyName)
