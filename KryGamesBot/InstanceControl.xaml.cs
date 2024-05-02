@@ -31,7 +31,7 @@ namespace KryGamesBot
     {
         string BetSettingsFile = "";
         string PersonalSettingsFile = "";
-        public Doormat botIns = new Doormat(null);
+        public DoormatBot.Doormat botIns = new DoormatBot.Doormat(null);
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler<RenameEventArgs> Rename;
@@ -58,7 +58,7 @@ namespace KryGamesBot
             botIns.CompileSites();
             botIns.GetStrats();
             cbeStartegies.ItemsSource = botIns.Strategies.Keys;
-            SelectSite1.Sites = Doormat.Sites;
+            SelectSite1.Sites = DoormatBot.Doormat.Sites;
             botIns.NeedConstringPassword += BotIns_NeedConstringPassword;
             botIns.NeedKeepassPassword += BotIns_NeedKeepassPassword;
             botIns.OnGameChanged += BotIns_OnGameChanged;
@@ -412,7 +412,7 @@ namespace KryGamesBot
                 botIns.LoadBetSettings(BetSettingsFile);
             else
             {
-                botIns.StoredBetSettings = new Doormat.ExportBetSettings
+                botIns.StoredBetSettings = new DoormatBot.Doormat.ExportBetSettings
                 {
                     BetSettings = new DoormatBot.Helpers.InternalBetSettings(),
                     
@@ -436,7 +436,7 @@ namespace KryGamesBot
             InstanceSettings tmp = JsonSerializer.Deserialize<InstanceSettings>(Settings);
             //botIns.ga
             
-            var tmpsite = Doormat.Sites.FirstOrDefault(m => m.Name == tmp.Site);
+            var tmpsite = DoormatBot.Doormat.Sites.FirstOrDefault(m => m.Name == tmp.Site);
             if (tmpsite != null)
             {
                 botIns.CurrentSite = Activator.CreateInstance(tmpsite.SiteType()) as DoormatCore.Sites.BaseSite;

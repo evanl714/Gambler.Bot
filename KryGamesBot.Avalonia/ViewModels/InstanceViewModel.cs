@@ -1,8 +1,5 @@
 ﻿using Avalonia.Threading;
-using DoormatBot;
 using DoormatBot.Strategies;
-using DoormatBot.Strategies.PresetListModels;
-using DoormatCore.Games;
 using DryIoc;
 using KryGamesBot.Ava.Classes;
 using KryGamesBot.Ava.Classes.BetsPanel;
@@ -11,7 +8,6 @@ using KryGamesBot.Ava.ViewModels.Common;
 using KryGamesBot.Ava.ViewModels.Games.Dice;
 using KryGamesBot.Ava.ViewModels.Strategies;
 using KryGamesBot.Ava.Views;
-using Microsoft.CodeAnalysis.Scripting.Hosting;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -22,7 +18,6 @@ using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using static IronPython.Modules._ast;
 
 namespace KryGamesBot.Ava.ViewModels
 {
@@ -33,8 +28,8 @@ namespace KryGamesBot.Ava.ViewModels
         public string InstanceName { get; set; }
         public SelectSiteViewModel SelectSite { get; set; }
         public bool IsSelectSiteViewVisible { get; set; }
-        private Doormat botIns;
-        public Doormat? BotInstance { get => botIns; set { botIns = value; this.RaisePropertyChanged(); } }
+        private DoormatBot.Doormat botIns;
+        public DoormatBot.Doormat? BotInstance { get => botIns; set { botIns = value; this.RaisePropertyChanged(); } }
         public Interaction<LoginViewModel, LoginViewModel?> ShowDialog { get; }
         public Interaction<SimulationViewModel, SimulationViewModel?> ShowSimulation { get; }
         private bool showSites=true;
@@ -199,7 +194,7 @@ namespace KryGamesBot.Ava.ViewModels
             OpenCommand = ReactiveCommand.Create(Open);
             SaveCommand = ReactiveCommand.Create(Save);
 
-            var tmp =  new Doormat(_logger);
+            var tmp =  new DoormatBot.Doormat(_logger);
             SelectSite = new SelectSiteViewModel(_logger);
             SelectSite.SelectedSiteChanged += SelectSite_SelectedSiteChanged;
             IsSelectSiteViewVisible = true;
@@ -466,7 +461,7 @@ namespace KryGamesBot.Ava.ViewModels
                 botIns.LoadBetSettings(BetSettingsFile);
             else
             {
-                botIns.StoredBetSettings = new Doormat.ExportBetSettings
+                botIns.StoredBetSettings = new DoormatBot.Doormat.ExportBetSettings
                 {
                     BetSettings = new DoormatBot.Helpers.InternalBetSettings(),
 
@@ -490,7 +485,7 @@ namespace KryGamesBot.Ava.ViewModels
             InstanceSettings tmp = JsonSerializer.Deserialize<InstanceSettings>(Settings);
             //botIns.ga
 
-            var tmpsite = Doormat.Sites.FirstOrDefault(m => m.Name == tmp.Site);
+            var tmpsite = DoormatBot.Doormat.Sites.FirstOrDefault(m => m.Name == tmp.Site);
             if (tmpsite != null)
             {
                 botIns.CurrentSite = Activator.CreateInstance(tmpsite.SiteType(),_logger) as DoormatCore.Sites.BaseSite;

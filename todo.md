@@ -2,8 +2,8 @@
 - [x] reset stats
 - [x] login check for specific cookie and immediately proceed. seems to work for now
 - [x] custom triggers
-- [ ] programmer mode error handler
-- [ ] stop simulation
+- [x] programmer mode error handler (kind of done i think)
+- [x] stop simulation
 - [ ] update stats window on timer if bot is running but stalled
 - [ ] Indicate but running status in status bar/title bar
 

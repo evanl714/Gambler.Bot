@@ -85,6 +85,7 @@ namespace KryGamesBot.Ava.ViewModels.Common
         public SimulationViewModel(ILogger logger):base(logger)
         {
            StartCommand = ReactiveCommand.Create(Start);
+            StopCommand = ReactiveCommand.Create(Stop);
             SaveCommand = ReactiveCommand.Create(Save);
             Stats = new SessionStatsViewModel(logger);
         }
@@ -97,17 +98,45 @@ namespace KryGamesBot.Ava.ViewModels.Common
             set { canSave = value; this.RaisePropertyChanged(); }
         }
 
+        private bool log=true;
+
+        public bool Log
+        {
+            get { return log; }
+            set { log = value; this.RaisePropertyChanged(); }
+        }
+
+        private bool running;
+
+        public bool Running
+        {
+            get { return running; }
+            set { running = value; this.RaisePropertyChanged(); this.RaisePropertyChanged(nameof(NotRunning)); }
+        }
+
+        public bool NotRunning
+        {
+            get { return !Running; }            
+        }
+        public ICommand StopCommand { get; }
+        void Stop()
+        {
+            CurrentSimulation?.StopSim();
+        }
 
         public ICommand StartCommand { get; }
         void Start()
         {
+            if (Running)
+                return;
             CurrentSimulation = new DoormatBot.Helpers.Simulation(null);
-            CurrentSimulation.Initialize(StartingBalance, NumberOfBets, CurrentSite, Strategy, BetSettings, "tmp.sim", true);
+            CurrentSimulation.Initialize(StartingBalance, NumberOfBets, CurrentSite, Strategy, BetSettings, "tmp.sim", Log);
             CanSave = false;
             CurrentSimulation.OnSimulationWriting += CurrentSimulation_OnSimulationWriting;
             CurrentSimulation.OnSimulationComplete += CurrentSimulation_OnSimulationComplete;
             CurrentSimulation.OnBetSimulated += CurrentSimulation_OnBetSimulated;
             SimTimer.Start();
+            running = true;
             CurrentSimulation.Start();
             Stats.Stats = CurrentSimulation.Stats;
         }
@@ -136,6 +165,7 @@ namespace KryGamesBot.Ava.ViewModels.Common
                 Dispatcher.UIThread.Invoke(Finished);
             else
             {
+                
                 SimTimer.Stop();
                 DoormatBot.Helpers.Simulation tmp = CurrentSimulation;
                 Stats.StatsUpdated(tmp.Stats);
@@ -151,6 +181,8 @@ namespace KryGamesBot.Ava.ViewModels.Common
                 this.RaisePropertyChanged(nameof(ProjectedTime));
                 this.RaisePropertyChanged(nameof(ProjectedRemaining));
                 this.RaisePropertyChanged(nameof(CurrentSimulation));
+
+                Running = false;
                 SimTimer.Reset();
                 CanSave = true;
             }

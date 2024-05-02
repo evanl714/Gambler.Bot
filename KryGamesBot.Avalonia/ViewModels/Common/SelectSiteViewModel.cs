@@ -35,13 +35,13 @@ namespace KryGamesBot.Ava.ViewModels.Common
 
         public SelectSiteViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
         {
-            Doormat botIns = new Doormat(_logger);
+            DoormatBot.Doormat botIns = new DoormatBot.Doormat(_logger);
             botIns.CompileSites();
             botIns.GetStrats();
             LoginCommand = ReactiveCommand.Create<object>(LogIn);
             SimulateCommand = ReactiveCommand.Create<object>(Simulate);
             ViewSiteCommand = ReactiveCommand.Create<object>(ViewSite);
-            Sites = new ObservableCollection<AvaSitesList>(Doormat.Sites.Select(x=>new AvaSitesList(x) ));
+            Sites = new ObservableCollection<AvaSitesList>(DoormatBot.Doormat.Sites.Select(x=>new AvaSitesList(x) ));
             
         }
 

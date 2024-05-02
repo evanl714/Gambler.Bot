@@ -6,7 +6,9 @@
              x:Class="KryGamesBot.Ava.Views.Common.TriggersView"
              xmlns:vm="using:KryGamesBot.Ava.ViewModels.Common"
              x:DataType="vm:TriggersViewModel"
-             xmlns:classes="using:KryGamesBot.Ava.Classes"			 xmlns:helpers="using:DoormatCore.Helpers"
+             xmlns:classes="using:KryGamesBot.Ava.Classes"
+
+             xmlns:helpers="using:DoormatCore.Helpers"
              >
     <StackPanel Orientation="Vertical">
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">

@@ -307,7 +307,7 @@ namespace KryGamesBot
         private void bchk_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
         {
             GlobalSettings tmp = new GlobalSettings();
-            Doormat botins = new Doormat(null);
+            DoormatBot.Doormat botins = new DoormatBot.Doormat(null);
             botins.LoadPersonalSettings(Path + "personalsettings.json");
             tmp.Settings = botins.PersonalSettings;
             //tmp.Settings = personal settings instance being used?
