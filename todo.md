@@ -19,7 +19,7 @@
 
 
 ### General
-- [ ] option to run simulation without bet history
+- [x] option to run simulation without bet history
 - [ ] multiple tabs
 - [ ] proxy
 - [ ] notifications
