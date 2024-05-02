@@ -37,14 +37,15 @@
             <NumericUpDown Grid.Column="1" Grid.Row="0" FormatString="n8" Value="{Binding StartingBalance}" />
             <TextBlock Grid.Column="0" Grid.Row="1" Text="Number of bets"/>
             <NumericUpDown Grid.Column="1" Grid.Row="1" FormatString="n0" Maximum="10000000000" Minimum="10" Value="{Binding NumberOfBets}" />
+            <!--
             <TextBlock Grid.Column="0" Grid.Row="2"  Text="{Binding CurrentSite.SiteName}"/>
-            <TextBlock Grid.Column="0" Grid.Row="3"  Text="{Binding Strategy.StrategyName}"/>
+            <TextBlock Grid.Column="0" Grid.Row="3"  Text="{Binding Strategy.StrategyName}"/>-->
             <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" HorizontalAlignment="Right">
                 <Button HorizontalAlignment="Right" VerticalAlignment="Top"  Content="Start Simulation" Command="{Binding StartCommand}" IsEnabled="{Binding NotRunning}"/>
                 <Button HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Column="1" Grid.Row="2" Content="Stop Simulation" Command="{Binding StopCommand}" IsEnabled="{Binding Running}"/>
             </StackPanel>
             <TextBlock Grid.Column="0" Grid.Row="3"  Text="Enable bet log"/>
-            <ToggleSwitch IsChecked="{Binding Log}" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" />
+            <ToggleSwitch IsChecked="{Binding Log}" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" IsEnabled="{Binding NotRunning}" />
             <Button HorizontalAlignment="Right" IsEnabled="{Binding CanSave}" VerticalAlignment="Top" Grid.Column="1" Grid.Row="3"  Content="Save Bets" Command="{Binding SaveCommand}"/>
             <SelectableTextBlock Grid.Column="0" Grid.Row="4" Text="Balance" />
             <SelectableTextBlock Grid.Column="1" Grid.Row="4"  >

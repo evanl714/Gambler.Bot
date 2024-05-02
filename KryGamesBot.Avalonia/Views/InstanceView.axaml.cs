@@ -51,6 +51,7 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
         dialog.DataContext = interaction.Input;
         window.Width = 800;
         window.Height = 450;
+        window.Title=$"Simulation - {interaction.Input.CurrentSite?.SiteName} - {interaction.Input.Strategy?.StrategyName}";
         window.Show();
     }
     private void OnAttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e)

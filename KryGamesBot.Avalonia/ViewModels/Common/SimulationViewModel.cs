@@ -118,6 +118,7 @@ namespace KryGamesBot.Ava.ViewModels.Common
         {
             get { return !Running; }            
         }
+
         public ICommand StopCommand { get; }
         void Stop()
         {
@@ -136,7 +137,8 @@ namespace KryGamesBot.Ava.ViewModels.Common
             CurrentSimulation.OnSimulationComplete += CurrentSimulation_OnSimulationComplete;
             CurrentSimulation.OnBetSimulated += CurrentSimulation_OnBetSimulated;
             SimTimer.Start();
-            running = true;
+            Running = true;
+            CanSave = false;
             CurrentSimulation.Start();
             Stats.Stats = CurrentSimulation.Stats;
         }
