@@ -54,6 +54,22 @@
 		<AvaloniaResource Include="Assets\**" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Remove="Assets\Images\bx-run.svg" />
+	  <None Remove="Assets\Images\bx-stop.svg" />
+	  <None Remove="Assets\Images\bxs-user-check.svg" />
+	  <None Remove="Assets\Images\bxs-user-x.svg" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AvaloniaResource Update="Assets\Images\bxs-user-check.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\bxs-user-x.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	</ItemGroup>
+
 	
 
 

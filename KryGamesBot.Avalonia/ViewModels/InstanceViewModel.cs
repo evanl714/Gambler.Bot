@@ -21,7 +21,7 @@ using System.Windows.Input;
 
 namespace KryGamesBot.Ava.ViewModels
 {
-    public class InstanceViewModel:ViewModelBase
+    public class InstanceViewModel : ViewModelBase
     {
         string BetSettingsFile = "";
         string PersonalSettingsFile = "";
@@ -32,12 +32,12 @@ namespace KryGamesBot.Ava.ViewModels
         public DoormatBot.Doormat? BotInstance { get => botIns; set { botIns = value; this.RaisePropertyChanged(); } }
         public Interaction<LoginViewModel, LoginViewModel?> ShowDialog { get; }
         public Interaction<SimulationViewModel, SimulationViewModel?> ShowSimulation { get; }
-        private bool showSites=true;
+        private bool showSites = true;
         public ProfitChartViewModel ChartData { get; set; }// = new ProfitChartViewModel();
         public SiteStatsViewModel SiteStatsData { get; set; }// = new SiteStatsViewModel();
         public SessionStatsViewModel SessionStatsData { get; set; }// = new SessionStatsViewModel();
         public TriggersViewModel TriggersVM { get; set; }
-        private bool showChart=true;
+        private bool showChart = true;
 
         public bool ShowChart
         {
@@ -45,7 +45,7 @@ namespace KryGamesBot.Ava.ViewModels
             set { showChart = value; this.RaisePropertyChanged(); }
         }
 
-        private bool showLiveBets=true;
+        private bool showLiveBets = true;
 
         public bool ShowLiveBets
         {
@@ -60,9 +60,6 @@ namespace KryGamesBot.Ava.ViewModels
             set { showStats = value; this.RaisePropertyChanged(); }
         }
 
-
-
-
         public string[] Currencies
         {
             get { return BotInstance?.CurrentSite?.Currencies; }
@@ -70,7 +67,7 @@ namespace KryGamesBot.Ava.ViewModels
         public int? CurrentCurrency
         {
             get { return BotInstance?.CurrentSite?.Currency; }
-            set { if (BotInstance?.CurrentSite!=null) BotInstance.CurrentSite.Currency = (value>=0?value:0)??0; this.RaisePropertyChanged(); }
+            set { if (BotInstance?.CurrentSite != null) BotInstance.CurrentSite.Currency = (value >= 0 ? value : 0) ?? 0; this.RaisePropertyChanged(); }
         }
         public DoormatCore.Games.Games[] Games
         {
@@ -79,7 +76,63 @@ namespace KryGamesBot.Ava.ViewModels
         public int? CurrentGame
         {
             get { return Array.IndexOf(BotInstance?.CurrentSite?.SupportedGames, BotInstance?.CurrentGame); }
-            set { if (BotInstance?.CurrentSite != null) BotInstance.CurrentGame = BotInstance?.CurrentSite?.SupportedGames[(value >= 0 ? value : 0)??0] ?? DoormatCore.Games.Games.Dice; }
+            set { if (BotInstance?.CurrentSite != null) BotInstance.CurrentGame = BotInstance?.CurrentSite?.SupportedGames[(value >= 0 ? value : 0) ?? 0] ?? DoormatCore.Games.Games.Dice; }
+        }
+
+        public bool LoggedIn
+        {
+            get { return botIns?.LoggedIn ?? false; }
+        }
+
+        public bool NotLoggedIn
+        {
+            get { return !(botIns?.LoggedIn ?? false); }
+        }
+        public bool Running
+        {
+            get { return botIns?.Running ?? false; }
+        }
+
+        public bool Stopped
+        {
+            get { return !(botIns?.Running ?? false); }
+        }
+
+        private bool canStart;
+
+        public bool CanStart
+        {
+            get { return canStart; }
+            set { canStart = value; this.RaisePropertyChanged(); }
+        }
+        private bool canResume;
+
+        public bool CanResume
+        {
+            get { return canResume; }
+            set { canResume = value; this.RaisePropertyChanged(); }
+        }
+
+        private string title;
+
+        public string Title
+        {
+            get { return title; }
+            set { title = value; this.RaisePropertyChanged(); }
+        }
+
+        void setTitle()
+        {
+            Title =$"{botIns?.CurrentSite?.SiteName} - {botIns?.CurrentGame.ToString()} - {botIns?.Strategy?.StrategyName} ({(Running?"Running":"Sopped")}";
+        }
+        void setCanStart()
+        {
+            CanStart = ((botIns?.LoggedIn ?? false) && botIns.Strategy != null && !botIns.Running && !botIns.RunningSimulation);            
+        }
+
+        void setCanResume()
+        {
+            CanResume = ((botIns?.LoggedIn ?? false) && botIns.Strategy != null && !botIns.Running && !botIns.RunningSimulation);
         }
 
         iLiveBet _liveBets;
@@ -268,6 +321,11 @@ namespace KryGamesBot.Ava.ViewModels
         {
             SiteStatsData.Stats = e.Stats;
             SiteStatsData.RaisePropertyChanged(nameof(SiteStatsData.Stats));
+            this.RaisePropertyChanged(nameof(LoggedIn));
+            this.RaisePropertyChanged(nameof(NotLoggedIn));
+            setCanResume();
+            setCanStart();
+            setTitle();
         }
 
         private void BotIns_OnStrategyChanged(object? sender, EventArgs e)
@@ -297,6 +355,7 @@ namespace KryGamesBot.Ava.ViewModels
             }
             StrategyVM?.Dispose();
             StrategyVM = tmpStrat;
+            setTitle();
         }
 
         private void BotIns_OnStopped(object? sender, DoormatCore.Sites.GenericEventArgs e)
@@ -312,11 +371,21 @@ namespace KryGamesBot.Ava.ViewModels
 
             //}
             StatusMessage = "Stopping: "+ e.Message;
+            this.RaisePropertyChanged(nameof(Running));
+            this.RaisePropertyChanged(nameof(Stopped));
+            setCanResume();
+            setCanStart();
+            setTitle();
         }
             private void BotIns_OnStarted(object? sender, EventArgs e)
         {
             SessionStatsData.Stats = botIns.Stats;
             SessionStatsData.RaisePropertyChanged(nameof(SessionStatsData.Stats));
+            this.RaisePropertyChanged(nameof(Running));
+            this.RaisePropertyChanged(nameof(Stopped));
+            setCanResume();
+            setCanStart();
+            setTitle();
         }
 
         private void BotIns_OnSiteBetFinished(object sender, DoormatCore.Sites.BetFinisedEventArgs e)
@@ -364,6 +433,8 @@ namespace KryGamesBot.Ava.ViewModels
             }
             if (PlaceBetVM != null)
                 PlaceBetVM.PlaceBet += PlaceBetVM_PlaceBet;
+
+            setTitle();
         }
 
         private void PlaceBetVM_PlaceBet(object? sender, PlaceBetEventArgs e)

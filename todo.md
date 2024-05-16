@@ -5,7 +5,7 @@
 - [x] programmer mode error handler (kind of done i think)
 - [x] stop simulation
 - [ ] update stats window on timer if bot is running but stalled
-- [ ] Indicate but running status in status bar/title bar
+- [x] Indicate but running status in status bar/title bar
 
 	
 ### Tabs

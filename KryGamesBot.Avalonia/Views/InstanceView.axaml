@@ -52,7 +52,8 @@
 
                 </MenuItem>
                 <MenuItem Header="Site">
-                    <MenuItem Header="Log out" Command="{Binding LogOutCommand}"/>
+                    <MenuItem Header="Log out" Command="{Binding LogOutCommand}" IsVisible="{Binding LoggedIn}"/>
+                    <MenuItem Header="Log in" Command="{Binding LogOutCommand}" IsVisible="{Binding NotLoggedIn}"/>
                     <MenuItem Header="Change Site"  Command="{Binding ChangeSiteCommand}"/>
                 </MenuItem>
                 <ComboBox ItemsSource="{Binding Currencies}" SelectedIndex="{Binding CurrentCurrency}" />
@@ -76,6 +77,10 @@
                         <ColumnDefinition  Width="*"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" >
+                        <Image Source="{SvgImage /Assets/Images/bxs-user-check.svg}" IsVisible="{Binding LoggedIn}"/>
+                        <Image Source="{SvgImage /Assets/Images/bxs-user-x.svg}" IsVisible="{Binding NotLoggedIn}"/>
+                        <Image Source="{SvgImage /Assets/Images/bx-run.svg}" IsVisible="{Binding Running}"/>
+                        <Image Source="{SvgImage /Assets/Images/bx-stop.svg}" IsVisible="{Binding Stopped}"/>
                         <TextBlock Text="Status: " VerticalAlignment="Bottom"/>
                         <TextBlock Text="{Binding StatusMessage}"/>
                     </StackPanel>
@@ -124,15 +129,15 @@
                 </Grid>
                 <DockPanel Grid.Column="2" Grid.RowSpan="3" >
                     <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button Margin="5" Command="{Binding StartCommand}">Start</Button>
-                        <Button Margin="5"  Command="{Binding ResumeCommand}">Resume</Button>
-                        <Button Margin="5" Command="{Binding StopCommand}">Stop</Button>
-                        <Button Margin="5" Command="{Binding StopOnWinCommand}">Stop On Win</Button>
+                        <Button Margin="5" Command="{Binding StartCommand}" IsEnabled="{Binding CanStart}">Start</Button>
+                        <Button Margin="5"  Command="{Binding ResumeCommand}" IsEnabled="{Binding CanResume}">Resume</Button>
+                        <Button Margin="5" Command="{Binding StopCommand}" >Stop</Button>
+                        <Button Margin="5" Command="{Binding StopOnWinCommand}" IsEnabled="{Binding Running}">Stop On Win</Button>
                     </StackPanel>
                     <TabControl>
                         <TabItem Header="Strategy">
                             <DockPanel>
-                                <ComboBox DockPanel.Dock="Top" ItemsSource="{Binding BotInstance.Strategies.Keys}" SelectedItem="{Binding SelectedStrategy}" >
+                                <ComboBox DockPanel.Dock="Top" ItemsSource="{Binding BotInstance.Strategies.Keys}" SelectedItem="{Binding SelectedStrategy}" IsEnabled="{Binding Stopped}" >
 
                                 </ComboBox>
                                 <ContentControl Content="{Binding StrategyVM}" VerticalAlignment="Stretch">
