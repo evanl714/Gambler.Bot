@@ -32,6 +32,9 @@
 - [ ] manual betting extra buttons (x2, 1/2, max, min, etc)
 - [ ] disable/enable start/stop/resume/stoponwin based on bot state
 
+### Sites
+- [ ] BCH.games
+
 
 ### Help windows:
 - [ ] Setup wizard
