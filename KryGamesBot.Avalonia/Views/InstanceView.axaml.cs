@@ -6,6 +6,7 @@ using KryGamesBot.Ava.ViewModels;
 using KryGamesBot.Ava.ViewModels.Common;
 using KryGamesBot.Ava.Views.Common;
 using ReactiveUI;
+using System.Reactive;
 using System.Threading.Tasks;
 
 namespace KryGamesBot.Ava.Views;
@@ -21,6 +22,7 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
             this.WhenActivated(action =>
             {
                 ViewModel!.ShowSimulation.RegisterHandler(DoShowSimulation);
+                ViewModel!.ShowRollVerifier.RegisterHandler(ShowRollVerifier);
                 ViewModel!.ShowDialog.RegisterHandler(DoShowDialogAsync);
 
             });
@@ -38,6 +40,22 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
         var result = await dialog.ShowDialog<LoginViewModel?>(ParentWindow);
         interaction.SetOutput(result);
     }
+
+    private async Task ShowRollVerifier(InteractionContext<RollVerifierViewModel,
+                                        Unit?> interaction)
+    {
+        var ParentWindow = this.FindAncestorOfType<Window>();
+        ReactiveWindow<RollVerifierViewModel> window = new();
+        window.DataContext = interaction.Input;
+        var dialog = new RollVerifierView();
+        window.Content = dialog;
+        dialog.DataContext = interaction.Input;
+        window.Width = 500;
+        window.Height = 500;
+        window.Title = $"Roll Verifier - {interaction.Input.Site?.SiteName}";
+        window.Show();
+    }
+
     private async Task DoShowSimulation(InteractionContext<SimulationViewModel,
                                         SimulationViewModel?> interaction)
     {

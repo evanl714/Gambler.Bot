@@ -4,7 +4,7 @@
 - [x] custom triggers
 - [x] programmer mode error handler (kind of done i think)
 - [x] stop simulation
-- [ ] update stats window on timer if bot is running but stalled
+- [x] update stats window on timer if bot is running but stalled
 - [x] Indicate but running status in status bar/title bar
 
 	
@@ -13,7 +13,7 @@
 
 ### Windows
 - [ ] settings import/export
-- [ ] roll verifier
+- [x] roll verifier
 - [ ] bet history
 - [ ] additional charts (streak occurance? roll distrobution? win/loss ratio? )
 
@@ -43,6 +43,7 @@
 - [ ] About
 
 ### settings: 
+- [ ] language localization (functionality mostly in place, but strings file not yet created)
 - [ ] skins
 - [ ] storage: bets
 - [ ] storage strategies
@@ -66,3 +67,4 @@
 - [ ] ???Specify system requirements in the readme file???
 - [ ] bot speed
 - [ ] charting line colours
+- [x] Programmer mode crash when file dialog cancelled

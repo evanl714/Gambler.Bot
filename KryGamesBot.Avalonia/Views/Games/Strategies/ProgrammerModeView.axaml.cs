@@ -3,6 +3,7 @@ using Avalonia.Platform.Storage;
 using Avalonia.ReactiveUI;
 using AvaloniaEdit;
 using AvaloniaEdit.TextMate;
+using KryGamesBot.Ava.Classes;
 using KryGamesBot.Ava.ViewModels.Common;
 using KryGamesBot.Ava.ViewModels.Strategies;
 using ReactiveUI;
@@ -22,35 +23,20 @@ namespace KryGamesBot.Ava.Views.Games.Strategies
 
             this.WhenActivated(d =>
             { 
-
                 ViewModel.SaveFileInteraction.RegisterHandler(SaveFile);
                 ViewModel.OpenFileInteraction.RegisterHandler(OpenFile);
-
             });
 
         }
 
         async Task SaveFile(InteractionContext<FilePickerSaveOptions, string?> interaction)
         {
-            var topLevel = TopLevel.GetTopLevel(this);
-            var storage = topLevel.StorageProvider;
-            var options = interaction.Input;
-            var dirs = await storage.SaveFilePickerAsync(options);
-            var dir = dirs.Path.AbsolutePath;
-            dir = HttpUtility.UrlDecode(dir);
-            interaction.SetOutput(dir);
+            await IOHelper.SaveFile(interaction, TopLevel.GetTopLevel(this));
         }
 
         async Task OpenFile(InteractionContext<FilePickerOpenOptions, string?> interaction)
         {
-            var topLevel = TopLevel.GetTopLevel(this);
-            var storage = topLevel.StorageProvider;
-            var options = interaction.Input;
-            var dirs = await storage.OpenFilePickerAsync(options);
-            var dir = dirs.FirstOrDefault().Path.AbsolutePath;
-            dir = HttpUtility.UrlDecode(dir);
-            interaction.SetOutput(dir);
+            await IOHelper.OpenFile(interaction, TopLevel.GetTopLevel(this));
         }
-
     }
 }

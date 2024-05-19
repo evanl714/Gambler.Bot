@@ -13,8 +13,13 @@
         <local:ViewLocator/>
     </Application.DataTemplates>
     <Application.Resources>
-        <converters:BitmapAssetValueConverter x:Key="variableImage"/>
 
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://KryGamesBot.Ava/Assets/Lang/en-US.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
 
     </Application.Resources>
     <Application.Styles>

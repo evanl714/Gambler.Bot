@@ -1,7 +1,6 @@
 ﻿using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using DoormatBot.Strategies;
-using DoormatCore.Helpers;
 using KryGamesBot.Ava.Classes.Strategies;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
@@ -213,6 +212,8 @@ namespace KryGamesBot.Ava.ViewModels.Strategies
                 SuggestedFileName = $"NewScript.{FileExtension}"
 
             });
+            if (result == null)
+                return;
             Strat.FileName= result;
             try
             {

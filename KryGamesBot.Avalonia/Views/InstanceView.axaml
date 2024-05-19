@@ -18,54 +18,60 @@
              >
 
     <Grid>
-        <common:SelectSiteView DataContext="{Binding SelectSite}" IsVisible="{Binding $parent[local:InstanceView].((vm:InstanceViewModel)Tag).ShowSites}"  />
 
-        <DockPanel IsVisible="{Binding ShowBot}">
+        <DockPanel >
             <Menu DockPanel.Dock="Top">
-                <MenuItem Header="File">
-                    <MenuItem Header="Save"/>
-                    <MenuItem Header="Load"/>
-                    <MenuItem Header="Exit"/>
+                <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.File}">
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Save}" IsEnabled="{Binding ShowBot}"/>
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Load}" IsEnabled="{Binding ShowBot}"/>
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Exit}" IsEnabled="{Binding ShowBot}"/>
                 </MenuItem>
-                <MenuItem Header="View">
-                    <MenuItem Header="_Live Charts" Click="OnMenuItemClicked">
+                <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.View}">
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.LiveCharts}" Click="OnMenuItemClicked"  IsEnabled="{Binding ShowBot}">
                         <MenuItem.Icon>
-                            <CheckBox IsChecked="{Binding ShowChart}"/>
+                            <CheckBox IsChecked="{Binding ShowChart}"  IsEnabled="{Binding ShowBot}"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="_Live Bets" Click="OnMenuItemClicked">
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.LiveBets}" Click="OnMenuItemClicked"  IsEnabled="{Binding ShowBot}">
                         <MenuItem.Icon>
-                            <CheckBox IsChecked="{Binding ShowLiveBets}"/>
+                            <CheckBox IsChecked="{Binding ShowLiveBets}"  IsEnabled="{Binding ShowBot}"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="_Stats" Click="OnMenuItemClicked">
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Stats}" Click="OnMenuItemClicked"  IsEnabled="{Binding ShowBot}">
                         <MenuItem.Icon>
-                            <CheckBox IsChecked="{Binding ShowStats}"/>
+                            <CheckBox IsChecked="{Binding ShowStats}"  IsEnabled="{Binding ShowBot}"/>
                         </MenuItem.Icon>
                     </MenuItem>
 
                     <Separator/>
-                    <MenuItem Header="Simulate" Command="{Binding SimulateCommand}"/>
-                    <MenuItem Header="Bet History"/>
-                    <MenuItem Header="Roll verifier"/>
-                    <MenuItem Header="Settings"/>
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Simulate}" Command="{Binding SimulateCommand}"  IsEnabled="{Binding ShowBot}"/>
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.BetHistory}"  IsEnabled="{Binding ShowBot}"/>
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.RollVerifier}" Command="{Binding RollVerifier}"  IsEnabled="{Binding ShowBot}"/>
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Settings}"/>
 
                 </MenuItem>
-                <MenuItem Header="Site">
-                    <MenuItem Header="Log out" Command="{Binding LogOutCommand}" IsVisible="{Binding LoggedIn}"/>
-                    <MenuItem Header="Log in" Command="{Binding LogOutCommand}" IsVisible="{Binding NotLoggedIn}"/>
-                    <MenuItem Header="Change Site"  Command="{Binding ChangeSiteCommand}"/>
+                <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Site}">
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.LogOut}" Command="{Binding LogOutCommand}" IsVisible="{Binding LoggedIn}"  IsEnabled="{Binding ShowBot}"/>
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.LogIn}" Command="{Binding LogOutCommand}" IsVisible="{Binding NotLoggedIn}"  IsEnabled="{Binding ShowBot}"/>
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.ChangeSite}"  Command="{Binding ChangeSiteCommand}"  IsEnabled="{Binding ShowBot}"/>
                 </MenuItem>
-                <ComboBox ItemsSource="{Binding Currencies}" SelectedIndex="{Binding CurrentCurrency}" />
-                <ComboBox ItemsSource="{Binding Games}" SelectedIndex="{Binding CurrentGame}" />
-                <MenuItem Header="Help">
-                    <MenuItem Header="Setup Wizard"/>
-                    <MenuItem Header="Reset to default"/>
-                    <MenuItem Header="Source code"/>
-                    <MenuItem Header="Tutorials"/>
-                    <MenuItem Header="Frequently Asked Questions"/>
-                    <MenuItem Header="Contact"/>
-                    <MenuItem Header="About"/>
+                <ComboBox ItemsSource="{Binding Currencies}" SelectedIndex="{Binding CurrentCurrency}"  IsEnabled="{Binding ShowBot}" />
+                <ComboBox ItemsSource="{Binding Games}" SelectedIndex="{Binding CurrentGame}"  IsEnabled="{Binding ShowBot}" />
+                <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Help}">
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Language}" ItemsSource="{Binding Languages}">
+                        <MenuItem.ItemTemplate>
+                            <DataTemplate x:DataType="system:String">
+                                <MenuItem Header="{Binding}" Command="{Binding $parent[Menu].((vm:InstanceViewModel)DataContext).SetLanguage}" CommandParameter="{Binding}" />
+                            </DataTemplate>
+                        </MenuItem.ItemTemplate>
+                    </MenuItem>
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.SetupWizard}"/>
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.ResetToDefault}"/>
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.SourceCode}"/>
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Tutorials}"/>
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.FAQ}"/>
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Contact}"/>
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.About}"/>
 
                 </MenuItem>
             </Menu>
@@ -88,10 +94,13 @@
                         <TextBlock Text="Last Action: "/>
                         <TextBlock Text="{Binding LastAction}"/>
                     </StackPanel>
+
                     <actipro:ToggleThemeButton HorizontalAlignment="Right" Grid.Column="2" />
                 </Grid>
             </Border>
-            <Grid >
+            <common:SelectSiteView DataContext="{Binding SelectSite}" IsVisible="{Binding $parent[local:InstanceView].((vm:InstanceViewModel)Tag).ShowSites}"  />
+
+            <Grid IsVisible="{Binding ShowBot}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="4*"></ColumnDefinition>
                     <ColumnDefinition Width="7"></ColumnDefinition>

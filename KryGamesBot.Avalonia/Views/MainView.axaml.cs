@@ -32,7 +32,10 @@ public partial class MainView : UserControl
     private async void WvBypass_NavigationCompleted(object? sender, WebViewCore.Events.WebViewUrlLoadedEventArg e)
     {
         //Navigation happened here, check for cookies again.
-        await CheckCookies();
+        if (e.IsSuccess)
+        {
+            await CheckCookies();
+        }
     }
 
     public async void ClickHandler(object sender, RoutedEventArgs args)

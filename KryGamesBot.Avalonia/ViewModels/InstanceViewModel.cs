@@ -1,6 +1,6 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Markup.Xaml.Styling;
+using Avalonia.Threading;
 using DoormatBot.Strategies;
-using DryIoc;
 using KryGamesBot.Ava.Classes;
 using KryGamesBot.Ava.Classes.BetsPanel;
 using KryGamesBot.Ava.Classes.Strategies;
@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Text.Json;
@@ -23,147 +24,355 @@ namespace KryGamesBot.Ava.ViewModels
 {
     public class InstanceViewModel : ViewModelBase
     {
-        string BetSettingsFile = "";
-        string PersonalSettingsFile = "";
-        public string InstanceName { get; set; }
-        public SelectSiteViewModel SelectSite { get; set; }
-        public bool IsSelectSiteViewVisible { get; set; }
+
+        iLiveBet _liveBets;
+
+        iPlaceBet _placeBetVM = null;// = new DicePlaceBetViewModel();
+
+        private string _status;
+        private IStrategy _strategyVM;
+        string BetSettingsFile = string.Empty;
         private DoormatBot.Doormat botIns;
-        public DoormatBot.Doormat? BotInstance { get => botIns; set { botIns = value; this.RaisePropertyChanged(); } }
-        public Interaction<LoginViewModel, LoginViewModel?> ShowDialog { get; }
-        public Interaction<SimulationViewModel, SimulationViewModel?> ShowSimulation { get; }
-        private bool showSites = true;
-        public ProfitChartViewModel ChartData { get; set; }// = new ProfitChartViewModel();
-        public SiteStatsViewModel SiteStatsData { get; set; }// = new SiteStatsViewModel();
-        public SessionStatsViewModel SessionStatsData { get; set; }// = new SessionStatsViewModel();
-        public TriggersViewModel TriggersVM { get; set; }
-        private bool showChart = true;
-
-        public bool ShowChart
-        {
-            get { return showChart; }
-            set { showChart = value; this.RaisePropertyChanged(); }
-        }
-
-        private bool showLiveBets = true;
-
-        public bool ShowLiveBets
-        {
-            get { return showLiveBets; }
-            set { showLiveBets = value; this.RaisePropertyChanged(); }
-        }
-        private bool showStats = true;
-
-        public bool ShowStats
-        {
-            get { return showStats; }
-            set { showStats = value; this.RaisePropertyChanged(); }
-        }
-
-        public string[] Currencies
-        {
-            get { return BotInstance?.CurrentSite?.Currencies; }
-        }
-        public int? CurrentCurrency
-        {
-            get { return BotInstance?.CurrentSite?.Currency; }
-            set { if (BotInstance?.CurrentSite != null) BotInstance.CurrentSite.Currency = (value >= 0 ? value : 0) ?? 0; this.RaisePropertyChanged(); }
-        }
-        public DoormatCore.Games.Games[] Games
-        {
-            get { return BotInstance?.CurrentSite?.SupportedGames; }
-        }
-        public int? CurrentGame
-        {
-            get { return Array.IndexOf(BotInstance?.CurrentSite?.SupportedGames, BotInstance?.CurrentGame); }
-            set { if (BotInstance?.CurrentSite != null) BotInstance.CurrentGame = BotInstance?.CurrentSite?.SupportedGames[(value >= 0 ? value : 0) ?? 0] ?? DoormatCore.Games.Games.Dice; }
-        }
-
-        public bool LoggedIn
-        {
-            get { return botIns?.LoggedIn ?? false; }
-        }
-
-        public bool NotLoggedIn
-        {
-            get { return !(botIns?.LoggedIn ?? false); }
-        }
-        public bool Running
-        {
-            get { return botIns?.Running ?? false; }
-        }
-
-        public bool Stopped
-        {
-            get { return !(botIns?.Running ?? false); }
-        }
+        private bool canResume;
 
         private bool canStart;
 
-        public bool CanStart
-        {
-            get { return canStart; }
-            set { canStart = value; this.RaisePropertyChanged(); }
-        }
-        private bool canResume;
+        private string lastAction;
+        string PersonalSettingsFile = string.Empty;
+        private bool showChart = true;
 
-        public bool CanResume
-        {
-            get { return canResume; }
-            set { canResume = value; this.RaisePropertyChanged(); }
-        }
+        private bool showLiveBets = true;
+        private bool showSites = true;
+        private bool showStats = true;
 
         private string title;
+        private DispatcherTimer tmrStats = new DispatcherTimer();
 
-        public string Title
+
+        public InstanceViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
         {
-            get { return title; }
-            set { title = value; this.RaisePropertyChanged(); }
+            GetLanguages();
+            tmrStats.Interval = TimeSpan.FromSeconds(1);
+            tmrStats.Tick += TmrStats_Tick;
+            AdvancedSettingsVM = new AdvancedViewModel(_logger);
+            ResetSettingsVM = new ResetSettingsViewModel(_logger);
+            ChartData = new ProfitChartViewModel(_logger);
+            SiteStatsData = new SiteStatsViewModel(_logger);
+            SessionStatsData = new SessionStatsViewModel(_logger);
+            TriggersVM = new TriggersViewModel(_logger);
+
+            SessionStatsData.OnResetStats += SessionStatsData_OnResetStats;
+
+            StartCommand = ReactiveCommand.Create(Start);
+            StopCommand = ReactiveCommand.Create(Stop);
+            ResumeCommand = ReactiveCommand.Create(Resume);
+            StopOnWinCommand = ReactiveCommand.Create(StopOnWin);
+
+            LogOutCommand = ReactiveCommand.Create(LogOut);
+            ChangeSiteCommand = ReactiveCommand.Create(ChangeSite);
+            SimulateCommand = ReactiveCommand.Create(Simulate);
+
+            ExitCommand = ReactiveCommand.Create(Exit);
+            OpenCommand = ReactiveCommand.Create(Open);
+            SaveCommand = ReactiveCommand.Create(Save);
+
+            var tmp = new DoormatBot.Doormat(_logger);
+            SelectSite = new SelectSiteViewModel(_logger);
+            SelectSite.SelectedSiteChanged += SelectSite_SelectedSiteChanged;
+            IsSelectSiteViewVisible = true;
+            ShowDialog = new Interaction<LoginViewModel, LoginViewModel?>();
+            ShowSimulation = new Interaction<SimulationViewModel, SimulationViewModel?>();
+            ShowRollVerifier = new Interaction<RollVerifierViewModel, Unit?>();
+            tmp.Strategy = new Martingale(_logger);
+            tmp.GetStrats();
+            PlaceBetVM = new DicePlaceBetViewModel(_logger);
+            PlaceBetVM.PlaceBet += PlaceBetVM_PlaceBet;
+            tmp.OnGameChanged += BotIns_OnGameChanged;
+            tmp.OnNotification += BotIns_OnNotification;
+            tmp.OnSiteAction += BotIns_OnSiteAction;
+            tmp.OnSiteBetFinished += BotIns_OnSiteBetFinished;
+            tmp.OnStarted += BotIns_OnStarted;
+            tmp.OnStopped += BotIns_OnStopped;
+            tmp.OnStrategyChanged += BotIns_OnStrategyChanged;
+            tmp.OnSiteLoginFinished += BotIns_OnSiteLoginFinished;
+            tmp.OnBypassRequired += Tmp_OnBypassRequired;
+            tmp.OnSiteNotify += Tmp_OnSiteNotify;
+            tmp.OnSiteError += Tmp_OnSiteError;
+            BotInstance = tmp;
+            botIns.CurrentGame = DoormatCore.Games.Games.Dice;
+            /*if (MainWindow.Portable && File.Exists("personalsettings.json"))
+            {
+                PersonalSettingsFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json";
+
+            }
+            //Check if global settings for this account exists
+            else*/
+            if (/*!MainWindow.Portable &&*/ File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json"))
+            {
+                PersonalSettingsFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json";
+                botIns.LoadPersonalSettings(PersonalSettingsFile);
+            }
+
+            LoadSettings("default");
+            
+
         }
 
-        void setTitle()
+        public List<string> Languages { get; set; }
+
+        void GetLanguages()
         {
-            Title =$"{botIns?.CurrentSite?.SiteName} - {botIns?.CurrentGame.ToString()} - {botIns?.Strategy?.StrategyName} ({(Running?"Running":"Sopped")}";
+            Languages = new List<string>();
+            Languages.Add("en-US");
+            Languages.Add("af-ZA");
+            /*var langs = App.Current.Resources.MergedDictionaries;
+            var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? false).ToList();*/
         }
-        void setCanStart()
+
+        public void SetLanguage(string newLanguage)
         {
-            CanStart = ((botIns?.LoggedIn ?? false) && botIns.Strategy != null && !botIns.Running && !botIns.RunningSimulation);            
+            var translations = App.Current.Resources.MergedDictionaries.OfType<ResourceInclude>().FirstOrDefault(x => x.Source?.OriginalString?.Contains("/Lang/") ?? false);
+
+            if (translations != null)
+                App.Current.Resources.MergedDictionaries.Remove(translations);
+
+            
+
+            App.Current.Resources.MergedDictionaries.Add(
+                new ResourceInclude(new Uri($"avares://KryGamesBot.Ava/Assets/Lang/{newLanguage}.axaml"))
+                {
+                    Source = new Uri($"avares://KryGamesBot.Ava/Assets/Lang/{newLanguage}.axaml")
+                });
+        }
+
+        private void TmrStats_Tick(object? sender, EventArgs e)
+        {
+            if (botIns.Running)
+            {
+                SessionStatsData.StatsUpdated(botIns.Stats);
+                SiteStatsData.StatsUpdated(botIns.CurrentSite?.Stats);
+            }
+        }
+
+        private void BotIns_OnGameChanged(object? sender, EventArgs e)
+        {
+            if (PlaceBetVM != null)
+                PlaceBetVM.PlaceBet -= PlaceBetVM_PlaceBet;
+
+            switch (botIns.CurrentGame)
+            {
+                case DoormatCore.Games.Games.Crash:
+                case DoormatCore.Games.Games.Roulette:
+                case DoormatCore.Games.Games.Plinko:
+                    break;
+                case
+                    DoormatCore.Games.Games.Dice:
+                    PlaceBetVM = new DicePlaceBetViewModel(_logger);
+                    LiveBets = new DiceLiveBetViewModel(_logger);
+                    break;
+
+            }
+            if (PlaceBetVM != null)
+                PlaceBetVM.PlaceBet += PlaceBetVM_PlaceBet;
+
+            setTitle();
+        }
+
+        private void BotIns_OnNotification(object? sender, DoormatCore.Helpers.NotificationEventArgs e)
+        {
+            throw new NotImplementedException();
+            switch (e.NotificationTrigger.Action)
+            {
+                case DoormatCore.Helpers.TriggerAction.Alarm: break;
+                case DoormatCore.Helpers.TriggerAction.Chime: break;
+                case DoormatCore.Helpers.TriggerAction.Email: break;
+                case DoormatCore.Helpers.TriggerAction.Popup: break;
+            }
+        }
+
+        private void BotIns_OnSiteAction(object sender, DoormatCore.Sites.GenericEventArgs e)
+        {
+            LastAction = e.Message;
+        }
+
+        private void BotIns_OnSiteBetFinished(object sender, DoormatCore.Sites.BetFinisedEventArgs e)
+        {
+            SiteStatsData.StatsUpdated(botIns.CurrentSite.Stats);
+            SessionStatsData.StatsUpdated(botIns.Stats);
+            ChartData.AddPoint(e.NewBet.Profit, e.NewBet.IsWin);
+            LiveBets.AddBet(e.NewBet);
+        }
+
+        private void BotIns_OnSiteLoginFinished(object sender, DoormatCore.Sites.LoginFinishedEventArgs e)
+        {
+            SiteStatsData.Stats = e.Stats;
+            SiteStatsData.RaisePropertyChanged(nameof(SiteStatsData.Stats));
+            this.RaisePropertyChanged(nameof(LoggedIn));
+            this.RaisePropertyChanged(nameof(NotLoggedIn));
+            setCanResume();
+            setCanStart();
+            setTitle();
+        }
+        private void BotIns_OnStarted(object? sender, EventArgs e)
+        {
+            SessionStatsData.Stats = botIns.Stats;
+            SessionStatsData.RaisePropertyChanged(nameof(SessionStatsData.Stats));
+            this.RaisePropertyChanged(nameof(Running));
+            this.RaisePropertyChanged(nameof(Stopped));
+            setCanResume();
+            setCanStart();
+            setTitle();
+            tmrStats.Start();
+        }
+
+        private void BotIns_OnStopped(object? sender, DoormatCore.Sites.GenericEventArgs e)
+        {
+            //if (!Dispatcher.CheckAccess())
+            //    Dispatcher.Invoke(new Action<object, DoormatCore.Sites.GenericEventArgs>(BotIns_OnStopped), sender, e);
+            //else
+            //{
+            //    bbtnSimulator.IsEnabled = true;
+            //    StatusBar.Content = $"Stopping: {e.Message}";
+            //    btcStart.IsEnabled = true;
+            //    btnResume.IsEnabled = true;
+
+            //}
+            StatusMessage = "Stopping: " + e.Message;
+            this.RaisePropertyChanged(nameof(Running));
+            this.RaisePropertyChanged(nameof(Stopped));
+            setCanResume();
+            setCanStart();
+            setTitle();
+            tmrStats.Stop();
+        }
+
+        private void BotIns_OnStrategyChanged(object? sender, EventArgs e)
+        {
+            AdvancedSettingsVM.BetSettings = botIns.BetSettings;
+            ResetSettingsVM.BetSettings = botIns.BetSettings;
+            TriggersVM.SetTriggers(botIns.BetSettings?.Triggers);
+            IStrategy tmpStrat = null;
+            //this needs to set the istrategy property to the appropriate viewmodel
+            switch (BotInstance.Strategy?.StrategyName)
+            {
+                case "Martingale": tmpStrat = new MartingaleViewModel(_logger); break;
+                case "D'Alembert": tmpStrat = new DAlembertViewModel(_logger); break;
+                case "Fibonacci": tmpStrat = new FibonacciViewModel(_logger); break;
+                case "Labouchere": tmpStrat = new LabouchereViewModel(_logger); break;
+                case "PresetList": tmpStrat = new PresetListViewModel(_logger); break;
+                case "ProgrammerLUA": tmpStrat = new ProgrammerModeLUAViewModel(_logger); break;
+                case "ProgrammerCS": tmpStrat = new ProgrammerModeCSViewModel(_logger); break;
+                case "ProgrammerJS": tmpStrat = new ProgrammerModeCSViewModel(_logger); break;
+                case "ProgrammerPython": tmpStrat = new ProgrammerModePYViewModel(_logger); break;
+                default: tmpStrat = null; break; ;
+            }
+            if (tmpStrat != null)
+            {
+                tmpStrat.SetStrategy(BotInstance.Strategy);
+                tmpStrat.GameChanged(BotInstance.CurrentGame);
+            }
+            StrategyVM?.Dispose();
+            StrategyVM = tmpStrat;
+            setTitle();
+        }
+        void ChangeSite()
+        {
+            botIns.StopStrategy("Logging Out");
+            botIns.CurrentSite.Disconnect();
+            ShowSites = true;
+        }
+
+        void Exit()
+        {
+            throw new NotImplementedException();
+        }
+
+        void LoadInstanceSettings(string FileLocation)
+        {
+            string Settings = string.Empty;
+            using (StreamReader sr = new StreamReader(FileLocation))
+            {
+                Settings = sr.ReadToEnd();
+            }
+            InstanceSettings tmp = JsonSerializer.Deserialize<InstanceSettings>(Settings);
+            //botIns.ga
+
+            var tmpsite = DoormatBot.Doormat.Sites.FirstOrDefault(m => m.Name == tmp.Site);
+            if (tmpsite != null)
+            {
+                botIns.CurrentSite = Activator.CreateInstance(tmpsite.SiteType(), _logger) as DoormatCore.Sites.BaseSite;
+                SiteChanged(botIns.CurrentSite, tmp.Currency, tmp.Game);
+            }
+            if (tmp.Game != null)
+                botIns.CurrentGame = Enum.Parse<DoormatCore.Games.Games>(tmp.Game);
+
+        }
+
+        private void LoginFinished(bool ChangeScreens)
+        {
+            if (ChangeScreens)
+            {
+                ShowSites = false;
+            }
+        }
+        void LogOut()
+        {
+            botIns.StopStrategy("Logging Out");
+            botIns.CurrentSite.Disconnect();
+            ShowLogin();
+        }
+
+        void Open()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void PlaceBetVM_PlaceBet(object? sender, PlaceBetEventArgs e)
+        {
+            botIns.PlaceBet(e.NewBet);
+        }
+        void Resume()
+        {
+            botIns.Resume();
+        }
+
+        void Save()
+        {
+            throw new NotImplementedException();
+        }
+
+        void SaveINstanceSettings(string FileLocation)
+        {
+            string Settings = JsonSerializer.Serialize<InstanceSettings>(new InstanceSettings
+            {
+                Site = botIns.CurrentSite?.GetType()?.Name,
+                AutoLogin = false,
+                Game = botIns.CurrentGame.ToString(),
+                Currency = botIns.CurrentSite?.CurrentCurrency
+            });
+            File.WriteAllText(FileLocation, Settings);
+        }
+
+        private void SelectSite_SelectedSiteChanged(object? sender, DoormatCore.Helpers.SitesList e)
+        {
+            SiteChanged(Activator.CreateInstance(e.SiteType(), _logger) as DoormatCore.Sites.BaseSite, e.SelectedCurrency?.Name, e.SelectedGame?.Name);
+            if (SiteStatsData != null)
+                SiteStatsData.SiteName = botIns.CurrentSite?.SiteName;
+        }
+
+        private void SessionStatsData_OnResetStats(object? sender, EventArgs e)
+        {
+            botIns.ResetStats();
+            SessionStatsData.StatsUpdated(botIns.Stats);
         }
 
         void setCanResume()
         {
             CanResume = ((botIns?.LoggedIn ?? false) && botIns.Strategy != null && !botIns.Running && !botIns.RunningSimulation);
         }
-
-        iLiveBet _liveBets;
-        public iLiveBet LiveBets { get => _liveBets; set { _liveBets = value; this.RaisePropertyChanged(); } }
-        private IStrategy _strategyVM;
-
-        public IStrategy StrategyVM
+        void setCanStart()
         {
-            get { return _strategyVM; }
-            set { _strategyVM = value; this.RaisePropertyChanged(); }
-        }
-
-        public AdvancedViewModel AdvancedSettingsVM { get; set; }// = new AdvancedViewModel();
-        public ResetSettingsViewModel ResetSettingsVM { get; set; }// = new ResetSettingsViewModel();
-
-        iPlaceBet _placeBetVM=null;// = new DicePlaceBetViewModel();
-        public iPlaceBet PlaceBetVM { get=> _placeBetVM; set { _placeBetVM = value; this.RaisePropertyChanged(); } } 
-
-        public bool ShowSites
-        {
-            get { return showSites; }
-            set { showSites = value; this.RaisePropertyChanged(); this.RaisePropertyChanged(nameof(ShowBot)); }
-        }
-
-
-
-
-        public string SelectedStrategy
-        {
-            get { return BotInstance?.Strategy?.StrategyName; }
-            set { SetStrategy( value); }
+            CanStart = ((botIns?.LoggedIn ?? false) && botIns.Strategy != null && !botIns.Running && !botIns.RunningSimulation);
         }
 
         void SetStrategy(string name)
@@ -198,255 +407,9 @@ namespace KryGamesBot.Ava.ViewModels
             }
         }
 
-
-        public bool ShowBot
+        void setTitle()
         {
-            get { return !ShowSites; }
-            
-        }
-
-        private string _status;
-
-        public string StatusMessage
-        {
-            get { return _status; }
-            set { _status = value; this.RaisePropertyChanged(); }
-        }
-
-        private string lastAction;
-
-        public string LastAction
-        {
-            get { return lastAction; }
-            set { lastAction = value; this.RaisePropertyChanged(); }
-        }
-
-
-
-        public InstanceViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
-        {
-            AdvancedSettingsVM= new AdvancedViewModel(_logger);
-            ResetSettingsVM = new ResetSettingsViewModel(_logger);
-            ChartData = new ProfitChartViewModel(_logger);
-            SiteStatsData = new SiteStatsViewModel(_logger);
-            SessionStatsData = new SessionStatsViewModel(_logger);
-            TriggersVM = new TriggersViewModel(_logger);
-
-            SessionStatsData.OnResetStats += SessionStatsData_OnResetStats;
-
-            StartCommand = ReactiveCommand.Create(Start);
-            StopCommand = ReactiveCommand.Create(Stop);
-            ResumeCommand = ReactiveCommand.Create(Resume);
-            StopOnWinCommand = ReactiveCommand.Create(StopOnWin);
-
-            LogOutCommand = ReactiveCommand.Create(LogOut);
-            ChangeSiteCommand = ReactiveCommand.Create(ChangeSite);
-            SimulateCommand = ReactiveCommand.Create(Simulate);
-
-            ExitCommand = ReactiveCommand.Create(Exit);
-            OpenCommand = ReactiveCommand.Create(Open);
-            SaveCommand = ReactiveCommand.Create(Save);
-
-            var tmp =  new DoormatBot.Doormat(_logger);
-            SelectSite = new SelectSiteViewModel(_logger);
-            SelectSite.SelectedSiteChanged += SelectSite_SelectedSiteChanged;
-            IsSelectSiteViewVisible = true;
-            ShowDialog = new Interaction<LoginViewModel, LoginViewModel?>();
-            ShowSimulation = new Interaction<SimulationViewModel, SimulationViewModel?>();
-            tmp.Strategy = new Martingale(_logger);
-            tmp.GetStrats();
-            PlaceBetVM = new DicePlaceBetViewModel(_logger);
-            PlaceBetVM.PlaceBet += PlaceBetVM_PlaceBet;
-            tmp.OnGameChanged += BotIns_OnGameChanged;
-            tmp.OnNotification += BotIns_OnNotification;
-            tmp.OnSiteAction += BotIns_OnSiteAction;
-            tmp.OnSiteBetFinished += BotIns_OnSiteBetFinished;
-            tmp.OnStarted += BotIns_OnStarted;
-            tmp.OnStopped += BotIns_OnStopped;
-            tmp.OnStrategyChanged += BotIns_OnStrategyChanged;
-            tmp.OnSiteLoginFinished += BotIns_OnSiteLoginFinished;
-            tmp.OnBypassRequired += Tmp_OnBypassRequired;
-            tmp.OnSiteNotify += Tmp_OnSiteNotify;
-            tmp.OnSiteError += Tmp_OnSiteError;
-            BotInstance = tmp;
-            botIns.CurrentGame = DoormatCore.Games.Games.Dice;
-            /*if (MainWindow.Portable && File.Exists("personalsettings.json"))
-            {
-                PersonalSettingsFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json";
-
-            }
-            //Check if global settings for this account exists
-            else*/ if (/*!MainWindow.Portable &&*/ File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json"))
-            {
-                PersonalSettingsFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json";
-                botIns.LoadPersonalSettings(PersonalSettingsFile);
-            }
-           
-            LoadSettings("default");
-            
-        }
-
-        private void SessionStatsData_OnResetStats(object? sender, EventArgs e)
-        {
-            botIns.ResetStats();
-            SessionStatsData.StatsUpdated(botIns.Stats);
-        }
-
-        private void Tmp_OnSiteError(object sender, DoormatCore.Sites.ErrorEventArgs e)
-        {
-            if (!Dispatcher.UIThread.CheckAccess())
-                Dispatcher.UIThread.Invoke(() => { Tmp_OnSiteError(sender, e); });
-            else
-            {
-                StatusMessage = e.Message;
-            }
-        }
-
-        private void Tmp_OnSiteNotify(object sender, DoormatCore.Sites.GenericEventArgs e)
-        {
-            if (!Dispatcher.UIThread.CheckAccess())
-                Dispatcher.UIThread.Invoke(() => { Tmp_OnSiteNotify(sender, e); });
-            else
-            {
-                StatusMessage = e.Message;
-            }
-        }
-
-        private void Tmp_OnBypassRequired(object? sender, DoormatCore.Sites.BypassRequiredArgs e)
-        {
-            e.Config = MainView.GetBypass(e);
-        }
-
-        private void BotIns_OnSiteLoginFinished(object sender, DoormatCore.Sites.LoginFinishedEventArgs e)
-        {
-            SiteStatsData.Stats = e.Stats;
-            SiteStatsData.RaisePropertyChanged(nameof(SiteStatsData.Stats));
-            this.RaisePropertyChanged(nameof(LoggedIn));
-            this.RaisePropertyChanged(nameof(NotLoggedIn));
-            setCanResume();
-            setCanStart();
-            setTitle();
-        }
-
-        private void BotIns_OnStrategyChanged(object? sender, EventArgs e)
-        {
-            AdvancedSettingsVM.BetSettings = botIns.BetSettings;
-            ResetSettingsVM.BetSettings = botIns.BetSettings;
-            TriggersVM.SetTriggers(botIns.BetSettings?.Triggers);
-            IStrategy tmpStrat = null;
-            //this needs to set the istrategy property to the appropriate viewmodel
-            switch(BotInstance.Strategy?.StrategyName)
-            {
-                case "Martingale": tmpStrat = new MartingaleViewModel(_logger); break;
-                case "D'Alembert": tmpStrat = new DAlembertViewModel(_logger); break;
-                case "Fibonacci": tmpStrat = new FibonacciViewModel(_logger); break;
-                case "Labouchere": tmpStrat = new LabouchereViewModel(_logger); break;
-                case "PresetList": tmpStrat = new PresetListViewModel(_logger); break;
-                case "ProgrammerLUA": tmpStrat = new ProgrammerModeLUAViewModel(_logger); break;
-                case "ProgrammerCS": tmpStrat = new ProgrammerModeCSViewModel(_logger); break;
-                case "ProgrammerJS": tmpStrat = new ProgrammerModeCSViewModel(_logger); break;
-                case "ProgrammerPython": tmpStrat = new ProgrammerModePYViewModel(_logger); break;
-                default: tmpStrat = null; break; ;
-            }
-            if (tmpStrat != null)
-            {
-                tmpStrat.SetStrategy(BotInstance.Strategy);
-                tmpStrat.GameChanged(BotInstance.CurrentGame);
-            }
-            StrategyVM?.Dispose();
-            StrategyVM = tmpStrat;
-            setTitle();
-        }
-
-        private void BotIns_OnStopped(object? sender, DoormatCore.Sites.GenericEventArgs e)
-        {
-            //if (!Dispatcher.CheckAccess())
-            //    Dispatcher.Invoke(new Action<object, DoormatCore.Sites.GenericEventArgs>(BotIns_OnStopped), sender, e);
-            //else
-            //{
-            //    bbtnSimulator.IsEnabled = true;
-            //    StatusBar.Content = $"Stopping: {e.Message}";
-            //    btcStart.IsEnabled = true;
-            //    btnResume.IsEnabled = true;
-
-            //}
-            StatusMessage = "Stopping: "+ e.Message;
-            this.RaisePropertyChanged(nameof(Running));
-            this.RaisePropertyChanged(nameof(Stopped));
-            setCanResume();
-            setCanStart();
-            setTitle();
-        }
-            private void BotIns_OnStarted(object? sender, EventArgs e)
-        {
-            SessionStatsData.Stats = botIns.Stats;
-            SessionStatsData.RaisePropertyChanged(nameof(SessionStatsData.Stats));
-            this.RaisePropertyChanged(nameof(Running));
-            this.RaisePropertyChanged(nameof(Stopped));
-            setCanResume();
-            setCanStart();
-            setTitle();
-        }
-
-        private void BotIns_OnSiteBetFinished(object sender, DoormatCore.Sites.BetFinisedEventArgs e)
-        {
-            SiteStatsData.StatsUpdated(botIns.CurrentSite.Stats);
-            SessionStatsData.StatsUpdated(botIns.Stats);
-            ChartData.AddPoint(e.NewBet.Profit,e.NewBet.IsWin);
-            LiveBets.AddBet(e.NewBet);
-        }
-
-        private void BotIns_OnSiteAction(object sender, DoormatCore.Sites.GenericEventArgs e)
-        {
-            LastAction = e.Message;
-        }
-
-        private void BotIns_OnNotification(object? sender, DoormatCore.Helpers.NotificationEventArgs e)
-        {
-            throw new NotImplementedException();
-            switch (e.NotificationTrigger.Action)
-            {
-                case DoormatCore.Helpers.TriggerAction.Alarm: break;
-                case DoormatCore.Helpers.TriggerAction.Chime: break;
-                case DoormatCore.Helpers.TriggerAction.Email: break;
-                case DoormatCore.Helpers.TriggerAction.Popup: break;                
-            }
-        }
-
-        private void BotIns_OnGameChanged(object? sender, EventArgs e)
-        {
-            if (PlaceBetVM != null)
-                PlaceBetVM.PlaceBet -= PlaceBetVM_PlaceBet;
-
-            switch (botIns.CurrentGame)
-            {
-                case DoormatCore.Games.Games.Crash:
-                case DoormatCore.Games.Games.Roulette:
-                case DoormatCore.Games.Games.Plinko:
-                    break;
-                case
-                    DoormatCore.Games.Games.Dice:
-                    PlaceBetVM = new DicePlaceBetViewModel(_logger);
-                    LiveBets = new DiceLiveBetViewModel(_logger);
-                        break;
-
-            }
-            if (PlaceBetVM != null)
-                PlaceBetVM.PlaceBet += PlaceBetVM_PlaceBet;
-
-            setTitle();
-        }
-
-        private void PlaceBetVM_PlaceBet(object? sender, PlaceBetEventArgs e)
-        {
-            botIns.PlaceBet(e.NewBet);
-        }
-
-        private void SelectSite_SelectedSiteChanged(object? sender, DoormatCore.Helpers.SitesList e)
-        {
-            SiteChanged(Activator.CreateInstance(e.SiteType(),_logger) as DoormatCore.Sites.BaseSite, e.SelectedCurrency?.Name, e.SelectedGame?.Name);
-            if (SiteStatsData!=null)
-                SiteStatsData.SiteName = botIns.CurrentSite?.SiteName;   
+            Title = $"{botIns?.CurrentSite?.SiteName} - {botIns?.CurrentGame.ToString()} - {botIns?.Strategy?.StrategyName} ({(Running ? "Running" : "Sopped")}";
         }
 
         async Task ShowLogin()
@@ -456,12 +419,20 @@ namespace KryGamesBot.Ava.ViewModels
             var result = await ShowDialog.Handle(store);
         }
 
-        private void LoginFinished(bool ChangeScreens)
+        async Task Simulate()
         {
-            if (ChangeScreens)
-            {
-                ShowSites = false;
-            }
+            SimulationViewModel simControl = new SimulationViewModel(_logger);
+            simControl.CurrentSite = botIns.CurrentSite;
+            simControl.Strategy = botIns.Strategy;
+            simControl.BetSettings = botIns.BetSettings;
+            await ShowSimulation.Handle(simControl);
+        }
+
+        public async Task RollVerifier()
+        {
+            RollVerifierViewModel simControl = new RollVerifierViewModel(_logger, BotInstance?.CurrentSite, BotInstance?.CurrentGame ?? DoormatCore.Games.Games.Dice);
+            
+            await ShowRollVerifier.Handle(simControl);
         }
 
         void SiteChanged(DoormatCore.Sites.BaseSite NewSite, string currency, string game)
@@ -500,10 +471,52 @@ namespace KryGamesBot.Ava.ViewModels
             lueGames.EditValue = botIns.CurrentGame;
             Rename?.Invoke(this, new RenameEventArgs { newName = "Log in - " + NewSite?.SiteName });*/
         }
+        void Start()
+        {
+            if (!botIns.Running)
+            {
+                StrategyVM?.Saving();
+                botIns.SaveBetSettings(BetSettingsFile);
+                botIns.Start();
+            }
+        }
+        void Stop()
+        {
+            botIns.StopStrategy("Stop button clicked");
+        }
+        void StopOnWin()
+        {
+            botIns.StopOnWin = true;
+        }
+
+        private void Tmp_OnBypassRequired(object? sender, DoormatCore.Sites.BypassRequiredArgs e)
+        {
+            e.Config = MainView.GetBypass(e);
+        }
+
+        private void Tmp_OnSiteError(object sender, DoormatCore.Sites.ErrorEventArgs e)
+        {
+            if (!Dispatcher.UIThread.CheckAccess())
+                Dispatcher.UIThread.Invoke(() => { Tmp_OnSiteError(sender, e); });
+            else
+            {
+                StatusMessage = e.Message;
+            }
+        }
+
+        private void Tmp_OnSiteNotify(object sender, DoormatCore.Sites.GenericEventArgs e)
+        {
+            if (!Dispatcher.UIThread.CheckAccess())
+                Dispatcher.UIThread.Invoke(() => { Tmp_OnSiteNotify(sender, e); });
+            else
+            {
+                StatusMessage = e.Message;
+            }
+        }
 
         public void LoadSettings(string Name)
         {
-            string path = "";
+            string path = string.Empty;
             //if (MainView.Portable)
             //    path = "";
             //else
@@ -546,124 +559,164 @@ namespace KryGamesBot.Ava.ViewModels
             //do all of this async to the gui somewhow?
         }
 
-        void LoadInstanceSettings(string FileLocation)
-        {
-            string Settings = "";
-            using (StreamReader sr = new StreamReader(FileLocation))
-            {
-                Settings = sr.ReadToEnd();
-            }
-            InstanceSettings tmp = JsonSerializer.Deserialize<InstanceSettings>(Settings);
-            //botIns.ga
-
-            var tmpsite = DoormatBot.Doormat.Sites.FirstOrDefault(m => m.Name == tmp.Site);
-            if (tmpsite != null)
-            {
-                botIns.CurrentSite = Activator.CreateInstance(tmpsite.SiteType(),_logger) as DoormatCore.Sites.BaseSite;
-                SiteChanged(botIns.CurrentSite, tmp.Currency, tmp.Game);
-            }
-            if (tmp.Game != null)
-                botIns.CurrentGame = Enum.Parse<DoormatCore.Games.Games>(tmp.Game);
-
-        }
-
-        void SaveINstanceSettings(string FileLocation)
-        {
-            string Settings = JsonSerializer.Serialize<InstanceSettings>(new InstanceSettings
-            {
-                Site = botIns.CurrentSite?.GetType()?.Name,
-                AutoLogin = false,
-                Game = botIns.CurrentGame.ToString(),
-                Currency = botIns.CurrentSite?.CurrentCurrency
-            });
-            File.WriteAllText(FileLocation, Settings);
-        }
-
-        public ICommand StartCommand { get; set; }
-        void Start()
-        {
-            if (!botIns.Running)
-            {
-                StrategyVM?.Saving();
-                botIns.SaveBetSettings(BetSettingsFile);
-                botIns.Start();
-            }           
-        }
-
-        public ICommand StopCommand { get; set; }
-        void Stop()
-        {
-            botIns.StopStrategy("Stop button clicked");
-        }
-
-        public ICommand ResumeCommand { get; set; }
-        void Resume()
-        {
-            botIns.Resume();
-        }
-
-        public ICommand StopOnWinCommand { get; set; }
-        void StopOnWin()
-        {
-            botIns.StopOnWin = true;
-        }
-        public ICommand LogOutCommand { get; set; }
-        void LogOut()
-        {
-            botIns.StopStrategy("Logging Out");
-            botIns.CurrentSite.Disconnect();
-            ShowLogin();
-        }
-
-        public ICommand ChangeSiteCommand { get; set; }
-        void ChangeSite()
-        {
-            botIns.StopStrategy("Logging Out");
-            botIns.CurrentSite.Disconnect();
-            ShowSites = true;
-        }
-
-        public ICommand SimulateCommand { get; }
-
-        async Task Simulate()
-        {
-            SimulationViewModel simControl = new SimulationViewModel(_logger);
-            simControl.CurrentSite = botIns.CurrentSite;
-            simControl.Strategy = botIns.Strategy;
-            simControl.BetSettings = botIns.BetSettings;
-            await ShowSimulation.Handle(simControl);
-        }
-
-        public ICommand ExitCommand { get; }
-
-        void Exit()
-        {
-            throw new NotImplementedException();
-        }
-
-        public ICommand OpenCommand { get; }
-
-        void Open()
-        {
-            throw new NotImplementedException();
-        }
-
-        public ICommand SaveCommand { get; }
-
-        void Save()
-        {
-            throw new NotImplementedException();
-        }
-
         public void OnClosing()
         {
             botIns.StopStrategy("Application Closing");
             if (botIns.CurrentSite != null)
                 botIns.CurrentSite.Disconnect();
-            string path = "";            
-            path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\";            
+            string path = string.Empty;
+            path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\";
             botIns.SaveBetSettings(path + InstanceName + ".betset");
             SaveINstanceSettings(path + InstanceName + ".siteset");
         }
+
+        public AdvancedViewModel AdvancedSettingsVM { get; set; }// = new AdvancedViewModel();
+        public DoormatBot.Doormat? BotInstance { get => botIns; set { botIns = value; this.RaisePropertyChanged(); } }
+
+        public bool CanResume
+        {
+            get { return canResume; }
+            set { canResume = value; this.RaisePropertyChanged(); }
+        }
+
+        public bool CanStart
+        {
+            get { return canStart; }
+            set { canStart = value; this.RaisePropertyChanged(); }
+        }
+
+        public ICommand ChangeSiteCommand { get; set; }
+        public ProfitChartViewModel ChartData { get; set; }// = new ProfitChartViewModel();
+
+        public string[] Currencies
+        {
+            get { return BotInstance?.CurrentSite?.Currencies; }
+        }
+        public int? CurrentCurrency
+        {
+            get { return BotInstance?.CurrentSite?.Currency; }
+            set { if (BotInstance?.CurrentSite != null) BotInstance.CurrentSite.Currency = (value >= 0 ? value : 0) ?? 0; this.RaisePropertyChanged(); }
+        }
+        public int? CurrentGame
+        {
+            get { return Array.IndexOf(BotInstance?.CurrentSite?.SupportedGames, BotInstance?.CurrentGame); }
+            set { if (BotInstance?.CurrentSite != null) BotInstance.CurrentGame = BotInstance?.CurrentSite?.SupportedGames[(value >= 0 ? value : 0) ?? 0] ?? DoormatCore.Games.Games.Dice; }
+        }
+
+        public ICommand ExitCommand { get; }
+        public DoormatCore.Games.Games[] Games
+        {
+            get { return BotInstance?.CurrentSite?.SupportedGames; }
+        }
+        public string InstanceName { get; set; }
+        public bool IsSelectSiteViewVisible { get; set; }
+
+        public string LastAction
+        {
+            get { return lastAction; }
+            set { lastAction = value; this.RaisePropertyChanged(); }
+        }
+        public iLiveBet LiveBets { get => _liveBets; set { _liveBets = value; this.RaisePropertyChanged(); } }
+
+        public bool LoggedIn
+        {
+            get { return botIns?.LoggedIn ?? false; }
+        }
+        public ICommand LogOutCommand { get; set; }
+
+        public bool NotLoggedIn
+        {
+            get { return !(botIns?.LoggedIn ?? false); }
+        }
+
+        public ICommand OpenCommand { get; }
+        public iPlaceBet PlaceBetVM { get => _placeBetVM; set { _placeBetVM = value; this.RaisePropertyChanged(); } }
+        public ResetSettingsViewModel ResetSettingsVM { get; set; }// = new ResetSettingsViewModel();
+
+        public ICommand ResumeCommand { get; set; }
+        public bool Running
+        {
+            get { return botIns?.Running ?? false; }
+        }
+
+        public ICommand SaveCommand { get; }
+
+
+
+
+        public string SelectedStrategy
+        {
+            get { return BotInstance?.Strategy?.StrategyName; }
+            set { SetStrategy(value); }
+        }
+        public SelectSiteViewModel SelectSite { get; set; }
+        public SessionStatsViewModel SessionStatsData { get; set; }// = new SessionStatsViewModel();
+
+
+        public bool ShowBot
+        {
+            get { return !ShowSites; }
+
+        }
+
+        public bool ShowChart
+        {
+            get { return showChart; }
+            set { showChart = value; this.RaisePropertyChanged(); }
+        }
+        public Interaction<LoginViewModel, LoginViewModel?> ShowDialog { get; }
+
+        public bool ShowLiveBets
+        {
+            get { return showLiveBets; }
+            set { showLiveBets = value; this.RaisePropertyChanged(); }
+        }
+        public Interaction<SimulationViewModel, SimulationViewModel?> ShowSimulation { get; }
+
+        public bool ShowSites
+        {
+            get { return showSites; }
+            set { showSites = value; this.RaisePropertyChanged(); this.RaisePropertyChanged(nameof(ShowBot)); }
+        }
+
+        public bool ShowStats
+        {
+            get { return showStats; }
+            set { showStats = value; this.RaisePropertyChanged(); }
+        }
+
+        public ICommand SimulateCommand { get; }
+        public SiteStatsViewModel SiteStatsData { get; set; }// = new SiteStatsViewModel();
+
+        public ICommand StartCommand { get; set; }
+
+        public string StatusMessage
+        {
+            get { return _status; }
+            set { _status = value; this.RaisePropertyChanged(); }
+        }
+
+        public ICommand StopCommand { get; set; }
+
+        public ICommand StopOnWinCommand { get; set; }
+
+        public bool Stopped
+        {
+            get { return !(botIns?.Running ?? false); }
+        }
+
+        public IStrategy StrategyVM
+        {
+            get { return _strategyVM; }
+            set { _strategyVM = value; this.RaisePropertyChanged(); }
+        }
+
+        public string Title
+        {
+            get { return title; }
+            set { title = value; this.RaisePropertyChanged(); }
+        }
+        public TriggersViewModel TriggersVM { get; set; }
+        public Interaction<RollVerifierViewModel, Unit?> ShowRollVerifier { get; internal set; }
     }
 }

@@ -35,7 +35,9 @@
         <StackPanel  Orientation="Horizontal" HorizontalAlignment="Center" IsEnabled="{Binding CanLogIn}">
             <Button Margin="5" Command="{Binding LoginCommand}" >
                 <StackPanel Orientation="Horizontal">
-
+                    <actipro:RingSpinner Width="24" Height="24" Classes="accent"
+                                         Background="{actipro:ThemeResource Container5BackgroundBrush}"
+                                         LineThickness="3" LineCap="Flat" IsSpinning="True" IsVisible="{Binding LoggingIn}" />
                     <TextBlock Text="Log In"></TextBlock>
                 </StackPanel>
             </Button>

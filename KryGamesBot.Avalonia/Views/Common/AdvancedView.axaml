@@ -8,27 +8,27 @@
              x:Class="KryGamesBot.Ava.Views.Common.AdvancedView">
     <ScrollViewer>
         <StackPanel Orientation="Vertical">
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="Auto withdraw/Tip" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="{DynamicResource Localization.Common.Advanced.AutoWith}" HorizontalAlignment="Center"/>
 
             <Expander Margin="2" IsExpanded="True" Header="{Binding}"  >
                 <Expander.HeaderTemplate>
                     <DataTemplate x:DataType="vm:AdvancedViewModel">
                         <Grid>
-                            <TextBlock Text="Upper Limit" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource Localization.Common.Advanced.UpperLimit}" HorizontalAlignment="Center"/>
                             <ToggleSwitch Classes="theme-solid accent"  IsChecked="{Binding BetSettings.EnableUpperLimit }" HorizontalAlignment="Left" />
                         </Grid>
                     </DataTemplate>
                 </Expander.HeaderTemplate>
                 <Grid RowDefinitions="*,*,*,*,*" ColumnDefinitions="*,2*">
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="When" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{DynamicResource Localization.Common.When}" VerticalAlignment="Center"/>
                     <ComboBox SelectedValue="{Binding BetSettings.UpperLimitCompare}" Margin="1" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch"/>
-                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Is more than" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{DynamicResource Localization.Common.IsMoreThan}" VerticalAlignment="Center"/>
                     <NumericUpDown Value="{Binding BetSettings.UpperLimit}" Margin="1" Grid.Row="1" Grid.Column="1"/>
-                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Then" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="{DynamicResource Localization.Common.Then}" VerticalAlignment="Center"/>
                     <ComboBox SelectedValue="{Binding BetSettings.UpperLimitAction}" Margin="1" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch"/>
-                    <TextBlock Grid.Row="3" Grid.Column="0" Text="This amount" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="{DynamicResource Localization.Common.ThisAmount}" VerticalAlignment="Center"/>
                     <NumericUpDown  Value="{Binding BetSettings.UpperLimitActionAmount}" Margin="1" Grid.Row="3" Grid.Column="1"/>
-                    <TextBlock Grid.Row="4" Grid.Column="0" Text="To" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="{DynamicResource Localization.Common.To}" VerticalAlignment="Center"/>
                     <TextBox Text="{Binding BetSettings.UpperLimitAddress}" Margin="1" Grid.Row="4" Grid.Column="1"/>
                 </Grid>
             </Expander>
@@ -37,21 +37,21 @@
                 <Expander.HeaderTemplate>
                     <DataTemplate x:DataType="vm:AdvancedViewModel">
                         <Grid>
-                            <TextBlock Text="Lower Limit" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource Localization.Common.Advanced.LowerLimit}" HorizontalAlignment="Center"/>
                             <ToggleSwitch Classes="theme-solid accent" IsChecked="{Binding BetSettings.EnableLowerLimit }" HorizontalAlignment="Left" />
                         </Grid>
                     </DataTemplate>
                 </Expander.HeaderTemplate>
                 <Grid RowDefinitions="*,*,*,*,*" ColumnDefinitions="*,2*">
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="When" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{DynamicResource Localization.Common.When}" VerticalAlignment="Center"/>
                     <ComboBox SelectedValue="{Binding BetSettings.LowerLimitCompare}" Margin="1" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch"/>
-                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Is less than" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{DynamicResource Localization.Common.IsLessThan}" VerticalAlignment="Center"/>
                     <NumericUpDown Value="{Binding BetSettings.LowerLimit}" Margin="1" Grid.Row="1" Grid.Column="1"/>
-                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Then" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="{DynamicResource Localization.Common.Then}" VerticalAlignment="Center"/>
                     <ComboBox SelectedValue="{Binding BetSettings.LowerLimit}" Margin="1" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch"/>
-                    <TextBlock Grid.Row="3" Grid.Column="0" Text="This amount" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="{DynamicResource Localization.Common.ThisAmount}" VerticalAlignment="Center"/>
                     <NumericUpDown Value="{Binding BetSettings.LowerLimitActionAmount}" Margin="1" Grid.Row="3" Grid.Column="1"/>
-                    <TextBlock Grid.Row="4" Grid.Column="0" Text="To" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="{DynamicResource Localization.Common.To}" VerticalAlignment="Center"/>
                     <TextBox Text="{Binding BetSettings.LowerLimitAddress}" Margin="1" Grid.Row="4" Grid.Column="1"/>
                 </Grid>
 
@@ -60,45 +60,45 @@
                 <Expander.HeaderTemplate>
                     <DataTemplate x:DataType="vm:AdvancedViewModel">
                         <Grid>
-                            <TextBlock Text="Reset Seed" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource Localization.Common.Advanced.ResetSeed}" HorizontalAlignment="Center"/>
                         </Grid>
                     </DataTemplate>
                 </Expander.HeaderTemplate>
                 <Grid RowDefinitions="*,*,*,*,*,*,*" ColumnDefinitions="25,80,3*,2*">
                     <CheckBox IsChecked="{Binding BetSettings.EnableResetSeedBets}" Margin="1" Grid.Row="0" Grid.Column="0"/>
-                    <TextBlock VerticalAlignment="Center" Text="after every" Margin="1" Grid.Row="0" Grid.Column="1"/>
+                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Common.AfterEvery}" Margin="1" Grid.Row="0" Grid.Column="1"/>
                     <NumericUpDown Value="{Binding BetSettings.ResetSeedBets}" Margin="1" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch"/>
-                    <TextBlock VerticalAlignment="Center" Text="Bets" Margin="1" Grid.Row="0" Grid.Column="3"/>
+                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Common.Bets}" Margin="1" Grid.Row="0" Grid.Column="3"/>
 
                     <CheckBox IsChecked="{Binding BetSettings.EnableResetSeedWins}" Margin="1" Grid.Row="1" Grid.Column="0"/>
-                    <TextBlock VerticalAlignment="Center" Text="after every" Margin="1" Grid.Row="1" Grid.Column="1"/>
+                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Common.AfterEvery}" Margin="1" Grid.Row="1" Grid.Column="1"/>
                     <NumericUpDown Value="{Binding BetSettings.ResetSeedWins}" Margin="1" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Stretch"/>
-                    <TextBlock VerticalAlignment="Center" Text="Wins" Margin="1" Grid.Row="1" Grid.Column="3"/>
+                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Common.Wins}" Margin="1" Grid.Row="1" Grid.Column="3"/>
 
                     <CheckBox IsChecked="{Binding BetSettings.EnableResetSeedWinStreak}" Margin="1" Grid.Row="2" Grid.Column="0"/>
-                    <TextBlock VerticalAlignment="Center" Text="after every" Margin="1" Grid.Row="2" Grid.Column="1"/>
+                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Common.AfterEvery}" Margin="1" Grid.Row="2" Grid.Column="1"/>
                     <NumericUpDown Value="{Binding BetSettings.ResetSeedWinStreak}" Margin="1" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Stretch"/>
-                    <TextBlock VerticalAlignment="Center" Text="Wins in a row" Margin="1" Grid.Row="2" Grid.Column="3"/>
+                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Common.WinsInARow}" Margin="1" Grid.Row="2" Grid.Column="3"/>
 
                     <CheckBox IsChecked="{Binding BetSettings.EnableResetSeedLosses}" Margin="1" Grid.Row="3" Grid.Column="0"/>
-                    <TextBlock VerticalAlignment="Center" Text="after every" Margin="1" Grid.Row="3" Grid.Column="1"/>
+                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Common.AfterEvery}" Margin="1" Grid.Row="3" Grid.Column="1"/>
                     <NumericUpDown Value="{Binding BetSettings.ResetSeedLosses}" Margin="1" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Stretch"/>
-                    <TextBlock VerticalAlignment="Center" Text="Losses" Margin="1" Grid.Row="3" Grid.Column="3"/>
+                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Common.Losses}" Margin="1" Grid.Row="3" Grid.Column="3"/>
 
                     <CheckBox IsChecked="{Binding BetSettings.EnableResetSeedLossStreak}" Margin="1" Grid.Row="4" Grid.Column="0"/>
-                    <TextBlock VerticalAlignment="Center" Text="after every" Margin="1" Grid.Row="4" Grid.Column="1"/>
+                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Common.AfterEvery}" Margin="1" Grid.Row="4" Grid.Column="1"/>
                     <NumericUpDown Value="{Binding BetSettings.ResetSeedLossStreak}" Margin="1" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Stretch"/>
-                    <TextBlock VerticalAlignment="Center" Text="Losses in a row" Margin="1" Grid.Row="4" Grid.Column="3"/>
+                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Common.LossesInARow}" Margin="1" Grid.Row="4" Grid.Column="3"/>
 
                     <CheckBox IsChecked="{Binding BetSettings.EnableResetSeedProfit}" Margin="1" Grid.Row="5" Grid.Column="0"/>
-                    <TextBlock VerticalAlignment="Center" Text="after every" Margin="1" Grid.Row="5" Grid.Column="1"/>
+                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Common.AfterEvery}" Margin="1" Grid.Row="5" Grid.Column="1"/>
                     <NumericUpDown Value="{Binding BetSettings.ResetSeedProfit}" Margin="1" Grid.Row="5" Grid.Column="2" HorizontalAlignment="Stretch"/>
-                    <TextBlock VerticalAlignment="Center" Text="Profit" Margin="1" Grid.Row="5" Grid.Column="3"/>
+                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Common.Profit}" Margin="1" Grid.Row="5" Grid.Column="3"/>
 
                     <CheckBox IsChecked="{Binding BetSettings.EnableResetSeedLoss}" Margin="1" Grid.Row="6" Grid.Column="0"/>
-                    <TextBlock VerticalAlignment="Center" Text="after every" Margin="1" Grid.Row="6" Grid.Column="1"/>
+                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Common.AfterEvery}" Margin="1" Grid.Row="6" Grid.Column="1"/>
                     <NumericUpDown Value="{Binding BetSettings.ResetSeedLoss}" Margin="1" Grid.Row="6" Grid.Column="2" HorizontalAlignment="Stretch"/>
-                    <TextBlock VerticalAlignment="Center" Text="Loss" Margin="1" Grid.Row="6" Grid.Column="3"/>
+                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Common.Loss}" Margin="1" Grid.Row="6" Grid.Column="3"/>
                 </Grid>
 
 
@@ -107,7 +107,7 @@
                 <Expander.HeaderTemplate>
                     <DataTemplate x:DataType="vm:AdvancedViewModel">
                         <Grid>
-                            <TextBlock Text="Bot speed" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource Localization.Common.Advanced.BotSpeed}" HorizontalAlignment="Center"/>
                             <ToggleSwitch  Classes="theme-solid accent" IsChecked="{Binding BetSettings.EnableBotSpeed }" HorizontalAlignment="Left" />
                         </Grid>
                     </DataTemplate>
@@ -115,9 +115,10 @@
 
                 <Grid RowDefinitions="*,*" ColumnDefinitions="2*,*">
                     <NumericUpDown Value="{Binding BetSettings.BotSpeed}" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch"/>
-                    <TextBlock Grid.Row="0" Grid.Column="1">Bets per second"</TextBlock>
-                    <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
-                        By default, the bot bets as fast as it can. The bot speed setting should only be enabled if you intend to slow down the betting speed or if you are getting errors from the site.
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{DynamicResource Localization.Common.Advanced.BetsPS}" VerticalAlignment="Center"></TextBlock>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="Wrap"
+                               Text="{DynamicResource Localization.Common.Advanced.BotSpeedExplain}">
+
                     </TextBlock>
                 </Grid>
 
