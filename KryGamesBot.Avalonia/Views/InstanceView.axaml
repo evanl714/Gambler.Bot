@@ -47,7 +47,7 @@
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Simulate}" Command="{Binding SimulateCommand}"  IsEnabled="{Binding ShowBot}"/>
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.BetHistory}"  IsEnabled="{Binding ShowBot}"/>
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.RollVerifier}" Command="{Binding RollVerifier}"  IsEnabled="{Binding ShowBot}"/>
-                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Settings}"/>
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Settings}" Command="{Binding OpenSettingsCommand}"/>
 
                 </MenuItem>
                 <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Site}">

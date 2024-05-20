@@ -3,7 +3,9 @@ using Avalonia.Controls;
 using Avalonia.ReactiveUI;
 using Avalonia.VisualTree;
 using KryGamesBot.Ava.ViewModels;
+using KryGamesBot.Ava.ViewModels.AppSettings;
 using KryGamesBot.Ava.ViewModels.Common;
+using KryGamesBot.Ava.Views.AppSettings;
 using KryGamesBot.Ava.Views.Common;
 using ReactiveUI;
 using System.Reactive;
@@ -17,12 +19,14 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
     public InstanceView()
     {
         InitializeComponent();
+        Loaded += InstanceView_Loaded;
         if (!Design.IsDesignMode)
         {
             this.WhenActivated(action =>
             {
                 ViewModel!.ShowSimulation.RegisterHandler(DoShowSimulation);
                 ViewModel!.ShowRollVerifier.RegisterHandler(ShowRollVerifier);
+                ViewModel!.ShowSettings.RegisterHandler(ShowSettings);
                 ViewModel!.ShowDialog.RegisterHandler(DoShowDialogAsync);
 
             });
@@ -31,6 +35,12 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
         this.DetachedFromVisualTree += OnDetachedFromVisualTree;
 
     }
+
+    private void InstanceView_Loaded(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        ViewModel.Loaded();
+    }
+
     private async Task DoShowDialogAsync(InteractionContext<LoginViewModel,
                                         LoginViewModel?> interaction)
     {
@@ -53,6 +63,20 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
         window.Width = 500;
         window.Height = 500;
         window.Title = $"Roll Verifier - {interaction.Input.Site?.SiteName}";
+        window.Show();
+    }
+    private async Task ShowSettings(InteractionContext<GlobalSettingsViewModel,
+                                        Unit?> interaction)
+    {
+        var ParentWindow = this.FindAncestorOfType<Window>();
+        ReactiveWindow<GlobalSettingsViewModel> window = new();
+        window.DataContext = interaction.Input;
+        var dialog = new GlobalSettingsView();
+        window.Content = dialog;
+        dialog.DataContext = interaction.Input;
+        window.Width = 600;
+        window.Height = 500;
+        window.Title = $"Settings";
         window.Show();
     }
 

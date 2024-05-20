@@ -47,5 +47,15 @@
     <system:String x:Key="Localization.Common.Advanced.LowerLimit">Lower Limit</system:String>
     <system:String x:Key="Localization.Common.Advanced.ResetSeed">Reset Seed</system:String>
     <system:String x:Key="Localization.Common.Advanced.BotSpeedExplain">By default, the bot bets as fast as it can. The bot speed setting should only be enabled if you intend to slow down the betting speed or if you are getting errors from the site.</system:String>
-
+    <system:String x:Key="Localization.AppSettings.General">General</system:String>
+    <system:String x:Key="Localization.AppSettings.LookAndFeel">Look and feel</system:String>
+    <system:String x:Key="Localization.AppSettings.BetStorage">Bet storage</system:String>
+    <system:String x:Key="Localization.AppSettings.Strategies">Strategies</system:String>
+    <system:String x:Key="Localization.AppSettings.Notifications">Notifications</system:String>
+    <system:String x:Key="Localization.AppSettings.Updates">Updates</system:String>
+    <system:String x:Key="Localization.AppSettings.LiveBets">Live bets</system:String>
+    <system:String x:Key="Localization.AppSettings.Donate">Donate</system:String>
+    <system:String x:Key="Localization.AppSettings.Proxy">Proxy</system:String>
+    <system:String x:Key="Localization.AppSettings.Errors">Errors</system:String>
+    <system:String x:Key="Localization.AppSettings.AutoLogin">Auto Login</system:String>
 </ResourceDictionary>

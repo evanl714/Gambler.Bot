@@ -4,6 +4,7 @@ using DoormatBot.Strategies;
 using KryGamesBot.Ava.Classes;
 using KryGamesBot.Ava.Classes.BetsPanel;
 using KryGamesBot.Ava.Classes.Strategies;
+using KryGamesBot.Ava.ViewModels.AppSettings;
 using KryGamesBot.Ava.ViewModels.Common;
 using KryGamesBot.Ava.ViewModels.Games.Dice;
 using KryGamesBot.Ava.ViewModels.Strategies;
@@ -19,6 +20,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using static Community.CsharpSqlite.Sqlite3;
 
 namespace KryGamesBot.Ava.ViewModels
 {
@@ -83,8 +85,8 @@ namespace KryGamesBot.Ava.ViewModels
             ShowDialog = new Interaction<LoginViewModel, LoginViewModel?>();
             ShowSimulation = new Interaction<SimulationViewModel, SimulationViewModel?>();
             ShowRollVerifier = new Interaction<RollVerifierViewModel, Unit?>();
+            ShowSettings = new Interaction<GlobalSettingsViewModel, Unit?>();
             tmp.Strategy = new Martingale(_logger);
-            tmp.GetStrats();
             PlaceBetVM = new DicePlaceBetViewModel(_logger);
             PlaceBetVM.PlaceBet += PlaceBetVM_PlaceBet;
             tmp.OnGameChanged += BotIns_OnGameChanged;
@@ -100,20 +102,8 @@ namespace KryGamesBot.Ava.ViewModels
             tmp.OnSiteError += Tmp_OnSiteError;
             BotInstance = tmp;
             botIns.CurrentGame = DoormatCore.Games.Games.Dice;
-            /*if (MainWindow.Portable && File.Exists("personalsettings.json"))
-            {
-                PersonalSettingsFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json";
-
-            }
-            //Check if global settings for this account exists
-            else*/
-            if (/*!MainWindow.Portable &&*/ File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json"))
-            {
-                PersonalSettingsFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json";
-                botIns.LoadPersonalSettings(PersonalSettingsFile);
-            }
-
-            LoadSettings("default");
+            
+            
             
 
         }
@@ -300,7 +290,8 @@ namespace KryGamesBot.Ava.ViewModels
             var tmpsite = DoormatBot.Doormat.Sites.FirstOrDefault(m => m.Name == tmp.Site);
             if (tmpsite != null)
             {
-                botIns.CurrentSite = Activator.CreateInstance(tmpsite.SiteType(), _logger) as DoormatCore.Sites.BaseSite;
+                botIns.CurrentSite = Activator.CreateInstance(tmpsite.SiteType(), _logger) as DoormatCore.Sites.BaseSite;                
+                ShowSites = false;
                 SiteChanged(botIns.CurrentSite, tmp.Currency, tmp.Game);
             }
             if (tmp.Game != null)
@@ -414,9 +405,16 @@ namespace KryGamesBot.Ava.ViewModels
 
         async Task ShowLogin()
         {
-            var store = new LoginViewModel(botIns.CurrentSite, _logger);
-            store.LoginFinished = LoginFinished;
-            var result = await ShowDialog.Handle(store);
+            try
+            {
+                var store = new LoginViewModel(botIns.CurrentSite, _logger);
+                store.LoginFinished = LoginFinished;
+                var result = await ShowDialog.Handle(store);
+            }
+            catch (Exception e)
+            {
+
+            }
         }
 
         async Task Simulate()
@@ -517,17 +515,18 @@ namespace KryGamesBot.Ava.ViewModels
         public void LoadSettings(string Name)
         {
             string path = string.Empty;
-            //if (MainView.Portable)
-            //    path = "";
-            //else
+            if (UISettings.Portable)
+                path = "";
+            else
             {
-                path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\";
+                path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "KryGamesBot");
             }
             InstanceName = Name;
             //load bet settings
-            //if (File.Exists(path+Name + ".betset"))
+
+            if (File.Exists(Path.Combine(path,Name + ".betset")))
             {
-                BetSettingsFile = path + Name + ".betset";
+                BetSettingsFile = Path.Combine(path, Name + ".betset");
 
             }
 
@@ -536,9 +535,10 @@ namespace KryGamesBot.Ava.ViewModels
             //{
             //    dlmMainLayout.RestoreLayoutFromXml(path + Name + ".layout");
             //}
-            if (File.Exists(path + Name + ".siteset"))
+            string InstanceSettingsFile =Path.Combine( path,Name + ".siteset");
+            if (File.Exists(InstanceSettingsFile))
             {
-                LoadInstanceSettings(path + Name + ".siteset");
+                LoadInstanceSettings(InstanceSettingsFile);
 
             }
             if (File.Exists(BetSettingsFile))
@@ -554,7 +554,8 @@ namespace KryGamesBot.Ava.ViewModels
                 botIns.Strategy = new DoormatBot.Strategies.Martingale(_logger);
             }
             this.RaisePropertyChanged(nameof(SelectedStrategy));
-            //load instance settings: site, currency, game, account, password if keepass is active and logged in.
+            
+            
             //if password is available, log in.
             //do all of this async to the gui somewhow?
         }
@@ -565,9 +566,27 @@ namespace KryGamesBot.Ava.ViewModels
             if (botIns.CurrentSite != null)
                 botIns.CurrentSite.Disconnect();
             string path = string.Empty;
-            path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\";
-            botIns.SaveBetSettings(path + InstanceName + ".betset");
-            SaveINstanceSettings(path + InstanceName + ".siteset");
+            path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) , "KryGamesBot");
+            botIns.SaveBetSettings(Path.Combine(path, InstanceName + ".betset"));
+            SaveINstanceSettings(Path.Combine(path, InstanceName + ".siteset"));
+        }
+
+        internal async Task Loaded()
+        {
+            botIns.GetStrats();
+            if (UISettings.Portable && File.Exists("PersonalSettings.json"))
+            {
+                PersonalSettingsFile ="PersonalSettings.json";
+
+            }
+            //Check if global settings for this account exists
+            else if (!UISettings.Portable && File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json"))
+            {
+                PersonalSettingsFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json";
+                botIns.LoadPersonalSettings(PersonalSettingsFile);
+            }
+
+            LoadSettings("default");
         }
 
         public AdvancedViewModel AdvancedSettingsVM { get; set; }// = new AdvancedViewModel();
@@ -599,7 +618,11 @@ namespace KryGamesBot.Ava.ViewModels
         }
         public int? CurrentGame
         {
-            get { return Array.IndexOf(BotInstance?.CurrentSite?.SupportedGames, BotInstance?.CurrentGame); }
+            get {  
+                if (BotInstance?.CurrentSite == null) 
+                    return -1;
+                return  Array.IndexOf(BotInstance?.CurrentSite?.SupportedGames, BotInstance?.CurrentGame); 
+            }
             set { if (BotInstance?.CurrentSite != null) BotInstance.CurrentGame = BotInstance?.CurrentSite?.SupportedGames[(value >= 0 ? value : 0) ?? 0] ?? DoormatCore.Games.Games.Dice; }
         }
 
@@ -716,7 +739,15 @@ namespace KryGamesBot.Ava.ViewModels
             get { return title; }
             set { title = value; this.RaisePropertyChanged(); }
         }
+
+        public async Task OpenSettingsCommand()
+        {
+            GlobalSettingsViewModel simControl = new GlobalSettingsViewModel(_logger);
+
+            await ShowSettings.Handle(simControl);
+        }
         public TriggersViewModel TriggersVM { get; set; }
         public Interaction<RollVerifierViewModel, Unit?> ShowRollVerifier { get; internal set; }
+        public Interaction<GlobalSettingsViewModel, Unit?> ShowSettings { get; internal set; }
     }
 }

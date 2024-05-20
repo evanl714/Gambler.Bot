@@ -10,6 +10,7 @@
              xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
              xmlns:behaviours="using:KryGamesBot.Ava.Behaviours"
              >
+
     <Grid>
         <TabControl>
             <TabItem Header="Basic">
