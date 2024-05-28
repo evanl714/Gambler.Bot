@@ -743,7 +743,7 @@ namespace KryGamesBot.Ava.ViewModels
         public async Task OpenSettingsCommand()
         {
             GlobalSettingsViewModel simControl = new GlobalSettingsViewModel(_logger);
-
+            simControl.Settings = botIns.PersonalSettings;
             await ShowSettings.Handle(simControl);
         }
         public TriggersViewModel TriggersVM { get; set; }

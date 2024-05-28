@@ -48,19 +48,26 @@ namespace KryGamesBot.Ava.ViewModels.AppSettings
             get { return pw; }
             set { pw = value; this.RaisePropertyChanged(nameof(Pw)); }
         }
-        public virtual string ConnectionString()
+        public string ConnectionString()
         {
-            throw new NotImplementedException();
+            return $"Data Source={DataSource};Initial Catalog={dbName};User Id={Username};Password={pw};persist security info=true;";
         }
 
         public virtual string Provider()
         {
-            throw new NotImplementedException();
+            return "MSSQL";
         }
 
-        public virtual bool Validate()
+        public bool Validate()
         {
-            throw new NotImplementedException();
+            if (DataSource != null && dbName != null && Username != null && pw != null)
+            {
+                //attempt to make a connection
+                return false;//if not valid
+                //else return true;
+            }
+            return false;
+
         }
 
 

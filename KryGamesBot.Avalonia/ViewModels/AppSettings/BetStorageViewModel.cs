@@ -15,7 +15,11 @@ namespace KryGamesBot.Ava.ViewModels.AppSettings
         public PersonalSettings Settings
         {
             get { return settings; }
-            set { settings = value; this.RaisePropertyChanged(); }
+            set { settings = value; this.RaisePropertyChanged();
+                Password = settings.EncryptConstring ? settings.EncrConnectionString : "";
+                SelectedStorageTypeIndex = settings.Provider;
+                 
+            }
         }
 
         private string password;
@@ -73,13 +77,6 @@ namespace KryGamesBot.Ava.ViewModels.AppSettings
             return DBVM.Validate();
         }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (Settings != null)
-            {
-                SelectedStorageTypeIndex = Settings.Provider;
-
-            }
-        }
+        
     }
 }
