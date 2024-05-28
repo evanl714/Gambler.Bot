@@ -1,17 +1,15 @@
-﻿using DoormatBot.Helpers;
+﻿using Avalonia.Interactivity;
+using DoormatBot.Helpers;
 using KryGamesBot.Ava.Classes;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KryGamesBot.Ava.ViewModels.AppSettings
 {
     public class BetStorageViewModel: ViewModelBase
     {
+        public List<string> Storages { get; set; }
         private PersonalSettings settings;
 
         public PersonalSettings Settings
@@ -20,32 +18,68 @@ namespace KryGamesBot.Ava.ViewModels.AppSettings
             set { settings = value; this.RaisePropertyChanged(); }
         }
 
-        private UISettings uiSettings;
+        private string password;
 
-        public UISettings UiSettings
+        public string Password
         {
-            get { return uiSettings; }
-            set { uiSettings = value; this.RaisePropertyChanged(); }
+            get { return password; }
+            set { password = value; }
+        }
+        private string selectedStorageTypeIndex= "SQLite (Default)";
+
+        public string SelectedStorageTypeIndex
+        {
+            get { return selectedStorageTypeIndex; }
+            set { selectedStorageTypeIndex = value; this.RaisePropertyChanged(); SetStorageType(); }
         }
 
-        
-
-        public string DonateMode
+        private void SetStorageType()
         {
-            get { return UiSettings?.DonateMode; }
-            set 
-            { 
-                if (UiSettings != null)
-                    UiSettings.DonateMode = value; 
-                this.RaisePropertyChanged(nameof(ShowDonatePercentage));
+            switch (SelectedStorageTypeIndex)
+            {
+                case "SQLite (Default)": DBVM = new SQLiteViewModel(_logger) ; break;
+                case "SQL Server": DBVM = new SQLServerViewModel(_logger); break;
+                case "MySQL": DBVM = new MySqlViewModel(_logger); break;
+                case "MongoDb": DBVM = new MongoDBViewModel(_logger); break;
+                case "PostGres": DBVM = new PostGresViewModel(_logger); break;
+                default: DBVM = new SQLiteViewModel(_logger); break;
             }
         }
 
-        public bool ShowDonatePercentage { get => DonateMode == "Prompt"|| DonateMode=="Auto"; }
+        private iDatabaseForm dbVM;
+
+        public iDatabaseForm DBVM
+        {
+            get { return dbVM; }
+            set { dbVM = value; this.RaisePropertyChanged(); }
+        }
+
 
         public BetStorageViewModel(ILogger logger) : base(logger)
         {
-            UiSettings = UISettings.Settings;
+            SelectedStorageTypeIndex = "SQLite (Default)";
+            Storages = new List<string>() { "SQLite (Default)", "SQL Server", "MySQL", "MongoDb", "PostGres" };
+        }
+
+        public void UpdateSettings()
+        {
+            Settings.Provider = DBVM.Provider();
+            Settings.EncryptConstring = !string.IsNullOrWhiteSpace(Password);
+            Settings.SetConnectionString(DBVM.ConnectionString(), Password);
+        }
+
+        public bool Verify()
+        {
+            return DBVM.Validate();
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (Settings != null)
+            {
+                SelectedStorageTypeIndex = Settings.Provider;
+
+            }
         }
     }
 }

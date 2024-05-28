@@ -16,7 +16,7 @@
             <local:GeneralSettingsView DataContext="{Binding General}"/>
         </TabItem>
         <TabItem Header="{DynamicResource Localization.AppSettings.BetStorage}">
-            <local:BetStorageView DataContext="{Binding Storage}"/>
+            <ContentControl Content="{Binding Storage}"/>
         </TabItem>
         <TabItem Header="{DynamicResource Localization.AppSettings.Notifications}">
             <common:TriggersView DataContext="{Binding Triggers}"/>

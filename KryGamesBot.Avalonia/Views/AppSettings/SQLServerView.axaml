@@ -1,0 +1,30 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="KryGamesBot.Ava.Views.AppSettings.SQLServerView"
+             xmlns:vm="using:KryGamesBot.Ava.ViewModels.AppSettings"
+             x:DataType="vm:SQLServerViewModel"
+             >
+    <Grid VerticalAlignment="Top">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="DataSource" Grid.Column="0" Grid.Row="0"/>
+        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding DataSource}"/>
+        <TextBlock Text="Database" Grid.Column="0" Grid.Row="1"/>
+        <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Database}"/>
+        <TextBlock Text="Username" Grid.Column="0" Grid.Row="2"/>
+        <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Username}"/>
+        <TextBlock Text="Password" Grid.Column="0" Grid.Row="3"/>
+        <TextBox Grid.Column="1" Grid.Row="3" PasswordChar="*" Text="{Binding Pw}"/>
+    </Grid>
+</UserControl>

@@ -1,6 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using KryGamesBot.Ava.ViewModels;
+using KryGamesBot.Ava.ViewModels.AppSettings;
+using KryGamesBot.Ava.Views.AppSettings;
 using System;
 
 namespace KryGamesBot.Ava
@@ -15,6 +17,13 @@ namespace KryGamesBot.Ava
             if (type != null)
             {
                 return (Control)Activator.CreateInstance(type)!;
+            }
+            else
+            {
+                if (data is SQLServerViewModel)
+                {
+                    return new SQLServerView();                        
+                }
             }
 
             return new TextBlock { Text = "Not Found: " + name };
