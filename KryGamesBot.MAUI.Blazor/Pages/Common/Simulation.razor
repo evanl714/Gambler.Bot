@@ -1,8 +1,8 @@
 ﻿@using System.Diagnostics;
 @using CommunityToolkit.Maui.Storage;
-@using DoormatBot.Helpers;
-@using DoormatBot.Strategies;
-@using DoormatCore.Sites;
+@using Gambler.Bot.AutoBet.Helpers;
+@using Gambler.Bot.AutoBet.Strategies;
+@using Gambler.Bot.Core.Sites;
 <h3>Simulation</h3>
 <div class="container-fluid d-flex">
 <div class="col">
@@ -45,7 +45,7 @@ Projected Remaining: <DxTimeEdit @bind-Time="@ProjectedRemaining" ReadOnly=true 
     [Parameter]
     public InternalBetSettings BetSettings { get; set; }
     bool EnableSave = false;
-    private DoormatBot.Helpers.Simulation CurrentSimulation = new DoormatBot.Helpers.Simulation(0,0,null,null,null,"",false);
+    private Gambler.Bot.AutoBet.Helpers.Simulation CurrentSimulation = new Gambler.Bot.AutoBet.Helpers.Simulation(0,0,null,null,null,"",false);
     bool GenerateSeeds = true;
     bool EnableStart = true;
     bool enableChart = false;
@@ -60,7 +60,7 @@ Projected Remaining: <DxTimeEdit @bind-Time="@ProjectedRemaining" ReadOnly=true 
     async Task Start()
     {
         Bets = new List<decimal>();
-        CurrentSimulation = new DoormatBot.Helpers.Simulation(StartingBalance, NumberOfBets, CurrentSite, Strategy, BetSettings, Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), true);
+        CurrentSimulation = new Gambler.Bot.AutoBet.Helpers.Simulation(StartingBalance, NumberOfBets, CurrentSite, Strategy, BetSettings, Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), true);
         EnableSave = false;
         CurrentSimulation.OnSimulationWriting += Tmp_OnSimulationWriting;
         CurrentSimulation.OnSimulationComplete += Tmp_OnSimulationComplete;
@@ -99,7 +99,7 @@ Projected Remaining: <DxTimeEdit @bind-Time="@ProjectedRemaining" ReadOnly=true 
     {
 
         SimTimer.Stop();
-        DoormatBot.Helpers.Simulation tmp = sender as DoormatBot.Helpers.Simulation;
+        Gambler.Bot.AutoBet.Helpers.Simulation tmp = sender as Gambler.Bot.AutoBet.Helpers.Simulation;
         sesseionStats1.RefreshStats();
         long ElapsedMilliseconds = SimTimer.ElapsedMilliseconds;
         Progress = (decimal)tmp.TotalBetsPlaced / (decimal)tmp.Bets;
@@ -117,7 +117,7 @@ Projected Remaining: <DxTimeEdit @bind-Time="@ProjectedRemaining" ReadOnly=true 
     private void Tmp_OnSimulationWriting(object sender, EventArgs e)
     {
 
-        DoormatBot.Helpers.Simulation tmp = sender as DoormatBot.Helpers.Simulation;
+        Gambler.Bot.AutoBet.Helpers.Simulation tmp = sender as Gambler.Bot.AutoBet.Helpers.Simulation;
         //Console.WriteLine("Simulation Progress: " + tmp.TotalBetsPlaced + " bets of " + tmp.Bets);
 
         if (tmp.TotalBetsPlaced > 0)

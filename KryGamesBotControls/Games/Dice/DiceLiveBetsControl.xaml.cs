@@ -13,7 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DevExpress.Xpf.Core;
 using DevExpress.Xpf.Grid;
-using DoormatCore.Games;
+using Gambler.Bot.Core.Games;
 using KryGamesBotControls.Helpers;
 
 namespace KryGamesBotControls.Games.Dice

@@ -13,7 +13,7 @@
              xmlns:strat="using:Gambler.Bot.Views.Games.Strategies"
              xmlns:system="using:System"
              xmlns:mart="using:Gambler.Bot.Views.Games.Strategies.Martingale"
-             xmlns:dalembert="using:Gambler.Bot.Views.Games.Strategies.DAlembert" xmlns:fibonacci="using:Gambler.Bot.Views.Games.Strategies.Fibonacci" xmlns:labouchere="using:Gambler.Bot.Views.Games.Strategies.Labouchere" xmlns:PresetList="using:DoormatBot.Strategies" xmlns:presetlist="using:Gambler.Bot.Views.Games.Strategies.PresetList"         Tag="{Binding}"
+             xmlns:dalembert="using:Gambler.Bot.Views.Games.Strategies.DAlembert" xmlns:fibonacci="using:Gambler.Bot.Views.Games.Strategies.Fibonacci" xmlns:labouchere="using:Gambler.Bot.Views.Games.Strategies.Labouchere" xmlns:PresetList="using:Gambler.Bot.AutoBet.Strategies" xmlns:presetlist="using:Gambler.Bot.Views.Games.Strategies.PresetList"         Tag="{Binding}"
              xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
              >
 

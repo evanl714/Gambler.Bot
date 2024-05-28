@@ -2,7 +2,7 @@
 using DevExpress.XtraRichEdit;
 using DevExpress.XtraRichEdit.Commands;
 using DevExpress.XtraRichEdit.Services;
-using DoormatBot.Strategies;
+using Gambler.Bot.AutoBet.Strategies;
 using KryGamesBotControls.Helpers;
 using Microsoft.Win32;
 using System;
@@ -31,7 +31,7 @@ namespace KryGamesBotControls.Strategies
         protected string TemplateName { get; set; } = "LUATemplate.lua";
 
 
-        DoormatBot.Strategies.ProgrammerMode Strat = null;
+        Gambler.Bot.AutoBet.Strategies.ProgrammerMode Strat = null;
         DateTime LastChanged = DateTime.Now;
         FileSystemWatcher FileWatcher;
         public ProgrammerModeLUA()
@@ -89,7 +89,7 @@ namespace KryGamesBotControls.Strategies
 
         public event EventHandler StartBetting;
 
-        public void GameChanged(DoormatCore.Games.Games newGame)
+        public void GameChanged(Gambler.Bot.Core.Games.Games newGame)
         {
             //throw new NotImplementedException();
         }

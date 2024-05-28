@@ -1,4 +1,4 @@
-﻿using DoormatBot.Strategies;
+﻿using Gambler.Bot.AutoBet.Strategies;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,11 +19,11 @@ namespace KryGamesBotControls.Strategies
     /// </summary>
     public partial class dAlembert : BaseControl, iStrategy
     {
-        private DoormatBot.Strategies.DAlembert strategy;
+        private Gambler.Bot.AutoBet.Strategies.DAlembert strategy;
 
         public event EventHandler StartBetting;
 
-        public DoormatBot.Strategies.DAlembert Strategy
+        public Gambler.Bot.AutoBet.Strategies.DAlembert Strategy
         {
             get { return strategy; }
             set { strategy = value; OnPropertyChanged(nameof(Strategy)); }
@@ -36,15 +36,15 @@ namespace KryGamesBotControls.Strategies
             this.DataContext = this;
         }
 
-        public void GameChanged(DoormatCore.Games.Games newGame)
+        public void GameChanged(Gambler.Bot.Core.Games.Games newGame)
         {
             
         }
 
         public void SetStrategy(BaseStrategy Strategy)
         {
-            if (Strategy is DoormatBot.Strategies.DAlembert)
-                this.Strategy = Strategy as DoormatBot.Strategies.DAlembert;
+            if (Strategy is Gambler.Bot.AutoBet.Strategies.DAlembert)
+                this.Strategy = Strategy as Gambler.Bot.AutoBet.Strategies.DAlembert;
         }
 
         public bool TopAlign()

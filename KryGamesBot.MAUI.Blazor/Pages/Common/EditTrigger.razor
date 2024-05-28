@@ -1,4 +1,4 @@
-﻿@using DoormatCore.Helpers;
+﻿@using Gambler.Bot.Core.Helpers;
 <h3>SingleTrigger</h3>
 When <DxComboBox Data="Properties" @bind-Value="SelectedTrigger.TriggerProperty"></DxComboBox>
 is <DxComboBox Data="Comparisons" @bind-Value="SelectedTrigger.Comparison"></DxComboBox>
@@ -63,7 +63,7 @@ than <DxComboBox Data="Againsts" @bind-Value="SelectedTrigger.TargetType"></DxCo
 }
 @code {
     [Parameter]
-    public DoormatCore.Helpers.Trigger SelectedTrigger { get; set; } = new Trigger();
+    public Gambler.Bot.Core.Helpers.Trigger SelectedTrigger { get; set; } = new Trigger();
 
     [Parameter]
     public bool Notifications { get; set; }
@@ -91,7 +91,7 @@ than <DxComboBox Data="Againsts" @bind-Value="SelectedTrigger.TargetType"></DxCo
 
     protected override Task OnInitializedAsync()
     {
-        var props = typeof(DoormatBot.Helpers.SessionStats).GetProperties();
+        var props = typeof(Gambler.Bot.AutoBet.Helpers.SessionStats).GetProperties();
         foreach (System.Reflection.PropertyInfo x in props)
         {
             Properties.Add(x.Name);

@@ -1,5 +1,5 @@
-﻿using DoormatBot.Strategies;
-using DoormatBot.Strategies.PresetListModels;
+﻿using Gambler.Bot.AutoBet.Strategies;
+using Gambler.Bot.AutoBet.Strategies.PresetListModels;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,8 +11,8 @@ namespace KryGamesBotControls.Strategies.PresetList
     /// </summary>
     public partial class PresetListControl : BaseControl, iStrategy
     {
-        DoormatCore.Games.Games Game = DoormatCore.Games.Games.Dice;
-        public DoormatBot.Strategies.PresetList Strategy { get; set; }
+        Gambler.Bot.Core.Games.Games Game = Gambler.Bot.Core.Games.Games.Dice;
+        public Gambler.Bot.AutoBet.Strategies.PresetList Strategy { get; set; }
         public UserControl StartControl { get; set; } = new PresetDice();
         public PresetListControl()
         {
@@ -39,12 +39,12 @@ namespace KryGamesBotControls.Strategies.PresetList
 
         public event EventHandler StartBetting;
 
-        public void GameChanged(DoormatCore.Games.Games newGame)
+        public void GameChanged(Gambler.Bot.Core.Games.Games newGame)
         {
             Game = newGame;
             switch (newGame)
             {
-                case DoormatCore.Games.Games.Dice:
+                case Gambler.Bot.Core.Games.Games.Dice:
                     break;
             }
         }
@@ -56,7 +56,7 @@ namespace KryGamesBotControls.Strategies.PresetList
 
         public void SetStrategy(BaseStrategy Strategy)
         {
-            if (Strategy is DoormatBot.Strategies.PresetList lst)
+            if (Strategy is Gambler.Bot.AutoBet.Strategies.PresetList lst)
             {
                 this.Strategy = lst;
                 
@@ -76,7 +76,7 @@ namespace KryGamesBotControls.Strategies.PresetList
         {
             switch (Game)
             {
-                case DoormatCore.Games.Games.Dice: e.NewObject = new PresetDiceBet { Amount = 0, Switch=false }; break;
+                case Gambler.Bot.Core.Games.Games.Dice: e.NewObject = new PresetDiceBet { Amount = 0, Switch=false }; break;
             }
         }
     }

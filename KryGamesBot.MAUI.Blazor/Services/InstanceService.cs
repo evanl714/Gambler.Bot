@@ -1,4 +1,4 @@
-﻿using DoormatBot;
+﻿using Gambler.Bot.AutoBet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,20 +9,20 @@ namespace KryGamesBot.MAUI.Blazor.Services
 {
     public interface IInstanceService
     {
-        void AddInstance(string name,DoormatBot.Doormat instance);
-        DoormatBot.Doormat GetInstance(string name);
+        void AddInstance(string name,Gambler.Bot.AutoBet.Doormat instance);
+        Gambler.Bot.AutoBet.Doormat GetInstance(string name);
     }
 
     public class InstanceService : IInstanceService
     {
-        Dictionary<string, DoormatBot.Doormat> Instances = new Dictionary<string, DoormatBot.Doormat>();
-        public DoormatBot.Doormat GetInstance(string name)
+        Dictionary<string, Gambler.Bot.AutoBet.Doormat> Instances = new Dictionary<string, Gambler.Bot.AutoBet.Doormat>();
+        public Gambler.Bot.AutoBet.Doormat GetInstance(string name)
         {
             if (Instances.ContainsKey(name))
                 return Instances[name];
             return null;
         }
-        public void AddInstance(string name, DoormatBot.Doormat instance)
+        public void AddInstance(string name, Gambler.Bot.AutoBet.Doormat instance)
         {
             if (!Instances.ContainsKey(name))
                 Instances.Add(name, instance);

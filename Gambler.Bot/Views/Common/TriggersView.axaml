@@ -8,7 +8,7 @@
              x:DataType="vm:TriggersViewModel"
              xmlns:classes="using:Gambler.Bot.Classes"
 
-             xmlns:helpers="using:DoormatCore.Helpers"
+             xmlns:helpers="using:Gambler.Bot.Core.Helpers"
              >
     <StackPanel Orientation="Vertical">
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">

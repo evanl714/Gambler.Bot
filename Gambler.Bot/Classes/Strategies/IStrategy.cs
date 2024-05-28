@@ -8,8 +8,8 @@ namespace Gambler.Bot.Classes.Strategies
 {
     public interface IStrategy:IDisposable
     {        
-        void GameChanged(DoormatCore.Games.Games newGame);
-        void SetStrategy(DoormatBot.Strategies.BaseStrategy Strategy);
+        void GameChanged(Gambler.Bot.Core.Games.Games newGame);
+        void SetStrategy(Gambler.Bot.AutoBet.Strategies.BaseStrategy Strategy);
         bool TopAlign();
         void Saving();
 

@@ -8,8 +8,8 @@ namespace KryGamesBotControls.Strategies
     public interface iStrategy
     {
         event EventHandler StartBetting;
-        void GameChanged(DoormatCore.Games.Games newGame);
-        void SetStrategy(DoormatBot.Strategies.BaseStrategy Strategy);
+        void GameChanged(Gambler.Bot.Core.Games.Games newGame);
+        void SetStrategy(Gambler.Bot.AutoBet.Strategies.BaseStrategy Strategy);
         bool TopAlign();
         void Saving();
 

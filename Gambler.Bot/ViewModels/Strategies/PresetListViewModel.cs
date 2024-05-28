@@ -1,5 +1,5 @@
-﻿using DoormatBot.Strategies;
-using DoormatBot.Strategies.PresetListModels;
+﻿using Gambler.Bot.AutoBet.Strategies;
+using Gambler.Bot.AutoBet.Strategies.PresetListModels;
 using Gambler.Bot.Classes.BetsPanel;
 using Gambler.Bot.Classes.Strategies;
 using Gambler.Bot.ViewModels.Games.Dice;
@@ -54,7 +54,7 @@ namespace Gambler.Bot.ViewModels.Strategies
             get { return _strategy; }
             set { _strategy = value; this.RaisePropertyChanged(); }
         }
-        private DoormatCore.Games.Games _game;
+        private Gambler.Bot.Core.Games.Games _game;
 
         private ObservableCollection<PresetDiceBet> _betList;
 
@@ -64,7 +64,7 @@ namespace Gambler.Bot.ViewModels.Strategies
             set { _betList = value; }
         }
 
-        public DoormatCore.Games.Games Game
+        public Gambler.Bot.Core.Games.Games Game
         {
             get { return _game; }
             set { _game = value; this.RaisePropertyChanged(); }
@@ -97,7 +97,7 @@ namespace Gambler.Bot.ViewModels.Strategies
                 BetList.Insert(SelectedIndex + 1, new PresetDiceBet { Amount = 0 });
         }
 
-        public void GameChanged(DoormatCore.Games.Games newGame)
+        public void GameChanged(Gambler.Bot.Core.Games.Games newGame)
         {
            
         }

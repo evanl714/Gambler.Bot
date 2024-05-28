@@ -1,4 +1,4 @@
-﻿@using DoormatBot.Helpers;
+﻿@using Gambler.Bot.AutoBet.Helpers;
 @using KryGamesBot.MAUI.Blazor.Services;
 @inject IThemeService ThemeService;
 <h3>KryGamesBot Setup</h3>
@@ -158,7 +158,7 @@
     }
     async Task SaveAndClose()
     {
-        DoormatBot.Doormat tmpInstance = new DoormatBot.Doormat();
+        Gambler.Bot.AutoBet.Doormat tmpInstance = new Gambler.Bot.AutoBet.Doormat();
         tmpInstance.PersonalSettings = settings;
         //save settings and close
         if (portable)

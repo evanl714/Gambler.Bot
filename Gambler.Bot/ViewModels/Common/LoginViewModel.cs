@@ -1,5 +1,5 @@
 ﻿using Avalonia.Threading;
-using DoormatCore.Sites;
+using Gambler.Bot.Core.Sites;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using System;

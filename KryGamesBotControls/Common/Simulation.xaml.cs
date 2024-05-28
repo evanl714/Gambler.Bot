@@ -1,7 +1,7 @@
 ﻿using DevExpress.Xpf.Dialogs;
-using DoormatBot.Helpers;
-using DoormatBot.Strategies;
-using DoormatCore.Sites;
+using Gambler.Bot.AutoBet.Helpers;
+using Gambler.Bot.AutoBet.Strategies;
+using Gambler.Bot.Core.Sites;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -45,9 +45,9 @@ namespace KryGamesBotControls.Common
 
         public InternalBetSettings BetSettings { get; set; }
 
-        private DoormatBot.Helpers.Simulation simulation;
+        private Gambler.Bot.AutoBet.Helpers.Simulation simulation;
 
-        public DoormatBot.Helpers.Simulation CurrentSimulation
+        public Gambler.Bot.AutoBet.Helpers.Simulation CurrentSimulation
         {
             get { return simulation; }
             set { simulation = value; }
@@ -67,7 +67,7 @@ namespace KryGamesBotControls.Common
         private void SimpleButton_Click(object sender, RoutedEventArgs e)
         {
             chrt.Reset();
-            CurrentSimulation = new DoormatBot.Helpers.Simulation(null);
+            CurrentSimulation = new Gambler.Bot.AutoBet.Helpers.Simulation(null);
             CurrentSimulation.Initialize(txtBalance.Value, (long)txtBets.Value, CurrentSite, Strategy, BetSettings,"tmp.sim",true);
             btnSaveFile.IsEnabled = false;
             CurrentSimulation.OnSimulationWriting += Tmp_OnSimulationWriting;
@@ -95,7 +95,7 @@ namespace KryGamesBotControls.Common
         {
             
             SimTimer.Stop();
-            DoormatBot.Helpers.Simulation tmp = sender as DoormatBot.Helpers.Simulation;
+            Gambler.Bot.AutoBet.Helpers.Simulation tmp = sender as Gambler.Bot.AutoBet.Helpers.Simulation;
             sesseionStats1.RefreshStats();
             long ElapsedMilliseconds = SimTimer.ElapsedMilliseconds;
             Progress = (decimal)tmp.TotalBetsPlaced / (decimal)tmp.Bets;
@@ -119,7 +119,7 @@ namespace KryGamesBotControls.Common
                 Dispatcher.BeginInvoke(new Action<object, EventArgs>(Tmp_OnSimulationWriting), sender,e);
             else
             {
-                DoormatBot.Helpers.Simulation tmp = sender as DoormatBot.Helpers.Simulation;
+                Gambler.Bot.AutoBet.Helpers.Simulation tmp = sender as Gambler.Bot.AutoBet.Helpers.Simulation;
                 //Console.WriteLine("Simulation Progress: " + tmp.TotalBetsPlaced + " bets of " + tmp.Bets);
 
                 if (tmp.TotalBetsPlaced > 0)

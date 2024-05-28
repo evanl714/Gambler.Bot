@@ -1,7 +1,7 @@
 ﻿using DevExpress.Xpf.Core;
 using DevExpress.XtraCharts.Native;
-using DoormatBot;
-using DoormatBot.Helpers;
+using Gambler.Bot.AutoBet;
+using Gambler.Bot.AutoBet.Helpers;
 using KryGamesBotControls.Common;
 using Microsoft.Scripting.Utils;
 using System;

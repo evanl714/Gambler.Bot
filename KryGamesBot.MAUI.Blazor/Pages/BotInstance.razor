@@ -1,7 +1,7 @@
-﻿@using DoormatBot;
-@using DoormatBot.Strategies;
-@using DoormatCore.Helpers;
-@using DoormatCore.Sites;
+﻿@using Gambler.Bot.AutoBet;
+@using Gambler.Bot.AutoBet.Strategies;
+@using Gambler.Bot.Core.Helpers;
+@using Gambler.Bot.Core.Sites;
 @using KryGamesBot.MAUI.Blazor.Classes;
 @using KryGamesBot.MAUI.Blazor.Interfaces;
 @using KryGamesBot.MAUI.Blazor.Pages.Common
@@ -266,14 +266,14 @@
         SaveINstanceSettings(path + InstanceName + ".siteset");
     }
 
-    void SiteChanged(DoormatCore.Sites.BaseSite NewSite, string currency, string game)
+    void SiteChanged(Gambler.Bot.Core.Sites.BaseSite NewSite, string currency, string game)
     {
         botIns.CurrentSite = NewSite;
         if (currency != null && Array.IndexOf(botIns.CurrentSite.Currencies, currency) >= 0)
             botIns.CurrentSite.Currency = Array.IndexOf(botIns.CurrentSite.Currencies, currency);
-        object curGame = DoormatCore.Games.Games.Dice;
-        if (game != null && Enum.TryParse(typeof(DoormatCore.Games.Games), game, out curGame) && Array.IndexOf(botIns.CurrentSite.SupportedGames, (DoormatCore.Games.Games)curGame) >= 0)
-            botIns.CurrentGame = (DoormatCore.Games.Games)curGame;
+        object curGame = Gambler.Bot.Core.Games.Games.Dice;
+        if (game != null && Enum.TryParse(typeof(Gambler.Bot.Core.Games.Games), game, out curGame) && Array.IndexOf(botIns.CurrentSite.SupportedGames, (Gambler.Bot.Core.Games.Games)curGame) >= 0)
+            botIns.CurrentGame = (Gambler.Bot.Core.Games.Games)curGame;
 
         // lciSelectSite1.Visibility = Visibility.Collapsed;
         // lciLoginControl.Visibility = Visibility.Visible;
@@ -302,7 +302,7 @@
     async Task SiteSelected(SitesList selectedSite)
     {
 
-        SiteChanged(Activator.CreateInstance(selectedSite.SiteType()) as DoormatCore.Sites.BaseSite, selectedSite.SelectedCurrency?.Name, selectedSite.SelectedGame?.Name);
+        SiteChanged(Activator.CreateInstance(selectedSite.SiteType()) as Gambler.Bot.Core.Sites.BaseSite, selectedSite.SelectedCurrency?.Name, selectedSite.SelectedGame?.Name);
         LoginPopupVisible = true;
 
     }
@@ -331,11 +331,11 @@
         {
             botIns.SaveBetSettings(BetSettingsFile);
             var Settings = botIns.LoadBetSettings(BetSettingsFile, false);
-            IEnumerable<PropertyInfo> Props = Settings.GetType().GetProperties().Where(m => typeof(DoormatBot.Strategies.BaseStrategy).IsAssignableFrom(m.PropertyType));
-            DoormatBot.Strategies.BaseStrategy newStrat = null;
+            IEnumerable<PropertyInfo> Props = Settings.GetType().GetProperties().Where(m => typeof(Gambler.Bot.AutoBet.Strategies.BaseStrategy).IsAssignableFrom(m.PropertyType));
+            Gambler.Bot.AutoBet.Strategies.BaseStrategy newStrat = null;
             foreach (PropertyInfo x in Props)
             {
-                DoormatBot.Strategies.BaseStrategy strat = (DoormatBot.Strategies.BaseStrategy)x.GetValue(Settings);
+                Gambler.Bot.AutoBet.Strategies.BaseStrategy strat = (Gambler.Bot.AutoBet.Strategies.BaseStrategy)x.GetValue(Settings);
                 if (strat != null)
                 {
                     PropertyInfo StratNameProp = strat.GetType().GetProperty("StrategyName");
@@ -349,14 +349,14 @@
             }
             if (newStrat == null)
             {
-                newStrat = Activator.CreateInstance(botIns.Strategies[e]) as DoormatBot.Strategies.BaseStrategy;
+                newStrat = Activator.CreateInstance(botIns.Strategies[e]) as Gambler.Bot.AutoBet.Strategies.BaseStrategy;
             }
             botIns.Strategy = newStrat;
         }
         //ProgrammerLUA.SetStrategy(botIns.Strategy);
 
     }
-    void BotIns_OnSiteLoginFinished(object sender, DoormatCore.Sites.LoginFinishedEventArgs e)
+    void BotIns_OnSiteLoginFinished(object sender, Gambler.Bot.Core.Sites.LoginFinishedEventArgs e)
     {
         if (e.Success)
         {
@@ -375,7 +375,7 @@
         }
     }
 
-    private void BotIns_OnSiteBetFinished(object sender, DoormatCore.Sites.BetFinisedEventArgs e)
+    private void BotIns_OnSiteBetFinished(object sender, Gambler.Bot.Core.Sites.BetFinisedEventArgs e)
     {
         (dcLiveBets?.Instance as iLiveBet)?.AddBet(e.NewBet);
         _profitChart.AddPoint(e.NewBet.Profit, e.NewBet.IsWin);
@@ -399,7 +399,7 @@
             case nameof(ProgrammerLUA): StrategyType = typeof(ProgrammerModeLUA); break;
             case nameof(ProgrammerPython): StrategyType = typeof(ProgrammerModePython); break;
             default:
-                botIns.Strategy = new DoormatBot.Strategies.Martingale(); break;
+                botIns.Strategy = new Gambler.Bot.AutoBet.Strategies.Martingale(); break;
         }
         await InvokeAsync( StateHasChanged);
         (dcStrategy?.Instance as iStrategy)?.SetStrategy(botIns?.Strategy);
@@ -440,11 +440,11 @@
         {
             botIns.StoredBetSettings = new Doormat.ExportBetSettings
                 {
-                    BetSettings = new DoormatBot.Helpers.InternalBetSettings(),
+                    BetSettings = new Gambler.Bot.AutoBet.Helpers.InternalBetSettings(),
 
 
                 };
-            botIns.Strategy = new DoormatBot.Strategies.Martingale();
+            botIns.Strategy = new Gambler.Bot.AutoBet.Strategies.Martingale();
         }
 
         //load instance settings: site, currency, game, account, password if keepass is active and logged in.
@@ -464,11 +464,11 @@
         var tmpsite = Doormat.Sites.FirstOrDefault(m => m.Name == tmp.Site);
         if (tmpsite != null)
         {
-            botIns.CurrentSite = Activator.CreateInstance(tmpsite.SiteType()) as DoormatCore.Sites.BaseSite;
+            botIns.CurrentSite = Activator.CreateInstance(tmpsite.SiteType()) as Gambler.Bot.Core.Sites.BaseSite;
             SiteChanged(botIns.CurrentSite, tmp.Currency, tmp.Game);
         }
         if (tmp.Game != null)
-            botIns.CurrentGame = Enum.Parse<DoormatCore.Games.Games>(tmp.Game);
+            botIns.CurrentGame = Enum.Parse<Gambler.Bot.Core.Games.Games>(tmp.Game);
 
     }
 
@@ -520,13 +520,13 @@
     {
         botIns.StopStrategy("Stop button clicked");
     }
-    void BotIns_OnSiteNotify(object sender, DoormatCore.Sites.GenericEventArgs e)
+    void BotIns_OnSiteNotify(object sender, Gambler.Bot.Core.Sites.GenericEventArgs e)
     {   
         //Figure out how to do a status bar kind of thing....
         statusMessage= e.Message;
         InvokeAsync(StateHasChanged);
     }
-    private void BotIns_OnStopped(object sender, DoormatCore.Sites.GenericEventArgs e)
+    private void BotIns_OnStopped(object sender, Gambler.Bot.Core.Sites.GenericEventArgs e)
     {
         //throw new NotImplementedException();
 
@@ -545,24 +545,24 @@
         btnResumeIsEnabled = false;
 
     }
-    private void BotIns_OnSiteAction(object sender, DoormatCore.Sites.GenericEventArgs e)
+    private void BotIns_OnSiteAction(object sender, Gambler.Bot.Core.Sites.GenericEventArgs e)
     {   
         statusMessage = e.Message;
     }
 
-    private void BotIns_OnNotification(object sender, DoormatCore.Helpers.NotificationEventArgs e)
+    private void BotIns_OnNotification(object sender, Gambler.Bot.Core.Helpers.NotificationEventArgs e)
     {
 
         switch (e.NotificationTrigger.Action)
         {
-            case DoormatCore.Helpers.TriggerAction.Alarm:
-            case DoormatCore.Helpers.TriggerAction.Chime:
-            case DoormatCore.Helpers.TriggerAction.Email: break;
-            case DoormatCore.Helpers.TriggerAction.Popup: statusMessage = "Something happened that triggered a notification.";
+            case Gambler.Bot.Core.Helpers.TriggerAction.Alarm:
+            case Gambler.Bot.Core.Helpers.TriggerAction.Chime:
+            case Gambler.Bot.Core.Helpers.TriggerAction.Email: break;
+            case Gambler.Bot.Core.Helpers.TriggerAction.Popup: statusMessage = "Something happened that triggered a notification.";
                 break;
 
         }
-        //statusMessage = e.NotificationTrigger.Action = DoormatCore.Helpers.TriggerAction.;
+        //statusMessage = e.NotificationTrigger.Action = Gambler.Bot.Core.Helpers.TriggerAction.;
     }
 
     private void BotIns_OnGameChanged(object sender, EventArgs e)
@@ -570,13 +570,13 @@
         //throw new NotImplementedException();
         switch (botIns.CurrentGame)
         {
-            case DoormatCore.Games.Games.Crash: break;
-            case DoormatCore.Games.Games.Dice:
+            case Gambler.Bot.Core.Games.Games.Crash: break;
+            case Gambler.Bot.Core.Games.Games.Dice:
                 ManualBetType = typeof(ManualDiceBet);
                 LiveBetViewType = typeof(DiceLiveBetsControl);
                 break;
-            case DoormatCore.Games.Games.Plinko: break;
-            case DoormatCore.Games.Games.Roulette: break;
+            case Gambler.Bot.Core.Games.Games.Plinko: break;
+            case Gambler.Bot.Core.Games.Games.Roulette: break;
         }
         /*OnPropertyChanged(nameof(ManualBet));
         OnPropertyChanged(nameof(LiveBets));
@@ -584,11 +584,11 @@
         InvokeAsync(StateHasChanged);
     }
 
-    private void BotIns_OnSiteStatsUpdated(object sender, DoormatCore.Sites.StatsUpdatedEventArgs e)
+    private void BotIns_OnSiteStatsUpdated(object sender, Gambler.Bot.Core.Sites.StatsUpdatedEventArgs e)
     {
 
     }
-    private void BotIns_OnSiteError(object sender, DoormatCore.Sites.ErrorEventArgs e)
+    private void BotIns_OnSiteError(object sender, Gambler.Bot.Core.Sites.ErrorEventArgs e)
     {
         statusMessage = "Error! " + e.Message;
 

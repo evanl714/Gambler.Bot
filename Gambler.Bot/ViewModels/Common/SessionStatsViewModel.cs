@@ -1,5 +1,5 @@
-﻿using DoormatBot.Helpers;
-using DoormatCore.Helpers;
+﻿using Gambler.Bot.AutoBet.Helpers;
+using Gambler.Bot.Core.Helpers;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;

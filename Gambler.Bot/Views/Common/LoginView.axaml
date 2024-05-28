@@ -6,7 +6,7 @@
         x:Class="Gambler.Bot.Views.Common.LoginView"
         xmlns:vm="using:Gambler.Bot.ViewModels.Common"
         x:DataType="vm:LoginViewModel"
-        xmlns:login="using:DoormatCore.Sites"
+        xmlns:login="using:Gambler.Bot.Core.Sites"
         SizeToContent="WidthAndHeight"
         Title="{Binding Title}" WindowStartupLocation="CenterOwner"
         xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"

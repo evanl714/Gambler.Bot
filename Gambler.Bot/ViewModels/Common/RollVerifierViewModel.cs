@@ -1,6 +1,6 @@
 ﻿using Avalonia.Platform.Storage;
 using Avalonia.Threading;
-using DoormatCore.Sites;
+using Gambler.Bot.Core.Sites;
 using Gambler.Bot.Classes;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
@@ -20,15 +20,15 @@ namespace Gambler.Bot.ViewModels.Common
         private Interaction<FilePickerSaveOptions, string> saveFile;
         public Interaction<FilePickerSaveOptions, string> SaveFileInteraction => saveFile;
         public BaseSite Site { get; set; }
-        private DoormatCore.Games.Games game;
+        private Gambler.Bot.Core.Games.Games game;
 
-        public DoormatCore.Games.Games Game
+        public Gambler.Bot.Core.Games.Games Game
         {
             get { return game; }
             set { game = value; }
         }
 
-        public DoormatCore.Games.Games[] Games
+        public Gambler.Bot.Core.Games.Games[] Games
         {
             get { return Site?.SupportedGames; }
         }
@@ -63,7 +63,7 @@ namespace Gambler.Bot.ViewModels.Common
             ConfigureCommands();
         }
 
-        public RollVerifierViewModel(ILogger logger, BaseSite site, DoormatCore.Games.Games game) : base(logger)
+        public RollVerifierViewModel(ILogger logger, BaseSite site, Gambler.Bot.Core.Games.Games game) : base(logger)
         {
             Site = site;
             ConfigureCommands();

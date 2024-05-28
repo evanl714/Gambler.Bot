@@ -25,9 +25,9 @@ namespace KryGamesBotControls.Strategies
         object QueuedPrintsLock = new object();
         List<string> LastCommands = new List<string>();
         int CommandsIndex = 0;
-        private DoormatBot.Strategies.ProgrammerMode strategy;
+        private Gambler.Bot.AutoBet.Strategies.ProgrammerMode strategy;
 
-        public DoormatBot.Strategies.ProgrammerMode Strategy
+        public Gambler.Bot.AutoBet.Strategies.ProgrammerMode Strategy
         {
             get { return strategy; }
             set 
@@ -47,12 +47,12 @@ namespace KryGamesBotControls.Strategies
         }
 
        
-        private void Strategy_OnScriptError(object sender, DoormatBot.Strategies.PrintEventArgs e)
+        private void Strategy_OnScriptError(object sender, Gambler.Bot.AutoBet.Strategies.PrintEventArgs e)
         {
             Print(e.Message);
         }
 
-        private void Strategy_OnPrint(object sender, DoormatBot.Strategies.PrintEventArgs e)
+        private void Strategy_OnPrint(object sender, Gambler.Bot.AutoBet.Strategies.PrintEventArgs e)
         {
             Print(e.Message);
         }

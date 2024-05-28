@@ -1,7 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Metadata;
-using DoormatCore.Helpers;
+using Gambler.Bot.Core.Helpers;
 using Org.BouncyCastle.Crmf;
 using System;
 using System.Collections.Generic;

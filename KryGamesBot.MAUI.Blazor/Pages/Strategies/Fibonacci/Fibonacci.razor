@@ -1,4 +1,4 @@
-﻿@using DoormatBot.Strategies;
+﻿@using Gambler.Bot.AutoBet.Strategies;
 @using KryGamesBot.MAUI.Blazor.Interfaces;
 @implements iStrategy;
 
@@ -106,9 +106,9 @@
 
 
 @code {
-    private DoormatBot.Strategies.Fibonacci strategy;
+    private Gambler.Bot.AutoBet.Strategies.Fibonacci strategy;
     [Parameter]
-    public DoormatBot.Doormat BotInstance { get; set; }
+    public Gambler.Bot.AutoBet.Doormat BotInstance { get; set; }
 
     [Parameter]
     public EventCallback StartBetting { get; set; }
@@ -119,7 +119,7 @@
         SetStrategy(BotInstance?.Strategy);
     }
 
-    public void GameChanged(DoormatCore.Games.Games newGame)
+    public void GameChanged(Gambler.Bot.Core.Games.Games newGame)
     {
         //throw new NotImplementedException();
 
@@ -127,7 +127,7 @@
 
     public void SetStrategy(BaseStrategy Strategy)
     {
-        strategy = Strategy as DoormatBot.Strategies.Fibonacci;
+        strategy = Strategy as Gambler.Bot.AutoBet.Strategies.Fibonacci;
     }
 
     public bool TopAlign()

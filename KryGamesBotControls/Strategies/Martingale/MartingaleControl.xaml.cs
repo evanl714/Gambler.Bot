@@ -1,4 +1,4 @@
-﻿using DoormatBot.Strategies;
+﻿using Gambler.Bot.AutoBet.Strategies;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,8 +19,8 @@ namespace KryGamesBotControls.Strategies.Martingale
     /// </summary>
     public partial class MartingaleControl : BaseControl, iStrategy
     {
-        private DoormatBot.Strategies.Martingale currentStrat = null;
-        public DoormatBot.Strategies.Martingale Strategy { 
+        private Gambler.Bot.AutoBet.Strategies.Martingale currentStrat = null;
+        public Gambler.Bot.AutoBet.Strategies.Martingale Strategy { 
             get { 
                 return currentStrat; } 
             set { 
@@ -40,11 +40,11 @@ namespace KryGamesBotControls.Strategies.Martingale
 
         public event EventHandler StartBetting;
 
-        public void GameChanged(DoormatCore.Games.Games newGame)
+        public void GameChanged(Gambler.Bot.Core.Games.Games newGame)
         {
             switch(newGame)
             {
-                case DoormatCore.Games.Games.Dice:
+                case Gambler.Bot.Core.Games.Games.Dice:
                 default: StartControl = new MartingaleDice();break;
 
             }
@@ -54,7 +54,7 @@ namespace KryGamesBotControls.Strategies.Martingale
 
         public void SetStrategy(BaseStrategy Strategy)
         {
-            if (Strategy is DoormatBot.Strategies.Martingale mart)
+            if (Strategy is Gambler.Bot.AutoBet.Strategies.Martingale mart)
                 this.Strategy = mart;
             StartControl.DataContext = Strategy;
             OnPropertyChanged(nameof(Strategy));

@@ -1,4 +1,4 @@
-﻿@using DoormatBot.Helpers;
+﻿@using Gambler.Bot.AutoBet.Helpers;
 @using KryGamesBot.MAUI.Blazor.Interfaces;
 @implements ISettingScreen;
 <h3>Notifications</h3>
@@ -21,7 +21,7 @@
 
     <EditFormTemplate Context="EditFormContext">
         <EditTrigger 
-            SelectedTrigger="@(EditFormContext.EditModel as DoormatCore.Helpers.Trigger)" 
+            SelectedTrigger="@(EditFormContext.EditModel as Gambler.Bot.Core.Helpers.Trigger)" 
             Notifications=true />
     </EditFormTemplate>
 </DxGrid>
@@ -33,23 +33,23 @@
     async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
     {
         if (e.IsNew)
-            Settings.Notifications.Add((e.EditModel as DoormatCore.Helpers.Trigger));
+            Settings.Notifications.Add((e.EditModel as Gambler.Bot.Core.Helpers.Trigger));
         else
         {
-            var oldTrigger = e.DataItem as DoormatCore.Helpers.Trigger;
-            var newTrigger = e.EditModel as DoormatCore.Helpers.Trigger;
+            var oldTrigger = e.DataItem as Gambler.Bot.Core.Helpers.Trigger;
+            var newTrigger = e.EditModel as Gambler.Bot.Core.Helpers.Trigger;
 
         }
     }
     async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
     {
-        Settings.Notifications.Remove(e.DataItem as DoormatCore.Helpers.Trigger);
+        Settings.Notifications.Remove(e.DataItem as Gambler.Bot.Core.Helpers.Trigger);
     }
     async Task Grid_CustomizeEditModel(GridCustomizeEditModelEventArgs e)
     {
         if (e.IsNew)
         {
-            var editModel = (DoormatCore.Helpers.Trigger)e.EditModel;
+            var editModel = (Gambler.Bot.Core.Helpers.Trigger)e.EditModel;
             //editModel.HireDate = DateTime.Today;
         }
     }

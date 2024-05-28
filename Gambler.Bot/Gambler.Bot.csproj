@@ -44,12 +44,6 @@
     <PackageReference Include="WebView.Avalonia" Version="11.0.0.1" />
   </ItemGroup>
 
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\DoormatBot\Doormat.Bot\Doormat.Bot.csproj" />
-    <ProjectReference Include="..\..\Doormat\Doormat\Doormat\DoormatCore.csproj" />
-  </ItemGroup>
-
 	<ItemGroup>
 		<AvaloniaResource Include="Assets\**" />
 	</ItemGroup>
@@ -64,6 +58,11 @@
 	  <None Remove="Assets\Images\bx-stop.svg" />
 	  <None Remove="Assets\Images\bxs-user-check.svg" />
 	  <None Remove="Assets\Images\bxs-user-x.svg" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\DoormatBot\Doormat.Bot\Gambler.Bot.AutoBet.csproj" />
+	  <ProjectReference Include="..\..\Doormat\Doormat\Doormat\Gambler.Bot.Core.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

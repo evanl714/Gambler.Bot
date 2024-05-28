@@ -1,4 +1,4 @@
-﻿@using DoormatBot.Strategies;
+﻿@using Gambler.Bot.AutoBet.Strategies;
 @using KryGamesBot.MAUI.Blazor.Interfaces;
 @implements iStrategy;
 
@@ -31,9 +31,9 @@
 </DxFormLayout>
 @code {
 
-    private DoormatBot.Strategies.DAlembert strategy;
+    private Gambler.Bot.AutoBet.Strategies.DAlembert strategy;
     [Parameter]
-    public DoormatBot.Doormat BotInstance { get; set; }
+    public Gambler.Bot.AutoBet.Doormat BotInstance { get; set; }
 
     [Parameter]
     public EventCallback StartBetting { get; set; }
@@ -44,7 +44,7 @@
 		SetStrategy(BotInstance?.Strategy);
 	}
 
-	public void GameChanged(DoormatCore.Games.Games newGame)
+	public void GameChanged(Gambler.Bot.Core.Games.Games newGame)
 	{
 		//throw new NotImplementedException();
 
@@ -52,7 +52,7 @@
 
 	public void SetStrategy(BaseStrategy Strategy)
 	{
-        strategy = Strategy as DoormatBot.Strategies.DAlembert;
+        strategy = Strategy as Gambler.Bot.AutoBet.Strategies.DAlembert;
 	}
 
     public bool TopAlign()

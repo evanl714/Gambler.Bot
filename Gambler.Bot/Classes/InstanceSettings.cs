@@ -1,4 +1,4 @@
-﻿using DoormatCore.Helpers;
+﻿using Gambler.Bot.Core.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Text;

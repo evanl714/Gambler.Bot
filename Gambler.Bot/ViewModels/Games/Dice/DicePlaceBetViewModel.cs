@@ -1,4 +1,4 @@
-﻿using DoormatCore.Games;
+﻿using Gambler.Bot.Core.Games;
 using Gambler.Bot.Classes.BetsPanel;
 using ReactiveUI;
 using System;

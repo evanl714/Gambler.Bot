@@ -1,8 +1,8 @@
 ﻿using DevExpress.Mvvm.UI.ModuleInjection;
 using DevExpress.Xpf.Bars;
 using DevExpress.Xpf.Core;
-using DoormatBot;
-using DoormatCore.Helpers;
+using Gambler.Bot.AutoBet;
+using Gambler.Bot.Core.Helpers;
 using KryGamesBot.Helpers;
 using KryGamesBotControls.Common;
 using KryGamesBotControls.Games;
@@ -31,7 +31,7 @@ namespace KryGamesBot
     {
         string BetSettingsFile = "";
         string PersonalSettingsFile = "";
-        public DoormatBot.Doormat botIns = new DoormatBot.Doormat(null);
+        public Gambler.Bot.AutoBet.Doormat botIns = new Gambler.Bot.AutoBet.Doormat(null);
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler<RenameEventArgs> Rename;
@@ -58,7 +58,7 @@ namespace KryGamesBot
             botIns.CompileSites();
             botIns.GetStrats();
             cbeStartegies.ItemsSource = botIns.Strategies.Keys;
-            SelectSite1.Sites = DoormatBot.Doormat.Sites;
+            SelectSite1.Sites = Gambler.Bot.AutoBet.Doormat.Sites;
             botIns.NeedConstringPassword += BotIns_NeedConstringPassword;
             botIns.NeedKeepassPassword += BotIns_NeedKeepassPassword;
             botIns.OnGameChanged += BotIns_OnGameChanged;
@@ -74,10 +74,10 @@ namespace KryGamesBot
             botIns.OnStarted += BotIns_OnStarted;
             botIns.OnStopped += BotIns_OnStopped;
             botIns.OnStrategyChanged += BotIns_OnStrategyChanged;
-            //botIns.Strategy = new DoormatBot.Strategies.ProgrammerLUA();
-            //(botIns.Strategy as DoormatBot.Strategies.Martingale).MinBet = 0.00000001m;
+            //botIns.Strategy = new Gambler.Bot.AutoBet.Strategies.ProgrammerLUA();
+            //(botIns.Strategy as Gambler.Bot.AutoBet.Strategies.Martingale).MinBet = 0.00000001m;
             //botIns.Strategy.Amount = 0.00000001m;
-            botIns.CurrentGame = DoormatCore.Games.Games.Dice;
+            botIns.CurrentGame = Gambler.Bot.Core.Games.Games.Dice;
             if (MainWindow.Portable && File.Exists("personalsettings.json"))
             {
                 PersonalSettingsFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json";
@@ -92,11 +92,11 @@ namespace KryGamesBot
             cbeStartegies.EditValue = botIns.Strategy?.StrategyName;
         }
 
-        private void BotIns_OnStopped(object sender, DoormatCore.Sites.GenericEventArgs e)
+        private void BotIns_OnStopped(object sender, Gambler.Bot.Core.Sites.GenericEventArgs e)
         {
             //throw new NotImplementedException();
             if (!Dispatcher.CheckAccess())
-                Dispatcher.Invoke(new Action<object, DoormatCore.Sites.GenericEventArgs>(BotIns_OnStopped),sender,e);
+                Dispatcher.Invoke(new Action<object, Gambler.Bot.Core.Sites.GenericEventArgs>(BotIns_OnStopped),sender,e);
             else
             {
                 bbtnSimulator.IsEnabled = true;
@@ -109,7 +109,7 @@ namespace KryGamesBot
         private void BotIns_OnStarted(object sender, EventArgs e)
         {
             if (!Dispatcher.CheckAccess())
-                Dispatcher.Invoke(new Action<object, DoormatCore.Sites.GenericEventArgs>(BotIns_OnStopped), sender, e);
+                Dispatcher.Invoke(new Action<object, Gambler.Bot.Core.Sites.GenericEventArgs>(BotIns_OnStopped), sender, e);
             else
             {
                 bbtnSimulator.IsEnabled = false;
@@ -134,7 +134,7 @@ namespace KryGamesBot
                 case "ProgrammerLUA": StrategyControl = new ProgrammerModeLUA();  break;
                 case "ProgrammerPython": StrategyControl = new ProgrammerModePy(); break;
                 default:
-                    botIns.Strategy = new DoormatBot.Strategies.Martingale(); break;
+                    botIns.Strategy = new Gambler.Bot.AutoBet.Strategies.Martingale(); break;
             }
             StratContent.VerticalAlignment = StrategyControl.TopAlign() ? VerticalAlignment.Top : VerticalAlignment.Stretch;
             StrategyControl.SetStrategy(botIns.Strategy);
@@ -194,32 +194,32 @@ namespace KryGamesBot
             catch { }
         }
 
-        private void BotIns_OnSiteStatsUpdated(object sender, DoormatCore.Sites.StatsUpdatedEventArgs e)
+        private void BotIns_OnSiteStatsUpdated(object sender, Gambler.Bot.Core.Sites.StatsUpdatedEventArgs e)
         {
             SiteStats.Stats = e.NewStats;
         }
 
-        private void BotIns_OnSiteRegisterFinished(object sender, DoormatCore.Sites.GenericEventArgs e)
+        private void BotIns_OnSiteRegisterFinished(object sender, Gambler.Bot.Core.Sites.GenericEventArgs e)
         {
             //throw new NotImplementedException();
         }
 
-        private void BotIns_OnSiteNotify(object sender, DoormatCore.Sites.GenericEventArgs e)
+        private void BotIns_OnSiteNotify(object sender, Gambler.Bot.Core.Sites.GenericEventArgs e)
         {
             if (!Dispatcher.CheckAccess()) // CheckAccess returns true if you're on the dispatcher thread
             {
-                Dispatcher.Invoke(new DoormatCore.Sites.BaseSite.dNotify(BotIns_OnSiteNotify), sender, e);
+                Dispatcher.Invoke(new Gambler.Bot.Core.Sites.BaseSite.dNotify(BotIns_OnSiteNotify), sender, e);
                 return;
             }           
                 StatusBar.Content = e.Message;
             
         }
 
-        private void BotIns_OnSiteLoginFinished(object sender, DoormatCore.Sites.LoginFinishedEventArgs e)
+        private void BotIns_OnSiteLoginFinished(object sender, Gambler.Bot.Core.Sites.LoginFinishedEventArgs e)
         {
             if (!Dispatcher.CheckAccess()) // CheckAccess returns true if you're on the dispatcher thread
             {
-                Dispatcher.Invoke(new DoormatCore.Sites.BaseSite.dLoginFinished(BotIns_OnSiteLoginFinished), sender, e);
+                Dispatcher.Invoke(new Gambler.Bot.Core.Sites.BaseSite.dLoginFinished(BotIns_OnSiteLoginFinished), sender, e);
                 return;
             }
             if (e.Success)
@@ -236,23 +236,23 @@ namespace KryGamesBot
             }
         }
 
-        private void BotIns_OnSiteError(object sender, DoormatCore.Sites.ErrorEventArgs e)
+        private void BotIns_OnSiteError(object sender, Gambler.Bot.Core.Sites.ErrorEventArgs e)
         {
             if (!Dispatcher.CheckAccess()) // CheckAccess returns true if you're on the dispatcher thread
             {
-                Dispatcher.Invoke(new DoormatCore.Sites.BaseSite.dError(BotIns_OnSiteError), sender, e);
+                Dispatcher.Invoke(new Gambler.Bot.Core.Sites.BaseSite.dError(BotIns_OnSiteError), sender, e);
                 return;
             }
             StatusBar.Content = "Error! "+e.Message;
             
         }
 
-        private void BotIns_OnSiteChat(object sender, DoormatCore.Sites.GenericEventArgs e)
+        private void BotIns_OnSiteChat(object sender, Gambler.Bot.Core.Sites.GenericEventArgs e)
         {
             //throw new NotImplementedException();
         }
 
-        private void BotIns_OnSiteBetFinished(object sender, DoormatCore.Sites.BetFinisedEventArgs e)
+        private void BotIns_OnSiteBetFinished(object sender, Gambler.Bot.Core.Sites.BetFinisedEventArgs e)
         {
             LiveBets.AddBet(e.NewBet);
             ProfitChart1.AddPoint(e.NewBet.Profit);
@@ -263,18 +263,18 @@ namespace KryGamesBot
                 sessionStats.RefreshStats();
         }
 
-        private void BotIns_OnSiteAction(object sender, DoormatCore.Sites.GenericEventArgs e)
+        private void BotIns_OnSiteAction(object sender, Gambler.Bot.Core.Sites.GenericEventArgs e)
         {
             if (!Dispatcher.CheckAccess()) // CheckAccess returns true if you're on the dispatcher thread
             {
-                Dispatcher.Invoke(new DoormatCore.Sites.BaseSite.dAction(BotIns_OnSiteAction), sender, e);
+                Dispatcher.Invoke(new Gambler.Bot.Core.Sites.BaseSite.dAction(BotIns_OnSiteAction), sender, e);
                 return;
             }
             StatusBar.Content = e.Message;
 
         }
 
-        private void BotIns_OnNotification(object sender, DoormatCore.Helpers.NotificationEventArgs e)
+        private void BotIns_OnNotification(object sender, Gambler.Bot.Core.Helpers.NotificationEventArgs e)
         {
             if (!Dispatcher.CheckAccess()) // CheckAccess returns true if you're on the dispatcher thread
             {
@@ -283,13 +283,13 @@ namespace KryGamesBot
             }
             switch (e.NotificationTrigger.Action)
             {
-                case DoormatCore.Helpers.TriggerAction.Alarm:                
-                case DoormatCore.Helpers.TriggerAction.Chime:
-                case DoormatCore.Helpers.TriggerAction.Email:break;
-                case DoormatCore.Helpers.TriggerAction.Popup: StatusBar.Content = "Something happened that triggered a notification.";break ;
+                case Gambler.Bot.Core.Helpers.TriggerAction.Alarm:                
+                case Gambler.Bot.Core.Helpers.TriggerAction.Chime:
+                case Gambler.Bot.Core.Helpers.TriggerAction.Email:break;
+                case Gambler.Bot.Core.Helpers.TriggerAction.Popup: StatusBar.Content = "Something happened that triggered a notification.";break ;
                     
             }
-            //StatusBar.Content = e.NotificationTrigger.Action = DoormatCore.Helpers.TriggerAction.;
+            //StatusBar.Content = e.NotificationTrigger.Action = Gambler.Bot.Core.Helpers.TriggerAction.;
         }
 
         private void BotIns_OnGameChanged(object sender, EventArgs e)
@@ -297,13 +297,13 @@ namespace KryGamesBot
             //throw new NotImplementedException();
             switch (botIns.CurrentGame)
             {
-                case DoormatCore.Games.Games.Crash:break;
-                case DoormatCore.Games.Games.Dice:
+                case Gambler.Bot.Core.Games.Games.Crash:break;
+                case Gambler.Bot.Core.Games.Games.Dice:
                     ManualBet = new PlaceDiceBetControl();
                     LiveBets = new DiceLiveBetsControl(); 
                     break;
-                case DoormatCore.Games.Games.Plinko: break;
-                case DoormatCore.Games.Games.Roulette: break;
+                case Gambler.Bot.Core.Games.Games.Plinko: break;
+                case Gambler.Bot.Core.Games.Games.Roulette: break;
             }
             OnPropertyChanged(nameof(ManualBet));
             OnPropertyChanged(nameof(LiveBets));
@@ -315,13 +315,13 @@ namespace KryGamesBot
             botIns.PlaceBet(e.NewBet);            
         }
 
-        private void BotIns_NeedKeepassPassword(object sender, DoormatBot.Helpers.PersonalSettings.GetConstringPWEventArgs e)
+        private void BotIns_NeedKeepassPassword(object sender, Gambler.Bot.AutoBet.Helpers.PersonalSettings.GetConstringPWEventArgs e)
         {
             //MainWindow parentWindow = Window.GetWindow(this) as MainWindow;
             MainWindow.TmpInstance_NeedKeepassPassword(sender, e);
         }
 
-        private void BotIns_NeedConstringPassword(object sender, DoormatBot.Helpers.PersonalSettings.GetConstringPWEventArgs e)
+        private void BotIns_NeedConstringPassword(object sender, Gambler.Bot.AutoBet.Helpers.PersonalSettings.GetConstringPWEventArgs e)
         {
             //MainWindow parentWindow = Window.GetWindow(this) as MainWindow;
             MainWindow.TmpInstance_NeedConstringPassword(sender, e);
@@ -330,17 +330,17 @@ namespace KryGamesBot
         private void SelectSite1_OnSiteSelected(object sender, KryGamesBotControls.Common.SiteSelectedEventArgs e)
         {
             
-            SiteChanged(Activator.CreateInstance(e.SelectedSite.SiteType(),null as ILogger) as DoormatCore.Sites.BaseSite, e.SelectedSite.SelectedCurrency?.Name,e.SelectedSite.SelectedGame?.Name);
+            SiteChanged(Activator.CreateInstance(e.SelectedSite.SiteType(),null as ILogger) as Gambler.Bot.Core.Sites.BaseSite, e.SelectedSite.SelectedCurrency?.Name,e.SelectedSite.SelectedGame?.Name);
         }
 
-        void SiteChanged(DoormatCore.Sites.BaseSite NewSite, string currency, string game)
+        void SiteChanged(Gambler.Bot.Core.Sites.BaseSite NewSite, string currency, string game)
         {
             botIns.CurrentSite = NewSite;
             if (currency != null && Array.IndexOf(botIns.CurrentSite.Currencies, currency)>=0)
                 botIns.CurrentSite.Currency = Array.IndexOf(botIns.CurrentSite.Currencies, currency);
-            object curGame = DoormatCore.Games.Games.Dice;
-            if (game != null && Enum.TryParse(typeof(DoormatCore.Games.Games), game, out curGame) && Array.IndexOf(botIns.CurrentSite.SupportedGames,(DoormatCore.Games.Games)curGame) >= 0)
-                botIns.CurrentGame = (DoormatCore.Games.Games)curGame;
+            object curGame = Gambler.Bot.Core.Games.Games.Dice;
+            if (game != null && Enum.TryParse(typeof(Gambler.Bot.Core.Games.Games), game, out curGame) && Array.IndexOf(botIns.CurrentSite.SupportedGames,(Gambler.Bot.Core.Games.Games)curGame) >= 0)
+                botIns.CurrentGame = (Gambler.Bot.Core.Games.Games)curGame;
             LoginControl.CurrentSite = botIns.CurrentSite;
             lciSelectSite1.Visibility = Visibility.Collapsed;
             lciLoginControl.Visibility = Visibility.Visible;
@@ -412,13 +412,13 @@ namespace KryGamesBot
                 botIns.LoadBetSettings(BetSettingsFile);
             else
             {
-                botIns.StoredBetSettings = new DoormatBot.Doormat.ExportBetSettings
+                botIns.StoredBetSettings = new Gambler.Bot.AutoBet.Doormat.ExportBetSettings
                 {
-                    BetSettings = new DoormatBot.Helpers.InternalBetSettings(),
+                    BetSettings = new Gambler.Bot.AutoBet.Helpers.InternalBetSettings(),
                     
 
                 };
-                botIns.Strategy =new DoormatBot.Strategies.Martingale();
+                botIns.Strategy =new Gambler.Bot.AutoBet.Strategies.Martingale();
             }
 
             //load instance settings: site, currency, game, account, password if keepass is active and logged in.
@@ -436,14 +436,14 @@ namespace KryGamesBot
             InstanceSettings tmp = JsonSerializer.Deserialize<InstanceSettings>(Settings);
             //botIns.ga
             
-            var tmpsite = DoormatBot.Doormat.Sites.FirstOrDefault(m => m.Name == tmp.Site);
+            var tmpsite = Gambler.Bot.AutoBet.Doormat.Sites.FirstOrDefault(m => m.Name == tmp.Site);
             if (tmpsite != null)
             {
-                botIns.CurrentSite = Activator.CreateInstance(tmpsite.SiteType()) as DoormatCore.Sites.BaseSite;
+                botIns.CurrentSite = Activator.CreateInstance(tmpsite.SiteType()) as Gambler.Bot.Core.Sites.BaseSite;
                 SiteChanged(botIns.CurrentSite, tmp.Currency, tmp.Game);
             }
             if (tmp.Game!=null)
-                botIns.CurrentGame =  Enum.Parse<DoormatCore.Games.Games>(tmp.Game);
+                botIns.CurrentGame =  Enum.Parse<Gambler.Bot.Core.Games.Games>(tmp.Game);
             
         }
 
@@ -513,11 +513,11 @@ namespace KryGamesBot
             {
                 botIns.SaveBetSettings(BetSettingsFile);
                 var Settings = botIns.LoadBetSettings(BetSettingsFile, false);
-                IEnumerable<PropertyInfo> Props = Settings.GetType().GetProperties().Where(m => typeof(DoormatBot.Strategies.BaseStrategy).IsAssignableFrom(m.PropertyType));
-                DoormatBot.Strategies.BaseStrategy newStrat = null;
+                IEnumerable<PropertyInfo> Props = Settings.GetType().GetProperties().Where(m => typeof(Gambler.Bot.AutoBet.Strategies.BaseStrategy).IsAssignableFrom(m.PropertyType));
+                Gambler.Bot.AutoBet.Strategies.BaseStrategy newStrat = null;
                 foreach (PropertyInfo x in Props)
                 {
-                    DoormatBot.Strategies.BaseStrategy strat = (DoormatBot.Strategies.BaseStrategy)x.GetValue(Settings);
+                    Gambler.Bot.AutoBet.Strategies.BaseStrategy strat = (Gambler.Bot.AutoBet.Strategies.BaseStrategy)x.GetValue(Settings);
                     if (strat != null)
                     {
                         PropertyInfo StratNameProp = strat.GetType().GetProperty("StrategyName");
@@ -531,7 +531,7 @@ namespace KryGamesBot
                 }
                 if (newStrat == null)
                 {
-                    newStrat = Activator.CreateInstance(botIns.Strategies[e.NewValue?.ToString()]) as DoormatBot.Strategies.BaseStrategy;                    
+                    newStrat = Activator.CreateInstance(botIns.Strategies[e.NewValue?.ToString()]) as Gambler.Bot.AutoBet.Strategies.BaseStrategy;                    
                 }
                 botIns.Strategy = newStrat;
             }
@@ -584,8 +584,8 @@ namespace KryGamesBot
 
         private void lueGames_EditValueChanged(object sender, DevExpress.Xpf.Editors.EditValueChangedEventArgs e)
         {
-            if (botIns.CurrentGame != (DoormatCore.Games.Games)lueGames.EditValue)
-                botIns.CurrentGame = (DoormatCore.Games.Games)lueGames.EditValue;
+            if (botIns.CurrentGame != (Gambler.Bot.Core.Games.Games)lueGames.EditValue)
+                botIns.CurrentGame = (Gambler.Bot.Core.Games.Games)lueGames.EditValue;
         }
 
         private void btnResume_Click(object sender, RoutedEventArgs e)
@@ -614,7 +614,7 @@ namespace KryGamesBot
         {
             botIns.StopStrategy("Logging Out");
             botIns.CurrentSite?.Disconnect();
-            SiteChanged((Activator.CreateInstance(botIns.CurrentSite.GetType()) as DoormatCore.Sites.BaseSite), botIns.CurrentSite.CurrentCurrency, botIns.CurrentGame.ToString());
+            SiteChanged((Activator.CreateInstance(botIns.CurrentSite.GetType()) as Gambler.Bot.Core.Sites.BaseSite), botIns.CurrentSite.CurrentCurrency, botIns.CurrentGame.ToString());
         }
 
         private void btnChangeSite_Click(object sender, RoutedEventArgs e)

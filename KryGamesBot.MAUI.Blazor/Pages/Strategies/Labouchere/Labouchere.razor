@@ -1,4 +1,4 @@
-﻿@using DoormatBot.Strategies;
+﻿@using Gambler.Bot.AutoBet.Strategies;
 @using System.Collections.ObjectModel;
 @using KryGamesBot.MAUI.Blazor.Interfaces;
 @implements iStrategy;
@@ -30,10 +30,10 @@ VirtualScrollingEnabled=true
     {
         public decimal Amount { get; set; }
     }
-    private DoormatBot.Strategies.Labouchere strategy;
+    private Gambler.Bot.AutoBet.Strategies.Labouchere strategy;
     public ObservableCollection<LabBet> Bets { get; set; } = new ObservableCollection<LabBet>();
     [Parameter]
-    public DoormatBot.Doormat BotInstance { get; set; }
+    public Gambler.Bot.AutoBet.Doormat BotInstance { get; set; }
 
     [Parameter]
     public EventCallback StartBetting { get; set; }
@@ -44,7 +44,7 @@ VirtualScrollingEnabled=true
         SetStrategy(BotInstance?.Strategy);
     }
 
-    public void GameChanged(DoormatCore.Games.Games newGame)
+    public void GameChanged(Gambler.Bot.Core.Games.Games newGame)
     {
         //throw new NotImplementedException();
 
@@ -53,9 +53,9 @@ VirtualScrollingEnabled=true
     public void SetStrategy(BaseStrategy Strategy)
     {
 
-        if (Strategy is DoormatBot.Strategies.Labouchere)
+        if (Strategy is Gambler.Bot.AutoBet.Strategies.Labouchere)
         {
-            strategy = Strategy as DoormatBot.Strategies.Labouchere;
+            strategy = Strategy as Gambler.Bot.AutoBet.Strategies.Labouchere;
             Bets.Clear();
             if (this.strategy != null && this.strategy.BetList != null)
                 foreach (decimal x in this.strategy?.BetList)

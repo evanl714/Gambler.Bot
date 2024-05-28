@@ -1,5 +1,5 @@
 ﻿using DevExpress.Xpf.LayoutControl;
-using DoormatBot.Helpers;
+using Gambler.Bot.AutoBet.Helpers;
 using KryGamesBotControls.Common.DBSetup;
 using System;
 using System.Collections.Generic;

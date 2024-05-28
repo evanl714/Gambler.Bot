@@ -1,4 +1,4 @@
-﻿using DoormatBot.Helpers;
+﻿using Gambler.Bot.AutoBet.Helpers;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;

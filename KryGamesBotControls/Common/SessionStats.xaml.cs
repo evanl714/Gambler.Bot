@@ -20,9 +20,9 @@ namespace KryGamesBotControls.Common
     {
         public bool ShowResetButton { get { return btnReset.Visibility == Visibility.Visible; } set { btnReset.Visibility = value ? Visibility.Visible : Visibility.Collapsed; } }
         public event EventHandler ResetStats;
-        private DoormatBot.Helpers.SessionStats stats;
+        private Gambler.Bot.AutoBet.Helpers.SessionStats stats;
 
-        public DoormatBot.Helpers.SessionStats Stats
+        public Gambler.Bot.AutoBet.Helpers.SessionStats Stats
         {
             get { return stats; }
             set { stats = value; OnPropertyChanged(nameof(Stats)); }

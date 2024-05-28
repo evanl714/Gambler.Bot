@@ -1,7 +1,7 @@
 ﻿using DevExpress.Xpf.Grid;
-using DoormatCore.Games;
-using DoormatCore.Helpers;
-using DoormatCore.Storage;
+using Gambler.Bot.Core.Games;
+using Gambler.Bot.Core.Helpers;
+using Gambler.Bot.Core.Storage;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -73,6 +73,6 @@ namespace KryGamesBotControls.Common
     {
         public SitesList SelectedSite { get; set; }
         public string SelectedCurrency { get; set; }
-        public DoormatCore.Games.Games SelectedGame { get; set; }
+        public Gambler.Bot.Core.Games.Games SelectedGame { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Avalonia.Threading;
-using DoormatBot.Helpers;
-using DoormatBot.Strategies;
-using DoormatCore.Sites;
+using Gambler.Bot.AutoBet.Helpers;
+using Gambler.Bot.AutoBet.Strategies;
+using Gambler.Bot.Core.Sites;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using System;
@@ -37,9 +37,9 @@ namespace Gambler.Bot.ViewModels.Common
 
         public InternalBetSettings BetSettings { get; set; }
 
-        private DoormatBot.Helpers.Simulation simulation;
+        private Gambler.Bot.AutoBet.Helpers.Simulation simulation;
 
-        public DoormatBot.Helpers.Simulation CurrentSimulation
+        public Gambler.Bot.AutoBet.Helpers.Simulation CurrentSimulation
         {
             get { return simulation; }
             set { simulation = value; }
@@ -130,7 +130,7 @@ namespace Gambler.Bot.ViewModels.Common
         {
             if (Running)
                 return;
-            CurrentSimulation = new DoormatBot.Helpers.Simulation(null);
+            CurrentSimulation = new Gambler.Bot.AutoBet.Helpers.Simulation(null);
             CurrentSimulation.Initialize(StartingBalance, NumberOfBets, CurrentSite, Strategy, BetSettings, "tmp.sim", Log);
             CanSave = false;
             CurrentSimulation.OnSimulationWriting += CurrentSimulation_OnSimulationWriting;
@@ -169,7 +169,7 @@ namespace Gambler.Bot.ViewModels.Common
             {
                 
                 SimTimer.Stop();
-                DoormatBot.Helpers.Simulation tmp = CurrentSimulation;
+                Gambler.Bot.AutoBet.Helpers.Simulation tmp = CurrentSimulation;
                 Stats.StatsUpdated(tmp.Stats);
                 long ElapsedMilliseconds = SimTimer.ElapsedMilliseconds;
                 Progress = (decimal)tmp.TotalBetsPlaced / (decimal)tmp.Bets;
@@ -196,7 +196,7 @@ namespace Gambler.Bot.ViewModels.Common
                 Dispatcher.UIThread.Invoke(UpdateStats);
             else
             {
-                DoormatBot.Helpers.Simulation tmp = CurrentSimulation;
+                Gambler.Bot.AutoBet.Helpers.Simulation tmp = CurrentSimulation;
                 //Console.WriteLine("Simulation Progress: " + tmp.TotalBetsPlaced + " bets of " + tmp.Bets);
 
                 if (tmp.TotalBetsPlaced > 0)

@@ -1,4 +1,4 @@
-﻿using DoormatBot.Helpers;
+﻿using Gambler.Bot.AutoBet.Helpers;
 using Gambler.Bot.Classes;
 using Gambler.Bot.ViewModels.Common;
 using Microsoft.Extensions.Logging;

@@ -1,6 +1,6 @@
 ﻿using Avalonia.Platform.Storage;
 using Avalonia.Threading;
-using DoormatBot.Strategies;
+using Gambler.Bot.AutoBet.Strategies;
 using Gambler.Bot.Classes.Strategies;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
@@ -36,7 +36,7 @@ namespace Gambler.Bot.ViewModels.Strategies
 
         public string TemplateName { get; protected set; } = "LUATemplate.lua";
 
-        public DoormatBot.Strategies.ProgrammerMode Strat { get; private set; }
+        public Gambler.Bot.AutoBet.Strategies.ProgrammerMode Strat { get; private set; }
         DateTime LastChanged = DateTime.Now;
         FileSystemWatcher FileWatcher;
         private readonly ILogger _logger;
@@ -106,7 +106,7 @@ namespace Gambler.Bot.ViewModels.Strategies
             }
         }
 
-        public void GameChanged(DoormatCore.Games.Games newGame)
+        public void GameChanged(Gambler.Bot.Core.Games.Games newGame)
         {
             
         }
@@ -146,7 +146,7 @@ namespace Gambler.Bot.ViewModels.Strategies
             if (result!=null)
             {
                 string FileName = result;
-                Stream x = typeof(BaseStrategy).Assembly.GetManifestResourceStream($"Doormat.Bot.Samples.{TemplateName}");
+                Stream x = typeof(BaseStrategy).Assembly.GetManifestResourceStream($"AutoBet.Bot.Samples.{TemplateName}");
                 string[] items = typeof(BaseStrategy).Assembly.GetManifestResourceNames();
                 byte[] buffer = new byte[x.Length];
                 x.Read(buffer, 0, (int)x.Length);

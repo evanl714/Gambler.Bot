@@ -1,7 +1,7 @@
-﻿@using DoormatBot.Strategies;
-@using DoormatBot.Strategies.PresetListModels;
+﻿@using Gambler.Bot.AutoBet.Strategies;
+@using Gambler.Bot.AutoBet.Strategies.PresetListModels;
 @using KryGamesBot.MAUI.Blazor.Interfaces;
-@using static DoormatBot.Strategies.PresetList;
+@using static Gambler.Bot.AutoBet.Strategies.PresetList;
 @implements iStrategy;
 
 <h3>PresetList</h3>
@@ -45,10 +45,10 @@
 
 @code {
     List<string> actions = new List<string> { "Stop", "Reset", "Step" };
-    private DoormatBot.Strategies.PresetList strategy;
+    private Gambler.Bot.AutoBet.Strategies.PresetList strategy;
     
     [Parameter]
-    public DoormatBot.Doormat BotInstance { get; set; }
+    public Gambler.Bot.AutoBet.Doormat BotInstance { get; set; }
 
     [Parameter]
     public EventCallback StartBetting { get; set; }
@@ -59,7 +59,7 @@
         SetStrategy(BotInstance?.Strategy);
     }
 
-    public void GameChanged(DoormatCore.Games.Games newGame)
+    public void GameChanged(Gambler.Bot.Core.Games.Games newGame)
     {
         //throw new NotImplementedException();
 
@@ -68,9 +68,9 @@
     public void SetStrategy(BaseStrategy Strategy)
     {
 
-        if (Strategy is DoormatBot.Strategies.PresetList)
+        if (Strategy is Gambler.Bot.AutoBet.Strategies.PresetList)
         {
-            strategy = Strategy as DoormatBot.Strategies.PresetList;
+            strategy = Strategy as Gambler.Bot.AutoBet.Strategies.PresetList;
             
         }
         InvokeAsync(StateHasChanged);

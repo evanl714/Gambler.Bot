@@ -8,11 +8,11 @@ namespace KryGamesBot.MAUI.Blazor.Interfaces
     public interface iStrategy
     {
         EventCallback StartBetting { get; set; }
-        void GameChanged(DoormatCore.Games.Games newGame);
-        void SetStrategy(DoormatBot.Strategies.BaseStrategy Strategy);
+        void GameChanged(Gambler.Bot.Core.Games.Games newGame);
+        void SetStrategy(Gambler.Bot.AutoBet.Strategies.BaseStrategy Strategy);
         bool TopAlign();
         Task Saving();
-        DoormatBot.Doormat BotInstance { get; set; }
+        Gambler.Bot.AutoBet.Doormat BotInstance { get; set; }
 
     }
 }

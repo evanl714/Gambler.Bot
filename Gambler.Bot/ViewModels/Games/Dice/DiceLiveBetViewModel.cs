@@ -1,6 +1,6 @@
 ﻿using Avalonia.Threading;
-using DoormatCore.Games;
-using DoormatCore.Helpers;
+using Gambler.Bot.Core.Games;
+using Gambler.Bot.Core.Helpers;
 using IronPython.Runtime;
 using Gambler.Bot.Classes;
 using Gambler.Bot.Classes.BetsPanel;

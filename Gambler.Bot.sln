@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doormat.Bot", "..\DoormatBot\Doormat.Bot\Doormat.Bot.csproj", "{F93DAEFA-B263-4D9A-BE45-2044AB93CB82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gambler.Bot.AutoBet", "..\DoormatBot\Doormat.Bot\Gambler.Bot.AutoBet.csproj", "{F93DAEFA-B263-4D9A-BE45-2044AB93CB82}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoormatCore", "..\Doormat\Doormat\Doormat\DoormatCore.csproj", "{35104049-E7EF-4642-B139-B0033C1040B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gambler.Bot.Core", "..\Doormat\Doormat\Doormat\Gambler.Bot.Core.csproj", "{35104049-E7EF-4642-B139-B0033C1040B2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platforms", "Platforms", "{8F9C7DF7-1122-4418-B30A-416B9F531FE5}"
 EndProject

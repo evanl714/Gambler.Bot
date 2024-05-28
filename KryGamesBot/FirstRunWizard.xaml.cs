@@ -1,7 +1,7 @@
 ﻿using DevExpress.Xpf.Core;
-using DoormatBot.Helpers;
-using DoormatBot.Strategies;
-using DoormatCore.Sites;
+using Gambler.Bot.AutoBet.Helpers;
+using Gambler.Bot.AutoBet.Strategies;
+using Gambler.Bot.Core.Sites;
 using KryGamesBotControls.Common;
 using System;
 using System.Collections.Generic;
@@ -78,7 +78,7 @@ You're all set up and ready to start. Finish this wizard to choose the site you 
 
         private void Wizard_Cancel(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            DoormatBot.Doormat tmpInstance = new DoormatBot.Doormat(null);
+            Gambler.Bot.AutoBet.Doormat tmpInstance = new Gambler.Bot.AutoBet.Doormat(null);
             tmpInstance.PersonalSettings = settings;
             if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot"))
                 Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot");
@@ -137,7 +137,7 @@ You're all set up and ready to start. Finish this wizard to choose the site you 
 
         private void wzrd_Finish(object sender, CancelEventArgs e)
         {
-            DoormatBot.Doormat tmpInstance = new DoormatBot.Doormat(null);
+            Gambler.Bot.AutoBet.Doormat tmpInstance = new Gambler.Bot.AutoBet.Doormat(null);
             tmpInstance.PersonalSettings = settings;
             if (IsPortable)
                 tmpInstance.SavePersonalSettings("PersonalSettings.json");

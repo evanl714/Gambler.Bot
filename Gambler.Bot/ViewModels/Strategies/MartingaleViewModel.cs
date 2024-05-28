@@ -1,5 +1,5 @@
-﻿using DoormatBot.Strategies;
-using DoormatCore.Games;
+﻿using Gambler.Bot.AutoBet.Strategies;
+using Gambler.Bot.Core.Games;
 using Gambler.Bot.Classes.BetsPanel;
 using Gambler.Bot.Classes.Strategies;
 using Gambler.Bot.ViewModels.Games.Dice;
@@ -23,7 +23,7 @@ namespace Gambler.Bot.ViewModels.Strategies
             set { _strategy = value; this.RaisePropertyChanged(); }
         }
 
-        private DoormatCore.Games.Games  _game;
+        private Gambler.Bot.Core.Games.Games  _game;
 
         private iPlaceBet _placeBetVM;
 
@@ -34,7 +34,7 @@ namespace Gambler.Bot.ViewModels.Strategies
         }
 
 
-        public DoormatCore.Games.Games Game
+        public Gambler.Bot.Core.Games.Games Game
         {
             get { return _game; }
             set { _game = value; this.RaisePropertyChanged(); }
@@ -44,7 +44,7 @@ namespace Gambler.Bot.ViewModels.Strategies
         {
             
         }
-        public void GameChanged(DoormatCore.Games.Games newGame)
+        public void GameChanged(Gambler.Bot.Core.Games.Games newGame)
         {
             if (PlaceBetVM!=null && PlaceBetVM is INotifyPropertyChanged notify)
             {
@@ -53,7 +53,7 @@ namespace Gambler.Bot.ViewModels.Strategies
             Game = newGame;
             switch (Game)
             {
-                case DoormatCore.Games.Games.Dice: PlaceBetVM = new DicePlaceBetViewModel(_logger) { ShowToggle = true };break;
+                case Gambler.Bot.Core.Games.Games.Dice: PlaceBetVM = new DicePlaceBetViewModel(_logger) { ShowToggle = true };break;
                 default: PlaceBetVM = null; break;
             }
             if (PlaceBetVM != null && PlaceBetVM is INotifyPropertyChanged notify2)

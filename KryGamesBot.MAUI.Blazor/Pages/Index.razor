@@ -1,6 +1,6 @@
 ﻿@implements IDisposable
 @page "/"
-@using DoormatCore.Helpers;
+@using Gambler.Bot.Core.Helpers;
 @using KryGamesBot.MAUI.Blazor.Classes;
 @using System.Text.Json;
 @inject NavigationManager NavManager
@@ -43,13 +43,13 @@
         PermissionStatus readstatus = await Permissions.RequestAsync<Permissions.StorageRead>();
         PermissionStatus writestatus = await Permissions.RequestAsync<Permissions.StorageWrite>();
 
-        //instances = await DoormatBot.Doormat.GetInstances();
+        //instances = await Gambler.Bot.AutoBet.Doormat.GetInstances();
 
         //load instances from storage
         //populate tabs
         string DocsPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "KryGamesBot");
 
-        DoormatBot.Doormat tmpInstance = new DoormatBot.Doormat();
+        Gambler.Bot.AutoBet.Doormat tmpInstance = new Gambler.Bot.AutoBet.Doormat();
         tmpInstance.NeedConstringPassword += TmpInstance_NeedConstringPassword;
         tmpInstance.NeedKeepassPassword += TmpInstance_NeedKeepassPassword;
         Portable = File.Exists("Portable");
@@ -95,7 +95,7 @@
         showSettings = true;
         await InvokeAsync(StateHasChanged);
     }
-    internal static void TmpInstance_NeedKeepassPassword(object sender, DoormatBot.Helpers.PersonalSettings.GetConstringPWEventArgs e)
+    internal static void TmpInstance_NeedKeepassPassword(object sender, Gambler.Bot.AutoBet.Helpers.PersonalSettings.GetConstringPWEventArgs e)
     {
         /*if (!string.IsNullOrWhiteSpace(kpPw))
         {
@@ -112,7 +112,7 @@
         }*/
     }
 
-    internal static void TmpInstance_NeedConstringPassword(object sender, DoormatBot.Helpers.PersonalSettings.GetConstringPWEventArgs e)
+    internal static void TmpInstance_NeedConstringPassword(object sender, Gambler.Bot.AutoBet.Helpers.PersonalSettings.GetConstringPWEventArgs e)
     {
         /* if (!string.IsNullOrWhiteSpace(dbPw))
         {

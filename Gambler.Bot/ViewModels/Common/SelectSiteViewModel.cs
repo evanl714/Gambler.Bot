@@ -5,8 +5,8 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Svg;
-using DoormatBot;
-using DoormatCore.Helpers;
+using Gambler.Bot.AutoBet;
+using Gambler.Bot.Core.Helpers;
 using ReactiveUI;
 using Svg.Skia;
 using System;
@@ -35,13 +35,13 @@ namespace Gambler.Bot.ViewModels.Common
 
         public SelectSiteViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
         {
-            DoormatBot.Doormat botIns = new DoormatBot.Doormat(_logger);
+            Gambler.Bot.AutoBet.AutoBet botIns = new Gambler.Bot.AutoBet.AutoBet(_logger);
             botIns.CompileSites();
             botIns.GetStrats();
             LoginCommand = ReactiveCommand.Create<object>(LogIn);
             SimulateCommand = ReactiveCommand.Create<object>(Simulate);
             ViewSiteCommand = ReactiveCommand.Create<object>(ViewSite);
-            Sites = new ObservableCollection<AvaSitesList>(DoormatBot.Doormat.Sites.Select(x=>new AvaSitesList(x) ));
+            Sites = new ObservableCollection<AvaSitesList>(Gambler.Bot.AutoBet.AutoBet.Sites.Select(x=>new AvaSitesList(x) ));
             
         }
 

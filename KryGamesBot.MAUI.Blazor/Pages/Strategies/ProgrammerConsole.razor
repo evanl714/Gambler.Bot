@@ -1,4 +1,4 @@
-﻿@using DoormatBot.Strategies;
+﻿@using Gambler.Bot.AutoBet.Strategies;
 <div>
 <div id="scrollbox" style="height: calc(100% - 90px); overflow: scroll;">
     
@@ -48,12 +48,12 @@
     }
 
 
-    private void Strategy_OnScriptError(object sender, DoormatBot.Strategies.PrintEventArgs e)
+    private void Strategy_OnScriptError(object sender, Gambler.Bot.AutoBet.Strategies.PrintEventArgs e)
     {
         Print(e.Message);
     }
 
-    private void Strategy_OnPrint(object sender, DoormatBot.Strategies.PrintEventArgs e)
+    private void Strategy_OnPrint(object sender, Gambler.Bot.AutoBet.Strategies.PrintEventArgs e)
     {
         Print(e.Message);
     }

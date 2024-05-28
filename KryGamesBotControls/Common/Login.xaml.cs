@@ -1,7 +1,7 @@
 ﻿using DevExpress.Xpf.Editors;
 using DevExpress.Xpf.LayoutControl;
-using DoormatCore.Sites;
-using DoormatCore.Storage;
+using Gambler.Bot.Core.Sites;
+using Gambler.Bot.Core.Storage;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using static DoormatCore.Sites.BaseSite;
+using static Gambler.Bot.Core.Sites.BaseSite;
 
 namespace KryGamesBotControls.Common
 {

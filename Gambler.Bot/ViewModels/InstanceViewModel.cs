@@ -1,6 +1,6 @@
 ﻿using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Threading;
-using DoormatBot.Strategies;
+using Gambler.Bot.AutoBet.Strategies;
 using Gambler.Bot.Classes;
 using Gambler.Bot.Classes.BetsPanel;
 using Gambler.Bot.Classes.Strategies;
@@ -34,7 +34,7 @@ namespace Gambler.Bot.ViewModels
         private string _status;
         private IStrategy _strategyVM;
         string BetSettingsFile = string.Empty;
-        private DoormatBot.Doormat botIns;
+        private Gambler.Bot.AutoBet.AutoBet botIns;
         private bool canResume;
 
         private bool canStart;
@@ -78,7 +78,7 @@ namespace Gambler.Bot.ViewModels
             OpenCommand = ReactiveCommand.Create(Open);
             SaveCommand = ReactiveCommand.Create(Save);
 
-            var tmp = new DoormatBot.Doormat(_logger);
+            var tmp = new Gambler.Bot.AutoBet.AutoBet(_logger);
             SelectSite = new SelectSiteViewModel(_logger);
             SelectSite.SelectedSiteChanged += SelectSite_SelectedSiteChanged;
             IsSelectSiteViewVisible = true;
@@ -101,7 +101,7 @@ namespace Gambler.Bot.ViewModels
             tmp.OnSiteNotify += Tmp_OnSiteNotify;
             tmp.OnSiteError += Tmp_OnSiteError;
             BotInstance = tmp;
-            botIns.CurrentGame = DoormatCore.Games.Games.Dice;
+            botIns.CurrentGame = Gambler.Bot.Core.Games.Games.Dice;
             
             
             
@@ -151,12 +151,12 @@ namespace Gambler.Bot.ViewModels
 
             switch (botIns.CurrentGame)
             {
-                case DoormatCore.Games.Games.Crash:
-                case DoormatCore.Games.Games.Roulette:
-                case DoormatCore.Games.Games.Plinko:
+                case Gambler.Bot.Core.Games.Games.Crash:
+                case Gambler.Bot.Core.Games.Games.Roulette:
+                case Gambler.Bot.Core.Games.Games.Plinko:
                     break;
                 case
-                    DoormatCore.Games.Games.Dice:
+                    Gambler.Bot.Core.Games.Games.Dice:
                     PlaceBetVM = new DicePlaceBetViewModel(_logger);
                     LiveBets = new DiceLiveBetViewModel(_logger);
                     break;
@@ -168,24 +168,24 @@ namespace Gambler.Bot.ViewModels
             setTitle();
         }
 
-        private void BotIns_OnNotification(object? sender, DoormatCore.Helpers.NotificationEventArgs e)
+        private void BotIns_OnNotification(object? sender, Gambler.Bot.Core.Helpers.NotificationEventArgs e)
         {
             throw new NotImplementedException();
             switch (e.NotificationTrigger.Action)
             {
-                case DoormatCore.Helpers.TriggerAction.Alarm: break;
-                case DoormatCore.Helpers.TriggerAction.Chime: break;
-                case DoormatCore.Helpers.TriggerAction.Email: break;
-                case DoormatCore.Helpers.TriggerAction.Popup: break;
+                case Gambler.Bot.Core.Helpers.TriggerAction.Alarm: break;
+                case Gambler.Bot.Core.Helpers.TriggerAction.Chime: break;
+                case Gambler.Bot.Core.Helpers.TriggerAction.Email: break;
+                case Gambler.Bot.Core.Helpers.TriggerAction.Popup: break;
             }
         }
 
-        private void BotIns_OnSiteAction(object sender, DoormatCore.Sites.GenericEventArgs e)
+        private void BotIns_OnSiteAction(object sender, Gambler.Bot.Core.Sites.GenericEventArgs e)
         {
             LastAction = e.Message;
         }
 
-        private void BotIns_OnSiteBetFinished(object sender, DoormatCore.Sites.BetFinisedEventArgs e)
+        private void BotIns_OnSiteBetFinished(object sender, Gambler.Bot.Core.Sites.BetFinisedEventArgs e)
         {
             SiteStatsData.StatsUpdated(botIns.CurrentSite.Stats);
             SessionStatsData.StatsUpdated(botIns.Stats);
@@ -193,7 +193,7 @@ namespace Gambler.Bot.ViewModels
             LiveBets.AddBet(e.NewBet);
         }
 
-        private void BotIns_OnSiteLoginFinished(object sender, DoormatCore.Sites.LoginFinishedEventArgs e)
+        private void BotIns_OnSiteLoginFinished(object sender, Gambler.Bot.Core.Sites.LoginFinishedEventArgs e)
         {
             SiteStatsData.Stats = e.Stats;
             SiteStatsData.RaisePropertyChanged(nameof(SiteStatsData.Stats));
@@ -215,10 +215,10 @@ namespace Gambler.Bot.ViewModels
             tmrStats.Start();
         }
 
-        private void BotIns_OnStopped(object? sender, DoormatCore.Sites.GenericEventArgs e)
+        private void BotIns_OnStopped(object? sender, Gambler.Bot.Core.Sites.GenericEventArgs e)
         {
             //if (!Dispatcher.CheckAccess())
-            //    Dispatcher.Invoke(new Action<object, DoormatCore.Sites.GenericEventArgs>(BotIns_OnStopped), sender, e);
+            //    Dispatcher.Invoke(new Action<object, Gambler.Bot.Core.Sites.GenericEventArgs>(BotIns_OnStopped), sender, e);
             //else
             //{
             //    bbtnSimulator.IsEnabled = true;
@@ -287,15 +287,15 @@ namespace Gambler.Bot.ViewModels
             InstanceSettings tmp = JsonSerializer.Deserialize<InstanceSettings>(Settings);
             //botIns.ga
 
-            var tmpsite = DoormatBot.Doormat.Sites.FirstOrDefault(m => m.Name == tmp.Site);
+            var tmpsite = Gambler.Bot.AutoBet.AutoBet.Sites.FirstOrDefault(m => m.Name == tmp.Site);
             if (tmpsite != null)
             {
-                botIns.CurrentSite = Activator.CreateInstance(tmpsite.SiteType(), _logger) as DoormatCore.Sites.BaseSite;                
+                botIns.CurrentSite = Activator.CreateInstance(tmpsite.SiteType(), _logger) as Gambler.Bot.Core.Sites.BaseSite;                
                 ShowSites = false;
                 SiteChanged(botIns.CurrentSite, tmp.Currency, tmp.Game);
             }
             if (tmp.Game != null)
-                botIns.CurrentGame = Enum.Parse<DoormatCore.Games.Games>(tmp.Game);
+                botIns.CurrentGame = Enum.Parse<Gambler.Bot.Core.Games.Games>(tmp.Game);
 
         }
 
@@ -344,9 +344,9 @@ namespace Gambler.Bot.ViewModels
             File.WriteAllText(FileLocation, Settings);
         }
 
-        private void SelectSite_SelectedSiteChanged(object? sender, DoormatCore.Helpers.SitesList e)
+        private void SelectSite_SelectedSiteChanged(object? sender, Gambler.Bot.Core.Helpers.SitesList e)
         {
-            SiteChanged(Activator.CreateInstance(e.SiteType(), _logger) as DoormatCore.Sites.BaseSite, e.SelectedCurrency?.Name, e.SelectedGame?.Name);
+            SiteChanged(Activator.CreateInstance(e.SiteType(), _logger) as Gambler.Bot.Core.Sites.BaseSite, e.SelectedCurrency?.Name, e.SelectedGame?.Name);
             if (SiteStatsData != null)
                 SiteStatsData.SiteName = botIns.CurrentSite?.SiteName;
         }
@@ -374,11 +374,11 @@ namespace Gambler.Bot.ViewModels
 
                 botIns.SaveBetSettings(BetSettingsFile);
                 var Settings = botIns.LoadBetSettings(BetSettingsFile, false);
-                IEnumerable<PropertyInfo> Props = Settings.GetType().GetProperties().Where(m => typeof(DoormatBot.Strategies.BaseStrategy).IsAssignableFrom(m.PropertyType));
-                DoormatBot.Strategies.BaseStrategy newStrat = null;
+                IEnumerable<PropertyInfo> Props = Settings.GetType().GetProperties().Where(m => typeof(Gambler.Bot.AutoBet.Strategies.BaseStrategy).IsAssignableFrom(m.PropertyType));
+                Gambler.Bot.AutoBet.Strategies.BaseStrategy newStrat = null;
                 foreach (PropertyInfo x in Props)
                 {
-                    DoormatBot.Strategies.BaseStrategy strat = (DoormatBot.Strategies.BaseStrategy)x.GetValue(Settings);
+                    Gambler.Bot.AutoBet.Strategies.BaseStrategy strat = (Gambler.Bot.AutoBet.Strategies.BaseStrategy)x.GetValue(Settings);
                     if (strat != null)
                     {
                         PropertyInfo StratNameProp = strat.GetType().GetProperty("StrategyName");
@@ -392,7 +392,7 @@ namespace Gambler.Bot.ViewModels
                 }
                 if (newStrat == null)
                 {
-                    newStrat = Activator.CreateInstance(botIns.Strategies[name]) as DoormatBot.Strategies.BaseStrategy;
+                    newStrat = Activator.CreateInstance(botIns.Strategies[name]) as Gambler.Bot.AutoBet.Strategies.BaseStrategy;
                 }
                 botIns.Strategy = newStrat;
             }
@@ -428,19 +428,19 @@ namespace Gambler.Bot.ViewModels
 
         public async Task RollVerifier()
         {
-            RollVerifierViewModel simControl = new RollVerifierViewModel(_logger, BotInstance?.CurrentSite, BotInstance?.CurrentGame ?? DoormatCore.Games.Games.Dice);
+            RollVerifierViewModel simControl = new RollVerifierViewModel(_logger, BotInstance?.CurrentSite, BotInstance?.CurrentGame ?? Gambler.Bot.Core.Games.Games.Dice);
             
             await ShowRollVerifier.Handle(simControl);
         }
 
-        void SiteChanged(DoormatCore.Sites.BaseSite NewSite, string currency, string game)
+        void SiteChanged(Gambler.Bot.Core.Sites.BaseSite NewSite, string currency, string game)
         {
             botIns.CurrentSite = NewSite;
             if (currency != null && Array.IndexOf(botIns.CurrentSite.Currencies, currency) >= 0)
                 botIns.CurrentSite.Currency = Array.IndexOf(botIns.CurrentSite.Currencies, currency);
-            object curGame = DoormatCore.Games.Games.Dice;
-            if (game != null && Enum.TryParse(typeof(DoormatCore.Games.Games), game, out curGame) && Array.IndexOf(botIns.CurrentSite.SupportedGames, (DoormatCore.Games.Games)curGame) >= 0)
-                botIns.CurrentGame = (DoormatCore.Games.Games)curGame;
+            object curGame = Gambler.Bot.Core.Games.Games.Dice;
+            if (game != null && Enum.TryParse(typeof(Gambler.Bot.Core.Games.Games), game, out curGame) && Array.IndexOf(botIns.CurrentSite.SupportedGames, (Gambler.Bot.Core.Games.Games)curGame) >= 0)
+                botIns.CurrentGame = (Gambler.Bot.Core.Games.Games)curGame;
             this.RaisePropertyChanged(nameof(Currencies));
             this.RaisePropertyChanged(nameof(CurrentCurrency));
             ShowLogin();//.Wait();
@@ -487,12 +487,12 @@ namespace Gambler.Bot.ViewModels
             botIns.StopOnWin = true;
         }
 
-        private void Tmp_OnBypassRequired(object? sender, DoormatCore.Sites.BypassRequiredArgs e)
+        private void Tmp_OnBypassRequired(object? sender, Gambler.Bot.Core.Sites.BypassRequiredArgs e)
         {
             e.Config = MainView.GetBypass(e);
         }
 
-        private void Tmp_OnSiteError(object sender, DoormatCore.Sites.ErrorEventArgs e)
+        private void Tmp_OnSiteError(object sender, Gambler.Bot.Core.Sites.ErrorEventArgs e)
         {
             if (!Dispatcher.UIThread.CheckAccess())
                 Dispatcher.UIThread.Invoke(() => { Tmp_OnSiteError(sender, e); });
@@ -502,7 +502,7 @@ namespace Gambler.Bot.ViewModels
             }
         }
 
-        private void Tmp_OnSiteNotify(object sender, DoormatCore.Sites.GenericEventArgs e)
+        private void Tmp_OnSiteNotify(object sender, Gambler.Bot.Core.Sites.GenericEventArgs e)
         {
             if (!Dispatcher.UIThread.CheckAccess())
                 Dispatcher.UIThread.Invoke(() => { Tmp_OnSiteNotify(sender, e); });
@@ -545,13 +545,13 @@ namespace Gambler.Bot.ViewModels
                 botIns.LoadBetSettings(BetSettingsFile);
             else
             {
-                botIns.StoredBetSettings = new DoormatBot.Doormat.ExportBetSettings
+                botIns.StoredBetSettings = new Gambler.Bot.AutoBet.AutoBet.ExportBetSettings
                 {
-                    BetSettings = new DoormatBot.Helpers.InternalBetSettings(),
+                    BetSettings = new Gambler.Bot.AutoBet.Helpers.InternalBetSettings(),
 
 
                 };
-                botIns.Strategy = new DoormatBot.Strategies.Martingale(_logger);
+                botIns.Strategy = new Gambler.Bot.AutoBet.Strategies.Martingale(_logger);
             }
             this.RaisePropertyChanged(nameof(SelectedStrategy));
             
@@ -590,7 +590,7 @@ namespace Gambler.Bot.ViewModels
         }
 
         public AdvancedViewModel AdvancedSettingsVM { get; set; }// = new AdvancedViewModel();
-        public DoormatBot.Doormat? BotInstance { get => botIns; set { botIns = value; this.RaisePropertyChanged(); } }
+        public Gambler.Bot.AutoBet.AutoBet? BotInstance { get => botIns; set { botIns = value; this.RaisePropertyChanged(); } }
 
         public bool CanResume
         {
@@ -623,11 +623,11 @@ namespace Gambler.Bot.ViewModels
                     return -1;
                 return  Array.IndexOf(BotInstance?.CurrentSite?.SupportedGames, BotInstance?.CurrentGame); 
             }
-            set { if (BotInstance?.CurrentSite != null) BotInstance.CurrentGame = BotInstance?.CurrentSite?.SupportedGames[(value >= 0 ? value : 0) ?? 0] ?? DoormatCore.Games.Games.Dice; }
+            set { if (BotInstance?.CurrentSite != null) BotInstance.CurrentGame = BotInstance?.CurrentSite?.SupportedGames[(value >= 0 ? value : 0) ?? 0] ?? Gambler.Bot.Core.Games.Games.Dice; }
         }
 
         public ICommand ExitCommand { get; }
-        public DoormatCore.Games.Games[] Games
+        public Gambler.Bot.Core.Games.Games[] Games
         {
             get { return BotInstance?.CurrentSite?.SupportedGames; }
         }

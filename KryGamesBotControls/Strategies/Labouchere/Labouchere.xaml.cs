@@ -1,4 +1,4 @@
-﻿using DoormatBot.Strategies;
+﻿using Gambler.Bot.AutoBet.Strategies;
 using Microsoft.Scripting.Utils;
 using System;
 using System.Collections.Generic;
@@ -31,9 +31,9 @@ namespace KryGamesBotControls.Strategies.Labouchere
 
         public BindingList<LabBet> Bets { get; set; } = new BindingList<LabBet>();
 
-        private DoormatBot.Strategies.Labouchere strategy;
+        private Gambler.Bot.AutoBet.Strategies.Labouchere strategy;
 
-        public DoormatBot.Strategies.Labouchere Strategy
+        public Gambler.Bot.AutoBet.Strategies.Labouchere Strategy
         {
             get { return strategy; }
             set { strategy = value; OnPropertyChanged(nameof(Strategy)); }
@@ -64,11 +64,11 @@ namespace KryGamesBotControls.Strategies.Labouchere
 
         public event EventHandler StartBetting;
 
-        public void GameChanged(DoormatCore.Games.Games newGame)
+        public void GameChanged(Gambler.Bot.Core.Games.Games newGame)
         {
             switch (newGame)
             {
-                case DoormatCore.Games.Games.Dice:
+                case Gambler.Bot.Core.Games.Games.Dice:
                 default: StartControl = new LabouchereDice(); break;
 
             }
@@ -78,9 +78,9 @@ namespace KryGamesBotControls.Strategies.Labouchere
 
         public void SetStrategy(BaseStrategy Strategy)
         {
-            if (Strategy is DoormatBot.Strategies.Labouchere)
+            if (Strategy is Gambler.Bot.AutoBet.Strategies.Labouchere)
             {
-                this.Strategy = Strategy as DoormatBot.Strategies.Labouchere;
+                this.Strategy = Strategy as Gambler.Bot.AutoBet.Strategies.Labouchere;
                 Bets.Clear();
                 if (this.Strategy!=null && this.Strategy.BetList!=null)
                 foreach (decimal x in this.Strategy?.BetList)

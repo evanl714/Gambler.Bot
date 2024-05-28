@@ -1,8 +1,8 @@
 ﻿using DevExpress.Mvvm;
 using DevExpress.Xpf.Core;
 using DevExpress.Xpf.Docking;
-using DoormatBot;
-using DoormatCore.Helpers;
+using Gambler.Bot.AutoBet;
+using Gambler.Bot.Core.Helpers;
 using KryGamesBot.Helpers;
 using KryGamesBotControls;
 using KryGamesBotControls.Common;
@@ -79,7 +79,7 @@ namespace KryGamesBot
             {
 
                 (newPanel.Content as InstanceControl).botIns.StoredBetSettings = 
-                    DoormatCore.Helpers.CopyHelper.CreateCopy<DoormatBot.Doormat.ExportBetSettings>(
+                    Gambler.Bot.Core.Helpers.CopyHelper.CreateCopy<Gambler.Bot.AutoBet.Doormat.ExportBetSettings>(
                         ActiveInstance.botIns.StoredBetSettings);
                 (newPanel.Content as InstanceControl).botIns.Strategy = (newPanel.Content as InstanceControl).botIns.StoredBetSettings.GetStrat();
 
@@ -96,7 +96,7 @@ namespace KryGamesBot
             dlmMainMainLayout.LayoutItemRestored += DlmMainMainLayout_LayoutItemRestored1;
             string DocsPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\";
             
-            DoormatBot.Doormat tmpInstance = new DoormatBot.Doormat(null);
+            Gambler.Bot.AutoBet.Doormat tmpInstance = new Gambler.Bot.AutoBet.Doormat(null);
             tmpInstance.NeedConstringPassword += TmpInstance_NeedConstringPassword;
             tmpInstance.NeedKeepassPassword += TmpInstance_NeedKeepassPassword;
             //check if there's a local settings file
@@ -170,7 +170,7 @@ namespace KryGamesBot
         }
 
 
-        internal static void TmpInstance_NeedKeepassPassword(object sender, DoormatBot.Helpers.PersonalSettings.GetConstringPWEventArgs e)
+        internal static void TmpInstance_NeedKeepassPassword(object sender, Gambler.Bot.AutoBet.Helpers.PersonalSettings.GetConstringPWEventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(kpPw))
             {
@@ -187,7 +187,7 @@ namespace KryGamesBot
             }
         }
 
-        internal static void TmpInstance_NeedConstringPassword(object sender, DoormatBot.Helpers.PersonalSettings.GetConstringPWEventArgs e)
+        internal static void TmpInstance_NeedConstringPassword(object sender, Gambler.Bot.AutoBet.Helpers.PersonalSettings.GetConstringPWEventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(dbPw))
             {
@@ -307,7 +307,7 @@ namespace KryGamesBot
         private void bchk_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
         {
             GlobalSettings tmp = new GlobalSettings();
-            DoormatBot.Doormat botins = new DoormatBot.Doormat(null);
+            Gambler.Bot.AutoBet.Doormat botins = new Gambler.Bot.AutoBet.Doormat(null);
             botins.LoadPersonalSettings(Path + "personalsettings.json");
             tmp.Settings = botins.PersonalSettings;
             //tmp.Settings = personal settings instance being used?
