@@ -1,12 +1,12 @@
 ﻿using System;
 using Avalonia;
 using Avalonia.ReactiveUI;
-using KryGamesBot.Ava;
+using Gambler.Bot;
 using Avalonia.WebView.Desktop;
 using Microsoft.Extensions.Configuration;
-using KryGamesBot.Ava.Classes;
+using Gambler.Bot.Classes;
 
-namespace KryGamesBot.Desktop;
+namespace Gambler.Bot.Desktop;
 
 class Program
 {

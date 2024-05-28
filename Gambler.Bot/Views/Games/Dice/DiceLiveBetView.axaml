@@ -1,0 +1,22 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Gambler.Bot.Views.Games.Dice.DiceLiveBetView" 
+             xmlns:vm="using:Gambler.Bot.ViewModels.Games.Dice"
+			 x:DataType="vm:DiceLiveBetViewModel"
+             >
+  <DataGrid ItemsSource="{Binding Bets}" IsReadOnly="True"  >
+    <DataGrid.Columns>
+      <DataGridTextColumn Binding="{Binding BetID}" Header="Bet Id"/>
+      <DataGridTextColumn Binding="{Binding DateValue}" Header="Time"/>
+      <DataGridTextColumn Binding="{Binding TotalAmount}" Header="Amount"/>
+		<DataGridCheckBoxColumn Binding="{Binding High}" Header="High"/>
+		<DataGridTextColumn Binding="{Binding Chance}" Header="Chance"/>
+      <DataGridTextColumn Binding="{Binding Roll}" Header="Roll"/>
+      <DataGridTextColumn Binding="{Binding Profit}" Header="Profit"/>
+      <DataGridTextColumn Binding="{Binding Nonce}" Header="Nonce"/>
+    </DataGrid.Columns>
+  </DataGrid>
+</UserControl>

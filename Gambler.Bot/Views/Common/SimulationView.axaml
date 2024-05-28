@@ -1,0 +1,93 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:common="using:Gambler.Bot.Views.Common"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Gambler.Bot.Views.Common.SimulationView"
+             xmlns:vm="using:Gambler.Bot.ViewModels.Common"
+             x:DataType="vm:SimulationViewModel"
+             xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+             xmlns:behaviours="using:Gambler.Bot.Behaviours"
+             xmlns:sg="clr-namespace:SpacedGridControl.Avalonia;assembly=SpacedGridControl.Avalonia"
+             >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <sg:SpacedGrid Margin="5" VerticalAlignment="Top" RowSpacing="3" ColumnSpacing="6" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition />
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+
+
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Column="0" Grid.Row="0" Text="Starting balance"/>
+            <NumericUpDown Grid.Column="1" Grid.Row="0" FormatString="n8" Value="{Binding StartingBalance}" />
+            <TextBlock Grid.Column="0" Grid.Row="1" Text="Number of bets"/>
+            <NumericUpDown Grid.Column="1" Grid.Row="1" FormatString="n0" Maximum="10000000000" Minimum="10" Value="{Binding NumberOfBets}" />
+            <!--
+            <TextBlock Grid.Column="0" Grid.Row="2"  Text="{Binding CurrentSite.SiteName}"/>
+            <TextBlock Grid.Column="0" Grid.Row="3"  Text="{Binding Strategy.StrategyName}"/>-->
+            <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" HorizontalAlignment="Right">
+                <Button HorizontalAlignment="Right" VerticalAlignment="Top"  Content="Start Simulation" Command="{Binding StartCommand}" IsEnabled="{Binding NotRunning}"/>
+                <Button HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Column="1" Grid.Row="2" Content="Stop Simulation" Command="{Binding StopCommand}" IsEnabled="{Binding Running}"/>
+            </StackPanel>
+            <TextBlock Grid.Column="0" Grid.Row="3"  Text="Enable bet log"/>
+            <ToggleSwitch IsChecked="{Binding Log}" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" IsEnabled="{Binding NotRunning}" />
+            <Button HorizontalAlignment="Right" IsEnabled="{Binding CanSave}" VerticalAlignment="Top" Grid.Column="1" Grid.Row="3"  Content="Save Bets" Command="{Binding SaveCommand}"/>
+            <SelectableTextBlock Grid.Column="0" Grid.Row="4" Text="Balance" />
+            <SelectableTextBlock Grid.Column="1" Grid.Row="4"  >
+                <i:Interaction.Behaviors>
+                    <behaviours:NumberFormatBehaviour Mask="n0" Text="{Binding CurrentSimulation.Balance, Mode=OneWay}" />
+                </i:Interaction.Behaviors>
+            </SelectableTextBlock>
+            <SelectableTextBlock Grid.Column="0" Grid.Row="5" Text="Progress"/>
+            <SelectableTextBlock Grid.Column="1" Grid.Row="5"   >
+                <i:Interaction.Behaviors>
+                    <behaviours:NumberFormatBehaviour Mask="p5" Text="{Binding Progress, Mode=OneWay}" />
+                </i:Interaction.Behaviors>
+            </SelectableTextBlock>
+
+            <TextBlock Grid.Column="2" Grid.Row="0" Text="Server seed"/>
+            <SelectableTextBlock Grid.Column="3" Grid.Row="0"  Text="{Binding CurrentSimulation.serverseed}"  />
+            <TextBlock Grid.Column="2" Grid.Row="1" Text="Server seed hash"/>
+            <SelectableTextBlock Grid.Column="3" Grid.Row="1"   Text="{Binding CurrentSimulation.serverseedhash}" />
+            <TextBlock Grid.Column="2" Grid.Row="2" Text="Client Seed"/>
+            <SelectableTextBlock Grid.Column="3" Grid.Row="2"   Text="{Binding CurrentSimulation.clientseed}"  />
+
+            <TextBlock Grid.Column="2" Grid.Row="3" Text="Time Running"/>
+            <SelectableTextBlock Grid.Column="3" Grid.Row="3"    >
+                <i:Interaction.Behaviors>
+                    <behaviours:NumberFormatBehaviour Mask="d\,hh\:mm\:ss"  Text="{Binding TimeRunning , Mode=OneWay}" />
+                </i:Interaction.Behaviors>
+            </SelectableTextBlock>
+            <TextBlock Grid.Column="2" Grid.Row="4" Text="Projected Time"/>
+            <SelectableTextBlock Grid.Column="3" Grid.Row="4"     >
+                <i:Interaction.Behaviors>
+                    <behaviours:NumberFormatBehaviour Mask="d\,hh\:mm\:ss"  Text="{Binding ProjectedTime , Mode=OneWay}" />
+                </i:Interaction.Behaviors>
+            </SelectableTextBlock>
+            <TextBlock Grid.Column="2" Grid.Row="5" Text="Projected remaining"/>
+            <SelectableTextBlock Grid.Column="3" Grid.Row="5"    >
+                <i:Interaction.Behaviors>
+                    <behaviours:NumberFormatBehaviour Mask="d\,hh\:mm\:ss"  Text="{Binding ProjectedRemaining , Mode=OneWay}" />
+                </i:Interaction.Behaviors>
+            </SelectableTextBlock>
+
+
+        </sg:SpacedGrid>
+        <common:SessionStatsView Grid.Row="1" DataContext="{Binding Stats}"  />
+    </Grid>
+</UserControl>

@@ -1,0 +1,79 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
+             x:Class="Gambler.Bot.Views.Common.TriggersView"
+             xmlns:vm="using:Gambler.Bot.ViewModels.Common"
+             x:DataType="vm:TriggersViewModel"
+             xmlns:classes="using:Gambler.Bot.Classes"
+
+             xmlns:helpers="using:DoormatCore.Helpers"
+             >
+    <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button HorizontalAlignment="Right" Content="Remove" Command="{Binding RemoveCommand}"/>
+            <Button HorizontalAlignment="Right" Content="Add"  Command="{Binding AddCommand}"/>
+        </StackPanel>
+        <DataGrid MinHeight="150" MaxHeight="400" ItemsSource="{Binding Triggers}" SelectedItem="{Binding SelectedTrigger}">
+            <DataGrid.Columns>
+                <DataGridCheckBoxColumn Header="Enabled" Binding="{Binding Enabled}" />
+                <DataGridTextColumn Header="Description" Binding="{Binding TriggerDescription}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel>
+            <ToggleSwitch Classes="theme-solid accent" Content="Enabled" IsChecked="{Binding SelectedTrigger.Enabled }" HorizontalAlignment="Left" />
+            <WrapPanel Orientation="Horizontal" IsVisible="{Binding ShowEditor}">
+
+
+                <TextBlock VerticalAlignment="Center"  Text="When " HorizontalAlignment="Left"/>
+                <ComboBox HorizontalAlignment="Left" MinWidth="150" MaxWidth="250" ItemsSource="{Binding Properties}" SelectedValue="{Binding SelectedTrigger.TriggerProperty}" />
+                <TextBlock  VerticalAlignment="Center" Text=" is "/>
+                <ComboBox MinWidth="150" MaxWidth="250" ItemsSource="{Binding Comparisons}" SelectedValue="{Binding SelectedTrigger.Comparison}" />
+                <TextBlock VerticalAlignment="Center"  Text=" than "/>
+                <ComboBox MinWidth="150" MaxWidth="250" ItemsSource="{Binding Againsts}" SelectedValue="{Binding SelectedTrigger.TargetType}"/>
+
+                <!--If tartget type is value-->
+                <NumericUpDown MinWidth="100" MaxWidth="150" Value="{Binding Target}" IsVisible="{Binding ShowTValue}" />
+                <!--If tartget type is percentage-->
+                <StackPanel Orientation="Horizontal"  IsVisible="{Binding ShowTPercentage}">
+                    <NumericUpDown MinWidth="100" MaxWidth="150" FormatString="n5" Value="{Binding SelectedTrigger.Percentage}"></NumericUpDown>
+                    <TextBlock VerticalAlignment="Center"  Text="% Of "/>
+                    <ComboBox MinWidth="150" MaxWidth="250" SelectedItem="{Binding SelectedTrigger.Target}"  ItemsSource="{Binding Properties}"/>
+
+                </StackPanel>
+                <!--If tartget type is property-->
+                <ComboBox SelectedItem="{Binding SelectedTrigger.Target}"  IsVisible="{Binding ShowTPrperty}" ItemsSource="{Binding Properties}"></ComboBox>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center"  Text=" Then ">
+
+                    </TextBlock>
+                    <ComboBox MinWidth="150" MaxWidth="250" SelectedItem="{Binding SelectedTrigger.Action}" ItemsSource="{Binding Actions}"/>
+                </StackPanel>
+                <!-- if Action is amount action -->
+                <WrapPanel Orientation="Vertical" IsVisible="{Binding ShowAmount}">
+                    <TextBlock Text="Amount"/>
+                    <ComboBox MinWidth="150" MaxWidth="250" ItemsSource="{Binding Againsts}" SelectedItem="{Binding SelectedTrigger.ValueType }" />
+                    <!-- if targettype = value-->
+                    <NumericUpDown MinWidth="100" MaxWidth="150" Value="{Binding SelectedTrigger.ValueValue}" IsVisible="{Binding ShowVValue}" />
+                    <!-- if targettype = percentage-->
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" IsVisible="{Binding ShowVPercentage}">
+                        <NumericUpDown MinWidth="100" MaxWidth="150" FormatString="n5" Value="{Binding SelectedTrigger.ValueValue}" />
+                        <TextBlock VerticalAlignment="Center" Text="% of "></TextBlock>
+                        <ComboBox MinWidth="150" MaxWidth="250" SelectedItem="{Binding SelectedTrigger.ValueProperty}" ItemsSource="{Binding Properties}"/>
+                    </StackPanel>
+                    <!-- if targettype = property-->
+                    <ComboBox MinWidth="150" MaxWidth="250" SelectedItem="{Binding SelectedTrigger.ValueProperty}" IsVisible="{Binding ShowVPrperty}" ItemsSource="{Binding Properties}"/>
+                </WrapPanel>
+                <!-- if action is destination action-->
+                <StackPanel Orientation="Horizontal" IsVisible="{Binding ShowDestination}">
+                    <TextBlock Text=" To "></TextBlock>
+                    <TextBox MinWidth="150" MaxWidth="300" Text="{Binding SelectedTrigger.Destination}"></TextBox>
+                </StackPanel>
+            </WrapPanel>
+        </StackPanel>
+    </StackPanel>
+
+</UserControl>
