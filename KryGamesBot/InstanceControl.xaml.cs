@@ -2,6 +2,7 @@
 using DevExpress.Xpf.Bars;
 using DevExpress.Xpf.Core;
 using Gambler.Bot.AutoBet;
+using Gambler.Bot.Core.Events;
 using Gambler.Bot.Core.Helpers;
 using KryGamesBot.Helpers;
 using KryGamesBotControls.Common;
@@ -26,7 +27,7 @@ namespace KryGamesBot
     /// <summary>
     /// Interaction logic for InstanceControl.xaml
     /// </summary>
-    
+
     public partial class InstanceControl : UserControl, INotifyPropertyChanged
     {
         string BetSettingsFile = "";
@@ -92,11 +93,11 @@ namespace KryGamesBot
             cbeStartegies.EditValue = botIns.Strategy?.StrategyName;
         }
 
-        private void BotIns_OnStopped(object sender, Gambler.Bot.Core.Sites.GenericEventArgs e)
+        private void BotIns_OnStopped(object sender, GenericEventArgs e)
         {
             //throw new NotImplementedException();
             if (!Dispatcher.CheckAccess())
-                Dispatcher.Invoke(new Action<object, Gambler.Bot.Core.Sites.GenericEventArgs>(BotIns_OnStopped),sender,e);
+                Dispatcher.Invoke(new Action<object, GenericEventArgs>(BotIns_OnStopped),sender,e);
             else
             {
                 bbtnSimulator.IsEnabled = true;
@@ -109,7 +110,7 @@ namespace KryGamesBot
         private void BotIns_OnStarted(object sender, EventArgs e)
         {
             if (!Dispatcher.CheckAccess())
-                Dispatcher.Invoke(new Action<object, Gambler.Bot.Core.Sites.GenericEventArgs>(BotIns_OnStopped), sender, e);
+                Dispatcher.Invoke(new Action<object, GenericEventArgs>(BotIns_OnStopped), sender, e);
             else
             {
                 bbtnSimulator.IsEnabled = false;
@@ -199,12 +200,12 @@ namespace KryGamesBot
             SiteStats.Stats = e.NewStats;
         }
 
-        private void BotIns_OnSiteRegisterFinished(object sender, Gambler.Bot.Core.Sites.GenericEventArgs e)
+        private void BotIns_OnSiteRegisterFinished(object sender, GenericEventArgs e)
         {
             //throw new NotImplementedException();
         }
 
-        private void BotIns_OnSiteNotify(object sender, Gambler.Bot.Core.Sites.GenericEventArgs e)
+        private void BotIns_OnSiteNotify(object sender, GenericEventArgs e)
         {
             if (!Dispatcher.CheckAccess()) // CheckAccess returns true if you're on the dispatcher thread
             {
@@ -247,7 +248,7 @@ namespace KryGamesBot
             
         }
 
-        private void BotIns_OnSiteChat(object sender, Gambler.Bot.Core.Sites.GenericEventArgs e)
+        private void BotIns_OnSiteChat(object sender, GenericEventArgs e)
         {
             //throw new NotImplementedException();
         }
@@ -263,7 +264,7 @@ namespace KryGamesBot
                 sessionStats.RefreshStats();
         }
 
-        private void BotIns_OnSiteAction(object sender, Gambler.Bot.Core.Sites.GenericEventArgs e)
+        private void BotIns_OnSiteAction(object sender, GenericEventArgs e)
         {
             if (!Dispatcher.CheckAccess()) // CheckAccess returns true if you're on the dispatcher thread
             {

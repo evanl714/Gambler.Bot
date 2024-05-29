@@ -1,6 +1,7 @@
 ﻿using DevExpress.Xpf.Editors;
 using DevExpress.Xpf.LayoutControl;
 using Gambler.Bot.Core.Sites;
+using Gambler.Bot.Core.Sites.Classes;
 using Gambler.Bot.Core.Storage;
 using System;
 using System.Collections.Generic;

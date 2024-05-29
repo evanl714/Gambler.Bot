@@ -1,5 +1,7 @@
 ﻿using Avalonia.Threading;
+using Gambler.Bot.Core.Events;
 using Gambler.Bot.Core.Sites;
+using Gambler.Bot.Core.Sites.Classes;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using System;

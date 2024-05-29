@@ -18,9 +18,9 @@ namespace KryGamesBotControls.Common
     /// </summary>
     public partial class SiteStats : BaseControl
     {
-        private Gambler.Bot.Core.Sites.SiteStats stats;
+        private Gambler.Bot.Core.Sites.Classes.SiteStats stats;
 
-        public Gambler.Bot.Core.Sites.SiteStats Stats
+        public Gambler.Bot.Core.Sites.Classes.SiteStats Stats
         {
             get { return stats; }
             set { stats = value; OnPropertyChanged(nameof(Stats)); }

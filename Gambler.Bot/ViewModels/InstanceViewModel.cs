@@ -4,6 +4,7 @@ using Gambler.Bot.AutoBet.Strategies;
 using Gambler.Bot.Classes;
 using Gambler.Bot.Classes.BetsPanel;
 using Gambler.Bot.Classes.Strategies;
+using Gambler.Bot.Core.Events;
 using Gambler.Bot.ViewModels.AppSettings;
 using Gambler.Bot.ViewModels.Common;
 using Gambler.Bot.ViewModels.Games.Dice;
@@ -180,12 +181,12 @@ namespace Gambler.Bot.ViewModels
             }
         }
 
-        private void BotIns_OnSiteAction(object sender, Gambler.Bot.Core.Sites.GenericEventArgs e)
+        private void BotIns_OnSiteAction(object sender, GenericEventArgs e)
         {
             LastAction = e.Message;
         }
 
-        private void BotIns_OnSiteBetFinished(object sender, Gambler.Bot.Core.Sites.BetFinisedEventArgs e)
+        private void BotIns_OnSiteBetFinished(object sender, BetFinisedEventArgs e)
         {
             SiteStatsData.StatsUpdated(botIns.CurrentSite.Stats);
             SessionStatsData.StatsUpdated(botIns.Stats);
@@ -193,7 +194,7 @@ namespace Gambler.Bot.ViewModels
             LiveBets.AddBet(e.NewBet);
         }
 
-        private void BotIns_OnSiteLoginFinished(object sender, Gambler.Bot.Core.Sites.LoginFinishedEventArgs e)
+        private void BotIns_OnSiteLoginFinished(object sender, LoginFinishedEventArgs e)
         {
             SiteStatsData.Stats = e.Stats;
             SiteStatsData.RaisePropertyChanged(nameof(SiteStatsData.Stats));
@@ -215,7 +216,7 @@ namespace Gambler.Bot.ViewModels
             tmrStats.Start();
         }
 
-        private void BotIns_OnStopped(object? sender, Gambler.Bot.Core.Sites.GenericEventArgs e)
+        private void BotIns_OnStopped(object? sender, GenericEventArgs e)
         {
             //if (!Dispatcher.CheckAccess())
             //    Dispatcher.Invoke(new Action<object, Gambler.Bot.Core.Sites.GenericEventArgs>(BotIns_OnStopped), sender, e);
@@ -487,12 +488,12 @@ namespace Gambler.Bot.ViewModels
             botIns.StopOnWin = true;
         }
 
-        private void Tmp_OnBypassRequired(object? sender, Gambler.Bot.Core.Sites.BypassRequiredArgs e)
+        private void Tmp_OnBypassRequired(object? sender, BypassRequiredArgs e)
         {
             e.Config = MainView.GetBypass(e);
         }
 
-        private void Tmp_OnSiteError(object sender, Gambler.Bot.Core.Sites.ErrorEventArgs e)
+        private void Tmp_OnSiteError(object sender, Core.Events.ErrorEventArgs e)
         {
             if (!Dispatcher.UIThread.CheckAccess())
                 Dispatcher.UIThread.Invoke(() => { Tmp_OnSiteError(sender, e); });
@@ -502,7 +503,7 @@ namespace Gambler.Bot.ViewModels
             }
         }
 
-        private void Tmp_OnSiteNotify(object sender, Gambler.Bot.Core.Sites.GenericEventArgs e)
+        private void Tmp_OnSiteNotify(object sender, GenericEventArgs e)
         {
             if (!Dispatcher.UIThread.CheckAccess())
                 Dispatcher.UIThread.Invoke(() => { Tmp_OnSiteNotify(sender, e); });

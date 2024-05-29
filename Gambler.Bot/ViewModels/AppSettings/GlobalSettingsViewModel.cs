@@ -32,6 +32,11 @@ namespace Gambler.Bot.ViewModels.AppSettings
             Errors.Settings = Settings;
             Storage.Settings = Settings;
             Triggers.SetTriggers(Settings?.Notifications);
+            Errors.Clear();
+            foreach (var error in Settings?.ErrorSettings)
+            {
+                Errors.AddItem(error);
+            }
         }
 
         public GlobalSettingsViewModel(ILogger logger) : base(logger)

@@ -1,5 +1,5 @@
 ﻿using Gambler.Bot.Core.Helpers;
-using Gambler.Bot.Core.Sites;
+using Gambler.Bot.Core.Sites.Classes;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;

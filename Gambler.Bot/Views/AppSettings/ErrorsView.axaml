@@ -3,6 +3,20 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Gambler.Bot.Views.AppSettings.ErrorsView">
-    Welcome to Avalonia!
+             x:Class="Gambler.Bot.Views.AppSettings.ErrorsView"
+             xmlns:vm="using:Gambler.Bot.ViewModels.AppSettings"
+             x:DataType="vm:ErrorsViewModel"
+             >
+    <DataGrid ItemsSource="{Binding Errors}">
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="Error type" Binding="{Binding Type}" IsReadOnly="True"></DataGridTextColumn>
+            <DataGridTemplateColumn Header="Action" >
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <ComboBox ItemsSource="{Binding $parent[DataGrid].((vm:ErrorsViewModel)DataContext).Actions}" SelectedItem="{Binding Action}"/>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+        </DataGrid.Columns>
+    </DataGrid>
 </UserControl>

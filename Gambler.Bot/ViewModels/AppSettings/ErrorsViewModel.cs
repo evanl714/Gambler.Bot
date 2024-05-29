@@ -1,16 +1,19 @@
-﻿using Gambler.Bot.AutoBet.Helpers;
+﻿using Doormat.Bot.Helpers;
+using Gambler.Bot.AutoBet.Helpers;
 using Gambler.Bot.Classes;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Gambler.Bot.AutoBet.Helpers.PersonalSettings;
 
 namespace Gambler.Bot.ViewModels.AppSettings
 {
-    public class ErrorsViewModel: ViewModelBase
+    public class ErrorsViewModel : ViewModelBase
     {
         private PersonalSettings settings;
 
@@ -20,32 +23,27 @@ namespace Gambler.Bot.ViewModels.AppSettings
             set { settings = value; this.RaisePropertyChanged(); }
         }
 
-        private UISettings uiSettings;
-
-        public UISettings UiSettings
-        {
-            get { return uiSettings; }
-            set { uiSettings = value; this.RaisePropertyChanged(); }
-        }
-
+        public ObservableCollection<ErrorSetting> Errors { get; set; } = new ObservableCollection<ErrorSetting>() ;
         
+        public List<ErrorActions> Actions { get; set; } = new List<ErrorActions>();
 
-        public string DonateMode
-        {
-            get { return UiSettings?.DonateMode; }
-            set 
-            { 
-                if (UiSettings != null)
-                    UiSettings.DonateMode = value; 
-                this.RaisePropertyChanged(nameof(ShowDonatePercentage));
-            }
-        }
 
-        public bool ShowDonatePercentage { get => DonateMode == "Prompt"|| DonateMode=="Auto"; }
 
         public ErrorsViewModel(ILogger logger) : base(logger)
         {
-            UiSettings = UISettings.Settings;
+            foreach (ErrorActions x in Enum.GetValues(typeof(ErrorActions)))
+            {
+                Actions.Add(x);
+            }
+        }
+        public void AddItem(ErrorSetting error)
+        {
+            Errors.Add(error);            
+        }
+
+        internal void Clear()
+        {
+            Errors.Clear();
         }
     }
 }

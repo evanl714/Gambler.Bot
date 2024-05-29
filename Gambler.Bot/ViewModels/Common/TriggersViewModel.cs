@@ -1,7 +1,7 @@
 ﻿using AvaloniaEdit.Utils;
 using Gambler.Bot.AutoBet.Helpers;
 using Gambler.Bot.Core.Helpers;
-using Gambler.Bot.Core.Sites;
+using Gambler.Bot.Core.Sites.Classes;
 using Microsoft.Extensions.Logging;
 using Org.BouncyCastle.Asn1.BC;
 using ReactiveUI;

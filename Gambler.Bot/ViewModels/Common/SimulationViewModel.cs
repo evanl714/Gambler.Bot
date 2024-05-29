@@ -1,6 +1,7 @@
 ﻿using Avalonia.Threading;
 using Gambler.Bot.AutoBet.Helpers;
 using Gambler.Bot.AutoBet.Strategies;
+using Gambler.Bot.Core.Events;
 using Gambler.Bot.Core.Sites;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
