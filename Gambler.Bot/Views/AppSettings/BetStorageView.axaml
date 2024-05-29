@@ -24,7 +24,7 @@
         </ComboBox>
         <TextBlock Grid.Column="0" Grid.Row="1" Text="Encryption password" Margin="5"/>
         <TextBox  Margin="5" Grid.Column="1" Grid.Row="1" Text="{Binding Password}" />
-        <TextBlock Margin="5" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" TextWrapping="Wrap" Text="This password is used to encrypt your connection string for your storage option. You will need to enter it every time you open KryGamesBot. If you leave it blank, you will not need to enter a password but your connection string will be saved in plain text." />
+        <TextBlock Margin="5" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" TextWrapping="Wrap" Text="This password is used to encrypt your connection string for your storage option. You will need to enter it every time you open Gambler.Bot. If you leave it blank, you will not need to enter a password but your connection string will be saved in plain text." />
         <ContentControl  Margin="5" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" Content="{Binding DBVM}"/>
     </Grid>
 </UserControl>

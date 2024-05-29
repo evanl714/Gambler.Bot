@@ -16,11 +16,15 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Gambler.Bot.Core.Events;
+using Avalonia.VisualTree;
+using Avalonia.ReactiveUI;
+using Gambler.Bot.ViewModels;
 
 namespace Gambler.Bot.Views;
 
-public partial class MainView : UserControl
+public partial class MainView : ReactiveUserControl<MainViewModel>
 {
+    private Window parentWindow;
     static MainView _instance;
     public MainView()
     {
@@ -28,8 +32,31 @@ public partial class MainView : UserControl
         _instance=this;
         wvBypass.NavigationCompleted += WvBypass_NavigationCompleted;
         //PART_WebView.
+        this.AttachedToVisualTree += OnAttachedToVisualTree;
+        this.DetachedFromVisualTree += OnDetachedFromVisualTree;
     }
 
+    private void OnAttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e)
+    {
+        parentWindow = this.FindAncestorOfType<Window>();
+        if (parentWindow != null)
+        {
+            parentWindow.Closing += OnWindowClosing;
+        }
+    }
+
+    private void OnDetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e)
+    {
+        if (parentWindow != null)
+        {
+            parentWindow.Closing -= OnWindowClosing;
+        }
+    }
+    private void OnWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+        // Handle window closing logic here
+        ViewModel.OnClosing();
+    }
     private async void WvBypass_NavigationCompleted(object? sender, WebViewCore.Events.WebViewUrlLoadedEventArg e)
     {
         //Navigation happened here, check for cookies again.

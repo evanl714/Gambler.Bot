@@ -29,7 +29,7 @@ namespace Gambler.Bot.ViewModels.AppSettings
         private void SetSettings()
         {
             General.Settings = Settings;
-            Errors.Settings = Settings;
+            //Errors.Settings = Settings;
             Storage.Settings = Settings;
             Triggers.SetTriggers(Settings?.Notifications);
             Errors.Clear();

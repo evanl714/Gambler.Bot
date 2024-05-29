@@ -13,7 +13,7 @@ namespace Gambler.Bot.ViewModels.AppSettings
     public class SQLiteViewModel: ViewModelBase, iDatabaseForm
     {
         public bool Portable { get; set; }
-        private string fileName = "KryGamesBot.db";
+        private string fileName = "Gambler.Bot.db";
 
         public string FileName
         {
@@ -24,9 +24,9 @@ namespace Gambler.Bot.ViewModels.AppSettings
         public SQLiteViewModel(ILogger logger):base(logger)
         {
             if (Portable)
-                FileName = "KryGamesBot.db";
+                FileName = "Gambler.Bot.db";
             else
-                FileName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\KryGamesBot.db";
+                FileName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gambler.Bot\\Gambler.Bot.db";
         }
 
         public string ConnectionString()

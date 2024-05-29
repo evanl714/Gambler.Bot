@@ -1,12 +1,9 @@
-﻿using Gambler.Bot.Classes;
+﻿using ActiproSoftware.UI.Avalonia.Themes;
+using Gambler.Bot.Classes;
 using ReactiveUI;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Gambler.Bot.ViewModels
 {
@@ -22,14 +19,42 @@ namespace Gambler.Bot.ViewModels
                 path = "";
             else
             {
-                path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "KryGamesBot");
+                path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gambler.Bot");
             }
             Instance = new InstanceViewModel(logger);
             if (File.Exists(Path.Combine(path, "UISettings.json")))
             {
                 UISettings.Settings = JsonSerializer.Deserialize<UISettings>(File.ReadAllText(Path.Combine(path, "UISettings.json")));
                 //change the theme somehow?
+                if ((UISettings.Settings?.ThemeName??"Default") != "Default")
+                {
+                    if (!ModernTheme.TryGetCurrent(out var theme))
+                    {
+                        return;
+                    }
+                    theme.Definition.AccentColorRampName = UISettings.Settings.ThemeName;
+                    theme.RefreshResources();
+                }
+                
             }
+        }
+
+        public void SaveUISettings()
+        {
+            string path = "";
+            if (UISettings.Portable)
+                path = "";
+            else
+            {
+                path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gambler.Bot");
+            }
+            File.WriteAllText(Path.Combine(path, "UISettings.json"), JsonSerializer.Serialize(UISettings.Settings));
+            
+        }
+
+        internal void OnClosing()
+        {
+            SaveUISettings();
         }
     }
 }

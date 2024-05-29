@@ -1,15 +1,10 @@
-﻿using AvaloniaEdit.Utils;
-using Gambler.Bot.AutoBet.Helpers;
-using Gambler.Bot.Core.Helpers;
+﻿using Gambler.Bot.Core.Helpers;
 using Gambler.Bot.Core.Sites.Classes;
 using Microsoft.Extensions.Logging;
-using Org.BouncyCastle.Asn1.BC;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Gambler.Bot.ViewModels.Common

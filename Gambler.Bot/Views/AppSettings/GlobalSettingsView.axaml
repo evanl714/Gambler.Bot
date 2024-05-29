@@ -13,16 +13,16 @@
 
     <TabControl TabStripPlacement ="Left" >
         <TabItem Header="{DynamicResource Localization.AppSettings.General}">
-            <ContentControl Content="{Binding General}"/>
+            <local:GeneralSettingsView DataContext="{Binding General}"/>
         </TabItem>
         <TabItem Header="{DynamicResource Localization.AppSettings.BetStorage}">
-            <ContentControl Content="{Binding Storage}"/>
+            <local:BetStorageView DataContext="{Binding Storage}"/>
         </TabItem>
         <TabItem Header="{DynamicResource Localization.AppSettings.Notifications}">
-            <ContentControl Content="{Binding Triggers}"/>
+            <common:TriggersView DataContext="{Binding Triggers}"/>
         </TabItem>
         <TabItem Header="{DynamicResource Localization.AppSettings.Errors}">
-            <ContentControl Content="{Binding Errors}"/>
+            <local:ErrorsView DataContext="{Binding Errors}"/>
         </TabItem>
     </TabControl>
 </UserControl>

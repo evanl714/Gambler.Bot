@@ -43,18 +43,11 @@
                                                    FontSize="36"
                                                    FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"
                                                    />
-                                        <actipro:AvatarGroup ItemsSource="{Binding Currencies}"
-                                                             OverflowKind="Popup"
-                                                             ItemLength="16"
-                                                             MaxInlineCount="5"
-                                                             OverlapPercentage="0,2"
-                                                             Grid.Column="2" HorizontalAlignment="Left"
-                                                             >
-
-                                            <!-- Use a ControlTheme to configure Avatar controls -->
+                                        <actipro:AvatarGroup OverlapPercentage="0.3" ItemLength="32" ItemsSource="{Binding Currencies}" Grid.Column="2">
                                             <actipro:AvatarGroup.ItemContainerTheme>
                                                 <ControlTheme TargetType="actipro:Avatar" BasedOn="{StaticResource {x:Type actipro:Avatar}}" x:DataType="vm:AvaCurrency">
-
+                                                    <Setter Property="BorderBrush" Value="{actipro:ThemeResource Container2BackgroundBrush}" />
+                                                    <Setter Property="BorderThickness" Value="2" />
                                                     <Setter Property="Content" >
                                                         <Template>
                                                             <Image>
@@ -67,23 +60,26 @@
                                                     <Setter Property="Description" Value="{Binding Currency}" />
                                                 </ControlTheme>
                                             </actipro:AvatarGroup.ItemContainerTheme>
-
+                                        </actipro:AvatarGroup>
+                                        <actipro:AvatarGroup OverlapPercentage="0.3" ItemLength="32" ItemsSource="{Binding Games}" Grid.Column="3">
+                                            <actipro:AvatarGroup.ItemContainerTheme>
+                                                <ControlTheme TargetType="actipro:Avatar" BasedOn="{StaticResource {x:Type actipro:Avatar}}" x:DataType="vm:AvaGame">
+                                                    <Setter Property="BorderBrush" Value="{actipro:ThemeResource Container2BackgroundBrush}" />
+                                                    <Setter Property="BorderThickness" Value="2" />
+                                                    <Setter Property="Content" >
+                                                        <Template>
+                                                            <Image>
+                                                                <Image.Source>
+                                                                    <svg:SvgImage Source="{Binding Image}" />
+                                                                </Image.Source>
+                                                            </Image>
+                                                        </Template>
+                                                    </Setter>
+                                                    <Setter Property="Description" Value="{Binding Game}" />
+                                                </ControlTheme>
+                                            </actipro:AvatarGroup.ItemContainerTheme>
                                         </actipro:AvatarGroup>
 
-                                        <ItemsControl Margin="5" Grid.Column="3" ItemsSource="{Binding Games}" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                            <ItemsControl.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <WrapPanel Orientation="Horizontal"/>
-                                                </ItemsPanelTemplate>
-                                            </ItemsControl.ItemsPanel>
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Border Width="32" Height="32" Margin="5,5,5,5">
-                                                        <Svg Path="{Binding Image}" />
-                                                    </Border>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
                                         <StackPanel Grid.Column="4" Orientation="Vertical">
                                             <Button Margin="5"
                                                     Width="250"

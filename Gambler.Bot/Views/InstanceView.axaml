@@ -75,12 +75,12 @@
 
                 </MenuItem>
             </Menu>
-            <Border  DockPanel.Dock="Bottom" Height="25" VerticalAlignment="Bottom" BorderThickness="1" BorderBrush="{DynamicResource SystemChromeGrayColor}" Padding="3">
+            <Border  DockPanel.Dock="Bottom" Height="30" VerticalAlignment="Bottom" BorderThickness="1" BorderBrush="{DynamicResource SystemChromeGrayColor}" Padding="3">
                 <Grid VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3*" />
                         <ColumnDefinition Width="3*" />
-                        <ColumnDefinition  Width="*"/>
+                        <ColumnDefinition  Width="auto"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" >
                         <Image Source="{SvgImage /Assets/Images/bxs-user-check.svg}" IsVisible="{Binding LoggedIn}"/>
@@ -94,8 +94,7 @@
                         <TextBlock Text="Last Action: "/>
                         <TextBlock Text="{Binding LastAction}"/>
                     </StackPanel>
-
-                    <actipro:ToggleThemeButton HorizontalAlignment="Right" Grid.Column="2" />
+                    <actipro:ToggleThemeButton Grid.Column="2" />
                 </Grid>
             </Border>
             <common:SelectSiteView DataContext="{Binding SelectSite}" IsVisible="{Binding $parent[local:InstanceView].((vm:InstanceViewModel)Tag).ShowSites}"  />

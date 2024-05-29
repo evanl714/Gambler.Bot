@@ -5,8 +5,7 @@
              mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="450"
              x:Class="Gambler.Bot.Views.AppSettings.GeneralSettingsView"
              xmlns:vm="clr-namespace:Gambler.Bot.ViewModels.AppSettings"
-             x:DataType="vm:GeneralSettingsViewModel"
-             xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+             x:DataType="vm:GeneralSettingsViewModel" xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
 
              >
     <StackPanel Orientation="Vertical">
@@ -24,9 +23,9 @@
                     </DataTemplate>
                 </Expander.HeaderTemplate>
                 <StackPanel >
-                    <actipro:ToggleThemeButton Content="Theme"  />
+                    <actipro:ToggleThemeButton IsEnabled="True" IsVisible="True" Background="Red" MinHeight="25" MinWidth="25" />
                     <TextBlock Text="Colour scheme"/>
-                    <ComboBox SelectedItem="{Binding UiSettings.ThemeName}" />
+                    <ComboBox SelectedItem="{Binding SelectedRamp}" ItemsSource="{Binding Ramps}" DisplayMemberBinding="{Binding Name}" />
                     <TextBlock Text="Should I offer multiple layouts here?"/>
                     <ComboBox />
                 </StackPanel>
@@ -40,10 +39,8 @@
                     </DataTemplate>
                 </Expander.HeaderTemplate>
                 <StackPanel >
-                    <ComboBox SelectedItem="{Binding UiSettings.UpdateMode}" >
-                        <ComboBoxItem Content="Never"></ComboBoxItem>
-                        <ComboBoxItem Content="Check for updates and notify"></ComboBoxItem>
-                        <ComboBoxItem Content="Update automatically"></ComboBoxItem>
+                    <ComboBox SelectedValue="{Binding UiSettings.UpdateMode}" ItemsSource="{Binding UpdateModes}">
+
                     </ComboBox>
                 </StackPanel>
             </Expander>
@@ -71,10 +68,7 @@
                     </DataTemplate>
                 </Expander.HeaderTemplate>
                 <StackPanel >
-                    <ComboBox SelectedItem="{Binding DonateMode}" >
-                        <ComboBoxItem Content="Dot not prompt"/>
-                        <ComboBoxItem Content="Show prompt with the below default"/>
-                        <ComboBoxItem Content="Automatically donate the below amount"/>
+                    <ComboBox SelectedItem="{Binding UiSettings.DonateMode}" ItemsSource="{Binding UpdateModes}" >
                     </ComboBox>
                     <NumericUpDown IsVisible="{Binding ShowDonatePercentage}"/>
                 </StackPanel>

@@ -15,10 +15,11 @@
     <Application.Resources>
 
         <ResourceDictionary>
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceInclude Source="avares://Gambler.Bot/Assets/Lang/en-US.axaml" />
             </ResourceDictionary.MergedDictionaries>
-
+            <converters:BitmapAssetValueConverter x:Key="variableImage"/>
         </ResourceDictionary>
 
     </Application.Resources>

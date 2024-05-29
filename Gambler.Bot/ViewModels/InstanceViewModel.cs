@@ -1,5 +1,6 @@
 ﻿using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Threading;
+using Gambler.Bot.AutoBet.Helpers;
 using Gambler.Bot.AutoBet.Strategies;
 using Gambler.Bot.Classes;
 using Gambler.Bot.Classes.BetsPanel;
@@ -520,40 +521,25 @@ namespace Gambler.Bot.ViewModels
                 path = "";
             else
             {
-                path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "KryGamesBot");
+                path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gambler.Bot");
             }
             InstanceName = Name;
             //load bet settings
+            BetSettingsFile = Path.Combine(path, Name + ".betset");
 
-            if (File.Exists(Path.Combine(path,Name + ".betset")))
-            {
-                BetSettingsFile = Path.Combine(path, Name + ".betset");
-
-            }
-
-            //load layout
-            //if (File.Exists(path + Name + ".layout"))
-            //{
-            //    dlmMainLayout.RestoreLayoutFromXml(path + Name + ".layout");
-            //}
             string InstanceSettingsFile =Path.Combine( path,Name + ".siteset");
             if (File.Exists(InstanceSettingsFile))
             {
                 LoadInstanceSettings(InstanceSettingsFile);
-
             }
-            if (File.Exists(BetSettingsFile))
-                botIns.LoadBetSettings(BetSettingsFile);
-            else
-            {
-                botIns.StoredBetSettings = new Gambler.Bot.AutoBet.AutoBet.ExportBetSettings
-                {
-                    BetSettings = new Gambler.Bot.AutoBet.Helpers.InternalBetSettings(),
-
-
-                };
+            if (!File.Exists(BetSettingsFile))
+            {                
+                //botIns.BetSettings = new Gambler.Bot.AutoBet.AutoBet.BetSettings();
+                botIns.BetSettings = new InternalBetSettings();
                 botIns.Strategy = new Gambler.Bot.AutoBet.Strategies.Martingale(_logger);
+                botIns.SaveBetSettings(BetSettingsFile);
             }
+            botIns.LoadBetSettings(BetSettingsFile);
             this.RaisePropertyChanged(nameof(SelectedStrategy));
             
             
@@ -567,26 +553,31 @@ namespace Gambler.Bot.ViewModels
             if (botIns.CurrentSite != null)
                 botIns.CurrentSite.Disconnect();
             string path = string.Empty;
-            path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) , "KryGamesBot");
+            path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) , "Gambler.Bot");
             botIns.SaveBetSettings(Path.Combine(path, InstanceName + ".betset"));
+            botIns.SavePersonalSettings(PersonalSettingsFile);
             SaveINstanceSettings(Path.Combine(path, InstanceName + ".siteset"));
         }
 
         internal async Task Loaded()
         {
             botIns.GetStrats();
-            if (UISettings.Portable && File.Exists("PersonalSettings.json"))
+            if (UISettings.Portable)
             {
                 PersonalSettingsFile ="PersonalSettings.json";
 
-            }
+            }            
             //Check if global settings for this account exists
-            else if (!UISettings.Portable && File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json"))
+            else
             {
-                PersonalSettingsFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\KryGamesBot\\PersonalSettings.json";
-                botIns.LoadPersonalSettings(PersonalSettingsFile);
+                PersonalSettingsFile =Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gambler.Bot","PersonalSettings.json");
             }
-
+            if (!File.Exists(PersonalSettingsFile))
+            {
+                botIns.PersonalSettings = PersonalSettings.Default();
+                botIns.SavePersonalSettings(PersonalSettingsFile);
+            }
+            botIns.LoadPersonalSettings(PersonalSettingsFile);
             LoadSettings("default");
         }
 

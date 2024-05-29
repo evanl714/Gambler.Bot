@@ -13,6 +13,8 @@ namespace Gambler.Bot.Classes
     {
         public static UISettings Settings = new UISettings();
         public static bool Portable = false;
+        bool darkMode = true;
+        public bool DarkMode { get=>darkMode; set { darkMode = value; RaisePropertyChanged(); } }
         string themeName;
         public string ThemeName { get => themeName; set { themeName = value; RaisePropertyChanged(); } }
         int chartBets = 1000;
@@ -20,8 +22,20 @@ namespace Gambler.Bot.Classes
 
         int liveBets = 100;
         public int LiveBets { get => liveBets; set { liveBets = value; RaisePropertyChanged(); } }
-        public string UpdateMode { get; set; }
-        public string DonateMode { get; set; }
+        string donateMode;
+        string updateMode;
+        public string UpdateMode 
+        { 
+            get =>updateMode; 
+            set 
+            { updateMode = value; RaisePropertyChanged(); } 
+        }
+        public string DonateMode
+        {
+            get => donateMode;
+            set { donateMode = value; RaisePropertyChanged(); }
+        }
+
 
         public event PropertyChangedEventHandler? PropertyChanged;
 

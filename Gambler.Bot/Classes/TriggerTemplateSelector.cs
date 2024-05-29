@@ -2,13 +2,7 @@
 using Avalonia.Controls.Templates;
 using Avalonia.Metadata;
 using Gambler.Bot.Core.Helpers;
-using Org.BouncyCastle.Crmf;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TextMateSharp.Model;
 
 namespace Gambler.Bot.Classes
 {
