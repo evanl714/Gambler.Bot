@@ -20,6 +20,8 @@ namespace Gambler.Bot
         {
             
             AvaloniaXamlLoader.Load(this);
+            // Workaround for default ToggleThemeButton theme in Actipro Avalonia v24.1.0
+            _ = ActiproSoftware.Properties.Shared.AssemblyInfo.Instance;
         }
 
         public override void OnFrameworkInitializationCompleted()

@@ -84,5 +84,13 @@ namespace Gambler.Bot.ViewModels.AppSettings
             
             
         }
+
+        public void ThemeToggled()
+        {
+            ModernTheme.TryGetCurrent(out var theme);
+            UiSettings.DarkMode =  App.Current.ActualThemeVariant.Key=="Light";
+            //determine if dark theme
+            //set uisettings
+        }
     }
 }

@@ -19,7 +19,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Column="0" Grid.Row="0" Text="Database type" Margin="5"/>
-        <ComboBox Grid.Column="1" Grid.Row="0"  Margin="5" ItemsSource="{Binding Storages}" SelectedItem="{Binding SelectedStorageTypeIndex}">
+        <ComboBox Grid.Column="1" Grid.Row="0"  Margin="5" ItemsSource="{Binding Storages}" SelectedIndex="{Binding SelectedStorageTypeIndex}">
 
         </ComboBox>
         <TextBlock Grid.Column="0" Grid.Row="1" Text="Encryption password" Margin="5"/>

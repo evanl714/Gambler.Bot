@@ -17,7 +17,7 @@ namespace Gambler.Bot.ViewModels.AppSettings
             get { return settings; }
             set { settings = value; this.RaisePropertyChanged();
                 Password = settings.EncryptConstring ? settings.EncrConnectionString : "";
-                SelectedStorageTypeIndex = settings.Provider;
+                SelectedStorageTypeIndex = Storages.IndexOf(settings.Provider);
                  
             }
         }
@@ -29,9 +29,9 @@ namespace Gambler.Bot.ViewModels.AppSettings
             get { return password; }
             set { password = value; }
         }
-        private string selectedStorageTypeIndex= "SQLite (Default)";
+        private int selectedStorageTypeIndex = 0;
 
-        public string SelectedStorageTypeIndex
+        public int SelectedStorageTypeIndex
         {
             get { return selectedStorageTypeIndex; }
             set { selectedStorageTypeIndex = value; this.RaisePropertyChanged(); SetStorageType(); }
@@ -41,11 +41,11 @@ namespace Gambler.Bot.ViewModels.AppSettings
         {
             switch (SelectedStorageTypeIndex)
             {
-                case "SQLite (Default)": DBVM = new SQLiteViewModel(_logger) ; break;
-                case "SQL Server": DBVM = new SQLServerViewModel(_logger); break;
-                case "MySQL": DBVM = new MySqlViewModel(_logger); break;
-                case "MongoDb": DBVM = new MongoDBViewModel(_logger); break;
-                case "PostGres": DBVM = new PostGresViewModel(_logger); break;
+                case 0: DBVM = new SQLiteViewModel(_logger) ; break;
+                case 1: DBVM = new SQLServerViewModel(_logger); break;
+                case 2: DBVM = new MySqlViewModel(_logger); break;
+                case 3: DBVM = new MongoDBViewModel(_logger); break;
+                case 4: DBVM = new PostGresViewModel(_logger); break;
                 default: DBVM = new SQLiteViewModel(_logger); break;
             }
         }
@@ -61,8 +61,8 @@ namespace Gambler.Bot.ViewModels.AppSettings
 
         public BetStorageViewModel(ILogger logger) : base(logger)
         {
-            SelectedStorageTypeIndex = "SQLite (Default)";
-            Storages = new List<string>() { "SQLite (Default)", "SQL Server", "MySQL", "MongoDb", "PostGres" };
+            SelectedStorageTypeIndex = 0;
+            Storages = new List<string>() { "SQLite", "SQL Server", "MySQL", "MongoDb", "PostGres" };
         }
 
         public void UpdateSettings()

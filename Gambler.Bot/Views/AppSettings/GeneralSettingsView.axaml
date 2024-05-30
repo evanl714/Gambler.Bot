@@ -14,7 +14,7 @@
 
         <WrapPanel Orientation="Horizontal">
 
-            <Expander IsExpanded="True" Width="200" Margin="5" Header="{Binding}">
+            <Expander IsExpanded="True" Width="250" Margin="5" Header="{Binding}">
                 <Expander.HeaderTemplate>
                     <DataTemplate x:DataType="vm:GeneralSettingsViewModel">
                         <Grid>
@@ -23,14 +23,17 @@
                     </DataTemplate>
                 </Expander.HeaderTemplate>
                 <StackPanel >
-                    <actipro:ToggleThemeButton IsEnabled="True" IsVisible="True" Background="Red" MinHeight="25" MinWidth="25" />
-                    <TextBlock Text="Colour scheme"/>
+                    <Grid ColumnDefinitions="*,auto">
+                        <TextBlock Text="Colour scheme" Grid.Column="0"/>
+                        <actipro:ToggleThemeButton Command="{Binding ThemeToggled}" HorizontalAlignment="Right" Grid.Column="1" />
+
+                    </Grid>
                     <ComboBox SelectedItem="{Binding SelectedRamp}" ItemsSource="{Binding Ramps}" DisplayMemberBinding="{Binding Name}" />
                     <TextBlock Text="Should I offer multiple layouts here?"/>
                     <ComboBox />
                 </StackPanel>
             </Expander>
-            <Expander IsExpanded="True"  Width="200"  Margin="5" Header="{Binding}">
+            <Expander IsExpanded="True"  Width="250"  Margin="5" Header="{Binding}">
                 <Expander.HeaderTemplate>
                     <DataTemplate x:DataType="vm:GeneralSettingsViewModel">
                         <Grid>
@@ -44,7 +47,7 @@
                     </ComboBox>
                 </StackPanel>
             </Expander>
-            <Expander IsExpanded="True"  Width="200" Margin="5" Header="{Binding}">
+            <Expander IsExpanded="True"  Width="250" Margin="5" Header="{Binding}">
                 <Expander.HeaderTemplate>
                     <DataTemplate x:DataType="vm:GeneralSettingsViewModel">
                         <Grid>
@@ -59,7 +62,7 @@
                     <NumericUpDown Value="{Binding UiSettings.ChartBets}"/>
                 </StackPanel>
             </Expander>
-            <Expander IsExpanded="True"  Width="200" Margin="5" Header="{Binding}">
+            <Expander IsExpanded="True"  Width="250" Margin="5" Header="{Binding}">
                 <Expander.HeaderTemplate>
                     <DataTemplate x:DataType="vm:GeneralSettingsViewModel">
                         <Grid>
@@ -73,7 +76,7 @@
                     <NumericUpDown IsVisible="{Binding ShowDonatePercentage}"/>
                 </StackPanel>
             </Expander>
-            <Expander IsExpanded="True"  Width="200" Margin="5" Header="{Binding}">
+            <Expander IsExpanded="True"  Width="250" Margin="5" Header="{Binding}">
                 <Expander.HeaderTemplate>
                     <DataTemplate x:DataType="vm:GeneralSettingsViewModel">
                         <Grid>

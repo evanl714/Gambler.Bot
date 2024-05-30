@@ -26,12 +26,17 @@ namespace Gambler.Bot.ViewModels
             {
                 UISettings.Settings = JsonSerializer.Deserialize<UISettings>(File.ReadAllText(Path.Combine(path, "UISettings.json")));
                 //change the theme somehow?
+                if (UISettings.Settings.DarkMode != null)
+                {
+                    App.Current.RequestedThemeVariant = UISettings.Settings.DarkMode == true ? Avalonia.Styling.ThemeVariant.Dark : Avalonia.Styling.ThemeVariant.Light;
+                }
                 if ((UISettings.Settings?.ThemeName??"Default") != "Default")
                 {
                     if (!ModernTheme.TryGetCurrent(out var theme))
                     {
                         return;
                     }
+                   
                     theme.Definition.AccentColorRampName = UISettings.Settings.ThemeName;
                     theme.RefreshResources();
                 }
