@@ -24,7 +24,7 @@
                 <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.File}">
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Save}" IsEnabled="{Binding ShowBot}"/>
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Load}" IsEnabled="{Binding ShowBot}"/>
-                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Exit}" IsEnabled="{Binding ShowBot}"/>
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Exit}" Command="{Binding Exit}"/>
                 </MenuItem>
                 <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.View}">
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.LiveCharts}" Click="OnMenuItemClicked"  IsEnabled="{Binding ShowBot}">
@@ -66,8 +66,12 @@
                         </MenuItem.ItemTemplate>
                     </MenuItem>
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.SetupWizard}"/>
-                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.ResetToDefault}"/>
-                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.SourceCode}"/>
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.ResetToDefault}" Command="{Binding ResetCommand}"/>
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.SourceCode}">
+                        <MenuItem Header="Gambler.Bot" Command="{Binding BotSourceClicked}"/>
+                        <MenuItem Header="Gambler.Bot.AutoBet" Command="{Binding AutoSourceClicked}"/>
+                        <MenuItem Header="Gambler.Bot.Core"  Command="{Binding CoreSourceClicked}"/>
+                    </MenuItem>
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Tutorials}"/>
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.FAQ}"/>
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Contact}"/>

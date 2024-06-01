@@ -13,6 +13,7 @@ namespace Gambler.Bot.Classes
     {
         public static UISettings Settings = new UISettings();
         public static bool Portable = false;
+        public static bool Resetting = false;
         bool? darkMode = true;
         public bool? DarkMode { get=>darkMode; set { darkMode = value; RaisePropertyChanged(); } }
         string themeName;

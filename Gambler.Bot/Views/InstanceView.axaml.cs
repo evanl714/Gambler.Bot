@@ -29,6 +29,7 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
                 ViewModel!.ShowRollVerifier.RegisterHandler(ShowRollVerifier);
                 ViewModel!.ShowSettings.RegisterHandler(ShowSettings);
                 ViewModel!.ShowBetHistory.RegisterHandler(ShowBetHistory);
+                ViewModel!.ExitInteraction.RegisterHandler(Close);
                 ViewModel!.ShowDialog.RegisterHandler(DoShowDialogAsync);
 
             });
@@ -36,6 +37,11 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
         this.AttachedToVisualTree += OnAttachedToVisualTree;
         this.DetachedFromVisualTree += OnDetachedFromVisualTree;
 
+    }
+
+    private void Close(InteractionContext<Unit?, Unit?> context)
+    {
+        this.parentWindow.Close();
     }
 
     private void ShowBetHistory(InteractionContext<BetHistoryViewModel, Unit?> context)

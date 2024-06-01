@@ -11,20 +11,22 @@ namespace Gambler.Bot.ViewModels
     {
         private InstanceViewModel _instance;
         public InstanceViewModel Instance { get =>_instance; set { _instance = value; this.RaisePropertyChanged(); } }
+        static string uiSettingsFile;
         public MainViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
         {
-            string path = string.Empty;
+            uiSettingsFile = string.Empty;
             UISettings.Portable = File.Exists("portable"); ;
             if (UISettings.Portable)
-                path = "";
+                uiSettingsFile = "";
             else
             {
-                path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gambler.Bot");
+                uiSettingsFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gambler.Bot");
             }
             Instance = new InstanceViewModel(logger);
-            if (File.Exists(Path.Combine(path, "UISettings.json")))
+            uiSettingsFile = Path.Combine(uiSettingsFile, "UISettings.json");
+            if (File.Exists(uiSettingsFile))
             {
-                UISettings.Settings = JsonSerializer.Deserialize<UISettings>(File.ReadAllText(Path.Combine(path, "UISettings.json")));
+                UISettings.Settings = JsonSerializer.Deserialize<UISettings>(File.ReadAllText(uiSettingsFile));
                 //change the theme somehow?
                 if (UISettings.Settings.DarkMode != null)
                 {
@@ -47,15 +49,17 @@ namespace Gambler.Bot.ViewModels
 
         public void SaveUISettings()
         {
-            string path = "";
-            if (UISettings.Portable)
-                path = "";
-            else
+            if (!UISettings.Resetting)
             {
-                path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gambler.Bot");
+                
+                File.WriteAllText(uiSettingsFile, JsonSerializer.Serialize(UISettings.Settings));
             }
-            File.WriteAllText(Path.Combine(path, "UISettings.json"), JsonSerializer.Serialize(UISettings.Settings));
-            
+        }
+
+        internal static void ClearUiSettings()
+        {
+            if (File.Exists(uiSettingsFile))
+                File.Delete(uiSettingsFile);
         }
 
         internal void OnClosing()

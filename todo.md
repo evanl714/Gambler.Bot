@@ -38,8 +38,8 @@
 
 ### Help windows:
 - [ ] Setup wizard
-- [ ] *Reset to default
-- [ ] *source code (link to githuib repo)
+- [x] *Reset to default
+- [x] *source code (link to githuib repo)
 - [ ] *tutorials (link)
 - [ ] *FAQ (link)
 - [ ] *Conact (link)

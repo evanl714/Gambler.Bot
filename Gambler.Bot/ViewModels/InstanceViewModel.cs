@@ -1,4 +1,6 @@
-﻿using ActiproSoftware.UI.Avalonia.Themes;
+﻿using ActiproSoftware.UI.Avalonia.Controls;
+using ActiproSoftware.UI.Avalonia.Themes;
+using Avalonia;
 using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Threading;
 using Gambler.Bot.AutoBet.Helpers;
@@ -15,11 +17,13 @@ using Gambler.Bot.Views;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -35,6 +39,7 @@ namespace Gambler.Bot.ViewModels
         private string _status;
         private IStrategy _strategyVM;
         string BetSettingsFile = string.Empty;
+        string InstanceSettingsFile = string.Empty;
         private Gambler.Bot.AutoBet.AutoBet botIns;
         private bool canResume;
 
@@ -86,9 +91,10 @@ public InstanceViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(log
     ShowDialog = new Interaction<LoginViewModel, LoginViewModel?>();
     ShowSimulation = new Interaction<SimulationViewModel, SimulationViewModel?>();
     ShowRollVerifier = new Interaction<RollVerifierViewModel, Unit?>();
+    ExitInteraction = new Interaction<Unit?, Unit?>();
     ShowSettings = new Interaction<GlobalSettingsViewModel, Unit?>();
-            ShowBetHistory = new Interaction<BetHistoryViewModel, Unit?>();
-            tmp.Strategy = new Martingale(_logger);
+    ShowBetHistory = new Interaction<BetHistoryViewModel, Unit?>();
+    tmp.Strategy = new Martingale(_logger);
     PlaceBetVM = new DicePlaceBetViewModel(_logger);
     PlaceBetVM.PlaceBet += PlaceBetVM_PlaceBet;
     tmp.OnGameChanged += BotIns_OnGameChanged;
@@ -295,7 +301,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             ShowSites = true;
         }
 
-        void Exit() { throw new NotImplementedException(); }
+        public async Task Exit() { await ExitInteraction.Handle(null); }
 
         void LoadInstanceSettings(string FileLocation)
         {
@@ -313,8 +319,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                 botIns.CurrentSite = Activator.CreateInstance(tmpsite.SiteType(), _logger) as Gambler.Bot.Core.Sites.BaseSite;
                 ShowSites = false;
                 SiteChanged(botIns.CurrentSite, tmp.Currency, tmp.Game);
-            }
-            else
+            } else
             {
                 ShowSites = true;
             }
@@ -359,14 +364,13 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         private void SelectSite_SelectedSiteChanged(object? sender, Gambler.Bot.Core.Helpers.SitesList e)
         {
-            if (sender is SelectSiteViewModel selectSiteViewModel)
+            if(sender is SelectSiteViewModel selectSiteViewModel)
             {
-
-
                 SiteChanged(
                     Activator.CreateInstance(e.SiteType(), _logger) as Gambler.Bot.Core.Sites.BaseSite,
                     e.SelectedCurrency?.Name,
-                    e.SelectedGame?.Name,!selectSiteViewModel.BypassLogIn);
+                    e.SelectedGame?.Name,
+                    !selectSiteViewModel.BypassLogIn);
             }
             if(SiteStatsData != null)
                 SiteStatsData.SiteName = botIns.CurrentSite?.SiteName;
@@ -464,7 +468,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             await ShowRollVerifier.Handle(simControl);
         }
 
-        void SiteChanged(Gambler.Bot.Core.Sites.BaseSite NewSite, string currency, string game, bool showLogin=true)
+        void SiteChanged(Gambler.Bot.Core.Sites.BaseSite NewSite, string currency, string game, bool showLogin = true)
         {
             botIns.CurrentSite = NewSite;
             if(currency != null && Array.IndexOf(botIns.CurrentSite.Currencies, currency) >= 0)
@@ -476,11 +480,10 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                 botIns.CurrentGame = (Gambler.Bot.Core.Games.Games)curGame;
             this.RaisePropertyChanged(nameof(Currencies));
             this.RaisePropertyChanged(nameof(CurrentCurrency));
-            if (showLogin)
+            if(showLogin)
                 ShowLogin();//.Wait();
             else
                 ShowSites = false;
-            
         }
 
         void Start()
@@ -541,12 +544,11 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             //load bet settings
             BetSettingsFile = Path.Combine(path, Name + ".betset");
 
-            string InstanceSettingsFile = Path.Combine(path, Name + ".siteset");
+            InstanceSettingsFile = Path.Combine(path, Name + ".siteset");
             if(File.Exists(InstanceSettingsFile))
             {
                 LoadInstanceSettings(InstanceSettingsFile);
-            }
-            else
+            } else
             {
                 ShowSites = true;
             }
@@ -570,11 +572,12 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             botIns.StopStrategy("Application Closing");
             if(botIns.CurrentSite != null)
                 botIns.CurrentSite.Disconnect();
-            string path = string.Empty;
-            path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gambler.Bot");
-            botIns.SaveBetSettings(Path.Combine(path, InstanceName + ".betset"));
-            botIns.SavePersonalSettings(PersonalSettingsFile);
-            SaveINstanceSettings(Path.Combine(path, InstanceName + ".siteset"));
+            if(!UISettings.Resetting)
+            {
+                botIns.SaveBetSettings(Path.Combine(BetSettingsFile));
+                botIns.SavePersonalSettings(PersonalSettingsFile);
+                SaveINstanceSettings(Path.Combine(InstanceSettingsFile));
+            }
         }
 
         internal async Task Loaded()
@@ -828,13 +831,14 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             settingsControl.SettingsSaved += GlobalSettingsViewModel_SettingsSaved;
             await ShowSettings.Handle(settingsControl);
         }
+
         public async Task BetHistoryCommand()
         {
             BetHistoryViewModel settingsControl = new BetHistoryViewModel(_logger);
             settingsControl.Site = botIns?.CurrentSite?.SiteName;
             settingsControl.Game = botIns.CurrentGame;
             settingsControl.Context = botIns.DBInterface;
-            
+
             await ShowBetHistory.Handle(settingsControl);
         }
 
@@ -847,9 +851,12 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         public TriggersViewModel TriggersVM { get; set; }
 
+        public Interaction<Unit?, Unit?> ExitInteraction { get; internal set; }
+
         public Interaction<RollVerifierViewModel, Unit?> ShowRollVerifier { get; internal set; }
 
         public Interaction<GlobalSettingsViewModel, Unit?> ShowSettings { get; internal set; }
+
         public Interaction<BetHistoryViewModel, Unit?> ShowBetHistory { get; internal set; }
 
         public void ThemeToggled()
@@ -858,6 +865,56 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             UISettings.Settings.DarkMode = App.Current.ActualThemeVariant.Key == "Light";
             //determine if dark theme
             //set uisettings
+        }
+
+        public void BotSourceClicked()
+        {
+            Process tmpProcess = new Process();
+            tmpProcess.StartInfo.FileName = "https://github.com/Seuntjie900/KryGamesBot";
+            tmpProcess.StartInfo.UseShellExecute = true;
+            tmpProcess.Start();
+        }
+
+        public void CoreSourceClicked()
+        {
+            Process tmpProcess = new Process();
+            tmpProcess.StartInfo.FileName = "https://github.com/Seuntjie900/Doormat";
+            tmpProcess.StartInfo.UseShellExecute = true;
+            tmpProcess.Start();
+        }
+
+        public void AutoSourceClicked()
+        {
+            Process tmpProcess = new Process();
+            tmpProcess.StartInfo.FileName = "https://github.com/Seuntjie900/DoormatBot";
+            tmpProcess.StartInfo.UseShellExecute = true;
+            tmpProcess.Start();
+        }
+
+        public async Task ResetCommand()
+        {
+            var result = await MessageBox.Show(
+                @"Are you sure you want to reset Gambler.Bot to its default settings?
+
+This will clear your bet settings, interface settings and personal settings.
+It will not delete or clear your bet history and it will not delete any programmer mode scripts from your computer.",
+                "Reset Gambler.Bot to default",
+                MessageBoxButtons.YesNo);
+            if(result == MessageBoxResult.Yes)
+            {
+                if(File.Exists(BetSettingsFile))
+                    File.Delete(PersonalSettingsFile);
+                if(File.Exists(BetSettingsFile))
+                    File.Delete(BetSettingsFile);
+                if(File.Exists(InstanceSettingsFile))
+                    File.Delete(InstanceSettingsFile);
+                MainViewModel.ClearUiSettings();
+                UISettings.Resetting = true;
+                result = await MessageBox.Show(
+                    @"Gambler.Bot has been reset to default and will close. Please restart the application to resume betting.",
+                    "Reset Complete");
+                await Exit();
+            }
         }
     }
 }
