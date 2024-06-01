@@ -5,11 +5,13 @@ using Avalonia.Controls;
 using Gambler.Bot.AutoBet.Helpers;
 using Gambler.Bot.Classes;
 using Gambler.Bot.ViewModels.AppSettings.Utilities;
+using Gambler.Bot.ViewModels.Common;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,6 +24,7 @@ namespace Gambler.Bot.ViewModels.AppSettings
         private PersonalSettings settings;
 
         private IEnumerable<ColorRampViewModel>? _ramps;
+        
 
         public PersonalSettings Settings
         {
@@ -66,7 +69,7 @@ namespace Gambler.Bot.ViewModels.AppSettings
             UiSettings = UISettings.Settings;
             UISettings.Settings.PropertyChanged += Settings_PropertyChanged;
             _colorPalette = new DefaultColorPaletteFactory().Create();
-
+            
             UpdateRamps();
         }
         private void UpdateRamps()

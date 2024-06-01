@@ -14,7 +14,7 @@
 ### Windows
 - [ ] *settings import/export
 - [x] *roll verifier
-- [ ] *bet history
+- [x] *bet history
 - [ ] additional charts (streak occurance? roll distrobution? win/loss ratio? )
 
 
@@ -47,12 +47,12 @@
 
 ### settings: 
 - [ ] *language localization (functionality mostly in place, but strings file not yet created)
-- [ ] *skins
-- [ ] *storage: bets
-- [ ] *storage strategies
+- [x] *skins
+- [x] *storage: bets
+- [ ] storage strategies
 - [ ] *notifications
 - [ ] *Updates
-- [ ] *Live bets
+- [x] *Live bets
 - [ ] Donate
 - [ ] Proxy
 - [ ] *Errors

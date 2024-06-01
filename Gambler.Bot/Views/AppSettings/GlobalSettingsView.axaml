@@ -10,19 +10,27 @@
              xmlns:vm="clr-namespace:Gambler.Bot.ViewModels.AppSettings"
              x:DataType="vm:GlobalSettingsViewModel"
              >
+    <Grid RowDefinitions="*,auto" >
+        <TabControl TabStripPlacement ="Left" Grid.Row="0" >
+            <TabItem Header="{DynamicResource Localization.AppSettings.General}">
+                <local:GeneralSettingsView DataContext="{Binding General}"/>
+            </TabItem>
+            <TabItem Header="{DynamicResource Localization.AppSettings.BetStorage}">
+                <local:BetStorageView DataContext="{Binding Storage}"/>
+            </TabItem>
+            <TabItem Header="{DynamicResource Localization.AppSettings.Notifications}">
+                <common:TriggersView DataContext="{Binding Triggers}"/>
+            </TabItem>
+            <TabItem Header="{DynamicResource Localization.AppSettings.Errors}">
+                <local:ErrorsView DataContext="{Binding Errors}"/>
+            </TabItem>
+        </TabControl>
+        <Border Padding="5" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="1" >
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Cancel" Margin="2" Command="{Binding Cancel}" />
+                <Button Content="Save" Margin="2" Command="{Binding Save}"/>
 
-    <TabControl TabStripPlacement ="Left" >
-        <TabItem Header="{DynamicResource Localization.AppSettings.General}">
-            <local:GeneralSettingsView DataContext="{Binding General}"/>
-        </TabItem>
-        <TabItem Header="{DynamicResource Localization.AppSettings.BetStorage}">
-            <local:BetStorageView DataContext="{Binding Storage}"/>
-        </TabItem>
-        <TabItem Header="{DynamicResource Localization.AppSettings.Notifications}">
-            <common:TriggersView DataContext="{Binding Triggers}"/>
-        </TabItem>
-        <TabItem Header="{DynamicResource Localization.AppSettings.Errors}">
-            <local:ErrorsView DataContext="{Binding Errors}"/>
-        </TabItem>
-    </TabControl>
+            </StackPanel>
+        </Border>
+    </Grid>
 </UserControl>

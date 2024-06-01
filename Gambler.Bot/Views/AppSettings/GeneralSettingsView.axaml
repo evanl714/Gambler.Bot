@@ -29,8 +29,8 @@
 
                     </Grid>
                     <ComboBox SelectedItem="{Binding SelectedRamp}" ItemsSource="{Binding Ramps}" DisplayMemberBinding="{Binding Name}" />
-                    <TextBlock Text="Should I offer multiple layouts here?"/>
-                    <ComboBox />
+                    <TextBlock Text="Should I offer multiple layouts here?" IsVisible="False"/>
+                    <ComboBox IsVisible="False"/>
                 </StackPanel>
             </Expander>
             <Expander IsExpanded="True"  Width="250"  Margin="5" Header="{Binding}">

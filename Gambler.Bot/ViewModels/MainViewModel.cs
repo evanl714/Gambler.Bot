@@ -28,6 +28,7 @@ namespace Gambler.Bot.ViewModels
                 //change the theme somehow?
                 if (UISettings.Settings.DarkMode != null)
                 {
+                    
                     App.Current.RequestedThemeVariant = UISettings.Settings.DarkMode == true ? Avalonia.Styling.ThemeVariant.Dark : Avalonia.Styling.ThemeVariant.Light;
                 }
                 if ((UISettings.Settings?.ThemeName??"Default") != "Default")

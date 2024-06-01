@@ -8,6 +8,7 @@ using Gambler.Bot.ViewModels.Common;
 using Gambler.Bot.Views.AppSettings;
 using Gambler.Bot.Views.Common;
 using ReactiveUI;
+using System;
 using System.Reactive;
 using System.Threading.Tasks;
 
@@ -27,6 +28,7 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
                 ViewModel!.ShowSimulation.RegisterHandler(DoShowSimulation);
                 ViewModel!.ShowRollVerifier.RegisterHandler(ShowRollVerifier);
                 ViewModel!.ShowSettings.RegisterHandler(ShowSettings);
+                ViewModel!.ShowBetHistory.RegisterHandler(ShowBetHistory);
                 ViewModel!.ShowDialog.RegisterHandler(DoShowDialogAsync);
 
             });
@@ -34,6 +36,20 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
         this.AttachedToVisualTree += OnAttachedToVisualTree;
         this.DetachedFromVisualTree += OnDetachedFromVisualTree;
 
+    }
+
+    private void ShowBetHistory(InteractionContext<BetHistoryViewModel, Unit?> context)
+    {
+        var ParentWindow = this.FindAncestorOfType<Window>();
+        ReactiveWindow<BetHistoryViewModel> window = new();
+        window.DataContext = context.Input;
+        var dialog = new BetHistoryView();
+        window.Content = dialog;
+        dialog.DataContext = context.Input;
+        window.Width = 1400;
+        window.Height = 700;
+        window.Title = $"Bet History";
+        window.Show();
     }
 
     private void InstanceView_Loaded(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -74,7 +90,7 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
         var dialog = new GlobalSettingsView();
         window.Content = dialog;
         dialog.DataContext = interaction.Input;
-        window.Width = 600;
+        window.Width = 700;
         window.Height = 500;
         window.Title = $"Settings";
         window.Show();

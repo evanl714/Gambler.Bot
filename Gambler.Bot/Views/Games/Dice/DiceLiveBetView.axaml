@@ -3,20 +3,50 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Gambler.Bot.Views.Games.Dice.DiceLiveBetView" 
+             x:Class="Gambler.Bot.Views.Games.Dice.DiceLiveBetView"
              xmlns:vm="using:Gambler.Bot.ViewModels.Games.Dice"
-			 x:DataType="vm:DiceLiveBetViewModel"
+             xmlns:common="using:Gambler.Bot.ViewModels"
+             xmlns:commonViews="using:Gambler.Bot.Views"
+             x:DataType="vm:DiceLiveBetViewModel"
+             xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+             xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"xmlns:converters="using:Gambler.Bot.Converters"
+             xmlns:games="using:Gambler.Bot.Core.Games"
              >
-  <DataGrid ItemsSource="{Binding Bets}" IsReadOnly="True"  >
-    <DataGrid.Columns>
-      <DataGridTextColumn Binding="{Binding BetID}" Header="Bet Id"/>
-      <DataGridTextColumn Binding="{Binding DateValue}" Header="Time"/>
-      <DataGridTextColumn Binding="{Binding TotalAmount}" Header="Amount"/>
-		<DataGridCheckBoxColumn Binding="{Binding High}" Header="High"/>
-		<DataGridTextColumn Binding="{Binding Chance}" Header="Chance"/>
-      <DataGridTextColumn Binding="{Binding Roll}" Header="Roll"/>
-      <DataGridTextColumn Binding="{Binding Profit}" Header="Profit"/>
-      <DataGridTextColumn Binding="{Binding Nonce}" Header="Nonce"/>
-    </DataGrid.Columns>
-  </DataGrid>
+    <UserControl.Resources>
+        <converters:BoolToColourConverter x:Key="RowConverter" />
+        <converters:DiceForegroundColourConverter x:Key="DiceConverter" />
+    </UserControl.Resources>
+    <UserControl.Styles>
+        <Style Selector="DataGridRow">
+            <Setter Property="Background" Value="{Binding  Converter={StaticResource RowConverter}}" />
+        </Style>
+    </UserControl.Styles>
+    <DataGrid ItemsSource="{Binding Bets}" IsReadOnly="True"  >
+        <DataGrid.Columns>
+            <DataGridTextColumn Binding="{Binding BetID}" Header="Bet Id"/>
+            <DataGridTextColumn Binding="{Binding DateValue}" Header="Time"/>
+            <DataGridTextColumn Binding="{Binding TotalAmount}" Header="Amount"/>
+            <DataGridCheckBoxColumn Binding="{Binding High}" Header="High"/>
+            <DataGridTextColumn Binding="{Binding Chance}" Header="Chance"/>
+            <DataGridTemplateColumn Header="Roll"  >
+                <DataTemplate >
+                    <Grid>
+                        <Grid.Background>
+                            <MultiBinding Converter="{StaticResource DiceConverter}">
+                                <Binding Path="."  RelativeSource="{RelativeSource AncestorType={x:Type DataGridRow}}" />
+
+                                <!-- Use RelativeSource to bind to the DataGrid's ViewModel -->
+                                <Binding Path="((common:InstanceViewModel)DataContext).BotInstance.CurrentSite" RelativeSource="{RelativeSource AncestorType={x:Type commonViews:InstanceView}}" />
+                            </MultiBinding>
+                        </Grid.Background>
+                        <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Roll, StringFormat=#0.00##}"/>
+                    </Grid>
+                </DataTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTextColumn Binding="{Binding Profit}" Header="Profit"/>
+            <DataGridTextColumn Binding="{Binding Nonce}" Header="Nonce"/>
+        </DataGrid.Columns>
+
+
+    </DataGrid>
 </UserControl>

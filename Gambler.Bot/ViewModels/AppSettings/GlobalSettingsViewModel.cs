@@ -1,39 +1,38 @@
 ﻿using Gambler.Bot.AutoBet.Helpers;
 using Gambler.Bot.Classes;
+using Gambler.Bot.Core.Helpers;
 using Gambler.Bot.ViewModels.Common;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Gambler.Bot.ViewModels.AppSettings
 {
     public class GlobalSettingsViewModel : ViewModelBase
     {
+        public Interaction<Unit?, Unit?> CloseWindow { get; internal set; }
+        public event EventHandler SettingsSaved;
         public GeneralSettingsViewModel General { get; set; }
         public ErrorsViewModel Errors { get; set; }
         public BetStorageViewModel Storage { get; set; }
         public TriggersViewModel Triggers { get; set; }
 
-        private PersonalSettings settings;
+        private PersonalSettings _settings; 
+        public PersonalSettings Settings { get => _settings; }
+        public bool Cancelled { get; set; } = false;
 
-        public PersonalSettings Settings
+        public void SetSettings(PersonalSettings settings)
         {
-            get { return settings; }
-            set { settings = value; this.RaisePropertyChanged(); SetSettings(); }
-        }
-
-        private void SetSettings()
-        {
-            General.Settings = Settings;
-            //Errors.Settings = Settings;
-            Storage.Settings = Settings;
-            Triggers.SetTriggers(Settings?.Notifications);
+            _settings = CopyHelper.CreateCopy(settings);
+            General.Settings = _settings;
+            Storage.Settings = _settings;
+            Triggers.SetTriggers(_settings?.Notifications);
             Errors.Clear();
-            foreach (var error in Settings?.ErrorSettings)
+            foreach (var error in _settings?.ErrorSettings)
             {
                 Errors.AddItem(error);
             }
@@ -41,11 +40,32 @@ namespace Gambler.Bot.ViewModels.AppSettings
 
         public GlobalSettingsViewModel(ILogger logger) : base(logger)
         {
+            CloseWindow = new Interaction<Unit?, Unit?>();
             General = new GeneralSettingsViewModel(logger);
             Errors = new ErrorsViewModel(logger);
             Storage = new BetStorageViewModel(logger);
             Triggers = new TriggersViewModel(logger) { Notifications=true };
 
+        }
+
+        public async Task Save()
+        {
+            if (!Storage.Verify())
+            {
+                //show error message
+                return;
+            }
+            UISettings.Settings = General.UiSettings;
+            SettingsSaved?.Invoke(this, new EventArgs());
+            await CloseWindow.Handle(null);
+            
+        }
+
+        public async Task Cancel()
+        {
+            //call close window interaction
+            Cancelled = true;
+            await CloseWindow.Handle(null);
         }
     }
 }

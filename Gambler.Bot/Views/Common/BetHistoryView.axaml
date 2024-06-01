@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Gambler.Bot.Views.Common.BetHistoryView"
+             xmlns:vm="using:Gambler.Bot.ViewModels.Common"
+             x:DataType="vm:BetHistoryViewModel"
+             >
+    <Grid RowDefinitions="auto,auto,*">
+
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+
+            <Button Content="First" Command="{Binding FirstPage}" Margin="3" />
+            <Button Content="Previous" Command="{Binding PreviousPage}" Margin="3" />
+            <TextBlock VerticalAlignment="Center">Page</TextBlock>
+            <NumericUpDown Margin="3" IsReadOnly="True" Value="{Binding CurrentPage}" Minimum="1" Maximum="{Binding TotalPages}" />
+            <TextBlock VerticalAlignment="Center" Text=" of "></TextBlock>
+            <TextBlock VerticalAlignment="Center" Text="{Binding TotalPages}"/>
+            <Button Content="Next"  Margin="3" Command="{Binding NextPage}" />
+            <Button Content="Last" Margin="3" Command="{Binding LastPage}" />
+        </StackPanel>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+            <TextBlock VerticalAlignment="Center" Text="Page Size" HorizontalAlignment="Right"/>
+            <NumericUpDown  Margin="3" Value="{Binding PageSize}" HorizontalAlignment="Right" Minimum="1" Maximum="100" MinWidth="100" />
+
+        </StackPanel>
+        <Grid Grid.Row="1">
+            <TextBlock Text="More filters and settings coming soon (tm)"/>
+        </Grid>
+        <DataGrid IsReadOnly="True"
+                  CanUserSortColumns="True"
+                  CanUserReorderColumns="True" CanUserResizeColumns="True"
+                  Grid.Row="2" ItemsSource="{Binding Bets}" AutoGenerateColumns="True"
+
+                  >
+        </DataGrid>
+    </Grid>
+
+</UserControl>

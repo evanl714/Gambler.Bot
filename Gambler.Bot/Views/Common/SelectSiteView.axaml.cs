@@ -1,3 +1,4 @@
+using ActiproSoftware.UI.Avalonia.Themes;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -18,15 +19,20 @@ public partial class SelectSiteView : UserControl
     public void PointerEntered(object sender, PointerEventArgs e)
     {
         
-        if (sender is Panel control)
-        {
-            control.Background = Brushes.LightGray;
+        if (sender is Panel control )
+        {   
+            string resourceKey = ThemeResourceKind.Container4BackgroundBrush.ToResourceKey();
+            if (Application.Current.TryGetResource(resourceKey, App.Current.ActualThemeVariant, out object obj))
+            {
+                control.Background = (Brush)obj;
+            }
+            
         }
     }
 
     public void PointerExited(object sender, PointerEventArgs e)
     {
-
+        
         if (sender is Panel control)
         {
             control.Background = Brushes.Transparent;
