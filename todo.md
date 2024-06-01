@@ -22,9 +22,9 @@
 - [x] option to run simulation without bet history
 - [ ] multiple tabs
 - [ ] proxy
-- [ ] notifications
+- [ ] *notifications
 - [ ] *Auto updates	
-- [ ] *triggers for notifications
+- [ ] *triggers for notifications (Don't think there's a lot to do here.)
 - [ ] Telemtry (???The stats could be tremendously important but need to be really carefull about what is logged and how.???)
 - [ ] CLI interface? old one should still be somewhere in the github repo, maybe compile a secondary exe for it?
 - [ ] Include site name in charts and titles?
@@ -45,20 +45,20 @@
 - [x] *Conact (link)
 - [x] *About
 
-### settings: 
+### Settings: 
 - [ ] *language localization (functionality mostly in place, but strings file not yet created)
 - [x] *skins
 - [x] *storage: bets
 - [ ] storage strategies
-- [ ] *notifications
-- [ ] *Updates
+- [x] *notifications (This should be done except for the grid not updating initially)
+- [x] *Updates (I think this is basically done)
 - [x] *Live bets
 - [ ] Donate
 - [ ] Proxy
 - [ ] *Errors
 - [ ] Telemetry
 
-### known issues
+### Known issues
 - [ ] *Double check site settings
 - [ ] *wolfbet
 - [ ] *reset seed caused betting to stop
