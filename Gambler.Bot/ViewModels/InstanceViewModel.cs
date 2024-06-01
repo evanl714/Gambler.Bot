@@ -89,7 +89,8 @@ public InstanceViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(log
     SelectSite.SelectedSiteChanged += SelectSite_SelectedSiteChanged;
     IsSelectSiteViewVisible = true;
     ShowDialog = new Interaction<LoginViewModel, LoginViewModel?>();
-    ShowSimulation = new Interaction<SimulationViewModel, SimulationViewModel?>();
+            ShowAbout = new Interaction<AboutViewModel, Unit?>();
+            ShowSimulation = new Interaction<SimulationViewModel, SimulationViewModel?>();
     ShowRollVerifier = new Interaction<RollVerifierViewModel, Unit?>();
     ExitInteraction = new Interaction<Unit?, Unit?>();
     ShowSettings = new Interaction<GlobalSettingsViewModel, Unit?>();
@@ -748,6 +749,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
         }
 
         public Interaction<LoginViewModel, LoginViewModel?> ShowDialog { get; }
+        public Interaction<AboutViewModel, Unit?> ShowAbout { get; }
 
         public bool ShowLiveBets
         {
@@ -867,26 +869,11 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             //set uisettings
         }
 
-        public void BotSourceClicked()
-        {
-            Process tmpProcess = new Process();
-            tmpProcess.StartInfo.FileName = "https://github.com/Seuntjie900/KryGamesBot";
-            tmpProcess.StartInfo.UseShellExecute = true;
-            tmpProcess.Start();
-        }
 
-        public void CoreSourceClicked()
+        public void OpenLink(string link)
         {
             Process tmpProcess = new Process();
-            tmpProcess.StartInfo.FileName = "https://github.com/Seuntjie900/Doormat";
-            tmpProcess.StartInfo.UseShellExecute = true;
-            tmpProcess.Start();
-        }
-
-        public void AutoSourceClicked()
-        {
-            Process tmpProcess = new Process();
-            tmpProcess.StartInfo.FileName = "https://github.com/Seuntjie900/DoormatBot";
+            tmpProcess.StartInfo.FileName = link;
             tmpProcess.StartInfo.UseShellExecute = true;
             tmpProcess.Start();
         }
@@ -915,6 +902,11 @@ It will not delete or clear your bet history and it will not delete any programm
                     "Reset Complete");
                 await Exit();
             }
+        }
+
+        public async Task AboutClicked()
+        {
+            await ShowAbout.Handle(new AboutViewModel(_logger));
         }
     }
 }

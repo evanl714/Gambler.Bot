@@ -31,12 +31,26 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
                 ViewModel!.ShowBetHistory.RegisterHandler(ShowBetHistory);
                 ViewModel!.ExitInteraction.RegisterHandler(Close);
                 ViewModel!.ShowDialog.RegisterHandler(DoShowDialogAsync);
-
+                ViewModel!.ShowAbout.RegisterHandler(ShowAbout);
             });
         }
         this.AttachedToVisualTree += OnAttachedToVisualTree;
         this.DetachedFromVisualTree += OnDetachedFromVisualTree;
 
+    }
+
+    private void ShowAbout(InteractionContext<AboutViewModel, Unit?> context)
+    {
+        var ParentWindow = this.FindAncestorOfType<Window>();
+        ReactiveWindow<AboutViewModel> window = new();
+        window.DataContext = context.Input;
+        var dialog = new AboutView();
+        window.Content = dialog;
+        dialog.DataContext = context.Input;
+        window.Width = 600;
+        window.Height = 300;
+        window.Title = $"About: Gambler.Bot";
+        window.Show();
     }
 
     private void Close(InteractionContext<Unit?, Unit?> context)

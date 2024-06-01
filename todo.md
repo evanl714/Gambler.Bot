@@ -40,10 +40,10 @@
 - [ ] Setup wizard
 - [x] *Reset to default
 - [x] *source code (link to githuib repo)
-- [ ] *tutorials (link)
-- [ ] *FAQ (link)
-- [ ] *Conact (link)
-- [ ] *About
+- [x] *tutorials (link)
+- [x] *FAQ (link)
+- [x] *Conact (link)
+- [x] *About
 
 ### settings: 
 - [ ] *language localization (functionality mostly in place, but strings file not yet created)

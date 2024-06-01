@@ -68,14 +68,17 @@
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.SetupWizard}"/>
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.ResetToDefault}" Command="{Binding ResetCommand}"/>
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.SourceCode}">
-                        <MenuItem Header="Gambler.Bot" Command="{Binding BotSourceClicked}"/>
-                        <MenuItem Header="Gambler.Bot.AutoBet" Command="{Binding AutoSourceClicked}"/>
-                        <MenuItem Header="Gambler.Bot.Core"  Command="{Binding CoreSourceClicked}"/>
+                        <MenuItem Header="Gambler.Bot" Command="{Binding OpenLink}" CommandParameter="https://github.com/Seuntjie900/KryGamesBot"/>
+                        <MenuItem Header="Gambler.Bot.AutoBet" Command="{Binding OpenLink}" CommandParameter="https://github.com/Seuntjie900/DoormatBot"/>
+                        <MenuItem Header="Gambler.Bot.Core"  Command="{Binding OpenLink}" CommandParameter="https://github.com/Seuntjie900/Doormat"/>
                     </MenuItem>
-                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Tutorials}"/>
-                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.FAQ}"/>
-                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Contact}"/>
-                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.About}"/>
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Tutorials}">
+                        <MenuItem Header="YouTube"  Command="{Binding OpenLink}" CommandParameter="https://youtube.com/@GamblerdotBot"/>
+                        <MenuItem Header="Written Tutorials"  Command="{Binding OpenLink}" CommandParameter="https://gambler.bot/tutorials"/>
+                    </MenuItem>
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.FAQ}" Command="{Binding OpenLink}" CommandParameter="https://gambler.bot/FAQ"/>
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Contact}"  Command="{Binding OpenLink}" CommandParameter="https://gambler.bot/Contact"/>
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.About}" Command="{Binding AboutClicked}"/>
 
                 </MenuItem>
             </Menu>
