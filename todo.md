@@ -66,7 +66,7 @@
 - [ ] *Add a new boolean variable that indicates if script is running in simulator
 - [ ] *Balance variable is not updated in programmer mode
 - [ ] *Sqlite update tables needs to be implemented
-- [ ] *Script conversion tool /legacy script support
+- [x] *Script conversion tool /legacy script support (untested but there for lua)
 - [ ] ???Specify system requirements in the readme file???
 - [ ] *bot speed
 - [ ] charting line colours
