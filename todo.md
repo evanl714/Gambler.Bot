@@ -13,28 +13,28 @@
 
 ### Windows
 - [ ] *settings import/export
+- [ ] additional charts (streak occurance? roll distrobution? win/loss ratio? )
 - [x] *roll verifier
 - [x] *bet history
-- [ ] additional charts (streak occurance? roll distrobution? win/loss ratio? )
 
 
 ### General
-- [x] option to run simulation without bet history
-- [ ] multiple tabs
-- [ ] proxy
 - [ ] *notifications
 - [ ] *Auto updates	
 - [ ] *triggers for notifications (Don't think there's a lot to do here.)
+- [ ] *improve programmer mode documentation
+- [ ] *manual betting extra buttons (x2, 1/2, max, min, etc)
+- [ ] multiple tabs
+- [ ] proxy
 - [ ] Telemtry (???The stats could be tremendously important but need to be really carefull about what is logged and how.???)
 - [ ] CLI interface? old one should still be somewhere in the github repo, maybe compile a secondary exe for it?
 - [ ] Include site name in charts and titles?
-- [ ] *improve programmer mode documentation
-- [ ] *manual betting extra buttons (x2, 1/2, max, min, etc)
 - [x] *disable/enable start/stop/resume/stoponwin based on bot state
+- [x] option to run simulation without bet history
 
 ### Sites
-- [ ] BCH.games
-
+- [ ] *wolfbet
+- [ ] BCH.game
 
 ### Help windows:
 - [ ] Setup wizard
@@ -47,27 +47,27 @@
 
 ### Settings: 
 - [ ] *language localization (functionality mostly in place, but strings file not yet created)
-- [x] *skins
-- [x] *storage: bets
+- [ ] *Errors
+- [ ] Donate
+- [ ] Proxy
+- [ ] Telemetry
 - [ ] storage strategies
 - [x] *notifications (This should be done except for the grid not updating initially)
 - [x] *Updates (I think this is basically done)
 - [x] *Live bets
-- [ ] Donate
-- [ ] Proxy
-- [ ] *Errors
-- [ ] Telemetry
+- [x] *skins
+- [x] *storage: bets
+
 
 ### Known issues
 - [ ] *Double check site settings
-- [ ] *wolfbet
 - [ ] *reset seed caused betting to stop
 - [ ] *SiteDetails and SiteStats class are not defined before until we do a first bet
 - [ ] *Add a new boolean variable that indicates if script is running in simulator
 - [ ] *Balance variable is not updated in programmer mode
 - [ ] *Sqlite update tables needs to be implemented
 - [x] *Script conversion tool /legacy script support (untested but there for lua)
-- [ ] ???Specify system requirements in the readme file???
 - [ ] *bot speed
+- [ ] ???Specify system requirements in the readme file???
 - [ ] charting line colours
 - [x] *Programmer mode crash when file dialog cancelled
