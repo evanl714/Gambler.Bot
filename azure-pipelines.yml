@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 resources:
   repositories:
   - repository: Gambler.Bot.Core # The name used to reference this repository in the checkout step
@@ -9,16 +10,26 @@ resources:
     type: github
     endpoint: Seuntjie900
     name: Seuntjie900/Gambler.Bot.AutoBet
+=======
+# .NET Desktop
+# Build and run tests for .NET Desktop or Windows classic desktop solutions.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
+>>>>>>> 8844cde49f42349ffa2a2424015f9191f0ddf0be
 
 trigger:
 - master
 
+<<<<<<< HEAD
 name: 1.0.$(Build.BuildId)
 
+=======
+>>>>>>> 8844cde49f42349ffa2a2424015f9191f0ddf0be
 pool:
   vmImage: 'windows-latest'
 
 variables:
+<<<<<<< HEAD
   solution: '**/Gambler.Bot.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
@@ -27,7 +38,7 @@ stages:
 - stage: Build
   jobs:
   - job: BuildJob
-steps:
+    steps:    
     - checkout: Gambler.Bot.Core
     - checkout: Gambler.Bot.AutoBet
     - checkout: Self
@@ -51,17 +62,17 @@ steps:
           $csproj.Save($csprojPath)
 
 
-- task: NuGetToolInstaller@1
+    - task: NuGetToolInstaller@1
 
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
+    - task: NuGetCommand@2
+      inputs:
+        restoreSolution: '$(solution)'
 
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    - task: VSBuild@1
+      inputs:
+        solution: '$(solution)'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
 
     - script: |
         mkdir $(Build.ArtifactStagingDirectory)\Artifacts
@@ -77,7 +88,30 @@ steps:
       displayName: 'Copy Artifacts to a Common Directory'
     
     - task: PublishBuildArtifacts@1
-  inputs:
+      inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)\Artifacts'
         ArtifactName: 'BuildArtifacts'
         publishLocation: 'container'
+=======
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: VSTest@2
+  inputs:
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+>>>>>>> 8844cde49f42349ffa2a2424015f9191f0ddf0be
