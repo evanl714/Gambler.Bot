@@ -1,0 +1,83 @@
+resources:
+  repositories:
+  - repository: Gambler.Bot.Core # The name used to reference this repository in the checkout step
+    type: github
+    endpoint: Seuntjie900
+    name: Seuntjie900/Gambler.Bot.Core
+ repositories:
+  - repository: Gambler.Bot.AutoBet # The name used to reference this repository in the checkout step
+    type: github
+    endpoint: Seuntjie900
+    name: Seuntjie900/Gambler.Bot.AutoBet
+
+trigger:
+- master
+
+name: 1.0.$(Build.BuildId)
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/Gambler.Bot.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+stages:
+- stage: Build
+  jobs:
+  - job: BuildJob
+    steps:    
+    - checkout: Gambler.Bot.Core
+    - checkout: Gambler.Bot.AutoBet
+    - checkout: Self
+
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: |
+          $csprojPath = Get-ChildItem -Path "$(Build.SourcesDirectory)" -Filter "Gambler.Bot.csproj" -Recurse | Select-Object -First 1 -ExpandProperty FullName
+          [xml]$csproj = Get-Content -Path $csprojPath
+          $versionNode = $csproj.SelectNodes("//Project/PropertyGroup/Version") | Select-Object -First 1
+          if ($versionNode -eq $null) {
+            $propertyGroup = $csproj.CreateElement("PropertyGroup")
+            $versionNode = $csproj.CreateElement("Version")
+            $versionNode.InnerText = "$(Build.BuildNumber)"
+            $propertyGroup.AppendChild($versionNode)
+            $csproj.DocumentElement.AppendChild($propertyGroup)
+          } else {
+            $versionNode.InnerText = "$(Build.BuildNumber)"
+          }
+          $csproj.Save($csprojPath)
+
+
+    - task: NuGetToolInstaller@1
+
+    - task: NuGetCommand@2
+      inputs:
+        restoreSolution: '$(solution)'
+
+    - task: VSBuild@1
+      inputs:
+        solution: '$(solution)'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+
+    - script: |
+        mkdir $(Build.ArtifactStagingDirectory)\Artifacts
+      displayName: 'Make artifacts common dir'
+
+    - script: |
+        dir
+        xcopy /I /E /Y "Gambler.Bot\Gambler.Bot\bin\Release\net8.0\*" "$(Build.ArtifactStagingDirectory)\Artifacts"
+      displayName: 'Copy Artifacts to a Common Directory'
+
+    - script: |        
+        xcopy /I /E /Y "Gambler.Bot\Gambler.Bot\bin\Release\*" "$(Build.ArtifactStagingDirectory)\Artifacts"
+      displayName: 'Copy Artifacts to a Common Directory'
+    
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)\Artifacts'
+        ArtifactName: 'BuildArtifacts'
+        publishLocation: 'container'
