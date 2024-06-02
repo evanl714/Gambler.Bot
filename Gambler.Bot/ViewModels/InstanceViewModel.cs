@@ -193,40 +193,10 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             switch(e.NotificationTrigger.Action)
             {
                 case TriggerAction.Alarm:
-                    if (!Dispatcher.UIThread.CheckAccess())
-                    {
-                        Dispatcher.UIThread.Invoke(() =>
-                        {
-                            try
-                            {   
-                                _alarm.Stop();
-                                _alarm.Play();
-                            }
-                            catch (Exception ex)
-                            {
-
-                            }
-                        });
-                    }
+                    PlaySound(_alarm);
                     break;
                 case TriggerAction.Chime:
-                    Uri chimeuri = new Uri( Path.Combine(Environment.CurrentDirectory,@"Assets/Sounds/chime.wav"));
-                   
-                    if (!Dispatcher.UIThread.CheckAccess())
-                    {
-                        Dispatcher.UIThread.Invoke(() =>
-                        {
-                            try
-                            {
-                                _chime.Stop();
-                                _chime.Play();
-                            }
-                            catch (Exception ex)
-                            {
-
-                            }
-                        });
-                    }
+                    PlaySound(_chime);
                     break;
                 case TriggerAction.Email:
                     break;
@@ -267,6 +237,26 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             setCanResume();
             setCanStart();
             setTitle();
+        }
+
+        void PlaySound(MediaPlayer sound)
+        {
+            if (!Dispatcher.UIThread.CheckAccess())
+            {
+                Dispatcher.UIThread.Invoke(() =>
+                {
+                    PlaySound(sound);
+                });
+            }
+            try
+            {
+                sound.Stop();
+                sound.Play();
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
 
         private void BotIns_OnStarted(object? sender, EventArgs e)
@@ -349,10 +339,108 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                 tmpStrat.SetStrategy(BotInstance.Strategy);
                 tmpStrat.GameChanged(BotInstance.CurrentGame);
             }
-            ConsoleVM.Strategy= BotInstance.Strategy as IProgrammerMode;
+            if (BotInstance.Strategy is IProgrammerMode prog)
+            {
+                ConsoleVM.Strategy = prog;
+                prog.OnAlarm -= Prog_OnAlarm;
+                prog.OnAlarm += Prog_OnAlarm;
+                prog.OnChing -= Prog_OnChing;    
+                prog.OnChing += Prog_OnChing;
+                prog.OnExportSim -= Prog_OnExportSim;
+                prog.OnExportSim += Prog_OnExportSim;
+                prog.OnPrint -= Prog_OnPrint;
+                prog.OnPrint += Prog_OnPrint;
+                prog.OnRead -= Prog_OnRead;
+                prog.OnRead += Prog_OnRead;
+                prog.OnReadAdv -= Prog_OnReadAdv;
+                prog.OnReadAdv += Prog_OnReadAdv;
+                prog.OnRunSim -= Prog_OnRunSim;
+                prog.OnRunSim += Prog_OnRunSim;
+                prog.OnScriptError -= Prog_OnScriptError;
+                prog.OnScriptError += Prog_OnScriptError;
+            }
+            else
+            {
+                ConsoleVM.Strategy = null;
+            }
             StrategyVM?.Dispose();
             StrategyVM = tmpStrat;
             setTitle();
+        }
+
+        private void Prog_OnScriptError(object? sender, PrintEventArgs e)
+        {
+            ConsoleVM.AddLine(e.Message);
+        }
+
+        private void Prog_OnRunSim(object? sender, RunSimEventArgs e)
+        {
+            if (simControl?.Running??false)
+            {
+                ConsoleVM.AddLine("Cannot start simulation, already running");
+            }
+            else
+            {
+                simControl = simControl?? new SimulationViewModel(_logger);
+                simControl.CurrentSite = botIns.CurrentSite;
+                simControl.Strategy = botIns.Strategy;
+                simControl.BetSettings = botIns.BetSettings;
+                simControl.CanStart += SimControl_CanStart;
+                simControl.NumberOfBets = e.Bets;
+                simControl.StartingBalance = e.Balance;
+                simControl.Log = e.WriteLog;
+                simControl.StartCommand.Execute(null);
+            }
+        }
+
+        private void Prog_OnReadAdv(object? sender, ReadEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Prog_OnRead(object? sender, ReadEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Prog_OnPrint(object? sender, PrintEventArgs e)
+        {
+            ConsoleVM.AddLine(e.Message);
+        }
+
+        private void Prog_OnExportSim(object? sender, ExportSimEventArgs e)
+        {
+            if (simControl == null)
+            {
+                ConsoleVM.AddLine("No simulation to export");
+                return;
+            }
+            if (simControl.Running)
+            {
+                ConsoleVM.AddLine("Cannot export simulation, it is still running");
+                return;
+            }
+            if (simControl.CurrentSimulation == null)
+            {
+                ConsoleVM.AddLine("No simulation to export");
+                return;
+            }
+            if (!simControl.Log)
+            {
+                ConsoleVM.AddLine("Cannot export simulation, log was not enabled");
+                return;
+            }
+            simControl.Save(e.FileName);
+        }
+
+        private void Prog_OnChing(object? sender, EventArgs e)
+        {
+            PlaySound(_chime);
+        }
+
+        private void Prog_OnAlarm(object? sender, EventArgs e)
+        {
+            PlaySound(_alarm);
         }
 
         void ChangeSite()
@@ -478,7 +566,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                     {
                         PropertyInfo StratNameProp = strat.GetType().GetProperty("StrategyName");
                         string nm = (string)StratNameProp.GetValue(strat);
-                        if(nm == BetSettingsFile.ToString())
+                        if(nm == name)
                         {
                             newStrat = strat;
                             break;
@@ -509,14 +597,27 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             {
             }
         }
-
+        SimulationViewModel simControl;
         async Task Simulate()
         {
-            SimulationViewModel simControl = new SimulationViewModel(_logger);
-            simControl.CurrentSite = botIns.CurrentSite;
-            simControl.Strategy = botIns.Strategy;
-            simControl.BetSettings = botIns.BetSettings;
-            await ShowSimulation.Handle(simControl);
+            if (!(simControl?.Running ?? false))
+            { 
+                simControl = new SimulationViewModel(_logger);
+                simControl.CurrentSite = botIns.CurrentSite;
+                simControl.Strategy = botIns.Strategy;
+                simControl.BetSettings = botIns.BetSettings;
+                simControl.CanStart += SimControl_CanStart;
+                await ShowSimulation.Handle(simControl);
+            }
+            else
+            {
+                await MessageBox.Show("There is already a simulation running. Please wait for it to finish or close the simulation window.", "Already running");
+            }
+        }
+
+        private void SimControl_CanStart(object? sender, CanSimulateEventArgs e)
+        {
+            e.CanSimulate = !BotInstance.Running && BotInstance.CurrentGame!=null && BotInstance.CurrentSite!=null && BotInstance.Strategy!=null && !(simControl?.Running??false);
         }
 
         public async Task RollVerifier()

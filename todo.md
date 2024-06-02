@@ -9,13 +9,13 @@
 
 	
 ### Tabs
-- [ ] *Console
+- [ ] *Console (still needs read methods)
 
 ### Windows
 - [ ] *settings import/export
 - [ ] additional charts (streak occurance? roll distrobution? win/loss ratio? )
 - [x] *roll verifier
-- [x] *bet history
+- [ ] *bet history
 
 
 ### General

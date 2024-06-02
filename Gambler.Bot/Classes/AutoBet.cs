@@ -663,18 +663,9 @@ namespace Gambler.Bot.Classes
                     strategy.OnNeedStats -= Strategy_OnNeedStats;
                     if (strategy is IProgrammerMode)
                     {
-                        (Strategy as IProgrammerMode).OnAlarm -= Autobet_OnAlarm;
-                        (Strategy as IProgrammerMode).OnChing -= Autobet_OnChing;
-                        (Strategy as IProgrammerMode).OnExportSim -= Autobet_OnExportSim;
                         (Strategy as IProgrammerMode).OnInvest -= Autobet_OnInvest;
-                        (Strategy as IProgrammerMode).OnPrint -= Autobet_OnPrint;
-                        (Strategy as IProgrammerMode).OnRead -= Autobet_OnRead;
-                        (Strategy as IProgrammerMode).OnReadAdv -= Autobet_OnReadAdv;
-                        //(Strategy aIs ProgrammerMode).OnResetBuiltIn -= Autobet_OnResetBuiltIn;
                         (Strategy as IProgrammerMode).OnResetSeed -= Autobet_OnResetSeed;
                         (Strategy as IProgrammerMode).OnResetStats -= Autobet_OnResetStats;
-                        (Strategy as IProgrammerMode).OnRunSim -= Autobet_OnRunSim;
-                        //(Strategy aIs ProgrammerMode).OnStop -= Autobet_OnStop;
                         (Strategy as IProgrammerMode).OnTip -= Autobet_OnTip;
                         (Strategy as IProgrammerMode).OnWithdraw -= Autobet_OnWithdraw;
                         (Strategy as IProgrammerMode).OnScriptError -= Autobet_OnScriptError;
@@ -691,18 +682,10 @@ namespace Gambler.Bot.Classes
                     if (strategy is IProgrammerMode)
                     {
                         (strategy as IProgrammerMode).CreateRuntime();
-                        (Strategy as IProgrammerMode).OnAlarm += Autobet_OnAlarm;
-                        (Strategy as IProgrammerMode).OnChing += Autobet_OnChing;
-                        (Strategy as IProgrammerMode).OnExportSim += Autobet_OnExportSim;
+                        
                         (Strategy as IProgrammerMode).OnInvest += Autobet_OnInvest;
-                        (Strategy as IProgrammerMode).OnPrint += Autobet_OnPrint;
-                        (Strategy as IProgrammerMode).OnRead += Autobet_OnRead;
-                        (Strategy as IProgrammerMode).OnReadAdv += Autobet_OnReadAdv;
-                        //(Strategy as ProgrammerMode).OnResetBuiltIn += Autobet_OnResetBuiltIn;
                         (Strategy as IProgrammerMode).OnResetSeed += Autobet_OnResetSeed;
                         (Strategy as IProgrammerMode).OnResetStats += Autobet_OnResetStats;
-                        (Strategy as IProgrammerMode).OnRunSim += Autobet_OnRunSim;
-                        //(Strategy aIs ProgrammerMode).OnStop += Autobet_OnStop;
                         (Strategy as IProgrammerMode).OnTip += Autobet_OnTip;
                         (Strategy as IProgrammerMode).OnWithdraw += Autobet_OnWithdraw;
                         (Strategy as IProgrammerMode).OnScriptError += Autobet_OnScriptError;
@@ -748,11 +731,6 @@ namespace Gambler.Bot.Classes
             StopStrategy("Programmer mode stop signal received.");
         }
 
-        private void Autobet_OnRunSim(object sender, RunSimEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
         private void Autobet_OnResetStats(object sender, EventArgs e)
         {
             ResetStats();
@@ -769,42 +747,10 @@ namespace Gambler.Bot.Classes
             Strategy.RunReset();
         }
 
-        private void Autobet_OnReadAdv(object sender, ReadEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void Autobet_OnRead(object sender, ReadEventArgs e)
-
-        {
-            throw new NotImplementedException();
-        }
-
-        private void Autobet_OnPrint(object sender, PrintEventArgs e)
-        {
-            //send print to UI
-            
-        }
-
         private void Autobet_OnInvest(object sender, InvestEventArgs e)
         {
             if (CurrentSite.AutoInvest)
                 CurrentSite.Invest(e.Amount);
-        }
-
-        private void Autobet_OnExportSim(object sender, ExportSimEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void Autobet_OnChing(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void Autobet_OnAlarm(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
         }
 
         private SessionStats Strategy_OnNeedStats(object sender, EventArgs e)

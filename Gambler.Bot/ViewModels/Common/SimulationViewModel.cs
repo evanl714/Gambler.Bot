@@ -15,11 +15,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using static Community.CsharpSqlite.Sqlite3;
+using DryIoc;
 
 namespace Gambler.Bot.ViewModels.Common
 {
     public class SimulationViewModel:ViewModelBase
     {
+        
+        public event EventHandler<CanSimulateEventArgs> CanStart;
         Stopwatch SimTimer = new Stopwatch();
 
         private BaseSite currentsite;
@@ -56,7 +59,7 @@ namespace Gambler.Bot.ViewModels.Common
             set { statsViewModel = value; }
         }
 
-        private decimal startingBalance;
+        private decimal startingBalance=1;
 
         public decimal StartingBalance
         {
@@ -64,7 +67,7 @@ namespace Gambler.Bot.ViewModels.Common
             set { startingBalance = value; }
         }
 
-        private long numberOfBets;
+        private long numberOfBets=1000000;
 
         public long NumberOfBets
         {
@@ -128,11 +131,32 @@ namespace Gambler.Bot.ViewModels.Common
             CurrentSimulation?.StopSim();
         }
 
+        private string error;
+
+        public string Error
+        {
+            get { return error; }
+            set { error = value; this.RaisePropertyChanged(); this.RaisePropertyChanged(nameof(showError)); }
+        }
+        public bool showError { get => !string.IsNullOrWhiteSpace(Error); }
+
         public ICommand StartCommand { get; }
         void Start()
         {
-            if (Running)
+            var args = new CanSimulateEventArgs() { CanSimulate = true };
+            CanStart?.Invoke(this, args);
+            if (!args.CanSimulate)
+            {
+                Error = "Cannot start simulation. The bot might be betting or running a simulation in the programmer mode.";
                 return;
+            }
+            if (Running )
+            {
+                Error = "Simulation already running";
+                
+                return;
+            }
+            Error = "";
             CurrentSimulation = new Gambler.Bot.Strategies.Helpers.Simulation(null);
             CurrentSimulation.Initialize(StartingBalance, NumberOfBets, CurrentSite, currentsite.SiteDetails, Strategy, BetSettings, "tmp.sim", Log);
             CanSave = false;
@@ -236,5 +260,15 @@ namespace Gambler.Bot.ViewModels.Common
                 CurrentSimulation.MoveLog(dg.FileName);
             }*/
         }
+
+        public void Save(string path)
+        {
+            CurrentSimulation.MoveLog(path);
+        }
+        
+    }
+    public class CanSimulateEventArgs : EventArgs
+    {
+        public bool CanSimulate { get; set; }
     }
 }

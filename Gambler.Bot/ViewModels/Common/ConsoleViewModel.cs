@@ -65,20 +65,24 @@ namespace Gambler.Bot.ViewModels.Common
             set { selectedIndex = value; this.RaisePropertyChanged(); }
         }
 
-
+        StringBuilder content = new StringBuilder();
         public void AddLine(string line)
         {
             if (Lines == null)
                 Lines = new ObservableCollection<string>();
             Lines.Add(line);
+            content.AppendLine(line);
             while (Lines.Count>1000)
             {
+                content.Remove(0, Lines[0].Length + 2);
                 Lines.RemoveAt(0);
-
             }
-            SelectedIndex = Lines.Count - 1;
+            HistoryString = content.ToString();
+            SelectedIndex = int.MaxValue;
         }
-        
+        string historyString;
+        public string HistoryString { get=>historyString; private set { historyString = value; this.RaisePropertyChanged(); } }
+
         public void ExecuteCommand()
         {
             if (Strategy == null)
