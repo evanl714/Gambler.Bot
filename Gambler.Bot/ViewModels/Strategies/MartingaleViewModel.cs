@@ -1,15 +1,11 @@
 ﻿using Gambler.Bot.AutoBet.Strategies;
-using Gambler.Bot.Core.Games;
+using Gambler.Bot.AutoBet.Strategies.Abstractions;
 using Gambler.Bot.Classes.BetsPanel;
 using Gambler.Bot.Classes.Strategies;
 using Gambler.Bot.ViewModels.Games.Dice;
 using ReactiveUI;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gambler.Bot.ViewModels.Strategies
 {
@@ -23,7 +19,7 @@ namespace Gambler.Bot.ViewModels.Strategies
             set { _strategy = value; this.RaisePropertyChanged(); }
         }
 
-        private Gambler.Bot.Core.Games.Games  _game;
+        private Bot.Common.Games.Games  _game;
 
         private iPlaceBet _placeBetVM;
 
@@ -34,7 +30,7 @@ namespace Gambler.Bot.ViewModels.Strategies
         }
 
 
-        public Gambler.Bot.Core.Games.Games Game
+        public Bot.Common.Games.Games Game
         {
             get { return _game; }
             set { _game = value; this.RaisePropertyChanged(); }
@@ -44,7 +40,7 @@ namespace Gambler.Bot.ViewModels.Strategies
         {
             
         }
-        public void GameChanged(Gambler.Bot.Core.Games.Games newGame)
+        public void GameChanged(Bot.Common.Games.Games newGame)
         {
             if (PlaceBetVM!=null && PlaceBetVM is INotifyPropertyChanged notify)
             {
@@ -53,7 +49,7 @@ namespace Gambler.Bot.ViewModels.Strategies
             Game = newGame;
             switch (Game)
             {
-                case Gambler.Bot.Core.Games.Games.Dice: PlaceBetVM = new DicePlaceBetViewModel(_logger) { ShowToggle = true };break;
+                case Bot.Common.Games.Games.Dice: PlaceBetVM = new DicePlaceBetViewModel(_logger) { ShowToggle = true };break;
                 default: PlaceBetVM = null; break;
             }
             if (PlaceBetVM != null && PlaceBetVM is INotifyPropertyChanged notify2)

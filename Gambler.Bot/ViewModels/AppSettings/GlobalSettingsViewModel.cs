@@ -1,5 +1,6 @@
 ﻿using Gambler.Bot.AutoBet.Helpers;
 using Gambler.Bot.Classes;
+using Gambler.Bot.Common.Helpers;
 using Gambler.Bot.Core.Helpers;
 using Gambler.Bot.ViewModels.Common;
 using Microsoft.Extensions.Logging;

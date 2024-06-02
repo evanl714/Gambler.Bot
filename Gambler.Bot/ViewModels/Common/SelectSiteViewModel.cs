@@ -35,13 +35,13 @@ namespace Gambler.Bot.ViewModels.Common
 
         public SelectSiteViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
         {
-            Gambler.Bot.AutoBet.AutoBet botIns = new Gambler.Bot.AutoBet.AutoBet(_logger);
+            Classes.AutoBet botIns = new Classes.AutoBet(_logger);
             botIns.CompileSites();
             botIns.GetStrats();
             LoginCommand = ReactiveCommand.Create<object>(LogIn);
             SimulateCommand = ReactiveCommand.Create<object>(Simulate);
             ViewSiteCommand = ReactiveCommand.Create<object>(ViewSite);
-            Sites = new ObservableCollection<AvaSitesList>(Gambler.Bot.AutoBet.AutoBet.Sites.Select(x=>new AvaSitesList(x) ));
+            Sites = new ObservableCollection<AvaSitesList>(Classes.AutoBet.Sites.Select(x=>new AvaSitesList(x) ));
             
         }
 

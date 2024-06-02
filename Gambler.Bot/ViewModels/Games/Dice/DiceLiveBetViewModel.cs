@@ -1,16 +1,10 @@
 ﻿using Avalonia.Threading;
-using Gambler.Bot.Core.Games;
-using Gambler.Bot.Core.Helpers;
-using IronPython.Runtime;
 using Gambler.Bot.Classes;
 using Gambler.Bot.Classes.BetsPanel;
+using Gambler.Bot.Common.Games;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gambler.Bot.ViewModels.Games.Dice
 {

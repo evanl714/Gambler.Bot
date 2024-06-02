@@ -1,16 +1,11 @@
 ﻿using ActiproSoftware.UI.Avalonia.Themes;
-using Amazon.Auth.AccessControlPolicy;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
-using Gambler.Bot.Core.Games;
+using Gambler.Bot.Common.Games;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gambler.Bot.Converters
 {

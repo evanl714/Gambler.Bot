@@ -1,4 +1,5 @@
 ﻿using Gambler.Bot.AutoBet.Strategies;
+using Gambler.Bot.AutoBet.Strategies.Abstractions;
 using Gambler.Bot.AutoBet.Strategies.PresetListModels;
 using Gambler.Bot.Classes.BetsPanel;
 using Gambler.Bot.Classes.Strategies;
@@ -54,7 +55,7 @@ namespace Gambler.Bot.ViewModels.Strategies
             get { return _strategy; }
             set { _strategy = value; this.RaisePropertyChanged(); }
         }
-        private Gambler.Bot.Core.Games.Games _game;
+        private Bot.Common.Games.Games _game;
 
         private ObservableCollection<PresetDiceBet> _betList;
 
@@ -64,7 +65,7 @@ namespace Gambler.Bot.ViewModels.Strategies
             set { _betList = value; }
         }
 
-        public Gambler.Bot.Core.Games.Games Game
+        public Bot.Common.Games.Games Game
         {
             get { return _game; }
             set { _game = value; this.RaisePropertyChanged(); }
@@ -97,7 +98,7 @@ namespace Gambler.Bot.ViewModels.Strategies
                 BetList.Insert(SelectedIndex + 1, new PresetDiceBet { Amount = 0 });
         }
 
-        public void GameChanged(Gambler.Bot.Core.Games.Games newGame)
+        public void GameChanged(Bot.Common.Games.Games newGame)
         {
            
         }

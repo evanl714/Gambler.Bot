@@ -1,4 +1,5 @@
 ﻿using Gambler.Bot.AutoBet.Helpers;
+using Gambler.Bot.Common.Helpers;
 using Gambler.Bot.Core.Helpers;
 using ReactiveUI;
 using System;

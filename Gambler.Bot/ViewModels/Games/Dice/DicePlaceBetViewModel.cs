@@ -1,11 +1,7 @@
-﻿using Gambler.Bot.Core.Games;
-using Gambler.Bot.Classes.BetsPanel;
+﻿using Gambler.Bot.Classes.BetsPanel;
+using Gambler.Bot.Common.Games;
 using ReactiveUI;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Gambler.Bot.ViewModels.Games.Dice

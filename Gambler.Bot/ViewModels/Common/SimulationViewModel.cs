@@ -1,6 +1,8 @@
 ﻿using Avalonia.Threading;
 using Gambler.Bot.AutoBet.Helpers;
-using Gambler.Bot.AutoBet.Strategies;
+using Gambler.Bot.AutoBet.Strategies.Abstractions;
+using Gambler.Bot.Common.Events;
+using Gambler.Bot.Common.Interfaces;
 using Gambler.Bot.Core.Events;
 using Gambler.Bot.Core.Sites;
 using Microsoft.Extensions.Logging;
@@ -132,7 +134,7 @@ namespace Gambler.Bot.ViewModels.Common
             if (Running)
                 return;
             CurrentSimulation = new Gambler.Bot.AutoBet.Helpers.Simulation(null);
-            CurrentSimulation.Initialize(StartingBalance, NumberOfBets, CurrentSite, Strategy, BetSettings, "tmp.sim", Log);
+            CurrentSimulation.Initialize(StartingBalance, NumberOfBets, CurrentSite, currentsite.SiteDetails, Strategy, BetSettings, "tmp.sim", Log);
             CanSave = false;
             CurrentSimulation.OnSimulationWriting += CurrentSimulation_OnSimulationWriting;
             CurrentSimulation.OnSimulationComplete += CurrentSimulation_OnSimulationComplete;

@@ -1,13 +1,10 @@
 ﻿using Avalonia.Collections;
-using Gambler.Bot.Core.Games;
 using Gambler.Bot.Core.Storage;
+using Gambler.Bot.Common.Games;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gambler.Bot.ViewModels.Common
 {
@@ -55,16 +52,16 @@ namespace Gambler.Bot.ViewModels.Common
                 DataGridCollectionView tmpBets=null;
                 switch (Game)
                 {
-                    case Core.Games.Games.Crash:
+                    case Bot.Common.Games.Games.Crash:
                         tmpBets = new DataGridCollectionView(Context.CrashBets.Where(x => x.Site == Site));
                         break;
-                    case Core.Games.Games.Dice:
+                    case Bot.Common.Games.Games.Dice:
                         tmpBets = new DataGridCollectionView(Context.DiceBets.Where(x => x.Site == Site));
                         break;
-                    case Core.Games.Games.Roulette:
+                    case Bot.Common.Games.Games.Roulette:
                         tmpBets = new DataGridCollectionView(Context.RouletteBets.Where(x => x.Site == Site));
                         break;
-                    case Core.Games.Games.Plinko:
+                    case Bot.Common.Games.Games.Plinko:
                         tmpBets = new DataGridCollectionView(Context.PlinkoBets.Where(x => x.Site == Site));
                         break;
                 }
@@ -79,9 +76,9 @@ namespace Gambler.Bot.ViewModels.Common
             }
         }
 
-        private Gambler.Bot.Core.Games.Games game = Core.Games.Games.Dice;
+        private Bot.Common.Games.Games game = Bot.Common.Games.Games.Dice;
 
-        public Gambler.Bot.Core.Games.Games Game
+        public Bot.Common.Games.Games Game
         {
             get { return game; }
             set { game = value; LoadData(); this.RaisePropertyChanged();  }

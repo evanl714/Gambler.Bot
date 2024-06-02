@@ -1,7 +1,6 @@
 ﻿using Avalonia.Platform.Storage;
-using Avalonia.Threading;
-using Gambler.Bot.Core.Sites;
 using Gambler.Bot.Classes;
+using Gambler.Bot.Core.Sites;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using System;
@@ -11,7 +10,6 @@ using System.IO;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace Gambler.Bot.ViewModels.Common
 {
@@ -20,15 +18,15 @@ namespace Gambler.Bot.ViewModels.Common
         private Interaction<FilePickerSaveOptions, string> saveFile;
         public Interaction<FilePickerSaveOptions, string> SaveFileInteraction => saveFile;
         public BaseSite Site { get; set; }
-        private Gambler.Bot.Core.Games.Games game;
+        private Bot.Common.Games.Games game;
 
-        public Gambler.Bot.Core.Games.Games Game
+        public Bot.Common.Games.Games Game
         {
             get { return game; }
             set { game = value; }
         }
 
-        public Gambler.Bot.Core.Games.Games[] Games
+        public Bot.Common.Games.Games[] Games
         {
             get { return Site?.SupportedGames; }
         }
@@ -63,7 +61,7 @@ namespace Gambler.Bot.ViewModels.Common
             ConfigureCommands();
         }
 
-        public RollVerifierViewModel(ILogger logger, BaseSite site, Gambler.Bot.Core.Games.Games game) : base(logger)
+        public RollVerifierViewModel(ILogger logger, BaseSite site, Bot.Common.Games.Games game) : base(logger)
         {
             Site = site;
             ConfigureCommands();

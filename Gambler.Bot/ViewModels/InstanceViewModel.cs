@@ -6,6 +6,7 @@ using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Threading;
 using Gambler.Bot.AutoBet.Helpers;
 using Gambler.Bot.AutoBet.Strategies;
+using Gambler.Bot.AutoBet.Strategies.Abstractions;
 using Gambler.Bot.Classes;
 using Gambler.Bot.Classes.BetsPanel;
 using Gambler.Bot.Classes.Strategies;
@@ -29,6 +30,8 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Gambler.Bot.Classes;
+using Gambler.Bot.Common.Events;
 
 namespace Gambler.Bot.ViewModels
 {
@@ -43,7 +46,7 @@ namespace Gambler.Bot.ViewModels
         private IStrategy _strategyVM;
         string BetSettingsFile = string.Empty;
         string InstanceSettingsFile = string.Empty;
-        private Gambler.Bot.AutoBet.AutoBet botIns;
+        private Classes.AutoBet botIns;
         private bool canResume;
 
         private bool canStart;
@@ -91,7 +94,7 @@ namespace Gambler.Bot.ViewModels
     OpenCommand = ReactiveCommand.Create(Open);
     SaveCommand = ReactiveCommand.Create(Save);
 
-    var tmp = new Gambler.Bot.AutoBet.AutoBet(_logger);
+    var tmp = new Classes.AutoBet(_logger);
     SelectSite = new SelectSiteViewModel(_logger);
     SelectSite.SelectedSiteChanged += SelectSite_SelectedSiteChanged;
     IsSelectSiteViewVisible = true;
@@ -118,7 +121,7 @@ namespace Gambler.Bot.ViewModels
     tmp.OnSiteNotify += Tmp_OnSiteNotify;
     tmp.OnSiteError += Tmp_OnSiteError;
     BotInstance = tmp;
-    botIns.CurrentGame = Gambler.Bot.Core.Games.Games.Dice;
+    botIns.CurrentGame = Bot.Common.Games.Games.Dice;
 }
 
         public List<string> Languages { get; set; }
@@ -166,12 +169,12 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
             switch(botIns.CurrentGame)
             {
-                case Gambler.Bot.Core.Games.Games.Crash:
-                    case Gambler.Bot.Core.Games.Games.Roulette:
-                    case Gambler.Bot.Core.Games.Games.Plinko:
+                case Bot.Common.Games.Games.Crash:
+                    case Bot.Common.Games.Games.Roulette:
+                    case Bot.Common.Games.Games.Plinko:
                     break;
                 case
-                    Gambler.Bot.Core.Games.Games.Dice:
+                    Bot.Common.Games.Games.Dice:
                     PlaceBetVM = new DicePlaceBetViewModel(_logger);
                     LiveBets = new DiceLiveBetViewModel(_logger);
                     break;
@@ -367,7 +370,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             InstanceSettings tmp = JsonSerializer.Deserialize<InstanceSettings>(Settings);
             //botIns.ga
 
-            var tmpsite = Gambler.Bot.AutoBet.AutoBet.Sites.FirstOrDefault(m => m.Name == tmp.Site);
+            var tmpsite = Classes.AutoBet.Sites.FirstOrDefault(m => m.Name == tmp.Site);
             if(tmpsite != null)
             {
                 botIns.CurrentSite = Activator.CreateInstance(tmpsite.SiteType(), _logger) as Gambler.Bot.Core.Sites.BaseSite;
@@ -378,7 +381,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                 ShowSites = true;
             }
             if(tmp.Game != null)
-                botIns.CurrentGame = Enum.Parse<Gambler.Bot.Core.Games.Games>(tmp.Game);
+                botIns.CurrentGame = Enum.Parse<Bot.Common.Games.Games>(tmp.Game);
         }
 
         private void LoginFinished(bool ChangeScreens)
@@ -461,11 +464,11 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                 var Settings = botIns.LoadBetSettings(BetSettingsFile, false);
                 IEnumerable<PropertyInfo> Props = Settings.GetType()
                     .GetProperties()
-                    .Where(m => typeof(Gambler.Bot.AutoBet.Strategies.BaseStrategy).IsAssignableFrom(m.PropertyType));
-                Gambler.Bot.AutoBet.Strategies.BaseStrategy newStrat = null;
+                    .Where(m => typeof(BaseStrategy).IsAssignableFrom(m.PropertyType));
+                BaseStrategy newStrat = null;
                 foreach(PropertyInfo x in Props)
                 {
-                    Gambler.Bot.AutoBet.Strategies.BaseStrategy strat = (Gambler.Bot.AutoBet.Strategies.BaseStrategy)x.GetValue(
+                    BaseStrategy strat = (BaseStrategy)x.GetValue(
                         Settings);
                     if(strat != null)
                     {
@@ -480,7 +483,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                 }
                 if(newStrat == null)
                 {
-                    newStrat = Activator.CreateInstance(botIns.Strategies[name]) as Gambler.Bot.AutoBet.Strategies.BaseStrategy;
+                    newStrat = Activator.CreateInstance(botIns.Strategies[name]) as BaseStrategy;
                 }
                 botIns.Strategy = newStrat;
             }
@@ -517,7 +520,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             RollVerifierViewModel simControl = new RollVerifierViewModel(
                 _logger,
                 BotInstance?.CurrentSite,
-                BotInstance?.CurrentGame ?? Gambler.Bot.Core.Games.Games.Dice);
+                BotInstance?.CurrentGame ?? Bot.Common.Games.Games.Dice);
 
             await ShowRollVerifier.Handle(simControl);
         }
@@ -527,11 +530,11 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             botIns.CurrentSite = NewSite;
             if(currency != null && Array.IndexOf(botIns.CurrentSite.Currencies, currency) >= 0)
                 botIns.CurrentSite.Currency = Array.IndexOf(botIns.CurrentSite.Currencies, currency);
-            object curGame = Gambler.Bot.Core.Games.Games.Dice;
+            object curGame = Bot.Common.Games.Games.Dice;
             if(game != null &&
-                Enum.TryParse(typeof(Gambler.Bot.Core.Games.Games), game, out curGame) &&
-                Array.IndexOf(botIns.CurrentSite.SupportedGames, (Gambler.Bot.Core.Games.Games)curGame) >= 0)
-                botIns.CurrentGame = (Gambler.Bot.Core.Games.Games)curGame;
+                Enum.TryParse(typeof(Bot.Common.Games.Games), game, out curGame) &&
+                Array.IndexOf(botIns.CurrentSite.SupportedGames, (Bot.Common.Games.Games)curGame) >= 0)
+                botIns.CurrentGame = (Bot.Common.Games.Games)curGame;
             this.RaisePropertyChanged(nameof(Currencies));
             this.RaisePropertyChanged(nameof(CurrentCurrency));
             if(showLogin)
@@ -555,7 +558,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         private void Tmp_OnBypassRequired(object? sender, BypassRequiredArgs e) { e.Config = MainView.GetBypass(e); }
 
-        private void Tmp_OnSiteError(object sender, Core.Events.ErrorEventArgs e)
+        private void Tmp_OnSiteError(object sender, Bot.Common.Events.ErrorEventArgs e)
         {
             if(!Dispatcher.UIThread.CheckAccess())
                 Dispatcher.UIThread
@@ -660,7 +663,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         public AdvancedViewModel AdvancedSettingsVM { get; set; }// = new AdvancedViewModel();
 
-        public Gambler.Bot.AutoBet.AutoBet? BotInstance
+        public Classes.AutoBet? BotInstance
         {
             get => botIns;
             set
@@ -719,13 +722,13 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             {
                 if(BotInstance?.CurrentSite != null)
                     BotInstance.CurrentGame = BotInstance?.CurrentSite?.SupportedGames[(value >= 0 ? value : 0) ?? 0] ??
-                        Gambler.Bot.Core.Games.Games.Dice;
+                        Bot.Common.Games.Games.Dice;
             }
         }
 
         public ICommand ExitCommand { get; }
 
-        public Gambler.Bot.Core.Games.Games[] Games { get { return BotInstance?.CurrentSite?.SupportedGames; } }
+        public Bot.Common.Games.Games[] Games { get { return BotInstance?.CurrentSite?.SupportedGames; } }
 
         public string InstanceName { get; set; }
 
