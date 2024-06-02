@@ -3,6 +3,7 @@ using Android.Content.PM;
 using Avalonia;
 using Avalonia.Android;
 using Avalonia.ReactiveUI;
+using Avalonia.WebView.Android;
 using Gambler.Bot;
 
 namespace Gambler.Bot.Android;
@@ -19,6 +20,7 @@ public class MainActivity : AvaloniaMainActivity<App>
     {
         return base.CustomizeAppBuilder(builder)
             .WithInterFont()
-            .UseReactiveUI();
+            .UseReactiveUI()
+            .UseAndroidWebView(); ;
     }
 }

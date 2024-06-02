@@ -1,12 +1,15 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using Avalonia.ReactiveUI;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
 using Gambler.Bot.ViewModels;
 using Gambler.Bot.ViewModels.AppSettings;
 using Gambler.Bot.ViewModels.Common;
 using Gambler.Bot.Views.AppSettings;
 using Gambler.Bot.Views.Common;
+using LibVLCSharp.Shared;
 using ReactiveUI;
 using System;
 using System.Reactive;
@@ -17,10 +20,13 @@ namespace Gambler.Bot.Views;
 public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
 {
     private Window parentWindow;
+    private INotificationManager notificationManager;
+
     public InstanceView()
     {
         InitializeComponent();
         Loaded += InstanceView_Loaded;
+        
         if (!Design.IsDesignMode)
         {
             this.WhenActivated(action =>
@@ -32,11 +38,32 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
                 ViewModel!.ExitInteraction.RegisterHandler(Close);
                 ViewModel!.ShowDialog.RegisterHandler(DoShowDialogAsync);
                 ViewModel!.ShowAbout.RegisterHandler(ShowAbout);
+                ViewModel!.ShowNotification.RegisterHandler(ShowNotification);
+
             });
         }
+
         this.AttachedToVisualTree += OnAttachedToVisualTree;
         this.DetachedFromVisualTree += OnDetachedFromVisualTree;
 
+    }
+
+    private void ShowNotification(InteractionContext<INotification, Unit?> context)
+    {
+        if (!Dispatcher.UIThread.CheckAccess())
+        {
+            Dispatcher.UIThread.InvokeAsync(() => ShowNotification(context));
+            return;
+        }
+
+        try
+        {
+            notificationManager.Show(context.Input);
+        }
+        catch (Exception e)
+        {
+
+        }
     }
 
     private void ShowAbout(InteractionContext<AboutViewModel, Unit?> context)
@@ -135,6 +162,7 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
     private void OnAttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e)
     {
         parentWindow = this.FindAncestorOfType<Window>();
+        this.notificationManager = new WindowNotificationManager(TopLevel.GetTopLevel(this));
         if (parentWindow != null)
         {
             parentWindow.Closing += OnWindowClosing;

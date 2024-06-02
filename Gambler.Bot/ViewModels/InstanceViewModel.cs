@@ -1,6 +1,7 @@
 ﻿using ActiproSoftware.UI.Avalonia.Controls;
 using ActiproSoftware.UI.Avalonia.Themes;
 using Avalonia;
+using Avalonia.Controls.Notifications;
 using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Threading;
 using Gambler.Bot.AutoBet.Helpers;
@@ -14,6 +15,7 @@ using Gambler.Bot.ViewModels.Common;
 using Gambler.Bot.ViewModels.Games.Dice;
 using Gambler.Bot.ViewModels.Strategies;
 using Gambler.Bot.Views;
+using LibVLCSharp.Shared;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -32,6 +34,7 @@ namespace Gambler.Bot.ViewModels
 {
     public class InstanceViewModel : ViewModelBase
     {
+        private readonly INotificationManager _notificationManager;
         iLiveBet _liveBets;
 
         iPlaceBet _placeBetVM = null;// = new DicePlaceBetViewModel();
@@ -55,12 +58,16 @@ namespace Gambler.Bot.ViewModels
 
         private string title;
         private DispatcherTimer tmrStats = new DispatcherTimer();
+        private LibVLC _libvlc = new LibVLC();
+        private MediaPlayer _chime;
+        private MediaPlayer _alarm;
 
-
-public InstanceViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
+        public InstanceViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
 {
     GetLanguages();
-    tmrStats.Interval = TimeSpan.FromSeconds(1);
+            _chime = new MediaPlayer(new Media(_libvlc, new Uri(Path.Combine(Environment.CurrentDirectory, @"Assets/Sounds/chime.wav"))));
+            _alarm = new MediaPlayer(new Media(_libvlc, new Uri(Path.Combine(Environment.CurrentDirectory, @"Assets/Sounds/alarm.wav"))));
+            tmrStats.Interval = TimeSpan.FromSeconds(1);
     tmrStats.Tick += TmrStats_Tick;
     AdvancedSettingsVM = new AdvancedViewModel(_logger);
     ResetSettingsVM = new ResetSettingsViewModel(_logger);
@@ -95,7 +102,8 @@ public InstanceViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(log
     ExitInteraction = new Interaction<Unit?, Unit?>();
     ShowSettings = new Interaction<GlobalSettingsViewModel, Unit?>();
     ShowBetHistory = new Interaction<BetHistoryViewModel, Unit?>();
-    tmp.Strategy = new Martingale(_logger);
+            ShowNotification = new Interaction<INotification, Unit?>();
+            tmp.Strategy = new Martingale(_logger);
     PlaceBetVM = new DicePlaceBetViewModel(_logger);
     PlaceBetVM.PlaceBet += PlaceBetVM_PlaceBet;
     tmp.OnGameChanged += BotIns_OnGameChanged;
@@ -176,18 +184,63 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         private void BotIns_OnNotification(object? sender, Gambler.Bot.Core.Helpers.NotificationEventArgs e)
         {
-            throw new NotImplementedException();
+            
             switch(e.NotificationTrigger.Action)
             {
                 case Gambler.Bot.Core.Helpers.TriggerAction.Alarm:
+                    if (!Dispatcher.UIThread.CheckAccess())
+                    {
+                        Dispatcher.UIThread.Invoke(() =>
+                        {
+                            try
+                            {   
+                                _alarm.Stop();
+                                _alarm.Play();
+                            }
+                            catch (Exception ex)
+                            {
+
+                            }
+                        });
+                    }
                     break;
                 case Gambler.Bot.Core.Helpers.TriggerAction.Chime:
+                    Uri chimeuri = new Uri( Path.Combine(Environment.CurrentDirectory,@"Assets/Sounds/chime.wav"));
+                   
+                    if (!Dispatcher.UIThread.CheckAccess())
+                    {
+                        Dispatcher.UIThread.Invoke(() =>
+                        {
+                            try
+                            {
+                                _chime.Stop();
+                                _chime.Play();
+                            }
+                            catch (Exception ex)
+                            {
+
+                            }
+                        });
+                    }
                     break;
                 case Gambler.Bot.Core.Helpers.TriggerAction.Email:
                     break;
                 case Gambler.Bot.Core.Helpers.TriggerAction.Popup:
+                    Avalonia.Controls.Notifications.Notification notification = new Avalonia.Controls.Notifications.Notification(
+                       e.NotificationTrigger.ToString(), e.NotificationTrigger.ToString(), NotificationType.Information);
+                    
+                    NotificationAsync(notification);
                     break;
             }
+        }
+        
+
+      
+       
+
+        async Task NotificationAsync(INotification notification)
+        {
+            await ShowNotification.Handle(notification);
         }
 
         private void BotIns_OnSiteAction(object sender, GenericEventArgs e) { LastAction = e.Message; }
@@ -860,6 +913,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
         public Interaction<GlobalSettingsViewModel, Unit?> ShowSettings { get; internal set; }
 
         public Interaction<BetHistoryViewModel, Unit?> ShowBetHistory { get; internal set; }
+        public Interaction<INotification, Unit?> ShowNotification { get; internal set; }
 
         public void ThemeToggled()
         {

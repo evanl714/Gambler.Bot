@@ -8,7 +8,8 @@
              x:DataType="vm:SelectSiteViewModel"
              xmlns:bot="using:Gambler.Bot.Core.Helpers"
              xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
-             xmlns:svg="clr-namespace:Avalonia.Svg;assembly=Avalonia.Svg"xmlns:converters="using:Gambler.Bot.Converters"
+             xmlns:svg="clr-namespace:Avalonia.Svg;assembly=Avalonia.Svg"
+xmlns:converters="using:Gambler.Bot.Converters"
              >
 
     <UserControl.Resources>

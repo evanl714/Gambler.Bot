@@ -19,9 +19,9 @@
 
 
 ### General
-- [ ] *notifications
+- [x] *notifications (only in app notifications that kind of go over the stop button, but sounds working. need to add an option to move audio sounds again.)
 - [ ] *Auto updates	
-- [ ] *triggers for notifications (Don't think there's a lot to do here.)
+- [x] *triggers for notifications (This seems to work but still having the weird issue on the settings screen.)
 - [ ] *improve programmer mode documentation
 - [ ] *manual betting extra buttons (x2, 1/2, max, min, etc)
 - [ ] multiple tabs

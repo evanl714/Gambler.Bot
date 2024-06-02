@@ -33,11 +33,12 @@
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.10" />
     <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.0.10.9" />
     <PackageReference Include="AvaloniaEdit.TextMate" Version="11.0.6" />
+    <PackageReference Include="LibVLCSharp" Version="3.8.5" />
     <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-rc2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
-    <PackageReference Include="Serilog" Version="3.1.1" />
+    <PackageReference Include="Serilog" Version="4.0.0" />
     <PackageReference Include="SpacedGrid-Avalonia" Version="11.0.0" />
     <PackageReference Include="Svg.Skia" Version="1.0.0.18" />
     <PackageReference Include="TextMateSharp.Grammars" Version="1.0.56" />
@@ -58,6 +59,9 @@
 	  <None Remove="Assets\Images\bx-stop.svg" />
 	  <None Remove="Assets\Images\bxs-user-check.svg" />
 	  <None Remove="Assets\Images\bxs-user-x.svg" />
+	  <None Remove="Assets\Images\logo3.png" />
+	  <None Remove="Assets\Sounds\alarm.wav" />
+	  <None Remove="Assets\Sounds\chime.wav" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -66,10 +70,1519 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <AvaloniaResource Update="Assets\Images\app.ico">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\bx-run.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\bx-stop.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
 	  <AvaloniaResource Update="Assets\Images\bxs-user-check.svg">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </AvaloniaResource>
 	  <AvaloniaResource Update="Assets\Images\bxs-user-x.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\aave.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\abt.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\act.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\actn.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ada.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\add.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\adx.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ae.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\aeon.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\aeur.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\agi.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\agrs.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\aion.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\algo.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\amb.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\amp.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ampl.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ankr.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ant.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ape.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\apex.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\appc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ardr.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\arg.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ark.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\arn.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\arnx.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ary.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ast.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\atlas.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\atm.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\atom.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\audr.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\aury.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\auto.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\avax.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\aywa.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\bab.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\bal.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\band.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\bat.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\bay.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\bcbc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\bcc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\bcd.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\bch.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\bcio.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\bcn.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\bco.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\bcpt.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\bdl.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\beam.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\bela.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\bix.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\blcn.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\blk.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\block.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\blz.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\bnb.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\bnt.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\bnty.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\booty.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\bos.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\bpt.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\bq.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\brd.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\bsd.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\bsv.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\btc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\btcd.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\btch.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\btcp.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\btcz.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\btdx.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\btg.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\btm.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\bts.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\btt.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\btx.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\burst.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\bze.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\call.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\cc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\cdn.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\cdt.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\cenz.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\chain.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\chat.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\chips.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\chsb.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\chz.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\cix.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\clam.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\cloak.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\cmm.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\cmt.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\cnd.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\cnx.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\cny.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\cob.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\colx.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\comp.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\coqui.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\cred.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\crpt.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\crv.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\crw.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\cs.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ctr.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ctxc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\cvc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\dai.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\dash.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\dat.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\data.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\dbc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\dcn.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\dcr.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\deez.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\dent.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\dew.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\dgb.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\dgd.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\dlt.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\dnt.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\dock.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\doge.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\dot.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\drgn.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\drop.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\dta.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\dth.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\dtr.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ebst.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\eca.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\edg.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\edo.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\edoge.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ela.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\elec.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\elf.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\elix.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ella.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\emb.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\emc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\emc2.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\eng.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\enj.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\entrp.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\eon.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\eop.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\eos.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\eqli.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\equa.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\etc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\eth.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ethos.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\etn.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\etp.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\eur.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\evx.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\exmo.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\exp.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\fair.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\fct.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\fida.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\fil.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\fjc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\fldc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\flo.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\flux.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\fsn.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ftc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\fuel.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\fun.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\game.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\gas.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\gbp.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\gbx.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\gbyte.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\generic.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\gin.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\glxt.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\gmr.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\gmt.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\gno.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\gnt.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\gold.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\grc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\grin.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\grs.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\grt.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\gsc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\gto.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\gup.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\gusd.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\gvt.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\gxs.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\gzr.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\hight.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\hns.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\hodl.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\hot.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\hpb.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\hsr.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ht.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\html.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\huc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\husd.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\hush.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\icn.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\icp.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\icx.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ignis.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ilk.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ink.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ins.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ion.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\iop.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\iost.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\iotx.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\iq.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\itc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\jnt.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\jpy.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\kcs.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\kin.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\klown.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\kmd.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\knc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\krb.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ksm.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\lbc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\lend.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\leo.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\link.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\lkk.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\loom.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\lpt.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\lrc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\lsk.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ltc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\lun.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\maid.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\mana.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\matic.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\max.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\mcap.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\mco.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\mda.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\mds.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\med.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\meetone.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\mft.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\miota.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\mith.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\mkr.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\mln.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\mnx.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\mnz.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\moac.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\mod.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\mona.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\msr.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\mth.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\mtl.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\music.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\mzc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\nano.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\nas.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\nav.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ncash.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ndz.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\nebl.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\neo.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\neos.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\neu.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\nexo.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ngc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\nio.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\nkn.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\nlc2.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\nlg.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\nmc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\nmr.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\npxs.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ntbc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\nuls.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\nxs.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\nxt.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\oax.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ok.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\omg.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\omni.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\one.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ong.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ont.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\oot.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ost.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ox.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\oxt.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\oxy.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\part.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\pasc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\pasl.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\pax.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\paxg.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\pay.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\payx.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\pink.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\pirl.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\pivx.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\plr.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\poa.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\poe.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\polis.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\poly.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\pot.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\powr.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ppc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ppp.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ppt.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\pre.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\prl.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\pungo.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\pura.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\qash.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\qiwi.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\qlc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\qnt.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\qrl.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\qsp.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\qtum.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\rads.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\rap.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ray.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\rcn.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\rdd.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\rdn.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ren.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\rep.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\repv2.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\req.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\rhoc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ric.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\rise.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\rlc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\rpx.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\rub.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\rvn.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ryo.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\safe.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\safemoon.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\sai.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\salt.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\san.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\sand.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\sbd.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\sberbank.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\sc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ser.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\shift.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\sib.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\sin.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\skl.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\sky.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\slr.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\sls.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\smart.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\sngls.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\snm.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\snt.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\snx.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\soc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\sol.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\spacehbit.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\spank.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\sphtx.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\srn.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\stak.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\start.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\steem.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\storj.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\storm.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\stox.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\stq.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\strat.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\stx.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\sub.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\sumo.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\sushi.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\sys.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\taas.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\tau.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\tbx.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\tel.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ten.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\tern.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\tgch.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\theta.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\tix.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\tkn.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\tks.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\tnb.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\tnc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\tnt.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\tomo.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\tpay.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\trig.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\trtl.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\trx.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\tusd.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\tzc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\ubq.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\uma.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\uni.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\unity.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\usd.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\usdc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\usdt.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\utk.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\veri.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\vet.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\via.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\vib.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\vibe.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\vivo.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\vrc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\vrsc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\vtc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\vtho.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\wabi.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\wan.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\waves.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\wax.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\wbtc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\wgr.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\wicc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\wings.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\wpr.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\wtc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\xas.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\xbc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\xbp.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\xby.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\xcp.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\xdn.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\xem.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\xin.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\xlm.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\xmcc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\xmg.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\xmo.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\xmr.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\xmy.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\xp.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\xpa.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\xpm.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\xpr.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\xrp.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\xsg.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\xtz.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\xuc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\xvc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\xvg.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\xzc.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\yfi.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\yoyow.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\zcl.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\zec.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\zel.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\zen.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\zest.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\zil.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\zilla.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Currencies\zrx.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Games\dice.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Games\dice.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Games\roulette.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Games\slot.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Games\slot.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\logo3.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\New.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Open.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Save.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\SaveAs.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Sites\bitsler.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Sites\bitvest.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Sites\cryptogames.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Sites\duckdice.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Sites\ethercrash.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Sites\freebitcoin.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Sites\nitrogensports.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Sites\primedice.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Sites\primedice.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Sites\stake.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Sites\windice.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Images\Sites\wolfbet.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Sounds\alarm.wav">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	  <AvaloniaResource Update="Assets\Sounds\chime.wav">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </AvaloniaResource>
 	  <AvaloniaXaml Update="Assets\Lang\en-US.axaml">

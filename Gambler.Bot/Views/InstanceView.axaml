@@ -82,7 +82,7 @@
 
                 </MenuItem>
             </Menu>
-            <Border  DockPanel.Dock="Bottom" Height="30" VerticalAlignment="Bottom" BorderThickness="1" BorderBrush="{DynamicResource SystemChromeGrayColor}" Padding="3">
+            <Border  DockPanel.Dock="Bottom" Height="30" VerticalAlignment="Bottom" BorderThickness="1" BorderBrush="{actipro:ThemeResource Container3BorderBrush}" Padding="3">
                 <Grid VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3*" />
@@ -120,7 +120,7 @@
                         <RowDefinition Height="175" MinHeight="175" MaxHeight="175" ></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <GridSplitter Margin="3" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource SystemChromeGrayColor}" ResizeDirection="Columns"/>
+                    <GridSplitter Margin="3" Grid.Column="1" Grid.RowSpan="2" Background="{actipro:ThemeResource Container3BorderBrush}" ResizeDirection="Columns"/>
 
                     <StackPanel IsVisible="{Binding ShowStats}" Grid.Column="0" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Stretch">
                         <common:SiteStatsView VerticalAlignment="Top" HorizontalAlignment="Stretch" MinWidth="300" Grid.Row="0" DataContext="{Binding SiteStatsData}"/>
@@ -128,15 +128,15 @@
                     </StackPanel>
                     <Grid Grid.Column="0" Grid.Row="1">
                         <Grid.RowDefinitions>
-                            <RowDefinition />
+                            <RowDefinition Height="*" />
                             <RowDefinition Height="7"/>
-                            <RowDefinition/>
+                            <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <Border IsVisible="{Binding ShowChart}" >
-                            <common:ProfitChartView Grid.Row="0" DataContext="{Binding ChartData}"/>
+                        <Border IsVisible="{Binding ShowChart}" Grid.Row="0" MinHeight="250"  >
+                            <common:ProfitChartView DataContext="{Binding ChartData}"/>
                         </Border>
-                        <GridSplitter Margin="2" Grid.Row="1" Background="{DynamicResource SystemChromeGrayColor}" ResizeDirection="Rows"/>
-                        <ContentControl Grid.Row="2" Content="{Binding LiveBets}"  IsVisible="{Binding ShowLiveBets}">
+                        <GridSplitter Margin="2" Grid.Row="1" Background="{actipro:ThemeResource Container3BorderBrush}" ResizeDirection="Rows"/>
+                        <ContentControl Grid.Row="2" Content="{Binding LiveBets}" MinHeight="250"  IsVisible="{Binding ShowLiveBets}">
                             <ContentControl.DataTemplates>
                                 <DataTemplate DataType="diceVM:DiceLiveBetViewModel">
                                     <dice:DiceLiveBetView/>
