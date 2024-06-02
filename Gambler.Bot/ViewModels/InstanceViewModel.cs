@@ -4,9 +4,9 @@ using Avalonia;
 using Avalonia.Controls.Notifications;
 using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Threading;
-using Gambler.Bot.AutoBet.Helpers;
-using Gambler.Bot.AutoBet.Strategies;
-using Gambler.Bot.AutoBet.Strategies.Abstractions;
+using Gambler.Bot.Strategies.Helpers;
+using Gambler.Bot.Strategies.Strategies;
+using Gambler.Bot.Strategies.Strategies.Abstractions;
 using Gambler.Bot.Classes;
 using Gambler.Bot.Classes.BetsPanel;
 using Gambler.Bot.Classes.Strategies;
@@ -185,12 +185,12 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             setTitle();
         }
 
-        private void BotIns_OnNotification(object? sender, Gambler.Bot.Core.Helpers.NotificationEventArgs e)
+        private void BotIns_OnNotification(object? sender, NotificationEventArgs e)
         {
             
             switch(e.NotificationTrigger.Action)
             {
-                case Gambler.Bot.Core.Helpers.TriggerAction.Alarm:
+                case TriggerAction.Alarm:
                     if (!Dispatcher.UIThread.CheckAccess())
                     {
                         Dispatcher.UIThread.Invoke(() =>
@@ -207,7 +207,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                         });
                     }
                     break;
-                case Gambler.Bot.Core.Helpers.TriggerAction.Chime:
+                case TriggerAction.Chime:
                     Uri chimeuri = new Uri( Path.Combine(Environment.CurrentDirectory,@"Assets/Sounds/chime.wav"));
                    
                     if (!Dispatcher.UIThread.CheckAccess())
@@ -226,9 +226,9 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                         });
                     }
                     break;
-                case Gambler.Bot.Core.Helpers.TriggerAction.Email:
+                case TriggerAction.Email:
                     break;
-                case Gambler.Bot.Core.Helpers.TriggerAction.Popup:
+                case TriggerAction.Popup:
                     Avalonia.Controls.Notifications.Notification notification = new Avalonia.Controls.Notifications.Notification(
                        e.NotificationTrigger.ToString(), e.NotificationTrigger.ToString(), NotificationType.Information);
                     
@@ -611,9 +611,9 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             }
             if(!File.Exists(BetSettingsFile))
             {
-                //botIns.BetSettings = new Gambler.Bot.AutoBet.AutoBet.BetSettings();
+                //botIns.BetSettings = new Gambler.Bot.Strategies.AutoBet.BetSettings();
                 botIns.BetSettings = new InternalBetSettings();
-                botIns.Strategy = new Gambler.Bot.AutoBet.Strategies.Martingale(_logger);
+                botIns.Strategy = new Gambler.Bot.Strategies.Strategies.Martingale(_logger);
                 botIns.SaveBetSettings(BetSettingsFile);
             }
             botIns.LoadBetSettings(BetSettingsFile);
@@ -640,6 +640,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
         internal async Task Loaded()
         {
             botIns.GetStrats();
+            this.RaisePropertyChanged(nameof(Strategies));
             if(UISettings.Portable)
             {
                 PersonalSettingsFile = "PersonalSettings.json";
@@ -780,7 +781,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         public ICommand SaveCommand { get; }
 
-
+        public IEnumerable<string> Strategies { get { return BotInstance?.Strategies?.Keys; } }
         public string SelectedStrategy
         {
             get { return BotInstance?.Strategy?.StrategyName; }

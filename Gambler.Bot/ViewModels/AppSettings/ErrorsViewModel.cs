@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using static Gambler.Bot.AutoBet.Helpers.PersonalSettings;
+using static Gambler.Bot.Classes.PersonalSettings;
 
 namespace Gambler.Bot.ViewModels.AppSettings
 {

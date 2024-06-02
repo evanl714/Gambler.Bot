@@ -1,6 +1,7 @@
 ﻿using Gambler.Bot.Common.Helpers;
 using Gambler.Bot.Core.Helpers;
 using Gambler.Bot.Core.Sites.Classes;
+using Gambler.Bot.Strategies.Helpers;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using System;
@@ -44,7 +45,7 @@ namespace Gambler.Bot.ViewModels.Common
         {
             
             List<string> newproperties = new List<string>();
-            var props = typeof(Gambler.Bot.AutoBet.Helpers.SessionStats).GetProperties().ToList();
+            var props = typeof(Gambler.Bot.Strategies.Helpers.SessionStats).GetProperties().ToList();
             props.AddRange(typeof(SiteStats).GetProperties());
             foreach (System.Reflection.PropertyInfo x in props)
             {

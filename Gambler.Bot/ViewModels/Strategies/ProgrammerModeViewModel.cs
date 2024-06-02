@@ -1,6 +1,6 @@
 ﻿using Avalonia.Platform.Storage;
 using Avalonia.Threading;
-using Gambler.Bot.AutoBet.Strategies.Abstractions;
+using Gambler.Bot.Strategies.Strategies.Abstractions;
 using Gambler.Bot.Classes.Strategies;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;

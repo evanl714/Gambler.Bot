@@ -1,6 +1,6 @@
 ﻿using Avalonia.Threading;
-using Gambler.Bot.AutoBet.Helpers;
-using Gambler.Bot.AutoBet.Strategies.Abstractions;
+using Gambler.Bot.Strategies.Helpers;
+using Gambler.Bot.Strategies.Strategies.Abstractions;
 using Gambler.Bot.Common.Events;
 using Gambler.Bot.Common.Interfaces;
 using Gambler.Bot.Core.Events;
@@ -40,9 +40,9 @@ namespace Gambler.Bot.ViewModels.Common
 
         public InternalBetSettings BetSettings { get; set; }
 
-        private Gambler.Bot.AutoBet.Helpers.Simulation simulation;
+        private Gambler.Bot.Strategies.Helpers.Simulation simulation;
 
-        public Gambler.Bot.AutoBet.Helpers.Simulation CurrentSimulation
+        public Gambler.Bot.Strategies.Helpers.Simulation CurrentSimulation
         {
             get { return simulation; }
             set { simulation = value; }
@@ -133,7 +133,7 @@ namespace Gambler.Bot.ViewModels.Common
         {
             if (Running)
                 return;
-            CurrentSimulation = new Gambler.Bot.AutoBet.Helpers.Simulation(null);
+            CurrentSimulation = new Gambler.Bot.Strategies.Helpers.Simulation(null);
             CurrentSimulation.Initialize(StartingBalance, NumberOfBets, CurrentSite, currentsite.SiteDetails, Strategy, BetSettings, "tmp.sim", Log);
             CanSave = false;
             CurrentSimulation.OnSimulationWriting += CurrentSimulation_OnSimulationWriting;
@@ -172,7 +172,7 @@ namespace Gambler.Bot.ViewModels.Common
             {
                 
                 SimTimer.Stop();
-                Gambler.Bot.AutoBet.Helpers.Simulation tmp = CurrentSimulation;
+                Gambler.Bot.Strategies.Helpers.Simulation tmp = CurrentSimulation;
                 Stats.StatsUpdated(tmp.Stats);
                 long ElapsedMilliseconds = SimTimer.ElapsedMilliseconds;
                 Progress = (decimal)tmp.TotalBetsPlaced / (decimal)tmp.Bets;
@@ -199,7 +199,7 @@ namespace Gambler.Bot.ViewModels.Common
                 Dispatcher.UIThread.Invoke(UpdateStats);
             else
             {
-                Gambler.Bot.AutoBet.Helpers.Simulation tmp = CurrentSimulation;
+                Gambler.Bot.Strategies.Helpers.Simulation tmp = CurrentSimulation;
                 //Console.WriteLine("Simulation Progress: " + tmp.TotalBetsPlaced + " bets of " + tmp.Bets);
 
                 if (tmp.TotalBetsPlaced > 0)

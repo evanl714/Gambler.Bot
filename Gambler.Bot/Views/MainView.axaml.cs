@@ -1,24 +1,18 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
+using Avalonia.ReactiveUI;
 using Avalonia.Threading;
-using Gambler.Bot.AutoBet;
+using Avalonia.VisualTree;
+using Gambler.Bot.Core.Events;
 using Gambler.Bot.Core.Helpers;
-using Gambler.Bot.Core.Sites;
-using DryIoc;
-using Esprima.Ast;
+using Gambler.Bot.ViewModels;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Gambler.Bot.Core.Events;
-using Avalonia.VisualTree;
-using Avalonia.ReactiveUI;
-using Gambler.Bot.ViewModels;
 
 namespace Gambler.Bot.Views;
 

@@ -1,5 +1,5 @@
-﻿using Gambler.Bot.AutoBet.Strategies;
-using Gambler.Bot.AutoBet.Strategies.Abstractions;
+﻿using Gambler.Bot.Strategies.Strategies;
+using Gambler.Bot.Strategies.Strategies.Abstractions;
 using Gambler.Bot.Classes.BetsPanel;
 using Gambler.Bot.Classes.Strategies;
 using Gambler.Bot.ViewModels.Games.Dice;

@@ -1,7 +1,4 @@
-﻿using Gambler.Bot.AutoBet.Helpers;
-using Gambler.Bot.AutoBet.Strategies;
-using Gambler.Bot.AutoBet.Strategies.Abstractions;
-using Gambler.Bot.Common.Enums;
+﻿using Gambler.Bot.Common.Enums;
 using Gambler.Bot.Common.Events;
 using Gambler.Bot.Common.Games;
 using Gambler.Bot.Common.Helpers;
@@ -11,6 +8,9 @@ using Gambler.Bot.Core.Sites;
 using Gambler.Bot.Core.Sites.Classes;
 using Gambler.Bot.Core.Storage;
 using Gambler.Bot.Helpers;
+using Gambler.Bot.Strategies.Helpers;
+using Gambler.Bot.Strategies.Strategies;
+using Gambler.Bot.Strategies.Strategies.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -21,7 +21,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading;
-using static Gambler.Bot.AutoBet.Helpers.PersonalSettings;
+using static Gambler.Bot.Classes.PersonalSettings;
 using ErrorEventArgs = Gambler.Bot.Common.Events.ErrorEventArgs;
 
 namespace Gambler.Bot.Classes
@@ -133,7 +133,7 @@ namespace Gambler.Bot.Classes
                     foreach (Type x in tps)
                     {
                         _Logger?.LogDebug("Stepping Through Types - {Description}", x.Name);
-                        if (x.IsSubclassOf(SiteAss.GetType("Gambler.Bot.Core.Sites.BaseSite")))
+                        if (x.IsSubclassOf(typeof(Gambler.Bot.Core.Sites.BaseSite)))
                         {
                             _Logger?.LogDebug("Found Type - " + x.Name, 6);
                             sites.Add(x.Name);
@@ -193,7 +193,7 @@ namespace Gambler.Bot.Classes
             Type[] tps = Assembly.GetAssembly(typeof(BaseStrategy)).GetTypes();
             List<string> sites = new List<string>();
 
-            Type BaseTyope = Type.GetType("Gambler.Bot.AutoBet.Strategies.BaseStrategy");
+            Type BaseTyope = typeof(Gambler.Bot.Strategies.Strategies.Abstractions.BaseStrategy);
             foreach (Type x in tps)
             { 
                 if (x.IsSubclassOf(BaseTyope))

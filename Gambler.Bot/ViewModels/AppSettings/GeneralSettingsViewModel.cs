@@ -2,7 +2,7 @@
 using ActiproSoftware.UI.Avalonia.Themes;
 using ActiproSoftware.UI.Avalonia.Themes.Generation;
 using Avalonia.Controls;
-using Gambler.Bot.AutoBet.Helpers;
+using Gambler.Bot.Strategies.Helpers;
 using Gambler.Bot.Classes;
 using Gambler.Bot.ViewModels.AppSettings.Utilities;
 using Gambler.Bot.ViewModels.Common;

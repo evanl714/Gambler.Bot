@@ -1,5 +1,5 @@
 ﻿using Avalonia.Interactivity;
-using Gambler.Bot.AutoBet.Helpers;
+using Gambler.Bot.Strategies.Helpers;
 using Gambler.Bot.Classes;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
