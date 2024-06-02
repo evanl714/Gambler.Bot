@@ -216,8 +216,8 @@
                                     </ContentControl.DataTemplates>
                                 </ContentControl>
                             </TabItem>
-                            <TabItem Header="Console" IsEnabled="False">
-                                <TextBlock>coming soon</TextBlock>
+                            <TabItem Header="Console">
+                                <common:ConsoleView DataContext="{Binding ConsoleVM}"/>
                             </TabItem>
                         </TabControl>
 

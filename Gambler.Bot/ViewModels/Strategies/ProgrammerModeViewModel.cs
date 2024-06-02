@@ -36,7 +36,7 @@ namespace Gambler.Bot.ViewModels.Strategies
 
         public string TemplateName { get; protected set; } = "LUATemplate.lua";
 
-        public ProgrammerMode Strat { get; private set; }
+        public IProgrammerMode Strat { get; private set; }
         DateTime LastChanged = DateTime.Now;
         FileSystemWatcher FileWatcher;
         private readonly ILogger _logger;
@@ -120,7 +120,7 @@ namespace Gambler.Bot.ViewModels.Strategies
 
         public void SetStrategy(BaseStrategy Strategy)
         {
-            Strat = Strategy as ProgrammerMode;
+            Strat = Strategy as IProgrammerMode;
             LoadDocument();
             CreateWatcher();
         }

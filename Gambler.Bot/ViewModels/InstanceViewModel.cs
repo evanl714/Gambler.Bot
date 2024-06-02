@@ -73,6 +73,7 @@ namespace Gambler.Bot.ViewModels
             tmrStats.Interval = TimeSpan.FromSeconds(1);
     tmrStats.Tick += TmrStats_Tick;
     AdvancedSettingsVM = new AdvancedViewModel(_logger);
+            ConsoleVM = new ConsoleViewModel(_logger);
     ResetSettingsVM = new ResetSettingsViewModel(_logger);
     ChartData = new ProfitChartViewModel(_logger);
     SiteStatsData = new SiteStatsViewModel(_logger);
@@ -120,6 +121,7 @@ namespace Gambler.Bot.ViewModels
     tmp.OnBypassRequired += Tmp_OnBypassRequired;
     tmp.OnSiteNotify += Tmp_OnSiteNotify;
     tmp.OnSiteError += Tmp_OnSiteError;
+            
     BotInstance = tmp;
     botIns.CurrentGame = Bot.Common.Games.Games.Dice;
 }
@@ -246,7 +248,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             await ShowNotification.Handle(notification);
         }
 
-        private void BotIns_OnSiteAction(object sender, GenericEventArgs e) { LastAction = e.Message; }
+        private void BotIns_OnSiteAction(object sender, GenericEventArgs e) { LastAction = e.Message; ConsoleVM.AddLine(e.Message); }
 
         private void BotIns_OnSiteBetFinished(object sender, BetFinisedEventArgs e)
         {
@@ -277,6 +279,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             setCanStart();
             setTitle();
             tmrStats.Start();
+            
         }
 
         private void BotIns_OnStopped(object? sender, GenericEventArgs e)
@@ -346,6 +349,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                 tmpStrat.SetStrategy(BotInstance.Strategy);
                 tmpStrat.GameChanged(BotInstance.CurrentGame);
             }
+            ConsoleVM.Strategy= BotInstance.Strategy as IProgrammerMode;
             StrategyVM?.Dispose();
             StrategyVM = tmpStrat;
             setTitle();
@@ -570,6 +574,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             else
             {
                 StatusMessage = e.Message;
+                ConsoleVM.AddLine(e.Message);
             }
         }
 
@@ -581,10 +586,12 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                         () =>
                         {
                             Tmp_OnSiteNotify(sender, e);
+                            
                         });
             else
             {
                 StatusMessage = e.Message;
+                ConsoleVM.AddLine(e.Message);
             }
         }
 
@@ -663,6 +670,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
         }
 
         public AdvancedViewModel AdvancedSettingsVM { get; set; }// = new AdvancedViewModel();
+        public ConsoleViewModel ConsoleVM { get; set; }// = new AdvancedViewModel();
 
         public Classes.AutoBet? BotInstance
         {

@@ -482,11 +482,11 @@ namespace Gambler.Bot.Classes
                     StopStrategy(Response);
                 }
                 Stats.UpdateStats(e.NewBet, win);
-                if (Strategy is ProgrammerMode)
+                if (Strategy is IProgrammerMode)
                 {
-                    (Strategy as ProgrammerMode).UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
-                    (Strategy as ProgrammerMode).UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
-                    (Strategy as ProgrammerMode).UpdateSite(CopyHelper.CreateCopy<SiteDetails>(CurrentSite.SiteDetails));
+                    (Strategy as IProgrammerMode).UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
+                    (Strategy as IProgrammerMode).UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
+                    (Strategy as IProgrammerMode).UpdateSite(CopyHelper.CreateCopy<SiteDetails>(CurrentSite.SiteDetails));
                 }
                 OnSiteBetFinished?.Invoke(sender, e);
 
@@ -594,11 +594,11 @@ namespace Gambler.Bot.Classes
         {
             if (CurrentSite.ActiveActions.Count > 0 || ActiveErrors.Count > 0)
                 return;
-            if (Strategy is ProgrammerMode)
+            if (Strategy is IProgrammerMode)
             {
-                (Strategy as ProgrammerMode).UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
-                (Strategy as ProgrammerMode).UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
-                (Strategy as ProgrammerMode).UpdateSite(CopyHelper.CreateCopy<SiteDetails>(CurrentSite.SiteDetails));
+                (Strategy as IProgrammerMode).UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
+                (Strategy as IProgrammerMode).UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
+                (Strategy as IProgrammerMode).UpdateSite(CopyHelper.CreateCopy<SiteDetails>(CurrentSite.SiteDetails));
             }
             bool win = MostRecentBet.IsWin;
             if (StopOnWin && win)
@@ -661,24 +661,24 @@ namespace Gambler.Bot.Classes
                     strategy.NeedBalance -= Strategy_NeedBalance;
                     strategy.Stop -= Strategy_Stop;
                     strategy.OnNeedStats -= Strategy_OnNeedStats;
-                    if (strategy is ProgrammerMode)
+                    if (strategy is IProgrammerMode)
                     {
-                        (Strategy as ProgrammerMode).OnAlarm -= Autobet_OnAlarm;
-                        (Strategy as ProgrammerMode).OnChing -= Autobet_OnChing;
-                        (Strategy as ProgrammerMode).OnExportSim -= Autobet_OnExportSim;
-                        (Strategy as ProgrammerMode).OnInvest -= Autobet_OnInvest;
-                        (Strategy as ProgrammerMode).OnPrint -= Autobet_OnPrint;
-                        (Strategy as ProgrammerMode).OnRead -= Autobet_OnRead;
-                        (Strategy as ProgrammerMode).OnReadAdv -= Autobet_OnReadAdv;
-                        //(Strategy as ProgrammerMode).OnResetBuiltIn -= Autobet_OnResetBuiltIn;
-                        (Strategy as ProgrammerMode).OnResetSeed -= Autobet_OnResetSeed;
-                        (Strategy as ProgrammerMode).OnResetStats -= Autobet_OnResetStats;
-                        (Strategy as ProgrammerMode).OnRunSim -= Autobet_OnRunSim;
-                        //(Strategy as ProgrammerMode).OnStop -= Autobet_OnStop;
-                        (Strategy as ProgrammerMode).OnTip -= Autobet_OnTip;
-                        (Strategy as ProgrammerMode).OnWithdraw -= Autobet_OnWithdraw;
-                        (Strategy as ProgrammerMode).OnScriptError -= Autobet_OnScriptError;
-                        (Strategy as ProgrammerMode).OnSetCurrency -= Autobet_OnSetCurrency;
+                        (Strategy as IProgrammerMode).OnAlarm -= Autobet_OnAlarm;
+                        (Strategy as IProgrammerMode).OnChing -= Autobet_OnChing;
+                        (Strategy as IProgrammerMode).OnExportSim -= Autobet_OnExportSim;
+                        (Strategy as IProgrammerMode).OnInvest -= Autobet_OnInvest;
+                        (Strategy as IProgrammerMode).OnPrint -= Autobet_OnPrint;
+                        (Strategy as IProgrammerMode).OnRead -= Autobet_OnRead;
+                        (Strategy as IProgrammerMode).OnReadAdv -= Autobet_OnReadAdv;
+                        //(Strategy aIs ProgrammerMode).OnResetBuiltIn -= Autobet_OnResetBuiltIn;
+                        (Strategy as IProgrammerMode).OnResetSeed -= Autobet_OnResetSeed;
+                        (Strategy as IProgrammerMode).OnResetStats -= Autobet_OnResetStats;
+                        (Strategy as IProgrammerMode).OnRunSim -= Autobet_OnRunSim;
+                        //(Strategy aIs ProgrammerMode).OnStop -= Autobet_OnStop;
+                        (Strategy as IProgrammerMode).OnTip -= Autobet_OnTip;
+                        (Strategy as IProgrammerMode).OnWithdraw -= Autobet_OnWithdraw;
+                        (Strategy as IProgrammerMode).OnScriptError -= Autobet_OnScriptError;
+                        (Strategy as IProgrammerMode).OnSetCurrency -= Autobet_OnSetCurrency;
 
                     }
                 }
@@ -688,25 +688,25 @@ namespace Gambler.Bot.Classes
                     strategy.NeedBalance += Strategy_NeedBalance;
                     strategy.Stop += Strategy_Stop;
                     strategy.OnNeedStats += Strategy_OnNeedStats;
-                    if (strategy is ProgrammerMode)
+                    if (strategy is IProgrammerMode)
                     {
-                        (strategy as ProgrammerMode).CreateRuntime();
-                        (Strategy as ProgrammerMode).OnAlarm += Autobet_OnAlarm;
-                        (Strategy as ProgrammerMode).OnChing += Autobet_OnChing;
-                        (Strategy as ProgrammerMode).OnExportSim += Autobet_OnExportSim;
-                        (Strategy as ProgrammerMode).OnInvest += Autobet_OnInvest;
-                        (Strategy as ProgrammerMode).OnPrint += Autobet_OnPrint;
-                        (Strategy as ProgrammerMode).OnRead += Autobet_OnRead;
-                        (Strategy as ProgrammerMode).OnReadAdv += Autobet_OnReadAdv;
+                        (strategy as IProgrammerMode).CreateRuntime();
+                        (Strategy as IProgrammerMode).OnAlarm += Autobet_OnAlarm;
+                        (Strategy as IProgrammerMode).OnChing += Autobet_OnChing;
+                        (Strategy as IProgrammerMode).OnExportSim += Autobet_OnExportSim;
+                        (Strategy as IProgrammerMode).OnInvest += Autobet_OnInvest;
+                        (Strategy as IProgrammerMode).OnPrint += Autobet_OnPrint;
+                        (Strategy as IProgrammerMode).OnRead += Autobet_OnRead;
+                        (Strategy as IProgrammerMode).OnReadAdv += Autobet_OnReadAdv;
                         //(Strategy as ProgrammerMode).OnResetBuiltIn += Autobet_OnResetBuiltIn;
-                        (Strategy as ProgrammerMode).OnResetSeed += Autobet_OnResetSeed;
-                        (Strategy as ProgrammerMode).OnResetStats += Autobet_OnResetStats;
-                        (Strategy as ProgrammerMode).OnRunSim += Autobet_OnRunSim;
-                        //(Strategy as ProgrammerMode).OnStop += Autobet_OnStop;
-                        (Strategy as ProgrammerMode).OnTip += Autobet_OnTip;
-                        (Strategy as ProgrammerMode).OnWithdraw += Autobet_OnWithdraw;
-                        (Strategy as ProgrammerMode).OnScriptError += Autobet_OnScriptError;
-                        (Strategy as ProgrammerMode).OnSetCurrency += Autobet_OnSetCurrency;
+                        (Strategy as IProgrammerMode).OnResetSeed += Autobet_OnResetSeed;
+                        (Strategy as IProgrammerMode).OnResetStats += Autobet_OnResetStats;
+                        (Strategy as IProgrammerMode).OnRunSim += Autobet_OnRunSim;
+                        //(Strategy aIs ProgrammerMode).OnStop += Autobet_OnStop;
+                        (Strategy as IProgrammerMode).OnTip += Autobet_OnTip;
+                        (Strategy as IProgrammerMode).OnWithdraw += Autobet_OnWithdraw;
+                        (Strategy as IProgrammerMode).OnScriptError += Autobet_OnScriptError;
+                        (Strategy as IProgrammerMode).OnSetCurrency += Autobet_OnSetCurrency;
                     }
                 }
                 StoredBetSettings.SetStrategy(value);
@@ -840,12 +840,12 @@ namespace Gambler.Bot.Classes
             
             if (!Running && !RunningSimulation)
             {
-                if (Strategy is ProgrammerMode)
+                if (Strategy is IProgrammerMode)
                 {
-                    (Strategy as ProgrammerMode).LoadScript();
-                    (Strategy as ProgrammerMode).UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
-                    (Strategy as ProgrammerMode).UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
-                    (Strategy as ProgrammerMode).UpdateSite(CopyHelper.CreateCopy<SiteDetails>(CurrentSite.SiteDetails));
+                    (Strategy as IProgrammerMode).LoadScript();
+                    (Strategy as IProgrammerMode).UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
+                    (Strategy as IProgrammerMode).UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
+                    (Strategy as IProgrammerMode).UpdateSite(CopyHelper.CreateCopy<SiteDetails>(CurrentSite.SiteDetails));
                 }
                 Running = true;
                 if (Stats == null)
@@ -881,12 +881,12 @@ namespace Gambler.Bot.Classes
 
             if (!Running && !RunningSimulation)
             {
-                if (Strategy is ProgrammerMode)
+                if (Strategy is IProgrammerMode)
                 {
-                    (Strategy as ProgrammerMode).LoadScript();
-                    (Strategy as ProgrammerMode).UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
-                    (Strategy as ProgrammerMode).UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
-                    (Strategy as ProgrammerMode).UpdateSite(CopyHelper.CreateCopy<SiteDetails>(CurrentSite.SiteDetails));
+                    (Strategy as IProgrammerMode).LoadScript();
+                    (Strategy as IProgrammerMode).UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
+                    (Strategy as IProgrammerMode).UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
+                    (Strategy as IProgrammerMode).UpdateSite(CopyHelper.CreateCopy<SiteDetails>(CurrentSite.SiteDetails));
                 }
                 Running = true;
                 Stats.StartTime = DateTime.Now;
