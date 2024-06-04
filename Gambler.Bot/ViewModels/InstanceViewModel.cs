@@ -32,6 +32,9 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Gambler.Bot.Classes;
 using Gambler.Bot.Common.Events;
+using Microsoft.Identity.Client;
+using System.Threading;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Gambler.Bot.ViewModels
 {
@@ -107,6 +110,7 @@ namespace Gambler.Bot.ViewModels
     ShowSettings = new Interaction<GlobalSettingsViewModel, Unit?>();
     ShowBetHistory = new Interaction<BetHistoryViewModel, Unit?>();
             ShowNotification = new Interaction<INotification, Unit?>();
+            ShowUserInput = new Interaction<UserInputViewModel, Unit?>();
             tmp.Strategy = new Martingale(_logger);
     PlaceBetVM = new DicePlaceBetViewModel(_logger);
     PlaceBetVM.PlaceBet += PlaceBetVM_PlaceBet;
@@ -395,12 +399,38 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         private void Prog_OnReadAdv(object? sender, ReadEventArgs e)
         {
-            throw new NotImplementedException();
+            using (var source = new CancellationTokenSource())
+            {
+                Read(e).ContinueWith(t => source.Cancel(), TaskScheduler.FromCurrentSynchronizationContext());
+                Dispatcher.UIThread.MainLoop(source.Token);
+            }
         }
-
+        bool WaitForInput = false;
         private void Prog_OnRead(object? sender, ReadEventArgs e)
         {
-            throw new NotImplementedException();
+            if (e.DataType == 0)
+            {
+                e.btncanceltext = "No";
+                e.btnoktext = "Yes";
+            }
+            else
+            {
+                e.btncanceltext = "Cancel";
+                e.btnoktext = "Ok";
+            }
+            using (var source = new CancellationTokenSource())
+            {
+                Read(e).ContinueWith(t => source.Cancel(), TaskScheduler.FromCurrentSynchronizationContext());
+                Dispatcher.UIThread.MainLoop(source.Token);
+            }   
+        }
+
+        public async Task Read(ReadEventArgs e)
+        {
+            UserInputViewModel tmp = new UserInputViewModel(_logger);
+            tmp.Args = e;
+                      
+            await ShowUserInput.Handle(tmp);
         }
 
         private void Prog_OnPrint(object? sender, PrintEventArgs e)
@@ -1027,6 +1057,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         public Interaction<BetHistoryViewModel, Unit?> ShowBetHistory { get; internal set; }
         public Interaction<INotification, Unit?> ShowNotification { get; internal set; }
+        public Interaction<UserInputViewModel, Unit?> ShowUserInput { get; internal set; }
 
         public void ThemeToggled()
         {

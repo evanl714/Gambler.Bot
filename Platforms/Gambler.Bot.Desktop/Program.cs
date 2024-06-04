@@ -21,7 +21,7 @@ class Program
     public static AppBuilder BuildAvaloniaApp()
     {
         var config = new ConfigurationBuilder()
-           .AddUserSecrets<Program>()
+           .AddUserSecrets<Program>()           
            .Build();
 
         return  AppBuilder.Configure<App>()
@@ -31,6 +31,8 @@ class Program
               .WithInterFont()
               .LogToTrace()
               .UseReactiveUI()
-              .UseDesktopWebView();
+              .UseDesktopWebView()
+              
+              ;
     }
 }

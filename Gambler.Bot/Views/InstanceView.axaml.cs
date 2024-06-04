@@ -39,6 +39,7 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
                 ViewModel!.ShowDialog.RegisterHandler(DoShowDialogAsync);
                 ViewModel!.ShowAbout.RegisterHandler(ShowAbout);
                 ViewModel!.ShowNotification.RegisterHandler(ShowNotification);
+                ViewModel!.ShowUserInput.RegisterHandler(ShowUserInput);
 
             });
         }
@@ -46,6 +47,19 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
         this.AttachedToVisualTree += OnAttachedToVisualTree;
         this.DetachedFromVisualTree += OnDetachedFromVisualTree;
 
+    }
+
+    private async Task ShowUserInput(InteractionContext<UserInputViewModel, Unit?> context)
+    {
+        var ParentWindow = this.FindAncestorOfType<Window>();
+        ReactiveWindow<UserInputViewModel> window = new();
+        window.DataContext = context.Input;
+        var dialog = new UserInputView();
+        window.Content = dialog;
+        dialog.DataContext = context.Input;
+        window.SizeToContent = SizeToContent.WidthAndHeight;
+        window.Title = $"User input";
+        await window.ShowDialog(this.parentWindow);
     }
 
     private void ShowNotification(InteractionContext<INotification, Unit?> context)

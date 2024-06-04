@@ -32,17 +32,17 @@ namespace Gambler.Bot
             ServiceProvider = services.BuildServiceProvider();
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                var logger = ServiceProvider.GetService<ILogger<MainWindowViewModel>>();
+                //var logger = ServiceProvider.GetService<ILogger<MainWindowViewModel>>();
                 desktop.MainWindow = new MainWindow
                 {                    
-                    DataContext = new MainWindowViewModel(logger),
+                    DataContext = ServiceProvider.GetService< MainWindowViewModel>(),
                 };
             }
             else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
             {
                 singleViewPlatform.MainView = new MainView
                 {
-                    DataContext = new MainViewModel(ServiceProvider.GetService<ILogger<MainViewModel>>())
+                    DataContext = ServiceProvider.GetService<MainWindowViewModel>()
                 };
             }
 
@@ -52,6 +52,9 @@ namespace Gambler.Bot
         private void ConfigureServices(IServiceCollection services)
         {
             services.AddLogging(configure => configure.AddConsole());
+
+            
+            services.AddTransient<MainWindowViewModel>();
             services.AddTransient<MainViewModel>();
             services.AddTransient<SelectSiteViewModel>();
             // Register other ViewModels and services

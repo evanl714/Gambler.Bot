@@ -15,7 +15,7 @@ namespace Gambler.Bot.ViewModels
         }
 
 
-        public MainWindowViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
+        public MainWindowViewModel(Microsoft.Extensions.Logging.ILogger<MainWindowViewModel> logger) : base(logger)
         {
             MainVM = new MainViewModel(logger);
         }

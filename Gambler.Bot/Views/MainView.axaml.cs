@@ -32,7 +32,7 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
 
     private void OnAttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e)
     {
-        parentWindow = this.FindAncestorOfType<Window>();
+         parentWindow = this.FindAncestorOfType<Window>();
         if (parentWindow != null)
         {
             parentWindow.Closing += OnWindowClosing;
