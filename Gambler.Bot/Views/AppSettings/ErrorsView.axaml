@@ -4,19 +4,32 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Gambler.Bot.Views.AppSettings.ErrorsView"
+             xmlns:local="using:Gambler.Bot.Views.AppSettings"
              xmlns:vm="using:Gambler.Bot.ViewModels.AppSettings"
              x:DataType="vm:ErrorsViewModel"
              >
-    <DataGrid ItemsSource="{Binding Errors}">
-        <DataGrid.Columns>
-            <DataGridTextColumn Header="Error type" Binding="{Binding Type}" IsReadOnly="True"></DataGridTextColumn>
-            <DataGridTemplateColumn Header="Action" >
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
-                        <ComboBox ItemsSource="{Binding $parent[DataGrid].((vm:ErrorsViewModel)DataContext).Actions}" SelectedItem="{Binding Action}"/>
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
-        </DataGrid.Columns>
-    </DataGrid>
+    <Grid ColumnDefinitions="*,*" RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto">
+        <TextBlock Text="Invalid Bet" Grid.Column="0" Grid.Row="0"></TextBlock>
+        <TextBlock Text="Balance too low" Grid.Column="0" Grid.Row="1"></TextBlock>
+        <TextBlock Text="Bet too low" Grid.Column="0" Grid.Row="2"></TextBlock>
+        <TextBlock Text="Reset Seed" Grid.Column="0" Grid.Row="3"></TextBlock>
+        <TextBlock Text="Withdrawal" Grid.Column="0" Grid.Row="4"></TextBlock>
+        <TextBlock Text="Tip" Grid.Column="0" Grid.Row="5"></TextBlock>
+        <TextBlock Text="Not Implemented" Grid.Column="0" Grid.Row="6"></TextBlock>
+        <TextBlock Text="Other" Grid.Column="0" Grid.Row="7"></TextBlock>
+        <TextBlock Text="Bet Mismatch" Grid.Column="0" Grid.Row="8"></TextBlock>
+        <TextBlock Text="Unknown" Grid.Column="0" Grid.Row="9"></TextBlock>
+        <ComboBox ItemsSource="{Binding Actions}" SelectedItem="{Binding InvalidBet}" Grid.Column="1" Grid.Row="0"/>
+        <ComboBox ItemsSource="{Binding Actions}" SelectedItem="{Binding BalanceTooLow}" Grid.Column="1" Grid.Row="1"/>
+        <ComboBox ItemsSource="{Binding Actions}" SelectedItem="{Binding BetTooLow}" Grid.Column="1" Grid.Row="2"/>
+        <ComboBox ItemsSource="{Binding Actions}" SelectedItem="{Binding ResetSeed}" Grid.Column="1" Grid.Row="3"/>
+        <ComboBox ItemsSource="{Binding Actions}" SelectedItem="{Binding Withdrawal}" Grid.Column="1" Grid.Row="4"/>
+        <ComboBox ItemsSource="{Binding Actions}" SelectedItem="{Binding Tip}" Grid.Column="1" Grid.Row="5"/>
+        <ComboBox ItemsSource="{Binding Actions}" SelectedItem="{Binding NotImplemented}" Grid.Column="1" Grid.Row="6"/>
+        <ComboBox ItemsSource="{Binding Actions}" SelectedItem="{Binding Other}" Grid.Column="1" Grid.Row="7"/>
+        <ComboBox ItemsSource="{Binding Actions}" SelectedItem="{Binding BetMisMatch}" Grid.Column="1" Grid.Row="8"/>
+        <ComboBox ItemsSource="{Binding Actions}" SelectedItem="{Binding Unkown}" Grid.Column="1" Grid.Row="9"/>
+
+
+    </Grid>
 </UserControl>

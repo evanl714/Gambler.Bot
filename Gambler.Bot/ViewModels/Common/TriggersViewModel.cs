@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 
@@ -181,9 +182,9 @@ namespace Gambler.Bot.ViewModels.Common
             }
         }
 
-        private List<Trigger> triggers;
+        private ObservableCollection<Trigger> triggers;
 
-        public List<Trigger> Triggers
+        public ObservableCollection<Trigger> Triggers
         {
             get { return triggers; }
             protected set
@@ -193,7 +194,7 @@ namespace Gambler.Bot.ViewModels.Common
             }
         }
 
-        public void SetTriggers(List<Trigger> triggers)
+        public void SetTriggers(ObservableCollection<Trigger> triggers)
         {
             Load();
             Triggers = triggers;            

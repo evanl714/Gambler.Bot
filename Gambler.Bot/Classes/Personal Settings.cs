@@ -4,6 +4,7 @@ using Gambler.Bot.Helpers;
 using Gambler.Bot.Strategies.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -12,10 +13,10 @@ namespace Gambler.Bot.Classes
 {
     public class PersonalSettings
     {
-        private List<Trigger> _triggers = new List<Trigger>();
+        private ObservableCollection<Trigger> _triggers = new ObservableCollection<Trigger>();
         private Dictionary<ErrorType, ErrorSetting> _Errors = new Dictionary<ErrorType, ErrorSetting>();
 
-        public List<Trigger> Notifications { get { return _triggers; } set { _triggers = value; } }
+        public ObservableCollection<Trigger> Notifications { get { return _triggers; } set { _triggers = value; } }
         private List<ErrorSetting> errorSettings;
 
         public List<ErrorSetting> ErrorSettings
@@ -109,8 +110,12 @@ namespace Gambler.Bot.Classes
         {
             ErrorType type;
             ErrorActions action;
-            public ErrorType Type { get => type; set { type = value; RaisePropertyChanged(); } }
-            public ErrorActions Action { get => action; set { action = value; RaisePropertyChanged(); } }
+            public ErrorType Type { 
+                get => type; 
+                set { type = value; RaisePropertyChanged(); } }
+            public ErrorActions Action { 
+                get => action; 
+                set { action = value; RaisePropertyChanged(); } }
 
             public event PropertyChangedEventHandler PropertyChanged;
             public void RaisePropertyChanged([CallerMemberName] string propertyName = null)

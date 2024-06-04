@@ -253,6 +253,10 @@ namespace Gambler.Bot.Classes
                     }
 
                 }
+                if (Strategy is IProgrammerMode prog)
+                {
+                    prog.UpdateSite(CopyHelper.CreateCopy<SiteDetails>(baseSite.SiteDetails));
+                }
             }
         }
 
@@ -311,6 +315,10 @@ namespace Gambler.Bot.Classes
         private void BaseSite_StatsUpdated(object sender, StatsUpdatedEventArgs e)
         {
             OnSiteStatsUpdated?.Invoke(sender, e);
+            if (Strategy is IProgrammerMode)
+            {
+                (Strategy as IProgrammerMode).UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(e.NewStats));
+            }
         }
 
         private void BaseSite_RegisterFinished(object sender, GenericEventArgs e)
@@ -482,11 +490,11 @@ namespace Gambler.Bot.Classes
                     StopStrategy(Response);
                 }
                 Stats.UpdateStats(e.NewBet, win);
-                if (Strategy is IProgrammerMode)
+                if (Strategy is IProgrammerMode prog)
                 {
-                    (Strategy as IProgrammerMode).UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
-                    (Strategy as IProgrammerMode).UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
-                    (Strategy as IProgrammerMode).UpdateSite(CopyHelper.CreateCopy<SiteDetails>(CurrentSite.SiteDetails));
+                    prog.UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
+                    prog.UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
+                    prog.UpdateSite(CopyHelper.CreateCopy<SiteDetails>(CurrentSite.SiteDetails));
                 }
                 OnSiteBetFinished?.Invoke(sender, e);
 
@@ -679,17 +687,20 @@ namespace Gambler.Bot.Classes
                     strategy.NeedBalance += Strategy_NeedBalance;
                     strategy.Stop += Strategy_Stop;
                     strategy.OnNeedStats += Strategy_OnNeedStats;
-                    if (strategy is IProgrammerMode)
+                    if (strategy is IProgrammerMode prog)
                     {
-                        (strategy as IProgrammerMode).CreateRuntime();
+                        prog.CreateRuntime();
+                        prog.UpdateSite(CopyHelper.CreateCopy<SiteDetails>(CurrentSite.SiteDetails));
+                        prog.UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
+                        prog.UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
                         
-                        (Strategy as IProgrammerMode).OnInvest += Autobet_OnInvest;
-                        (Strategy as IProgrammerMode).OnResetSeed += Autobet_OnResetSeed;
-                        (Strategy as IProgrammerMode).OnResetStats += Autobet_OnResetStats;
-                        (Strategy as IProgrammerMode).OnTip += Autobet_OnTip;
-                        (Strategy as IProgrammerMode).OnWithdraw += Autobet_OnWithdraw;
-                        (Strategy as IProgrammerMode).OnScriptError += Autobet_OnScriptError;
-                        (Strategy as IProgrammerMode).OnSetCurrency += Autobet_OnSetCurrency;
+                        prog.OnInvest += Autobet_OnInvest;
+                        prog.OnResetSeed += Autobet_OnResetSeed;
+                        prog.OnResetStats += Autobet_OnResetStats;
+                        prog.OnTip += Autobet_OnTip;
+                        prog.OnWithdraw += Autobet_OnWithdraw;
+                        prog.OnScriptError += Autobet_OnScriptError;
+                        prog.OnSetCurrency += Autobet_OnSetCurrency;
                     }
                 }
                 StoredBetSettings.SetStrategy(value);
@@ -786,12 +797,14 @@ namespace Gambler.Bot.Classes
             
             if (!Running && !RunningSimulation)
             {
-                if (Strategy is IProgrammerMode)
+                if (Strategy is IProgrammerMode prog)
                 {
-                    (Strategy as IProgrammerMode).LoadScript();
-                    (Strategy as IProgrammerMode).UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
-                    (Strategy as IProgrammerMode).UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
-                    (Strategy as IProgrammerMode).UpdateSite(CopyHelper.CreateCopy<SiteDetails>(CurrentSite.SiteDetails));
+                    prog.SetSimulation(false);
+                    prog.LoadScript();
+                    prog.UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
+                    prog.UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
+                    prog.UpdateSite(CopyHelper.CreateCopy<SiteDetails>(CurrentSite.SiteDetails));
+                    
                 }
                 Running = true;
                 if (Stats == null)
@@ -870,7 +883,14 @@ namespace Gambler.Bot.Classes
                 {
                     if (Stats.SessionStatsId<=0)
                         DBInterface.Add(Stats);
-                    DBInterface?.SaveChanges();
+                    try
+                    {
+                        DBInterface?.SaveChanges();
+                    }
+                    catch (Exception e)
+                    {
+                        
+                    }
                 }
             }
             

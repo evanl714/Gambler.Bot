@@ -9,13 +9,13 @@
 
 	
 ### Tabs
-- [ ] *Console (still needs read methods)
+- [x] *Console (still needs read methods)
 
 ### Windows
 - [ ] *settings import/export
 - [ ] additional charts (streak occurance? roll distrobution? win/loss ratio? )
 - [x] *roll verifier
-- [ ] *bet history
+- [x] *bet history
 
 
 ### General
@@ -47,12 +47,12 @@
 
 ### Settings: 
 - [ ] *language localization (functionality mostly in place, but strings file not yet created)
-- [ ] *Errors
+- [x] *Errors
 - [ ] Donate
 - [ ] Proxy
 - [ ] Telemetry
 - [ ] storage strategies
-- [x] *notifications (This should be done except for the grid not updating initially)
+- [x] *notifications
 - [x] *Updates (I think this is basically done)
 - [x] *Live bets
 - [x] *skins
@@ -61,11 +61,11 @@
 
 ### Known issues
 - [ ] *Double check site settings
-- [ ] *reset seed caused betting to stop
-- [ ] *SiteDetails and SiteStats class are not defined before until we do a first bet
-- [ ] *Add a new boolean variable that indicates if script is running in simulator
-- [ ] *Balance variable is not updated in programmer mode
-- [ ] *Sqlite update tables needs to be implemented
+- [ ] *reset seed caused betting to stop (this probably just needs to implemented on all of the sites?)
+- [x] *SiteDetails and SiteStats class are not defined before until we do a first bet
+- [x] *Add a new boolean variable that indicates if script is running in simulator
+- [x] *Balance variable is not updated in programmer mode
+- [ ] *Sqlite update tables needs to be implemented (I have the EF migrations but not quite sure if that's going to work.... meh)
 - [x] *Script conversion tool /legacy script support (untested but there for lua)
 - [ ] *bot speed
 - [ ] ???Specify system requirements in the readme file???
