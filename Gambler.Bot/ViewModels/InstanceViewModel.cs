@@ -664,7 +664,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
         {
             botIns.CurrentSite = NewSite;
             if(currency != null && Array.IndexOf(botIns.CurrentSite.Currencies, currency) >= 0)
-                botIns.CurrentSite.Currency = Array.IndexOf(botIns.CurrentSite.Currencies, currency);
+                botIns.CurrentSite.CurrentCurrency =  currency;
             object curGame = Bot.Common.Games.Games.Dice;
             if(game != null &&
                 Enum.TryParse(typeof(Bot.Common.Games.Games), game, out curGame) &&
@@ -672,7 +672,8 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                 botIns.CurrentGame = (Bot.Common.Games.Games)curGame;
             this.RaisePropertyChanged(nameof(Currencies));
             this.RaisePropertyChanged(nameof(CurrentCurrency));
-            if(showLogin)
+            this.RaisePropertyChanged(nameof(SiteName));
+            if (showLogin)
                 ShowLogin();//.Wait();
             else
                 ShowSites = false;
@@ -839,13 +840,13 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         public string[] Currencies { get { return BotInstance?.CurrentSite?.Currencies; } }
 
-        public int? CurrentCurrency
+        public string? CurrentCurrency
         {
-            get { return BotInstance?.CurrentSite?.Currency; }
+            get { return BotInstance?.CurrentSite?.CurrentCurrency; }
             set
             {
                 if(BotInstance?.CurrentSite != null)
-                    BotInstance.CurrentSite.Currency = (value >= 0 ? value : 0) ?? 0;
+                    BotInstance.CurrentSite.CurrentCurrency = value;
                 this.RaisePropertyChanged();
             }
         }
@@ -958,6 +959,13 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
         }
 
         public Interaction<SimulationViewModel, SimulationViewModel?> ShowSimulation { get; }
+
+        
+
+        public string SiteName
+        {
+            get { return BotInstance?.CurrentSite?.SiteName??"Site"; }
+        }
 
         public bool ShowSites
         {

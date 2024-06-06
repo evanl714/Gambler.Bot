@@ -21,6 +21,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading;
+using System.Threading.Tasks;
 using static Gambler.Bot.Classes.PersonalSettings;
 using ErrorEventArgs = Gambler.Bot.Common.Events.ErrorEventArgs;
 
@@ -29,6 +30,7 @@ namespace Gambler.Bot.Classes
     public class AutoBet: INotifyPropertyChanged
     {
         #region Internal Variables
+        private Task RunningThread;
         private readonly ILogger _Logger;
         List<Common.Events.ErrorEventArgs> ActiveErrors = new List<ErrorEventArgs>();
         //PwDatabase Passdb = new PwDatabase();
@@ -217,16 +219,11 @@ namespace Gambler.Bot.Classes
                 {
                     baseSite.Action -= BaseSite_Action;
                     baseSite.ChatReceived -= BaseSite_ChatReceived;
-                    baseSite.BetFinished -= BaseSite_DiceBetFinished;
                     baseSite.Error -= BaseSite_Error;
                     baseSite.LoginFinished -= BaseSite_LoginFinished;
                     baseSite.Notify -= BaseSite_Notify;
                     baseSite.RegisterFinished -= BaseSite_RegisterFinished;
                     baseSite.StatsUpdated -= BaseSite_StatsUpdated;
-                    baseSite.OnInvestFinished -= BaseSite_OnInvestFinished;
-                    baseSite.OnResetSeedFinished -= BaseSite_OnResetSeedFinished;
-                    baseSite.OnTipFinished -= BaseSite_OnTipFinished;
-                    baseSite.OnWithdrawalFinished -= BaseSite_OnWithdrawalFinished;
                     baseSite.OnBrowserBypassRequired -= BaseSite_OnBrowserBypassRequired;
                     baseSite.Disconnect();                    
                 }
@@ -235,16 +232,11 @@ namespace Gambler.Bot.Classes
                 {
                     baseSite.Action += BaseSite_Action;
                     baseSite.ChatReceived += BaseSite_ChatReceived;
-                    baseSite.BetFinished += BaseSite_DiceBetFinished;
                     baseSite.Error += BaseSite_Error;
                     baseSite.LoginFinished += BaseSite_LoginFinished;
                     baseSite.Notify += BaseSite_Notify;
                     baseSite.RegisterFinished += BaseSite_RegisterFinished;
                     baseSite.StatsUpdated += BaseSite_StatsUpdated;
-                    baseSite.OnInvestFinished += BaseSite_OnInvestFinished;
-                    baseSite.OnResetSeedFinished += BaseSite_OnResetSeedFinished;
-                    baseSite.OnTipFinished += BaseSite_OnTipFinished;
-                    baseSite.OnWithdrawalFinished += BaseSite_OnWithdrawalFinished;
                     baseSite.OnBrowserBypassRequired += BaseSite_OnBrowserBypassRequired;
                     
                     if (!new List<Games>(baseSite.SupportedGames).Contains(CurrentGame))
@@ -265,26 +257,6 @@ namespace Gambler.Bot.Classes
             OnBypassRequired?.Invoke(sender, e);
         }
 
-        private void BaseSite_OnWithdrawalFinished(object sender, GenericEventArgs e)
-        {
-            CalculateNextBet();
-        }
-
-        private void BaseSite_OnTipFinished(object sender, GenericEventArgs e)
-        {
-            CalculateNextBet();
-        }
-
-        private void BaseSite_OnResetSeedFinished(object sender, GenericEventArgs e)
-        {
-            CalculateNextBet();
-        }
-
-        private void BaseSite_OnInvestFinished(object sender, GenericEventArgs e)
-        {
-            CalculateNextBet();
-        }
-
         private Games currentGame;
 
         public Games CurrentGame
@@ -294,14 +266,14 @@ namespace Gambler.Bot.Classes
         }
 
 
-        public event BaseSite.dStatsUpdated OnSiteStatsUpdated;
-        public event BaseSite.dAction OnSiteAction;
-        public event BaseSite.dChat OnSiteChat;
-        public event BaseSite.dBetFinished OnSiteBetFinished;
-        public event BaseSite.dError OnSiteError;
-        public event BaseSite.dLoginFinished OnSiteLoginFinished;
-        public event BaseSite.dNotify OnSiteNotify;
-        public event BaseSite.dRegisterFinished OnSiteRegisterFinished;
+        public event EventHandler<StatsUpdatedEventArgs > OnSiteStatsUpdated;
+        public event EventHandler<GenericEventArgs> OnSiteAction;
+        public event EventHandler<GenericEventArgs> OnSiteChat;
+        public event EventHandler<BetFinisedEventArgs> OnSiteBetFinished;
+        public event EventHandler<ErrorEventArgs> OnSiteError;
+        public event EventHandler<LoginFinishedEventArgs> OnSiteLoginFinished;
+        public event EventHandler<GenericEventArgs> OnSiteNotify;
+        public event EventHandler<GenericEventArgs> OnSiteRegisterFinished;
         public event EventHandler OnGameChanged;
         public event EventHandler OnStrategyChanged;
         public event EventHandler<NotificationEventArgs> OnNotification;
@@ -343,7 +315,7 @@ namespace Gambler.Bot.Classes
         {
             BotErrorEventArgs be = new BotErrorEventArgs(ea);
             ActiveErrors.Add(be);
-            if (Strategy != null)
+            if (Running && Strategy != null)
             {
                 Strategy.OnError(be);
                 if (be.Handled)
@@ -461,147 +433,10 @@ namespace Gambler.Bot.Classes
             }
         }
 
-        private void BaseSite_DiceBetFinished(object sender, BetFinisedEventArgs e)
-        {
-            if (e.NewBet == null)
-                return;
-            try
-            {
-                
-                DBInterface?.Add(e.NewBet);
-                DBInterface?.SaveChanges();
-                MostRecentBet = e.NewBet;
-                MostRecentBetTime = DateTime.Now;
-                Retries = 0;
-                /*
-                 * save bet to DB - invoke async?
-                 * send bet to GUI - invoke async?
-                 * */
-                bool win = e.NewBet.IsWin;
-                string Response = "";
-                bool Reset = false;
-                if (BetSettings?.CheckResetPreStats(e.NewBet, win, Stats, CurrentSite.Stats) ?? false)
-                {
-                    Reset = true;
-                    NextBext = Strategy.RunReset();
-                }
-                if (BetSettings?.CheckStopPreStats(e.NewBet, win, Stats, out Response, CurrentSite.Stats) ?? false)
-                {
-                    StopStrategy(Response);
-                }
-                Stats.UpdateStats(e.NewBet, win);
-                if (Strategy is IProgrammerMode prog)
-                {
-                    prog.UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
-                    prog.UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
-                    prog.UpdateSite(CopyHelper.CreateCopy<SiteDetails>(CurrentSite.SiteDetails));
-                }
-                OnSiteBetFinished?.Invoke(sender, e);
-
-
-                if (e.NewBet.Guid != LastBetGuid || LastBetsGuids.Contains(e.NewBet.Guid))
-                {
-                    StopStrategy("Last bet did not match the latest bet placed.");
-                    //stop
-                    return;
-                }
-                else
-                {
-                    LastBetsGuids.Enqueue(e.NewBet.Guid);
-                    if (LastBetsGuids.Count > 10)
-                        LastBetsGuids.Dequeue();
-                }
-
-
-
-
-
-                foreach (Trigger x in PersonalSettings.Notifications)
-                {
-                    if (x.Enabled)
-                    {
-                        if (x.CheckNotification(Stats, CurrentSite.Stats))
-                        {
-                            switch (x.Action)
-                            {
-                                case TriggerAction.Alarm:
-                                case TriggerAction.Chime:
-                                case TriggerAction.Popup: OnNotification?.Invoke(this, new NotificationEventArgs { NotificationTrigger = x }); break;
-                                case TriggerAction.Email: throw new NotImplementedException("Supporting infrastructure for this still needs to be built.");
-                            }
-                        }
-                    }
-                }
-                NextBext = null;
-
-                foreach (Trigger x in BetSettings.Triggers)
-                {
-                    if (x.Enabled)
-                    {
-                        if (x.CheckNotification(Stats, CurrentSite.Stats))
-                        {
-                            switch (x.Action)
-                            {
-
-                                case TriggerAction.Bank: throw new NotImplementedException(); break;
-                                case TriggerAction.Invest: CurrentSite.Invest(x.GetValue(Stats, CurrentSite.Stats)); break;
-                                case TriggerAction.Reset: NextBext = Strategy.RunReset(); Reset = true; break;
-                                case TriggerAction.ResetSeed: if (CurrentSite.CanChangeSeed) CurrentSite.ResetSeed(CurrentSite.GenerateNewClientSeed()); break;
-                                case TriggerAction.Stop: StopStrategy($"Stop trigger fired: {x.ToString()}"); break;
-                                //case TriggerAction.Switch: Strategy.High = !Strategy.High; if (NewBetObject != null)NewBetObject.High = !e.NewBet.High;  break;
-                                case TriggerAction.Tip: CurrentSite.SendTip(x.Destination, x.GetValue(Stats, CurrentSite.Stats)); break;
-                                case TriggerAction.Withdraw: CurrentSite.Withdraw(x.Destination, x.GetValue(Stats, CurrentSite.Stats)); break;
-
-                            }
-                        }
-                    }
-                }
-                if (BetSettings.CheckResetPostStats(e.NewBet, win, Stats, CurrentSite.Stats))
-                {
-                    Reset = true;
-                    NextBext = Strategy.RunReset();
-                }
-                if (BetSettings.CheckStopPOstStats(e.NewBet, win, Stats, out Response, CurrentSite.Stats))
-                {
-                    StopStrategy(Response);
-                }
-                decimal withdrawamount = 0;
-                if (BetSettings.CheckWithdraw(e.NewBet, win, Stats, out withdrawamount, CurrentSite.Stats))
-                {
-                    throw new NotImplementedException();
-                    //if (CurrentSite.AutoWithdraw)
-                    //CurrentSite.Withdraw(BetSettings.)
-                    // this.Balance -= withdrawamount;
-                }
-                if (BetSettings.CheckBank(e.NewBet, win, Stats, out withdrawamount, CurrentSite.Stats))
-                {
-                    throw new NotImplementedException();
-                    //this.Balance -= withdrawamount;
-                }
-                if (BetSettings.CheckTips(e.NewBet, win, Stats, out withdrawamount, CurrentSite.Stats))
-                {
-                    throw new NotImplementedException();
-                    //this.Balance -= withdrawamount;
-                }
-                bool NewHigh = false;
-                if (BetSettings.CheckResetSeed(e.NewBet, win, Stats, CurrentSite.Stats))
-                {
-                    if (CurrentSite.CanChangeSeed)
-                        CurrentSite.ResetSeed("");
-                }
-                if (Running)
-                    CalculateNextBet();
-            }
-            catch (Exception E)
-            {
-                _Logger?.LogError(E.ToString());
-            }
-        }
-
-        void CalculateNextBet()
+        PlaceBet CalculateNextBet()
         {
             if (CurrentSite.ActiveActions.Count > 0 || ActiveErrors.Count > 0)
-                return;
+                return null;
             if (Strategy is IProgrammerMode)
             {
                 (Strategy as IProgrammerMode).UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
@@ -612,7 +447,7 @@ namespace Gambler.Bot.Classes
             if (StopOnWin && win)
             {
                 StopStrategy("Stop On Win enabled - Bet won");
-                return;
+                return null;
             }
             if (NextBext ==null)
                 NextBext = Strategy.CalculateNextBet(MostRecentBet, win);
@@ -628,9 +463,9 @@ namespace Gambler.Bot.Classes
                         TimeToBet = (10);
                     Thread.Sleep(TimeToBet);
                 }
-                if (Running)
-                    PlaceBet(NextBext);
+                return NextBext;
             }
+            return null;
         }
 
         private void BaseSite_ChatReceived(object sender, GenericEventArgs e)
@@ -713,9 +548,9 @@ namespace Gambler.Bot.Classes
         {
             if (CurrentSite != null)
             {
-                if (Array.IndexOf(this.CurrentSite.Currencies, e.Message) > 0)
+                if (Array.IndexOf(this.CurrentSite.Currencies, e.Message) > 0)//should I do this check?
                 {
-                    this.CurrentSite.Currency = Array.IndexOf(this.CurrentSite.Currencies, e.Message);
+                    this.CurrentSite.CurrentCurrency = e.Message;
                 }
             }
         }
@@ -750,7 +585,7 @@ namespace Gambler.Bot.Classes
         private void Autobet_OnResetSeed(object sender, EventArgs e)
         {
             if (CurrentSite.CanChangeSeed)
-                CurrentSite.ResetSeed(CurrentSite.Random.Next(0, int.MaxValue).ToString());
+                CurrentSite.ResetSeed(CurrentSite.GenerateNewClientSeed().ToString());
         }
 
         private void Autobet_OnResetBuiltIn(object sender, EventArgs e)
@@ -814,7 +649,8 @@ namespace Gambler.Bot.Classes
                 OnStarted?.Invoke(this, new EventArgs());
                 MostRecentBetTime = DateTime.Now;
                 BetTimer.Enabled = true;
-                PlaceBet(Strategy.Start());
+                RunningThread = RunBot();
+                
             }
             /*
              * if not running
@@ -825,6 +661,146 @@ namespace Gambler.Bot.Classes
              * continue session variables
              * run dicebet thread to place initial bet
              */
+        }
+
+        private async Task RunBot()
+        {
+            await Task.Run(async () =>
+            {
+                Bet NewBet = await PlaceBet(Strategy.Start());
+                while (Running && NewBet != null)
+                {
+
+                    if (NewBet == null)
+                        return;
+                    try
+                    {
+                        bool win = NewBet.IsWin;
+                        string Response = "";
+                        bool Reset = false;
+                        if (BetSettings?.CheckResetPreStats(NewBet, win, Stats, CurrentSite.Stats) ?? false)
+                        {
+                            Reset = true;
+                            NextBext = Strategy.RunReset();
+                        }
+                        if (BetSettings?.CheckStopPreStats(NewBet, win, Stats, out Response, CurrentSite.Stats) ?? false)
+                        {
+                            StopStrategy(Response);
+                        }
+                        Stats.UpdateStats(NewBet, win);
+                        if (Strategy is IProgrammerMode prog)
+                        {
+                            prog.UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
+                            prog.UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
+                            prog.UpdateSite(CopyHelper.CreateCopy<SiteDetails>(CurrentSite.SiteDetails));
+                        }
+                        OnSiteBetFinished?.Invoke(CurrentSite, new BetFinisedEventArgs(NewBet));
+
+
+                        if (NewBet.Guid != LastBetGuid || LastBetsGuids.Contains(NewBet.Guid))
+                        {
+                            StopStrategy("Last bet did not match the latest bet placed.");
+                            //stop
+                            return;
+                        }
+                        else
+                        {
+                            LastBetsGuids.Enqueue(NewBet.Guid);
+                            if (LastBetsGuids.Count > 10)
+                                LastBetsGuids.Dequeue();
+                        }
+
+
+
+
+
+                        foreach (Trigger x in PersonalSettings.Notifications)
+                        {
+                            if (x.Enabled)
+                            {
+                                if (x.CheckNotification(Stats, CurrentSite.Stats))
+                                {
+                                    switch (x.Action)
+                                    {
+                                        case TriggerAction.Alarm:
+                                        case TriggerAction.Chime:
+                                        case TriggerAction.Popup: OnNotification?.Invoke(this, new NotificationEventArgs { NotificationTrigger = x }); break;
+                                        case TriggerAction.Email: throw new NotImplementedException("Supporting infrastructure for this still needs to be built.");
+                                    }
+                                }
+                            }
+                        }
+                        NextBext = null;
+
+                        foreach (Trigger x in BetSettings.Triggers)
+                        {
+                            if (x.Enabled)
+                            {
+                                if (x.CheckNotification(Stats, CurrentSite.Stats))
+                                {
+                                    switch (x.Action)
+                                    {
+
+                                        case TriggerAction.Bank: throw new NotImplementedException(); break;
+                                        case TriggerAction.Invest: await CurrentSite.Invest(x.GetValue(Stats, CurrentSite.Stats)); break;
+                                        case TriggerAction.Reset: NextBext = Strategy.RunReset(); Reset = true; break;
+                                        case TriggerAction.ResetSeed: await CurrentSite.ResetSeed(CurrentSite.GenerateNewClientSeed()); break;
+                                        case TriggerAction.Stop: StopStrategy($"Stop trigger fired: {x.ToString()}"); break;
+                                        //case TriggerAction.Switch: Strategy.High = !Strategy.High; if (NewBetObject != null)NewBetObject.High = !NewBet.High;  break;
+                                        case TriggerAction.Tip: await CurrentSite.SendTip(x.Destination, x.GetValue(Stats, CurrentSite.Stats)); break;
+                                        case TriggerAction.Withdraw: await CurrentSite.Withdraw(x.Destination, x.GetValue(Stats, CurrentSite.Stats)); break;
+
+                                    }
+                                }
+                            }
+                        }
+                        if (BetSettings.CheckResetPostStats(NewBet, win, Stats, CurrentSite.Stats))
+                        {
+                            Reset = true;
+                            NextBext = Strategy.RunReset();
+                        }
+                        if (BetSettings.CheckStopPOstStats(NewBet, win, Stats, out Response, CurrentSite.Stats))
+                        {
+                            StopStrategy(Response);
+                        }
+                        decimal withdrawamount = 0;
+                        string address = null;
+                        if (BetSettings.CheckWithdraw(NewBet, win, Stats, out withdrawamount, CurrentSite.Stats, out address))
+                        {
+
+                            await CurrentSite.Withdraw(address, withdrawamount);
+
+                        }
+                        if (BetSettings.CheckBank(NewBet, win, Stats, out withdrawamount, CurrentSite.Stats))
+                        {
+                            throw new NotImplementedException();
+                            //this.Balance -= withdrawamount;
+                        }
+                        if (BetSettings.CheckTips(NewBet, win, Stats, out withdrawamount, CurrentSite.Stats, out address))
+                        {
+                            await CurrentSite.SendTip(address, withdrawamount);
+                            //this.Balance -= withdrawamount;
+                        }
+                        bool NewHigh = false;
+                        if (BetSettings.CheckResetSeed(NewBet, win, Stats, CurrentSite.Stats))
+                        {
+                            if (CurrentSite.CanChangeSeed)
+                                await CurrentSite.ResetSeed("");
+                        }
+                        if (Running)
+                        {
+                            var nextbet = CalculateNextBet();
+                            if (nextbet == null)
+                                break;
+                            NewBet = await PlaceBet(nextbet);
+                        }
+                    }
+                    catch (Exception E)
+                    {
+                        _Logger?.LogError(E.ToString());
+                    }
+                }
+            });
         }
 
         public void Resume()
@@ -916,14 +892,23 @@ namespace Gambler.Bot.Classes
             Stats = new SessionStats();
         }
 
-        public void PlaceBet(PlaceBet Bet)
+        public async Task<Bet> PlaceBet(PlaceBet Bet)
         {
-            if (Bet != null)
+            if (Bet == null)
             {
-                Bet.GUID = Guid.NewGuid().ToString();
-                LastBetGuid = Bet.GUID;
-                CurrentSite.PlaceBet(Bet);
+                //notify of an error?
+                throw new Exception("Bet cannot be null");
             }
+                
+            Bet.GUID = Guid.NewGuid().ToString();
+            LastBetGuid = Bet.GUID;
+            var NewBet =  await CurrentSite.PlaceBet(Bet);
+            DBInterface?.Add(NewBet);
+            await DBInterface?.SaveChangesAsync();
+            MostRecentBet = NewBet;
+            MostRecentBetTime = DateTime.Now;
+            Retries = 0;
+            return NewBet;
         }
 
         void DiceBetThread(object Bet)

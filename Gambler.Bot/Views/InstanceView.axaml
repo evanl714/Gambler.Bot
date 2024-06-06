@@ -54,12 +54,12 @@
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Settings}" Command="{Binding OpenSettingsCommand}"/>
 
                 </MenuItem>
-                <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Site}">
+                <MenuItem Header="{Binding SiteName}">
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.LogOut}" Command="{Binding LogOutCommand}" IsVisible="{Binding LoggedIn}"  IsEnabled="{Binding ShowBot}"/>
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.LogIn}" Command="{Binding LogOutCommand}" IsVisible="{Binding NotLoggedIn}"  IsEnabled="{Binding ShowBot}"/>
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.ChangeSite}"  Command="{Binding ChangeSiteCommand}"  IsEnabled="{Binding ShowBot}"/>
                 </MenuItem>
-                <ComboBox ItemsSource="{Binding Currencies}" SelectedIndex="{Binding CurrentCurrency}"  IsEnabled="{Binding ShowBot}" />
+                <ComboBox ItemsSource="{Binding Currencies}" SelectedItem="{Binding CurrentCurrency}"  IsEnabled="{Binding ShowBot}" />
                 <ComboBox ItemsSource="{Binding Games}" SelectedIndex="{Binding CurrentGame}"  IsEnabled="{Binding ShowBot}" />
                 <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Help}">
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Language}" ItemsSource="{Binding Languages}">
