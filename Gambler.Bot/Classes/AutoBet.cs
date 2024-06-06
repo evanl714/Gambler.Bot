@@ -485,7 +485,8 @@ namespace Gambler.Bot.Classes
             {
                 throw new Exception("Cannot login without a site. Assign a value to CurrentSite, then log in.");
             }
-            return await CurrentSite.LogIn(LoginParams);
+            LoggedIn = await CurrentSite.LogIn(LoginParams);
+            return LoggedIn;
         }
 
         
