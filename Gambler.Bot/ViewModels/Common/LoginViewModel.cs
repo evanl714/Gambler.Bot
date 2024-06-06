@@ -1,4 +1,5 @@
 ﻿using Avalonia.Threading;
+using Gambler.Bot.Classes;
 using Gambler.Bot.Core.Events;
 using Gambler.Bot.Core.Sites;
 using Gambler.Bot.Core.Sites.Classes;
@@ -25,22 +26,22 @@ namespace Gambler.Bot.ViewModels.Common
         }
 
 
-        private BaseSite _site;
+        private AutoBet _site;
 
-        public BaseSite Site
+        public AutoBet Site
         {
             get { return _site; }
             set {
                 if (_site!=null)
                 {
-                    _site.LoginFinished -= _site_LoginFinished;
+                    _site.OnSiteLoginFinished -= _site_LoginFinished;
                 }
                 _site = value; 
                 this.RaisePropertyChanged();
                 this.RaisePropertyChanged(nameof(Title));
                 if (_site != null)
                 {
-                    _site.LoginFinished += _site_LoginFinished;
+                    _site.OnSiteLoginFinished += _site_LoginFinished;
                 }
             }
              
@@ -111,21 +112,21 @@ namespace Gambler.Bot.ViewModels.Common
         }
 
 
-        public LoginViewModel(BaseSite site, ILogger logger): this(logger)
+        public LoginViewModel(AutoBet site, ILogger logger): this(logger)
         {
             Site = site;
-            LoginParams = site.LoginParams.Select(x => new LoginParamValue { Param = x }).ToList();
+            LoginParams = site.GetLoginParams();
         }
 
         public ICommand LoginCommand { get; }
 
-        void LogIn()
+        async Task LogIn()
         {
             if (Site!=null)
             {
                 CanLogIn = false;
                 ShowError = false;
-                Site.LogIn(LoginParams.ToArray());
+                await Site.Login(LoginParams.ToArray());
             }
         }
         public ICommand SkipCommand { get; }

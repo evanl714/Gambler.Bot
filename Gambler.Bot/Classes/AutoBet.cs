@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
@@ -210,7 +211,7 @@ namespace Gambler.Bot.Classes
         #region Site Stuff
         private BaseSite baseSite;
 
-        public BaseSite CurrentSite
+        protected BaseSite CurrentSite
         {
             get { return baseSite; }
             set
@@ -478,13 +479,13 @@ namespace Gambler.Bot.Classes
             OnSiteAction?.Invoke(sender, e);
         }
 
-        public void Login(LoginParamValue[] LoginParams)
+        public async Task<bool> Login(LoginParamValue[] LoginParams)
         {
             if (CurrentSite==null)
             {
                 throw new Exception("Cannot login without a site. Assign a value to CurrentSite, then log in.");
             }
-            CurrentSite.LogIn(LoginParams);
+            return await CurrentSite.LogIn(LoginParams);
         }
 
         
@@ -543,6 +544,21 @@ namespace Gambler.Bot.Classes
                 
             }
         }
+
+        public string SiteName { get => CurrentSite?.SiteName; }
+        public SiteStats SiteStats { get => CurrentSite?.Stats; }
+        public string[] Currencies { get => CurrentSite?.Currencies; }
+        public string CurrentCurrency 
+        { 
+            get => CurrentSite?.CurrentCurrency;  
+            set 
+            { 
+                if (CurrentSite != null)
+                    CurrentSite.CurrentCurrency = value;
+            } 
+        }
+
+        public Games[] SiteGames { get => CurrentSite?.SupportedGames; }
 
         private void Autobet_OnSetCurrency(object sender, PrintEventArgs e)
         {
@@ -1151,6 +1167,39 @@ namespace Gambler.Bot.Classes
             Note = pwEntry.Strings.ReadSafe("Note");
             return pwEntry.Strings.ReadSafe("Password");*/
             throw new NotImplementedException();
+        }
+
+        internal void Disconnect()
+        {
+            CurrentSite?.Disconnect();
+        }
+
+        internal void SetSite(SitesList newSite)
+        {            
+            CurrentSite = Activator.CreateInstance(newSite.SiteType(), this._Logger) as Gambler.Bot.Core.Sites.BaseSite;
+        }
+        Simulation CurrentSimulation;
+        internal Simulation InitializeSim(decimal StartingBalance, long NumberOfBets,string File, bool Log)
+        {
+            CurrentSimulation = new Gambler.Bot.Strategies.Helpers.Simulation(null);
+            CurrentSimulation.Initialize(StartingBalance, NumberOfBets, CurrentSite, CurrentSite.SiteDetails, Strategy, BetSettings, File, Log);
+            CurrentSimulation.OnSimulationComplete += CurrentSimulation_OnSimulationComplete;
+            return CurrentSimulation;
+        }
+
+        private void CurrentSimulation_OnSimulationComplete(object? sender, EventArgs e)
+        {
+            RunningSimulation = false;
+        }
+
+        internal List<LoginParamValue> GetLoginParams()
+        {
+            return CurrentSite.LoginParams.Select(x => new LoginParamValue { Param = x }).ToList();
+        }
+
+        internal BaseSite GetCurrentSite()
+        {
+            return CurrentSite;
         }
         #endregion
 

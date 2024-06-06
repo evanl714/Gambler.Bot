@@ -10,10 +10,10 @@
              xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
              xmlns:behaviours="using:Gambler.Bot.Behaviours"
              >
-    <StackPanel Orientation="Vertical" VerticalAlignment="Stretch">
+    <Grid Grid.RowDefinitions="auto,auto,*">
 
-        <TextBox Text="{Binding fileName}"/>
-        <StackPanel Orientation="Horizontal">
+        <TextBox Text="{Binding fileName}" Grid.Row="0"/>
+        <StackPanel Orientation="Horizontal"  Grid.Row="1">
             <Button Content="New" Command="{Binding NewCommand}"/>
             <Button Content="Open" Command="{Binding OpenCommand}"/>
             <Button Content="Save" Command="{Binding SaveCommand}"/>
@@ -27,10 +27,10 @@
                                  FontFamily="{DynamicResource CodeFontFamily}"
                                  FontWeight="Normal"
                                  FontSize="14"
-                                 WordWrap="False"  >
+                                 WordWrap="False"  Grid.Row="2"  >
             <i:Interaction.Behaviors>
                 <behaviours:EditorBindingBehavior Text="{Binding Content, Mode=TwoWay}" Language="{Binding FileExtension}"/>
             </i:Interaction.Behaviors>
         </avaloniaedit:TextEditor>
-    </StackPanel>
+    </Grid>
 </UserControl>

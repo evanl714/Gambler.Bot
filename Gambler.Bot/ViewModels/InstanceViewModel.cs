@@ -35,6 +35,7 @@ using Gambler.Bot.Common.Events;
 using Microsoft.Identity.Client;
 using System.Threading;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Gambler.Bot.Core.Helpers;
 
 namespace Gambler.Bot.ViewModels
 {
@@ -164,7 +165,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             if(botIns.Running)
             {
                 SessionStatsData.StatsUpdated(botIns.Stats);
-                SiteStatsData.StatsUpdated(botIns.CurrentSite?.Stats);
+                SiteStatsData.StatsUpdated(botIns.SiteStats);
             }
         }
 
@@ -224,9 +225,9 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         private void BotIns_OnSiteAction(object sender, GenericEventArgs e) { LastAction = e.Message; ConsoleVM.AddLine(e.Message); }
 
-        private void BotIns_OnSiteBetFinished(object sender, BetFinisedEventArgs e)
+        private async void BotIns_OnSiteBetFinished(object sender, BetFinisedEventArgs e)
         {
-            SiteStatsData.StatsUpdated(botIns.CurrentSite.Stats);
+            SiteStatsData.StatsUpdated(botIns.SiteStats);
             SessionStatsData.StatsUpdated(botIns.Stats);
             ChartData.AddPoint(e.NewBet.Profit, e.NewBet.IsWin);
             LiveBets.AddBet(e.NewBet);
@@ -386,9 +387,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             else
             {
                 simControl = simControl?? new SimulationViewModel(_logger);
-                simControl.CurrentSite = botIns.CurrentSite;
-                simControl.Strategy = botIns.Strategy;
-                simControl.BetSettings = botIns.BetSettings;
+                simControl.Bot = BotInstance;
                 simControl.CanStart += SimControl_CanStart;
                 simControl.NumberOfBets = e.Bets;
                 simControl.StartingBalance = e.Balance;
@@ -476,7 +475,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
         void ChangeSite()
         {
             botIns.StopStrategy("Logging Out");
-            botIns.CurrentSite.Disconnect();
+            botIns.Disconnect();
             ShowSites = true;
         }
 
@@ -495,9 +494,9 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             var tmpsite = Classes.AutoBet.Sites.FirstOrDefault(m => m.Name == tmp.Site);
             if(tmpsite != null)
             {
-                botIns.CurrentSite = Activator.CreateInstance(tmpsite.SiteType(), _logger) as Gambler.Bot.Core.Sites.BaseSite;
+                
                 ShowSites = false;
-                SiteChanged(botIns.CurrentSite, tmp.Currency, tmp.Game);
+                SiteChanged(tmpsite, tmp.Currency, tmp.Game);
             } else
             {
                 ShowSites = true;
@@ -517,7 +516,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
         void LogOut()
         {
             botIns.StopStrategy("Logging Out");
-            botIns.CurrentSite.Disconnect();
+            botIns.Disconnect();
             ShowLogin();
         }
 
@@ -533,10 +532,10 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             string Settings = JsonSerializer.Serialize<InstanceSettings>(
                 new InstanceSettings
                 {
-                    Site = botIns.CurrentSite?.GetType()?.Name,
+                    Site = botIns.SiteName,
                     AutoLogin = false,
                     Game = botIns.CurrentGame.ToString(),
-                    Currency = botIns.CurrentSite?.CurrentCurrency
+                    Currency = botIns.CurrentCurrency
                 });
             File.WriteAllText(FileLocation, Settings);
         }
@@ -546,13 +545,13 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             if(sender is SelectSiteViewModel selectSiteViewModel)
             {
                 SiteChanged(
-                    Activator.CreateInstance(e.SiteType(), _logger) as Gambler.Bot.Core.Sites.BaseSite,
+                    e,
                     e.SelectedCurrency?.Name,
                     e.SelectedGame?.Name,
                     !selectSiteViewModel.BypassLogIn);
             }
             if(SiteStatsData != null)
-                SiteStatsData.SiteName = botIns.CurrentSite?.SiteName;
+                SiteStatsData.SiteName = botIns?.SiteName;
         }
 
         private void SessionStatsData_OnResetStats(object? sender, EventArgs e)
@@ -613,14 +612,14 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         void setTitle()
         {
-            Title = $"{botIns?.CurrentSite?.SiteName} - {botIns?.CurrentGame.ToString()} - {botIns?.Strategy?.StrategyName} ({(Running ? "Running" : "Sopped")}";
+            Title = $"{botIns?.SiteName} - {botIns?.CurrentGame.ToString()} - {botIns?.Strategy?.StrategyName} ({(Running ? "Running" : "Sopped")}";
         }
 
         async Task ShowLogin()
         {
             try
             {
-                var store = new LoginViewModel(botIns.CurrentSite, _logger);
+                var store = new LoginViewModel(botIns, _logger);
                 store.LoginFinished = LoginFinished;
                 var result = await ShowDialog.Handle(store);
             } catch(Exception e)
@@ -633,9 +632,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             if (!(simControl?.Running ?? false))
             { 
                 simControl = new SimulationViewModel(_logger);
-                simControl.CurrentSite = botIns.CurrentSite;
-                simControl.Strategy = botIns.Strategy;
-                simControl.BetSettings = botIns.BetSettings;
+                simControl.Bot = botIns;
                 simControl.CanStart += SimControl_CanStart;
                 await ShowSimulation.Handle(simControl);
             }
@@ -647,28 +644,28 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         private void SimControl_CanStart(object? sender, CanSimulateEventArgs e)
         {
-            e.CanSimulate = !BotInstance.Running && BotInstance.CurrentGame!=null && BotInstance.CurrentSite!=null && BotInstance.Strategy!=null && !(simControl?.Running??false);
+            e.CanSimulate = !BotInstance.Running && BotInstance.CurrentGame!=null && BotInstance.SiteName!=null && BotInstance.Strategy!=null && !(simControl?.Running??false);
         }
 
         public async Task RollVerifier()
         {
             RollVerifierViewModel simControl = new RollVerifierViewModel(
                 _logger,
-                BotInstance?.CurrentSite,
+                BotInstance?.GetCurrentSite(),
                 BotInstance?.CurrentGame ?? Bot.Common.Games.Games.Dice);
 
             await ShowRollVerifier.Handle(simControl);
         }
 
-        void SiteChanged(Gambler.Bot.Core.Sites.BaseSite NewSite, string currency, string game, bool showLogin = true)
+        void SiteChanged(SitesList SiteName, string currency, string game, bool showLogin = true)
         {
-            botIns.CurrentSite = NewSite;
-            if(currency != null && Array.IndexOf(botIns.CurrentSite.Currencies, currency) >= 0)
-                botIns.CurrentSite.CurrentCurrency =  currency;
+            botIns.SetSite(SiteName);
+            if(currency != null && Array.IndexOf(botIns.Currencies, currency) >= 0)
+                botIns.CurrentCurrency =  currency;
             object curGame = Bot.Common.Games.Games.Dice;
             if(game != null &&
                 Enum.TryParse(typeof(Bot.Common.Games.Games), game, out curGame) &&
-                Array.IndexOf(botIns.CurrentSite.SupportedGames, (Bot.Common.Games.Games)curGame) >= 0)
+                Array.IndexOf(botIns.SiteGames, (Bot.Common.Games.Games)curGame) >= 0)
                 botIns.CurrentGame = (Bot.Common.Games.Games)curGame;
             this.RaisePropertyChanged(nameof(Currencies));
             this.RaisePropertyChanged(nameof(CurrentCurrency));
@@ -765,9 +762,8 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         public void OnClosing()
         {
-            botIns.StopStrategy("Application Closing");
-            if(botIns.CurrentSite != null)
-                botIns.CurrentSite.Disconnect();
+            botIns.StopStrategy("Application Closing");            
+            botIns.Disconnect();
             if(!UISettings.Resetting)
             {
                 botIns.SaveBetSettings(Path.Combine(BetSettingsFile));
@@ -838,15 +834,14 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         public ProfitChartViewModel ChartData { get; set; }// = new ProfitChartViewModel();
 
-        public string[] Currencies { get { return BotInstance?.CurrentSite?.Currencies; } }
+        public string[] Currencies { get { return BotInstance?.Currencies; } }
 
         public string? CurrentCurrency
         {
-            get { return BotInstance?.CurrentSite?.CurrentCurrency; }
+            get { return BotInstance?.CurrentCurrency; }
             set
             {
-                if(BotInstance?.CurrentSite != null)
-                    BotInstance.CurrentSite.CurrentCurrency = value;
+                BotInstance.CurrentCurrency = value;
                 this.RaisePropertyChanged();
             }
         }
@@ -855,21 +850,21 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
         {
             get
             {
-                if(BotInstance?.CurrentSite == null)
+                if(BotInstance?.SiteGames == null)
                     return -1;
-                return  Array.IndexOf(BotInstance?.CurrentSite?.SupportedGames, BotInstance?.CurrentGame);
+                return  Array.IndexOf(BotInstance?.SiteGames, BotInstance?.CurrentGame);
             }
             set
             {
-                if(BotInstance?.CurrentSite != null)
-                    BotInstance.CurrentGame = BotInstance?.CurrentSite?.SupportedGames[(value >= 0 ? value : 0) ?? 0] ??
+                if(BotInstance?.SiteGames != null)
+                    BotInstance.CurrentGame = BotInstance?.SiteGames[(value >= 0 ? value : 0) ?? 0] ??
                         Bot.Common.Games.Games.Dice;
             }
         }
 
         public ICommand ExitCommand { get; }
 
-        public Bot.Common.Games.Games[] Games { get { return BotInstance?.CurrentSite?.SupportedGames; } }
+        public Bot.Common.Games.Games[] Games { get { return BotInstance?.SiteGames; } }
 
         public string InstanceName { get; set; }
 
@@ -964,7 +959,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         public string SiteName
         {
-            get { return BotInstance?.CurrentSite?.SiteName??"Site"; }
+            get { return BotInstance?.SiteName ??"Site"; }
         }
 
         public bool ShowSites
@@ -1041,7 +1036,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
         public async Task BetHistoryCommand()
         {
             BetHistoryViewModel settingsControl = new BetHistoryViewModel(_logger);
-            settingsControl.Site = botIns?.CurrentSite?.SiteName;
+            settingsControl.Site = botIns?.SiteName;
             settingsControl.Game = botIns.CurrentGame;
             settingsControl.Context = botIns.DBInterface;
 

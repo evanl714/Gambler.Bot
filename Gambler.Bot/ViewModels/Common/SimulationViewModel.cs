@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using static Community.CsharpSqlite.Sqlite3;
 using DryIoc;
+using Gambler.Bot.Classes;
 
 namespace Gambler.Bot.ViewModels.Common
 {
@@ -25,23 +26,14 @@ namespace Gambler.Bot.ViewModels.Common
         public event EventHandler<CanSimulateEventArgs> CanStart;
         Stopwatch SimTimer = new Stopwatch();
 
-        private BaseSite currentsite;
+        private AutoBet bot;
 
-        public BaseSite CurrentSite
+        public AutoBet Bot
         {
-            get { return currentsite; }
-            set { currentsite = value; }
+            get { return bot; }
+            set { bot = value; }
         }
 
-        private BaseStrategy strategy;
-
-        public BaseStrategy Strategy
-        {
-            get { return strategy; }
-            set { strategy = value; }
-        }
-
-        public InternalBetSettings BetSettings { get; set; }
 
         private Gambler.Bot.Strategies.Helpers.Simulation simulation;
 
@@ -157,8 +149,8 @@ namespace Gambler.Bot.ViewModels.Common
                 return;
             }
             Error = "";
-            CurrentSimulation = new Gambler.Bot.Strategies.Helpers.Simulation(null);
-            CurrentSimulation.Initialize(StartingBalance, NumberOfBets, CurrentSite, currentsite.SiteDetails, Strategy, BetSettings, "tmp.sim", Log);
+            CurrentSimulation = bot.InitializeSim(startingBalance, NumberOfBets, "tmp.csv",Log);
+            
             CanSave = false;
             CurrentSimulation.OnSimulationWriting += CurrentSimulation_OnSimulationWriting;
             CurrentSimulation.OnSimulationComplete += CurrentSimulation_OnSimulationComplete;
