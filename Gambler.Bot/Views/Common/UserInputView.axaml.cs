@@ -23,7 +23,7 @@ namespace Gambler.Bot.Views.Common
             }
         }
 
-        private async Task CloseDialog(InteractionContext<Unit?, Unit?> context)
+        private async Task CloseDialog(IInteractionContext<Unit?, Unit?> context)
         {
             var ParentWindow = this.FindAncestorOfType<Window>();
             ParentWindow.Close();

@@ -25,7 +25,7 @@ namespace Gambler.Bot.Views.AppSettings
                 });
             }
         }
-        private async Task DoCloseWindow(InteractionContext<Unit?,Unit?> interaction)
+        private async Task DoCloseWindow(IInteractionContext<Unit?,Unit?> interaction)
         {
             var ParentWindow = this.FindAncestorOfType<Window>();
             ParentWindow.Close();

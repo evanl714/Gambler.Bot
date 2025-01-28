@@ -1,24 +1,14 @@
-﻿using ActiproSoftware.UI.Avalonia.Media;
-using Avalonia;
-using Avalonia.Controls.Utils;
-using Avalonia.Media;
-using Avalonia.Media.Imaging;
+﻿using Avalonia.Media.Imaging;
 using Avalonia.Platform;
-using Avalonia.Svg;
-using Gambler.Bot.Strategies;
 using Gambler.Bot.Core.Helpers;
 using ReactiveUI;
-using Svg.Skia;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using static IronPython.Modules._ast;
 
 namespace Gambler.Bot.ViewModels.Common
 {

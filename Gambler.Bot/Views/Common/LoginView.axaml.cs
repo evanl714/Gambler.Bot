@@ -15,7 +15,7 @@ public partial class LoginView : ReactiveWindow<LoginViewModel>
         action(ViewModel!.CloseDialog.RegisterHandler(CloseDialogAsync)));
     }
 
-    private async Task CloseDialogAsync(InteractionContext<LoginViewModel,
+    private async Task CloseDialogAsync(IInteractionContext<LoginViewModel,
                                         LoginViewModel?> interaction)
     {
         Dispatcher.UIThread.Invoke(Close);

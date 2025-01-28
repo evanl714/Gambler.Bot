@@ -9,11 +9,11 @@ using Gambler.Bot.ViewModels.AppSettings;
 using Gambler.Bot.ViewModels.Common;
 using Gambler.Bot.Views.AppSettings;
 using Gambler.Bot.Views.Common;
-using LibVLCSharp.Shared;
 using ReactiveUI;
 using System;
 using System.Reactive;
 using System.Threading.Tasks;
+using System.Reactive.Linq;
 
 namespace Gambler.Bot.Views;
 
@@ -49,7 +49,7 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
 
     }
 
-    private async Task ShowUserInput(InteractionContext<UserInputViewModel, Unit?> context)
+    private async Task ShowUserInput(IInteractionContext<UserInputViewModel, Unit?> context)
     {
         var ParentWindow = this.FindAncestorOfType<Window>();
         ReactiveWindow<UserInputViewModel> window = new();
@@ -62,7 +62,7 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
         await window.ShowDialog(this.parentWindow);
     }
 
-    private void ShowNotification(InteractionContext<INotification, Unit?> context)
+    private void ShowNotification(IInteractionContext<INotification, Unit?> context)
     {
         if (!Dispatcher.UIThread.CheckAccess())
         {
@@ -80,7 +80,7 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
         }
     }
 
-    private void ShowAbout(InteractionContext<AboutViewModel, Unit?> context)
+    private void ShowAbout(IInteractionContext<AboutViewModel, Unit?> context)
     {
         var ParentWindow = this.FindAncestorOfType<Window>();
         ReactiveWindow<AboutViewModel> window = new();
@@ -94,12 +94,12 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
         window.Show();
     }
 
-    private void Close(InteractionContext<Unit?, Unit?> context)
+    private void Close(IInteractionContext<Unit?, Unit?> context)
     {
         this.parentWindow.Close();
     }
 
-    private void ShowBetHistory(InteractionContext<BetHistoryViewModel, Unit?> context)
+    private void ShowBetHistory(IInteractionContext<BetHistoryViewModel, Unit?> context)
     {
         var ParentWindow = this.FindAncestorOfType<Window>();
         ReactiveWindow<BetHistoryViewModel> window = new();
@@ -118,7 +118,7 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
         ViewModel.Loaded();
     }
 
-    private async Task DoShowDialogAsync(InteractionContext<LoginViewModel,
+    private async Task DoShowDialogAsync(IInteractionContext<LoginViewModel,
                                         LoginViewModel?> interaction)
     {
         var dialog = new LoginView();
@@ -128,7 +128,7 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
         interaction.SetOutput(result);
     }
 
-    private async Task ShowRollVerifier(InteractionContext<RollVerifierViewModel,
+    private async Task ShowRollVerifier(IInteractionContext<RollVerifierViewModel,
                                         Unit?> interaction)
     {
         var ParentWindow = this.FindAncestorOfType<Window>();
@@ -142,7 +142,7 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
         window.Title = $"Roll Verifier - {interaction.Input.Site?.SiteName}";
         window.Show();
     }
-    private async Task ShowSettings(InteractionContext<GlobalSettingsViewModel,
+    private async Task ShowSettings(IInteractionContext<GlobalSettingsViewModel,
                                         Unit?> interaction)
     {
         var ParentWindow = this.FindAncestorOfType<Window>();
@@ -157,7 +157,7 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
         window.Show();
     }
 
-    private async Task DoShowSimulation(InteractionContext<SimulationViewModel,
+    private async Task DoShowSimulation(IInteractionContext<SimulationViewModel,
                                         SimulationViewModel?> interaction)
     {
         

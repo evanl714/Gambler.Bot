@@ -527,10 +527,12 @@ namespace Gambler.Bot.Classes
                     if (strategy is IProgrammerMode prog)
                     {
                         prog.CreateRuntime();
-                        prog.UpdateSite(CopyHelper.CreateCopy<SiteDetails>(CurrentSite.SiteDetails));
-                        prog.UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
-                        prog.UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
-                        
+                        if (CurrentSite != null)
+                        {
+                            prog.UpdateSite(CopyHelper.CreateCopy<SiteDetails>(CurrentSite.SiteDetails));
+                            prog.UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
+                            prog.UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
+                        }
                         prog.OnInvest += Autobet_OnInvest;
                         prog.OnResetSeed += Autobet_OnResetSeed;
                         prog.OnResetStats += Autobet_OnResetStats;
@@ -920,8 +922,16 @@ namespace Gambler.Bot.Classes
             Bet.GUID = Guid.NewGuid().ToString();
             LastBetGuid = Bet.GUID;
             var NewBet =  await CurrentSite.PlaceBet(Bet);
-            DBInterface?.Add(NewBet);
-            await DBInterface?.SaveChangesAsync();
+            try
+            {
+                DBInterface?.Add(NewBet);
+                await DBInterface?.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                //alert alert alert! bet not saved Not sure how yet.
+                _Logger.LogError(ex.ToString());
+            }
             MostRecentBet = NewBet;
             MostRecentBetTime = DateTime.Now;
             Retries = 0;

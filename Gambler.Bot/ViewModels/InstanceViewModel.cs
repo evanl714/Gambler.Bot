@@ -1,16 +1,17 @@
 ﻿using ActiproSoftware.UI.Avalonia.Controls;
 using ActiproSoftware.UI.Avalonia.Themes;
-using Avalonia;
 using Avalonia.Controls.Notifications;
 using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Threading;
-using Gambler.Bot.Strategies.Helpers;
-using Gambler.Bot.Strategies.Strategies;
-using Gambler.Bot.Strategies.Strategies.Abstractions;
 using Gambler.Bot.Classes;
 using Gambler.Bot.Classes.BetsPanel;
 using Gambler.Bot.Classes.Strategies;
+using Gambler.Bot.Common.Events;
 using Gambler.Bot.Core.Events;
+using Gambler.Bot.Core.Helpers;
+using Gambler.Bot.Strategies.Helpers;
+using Gambler.Bot.Strategies.Strategies;
+using Gambler.Bot.Strategies.Strategies.Abstractions;
 using Gambler.Bot.ViewModels.AppSettings;
 using Gambler.Bot.ViewModels.Common;
 using Gambler.Bot.ViewModels.Games.Dice;
@@ -26,16 +27,10 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Gambler.Bot.Classes;
-using Gambler.Bot.Common.Events;
-using Microsoft.Identity.Client;
-using System.Threading;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Gambler.Bot.Core.Helpers;
 
 namespace Gambler.Bot.ViewModels
 {

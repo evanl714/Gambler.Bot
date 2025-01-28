@@ -12,7 +12,7 @@ namespace Gambler.Bot.Classes
 {
     internal class IOHelper
     {
-        public static async Task SaveFile(InteractionContext<FilePickerSaveOptions, string?> interaction, TopLevel topLevel)
+        public static async Task SaveFile(IInteractionContext<FilePickerSaveOptions, string?> interaction, TopLevel topLevel)
         {
             
             var storage = topLevel.StorageProvider;
@@ -23,7 +23,7 @@ namespace Gambler.Bot.Classes
             interaction.SetOutput(dir);
         }
 
-        public static async Task OpenFile(InteractionContext<FilePickerOpenOptions, string?> interaction, TopLevel topLevel)
+        public static async Task OpenFile(IInteractionContext<FilePickerOpenOptions, string?> interaction, TopLevel topLevel)
         {
             
             var storage = topLevel.StorageProvider;
