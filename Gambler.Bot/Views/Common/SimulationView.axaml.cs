@@ -7,6 +7,7 @@ namespace Gambler.Bot.Views.Common
         public SimulationView()
         {
             InitializeComponent();
+            
         }
     }
 }

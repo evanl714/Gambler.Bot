@@ -924,8 +924,15 @@ namespace Gambler.Bot.Classes
             var NewBet =  await CurrentSite.PlaceBet(Bet);
             try
             {
-                DBInterface?.Add(NewBet);
-                await DBInterface?.SaveChangesAsync();
+                if (DBInterface != null)
+                {
+                    DBInterface?.Add(NewBet);
+                    await DBInterface?.SaveChangesAsync();
+                }
+                else
+                {
+                    _Logger.LogError("DBInterface not initialized");
+                }
             }
             catch (Exception ex)
             {
