@@ -11,26 +11,26 @@
              >
     <StackPanel Orientation="Vertical">
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button HorizontalAlignment="Right" Content="Remove" Command="{Binding RemoveCommand}"/>
-            <Button HorizontalAlignment="Right" Content="Add"  Command="{Binding AddCommand}"/>
+            <Button HorizontalAlignment="Right" Content="{DynamicResource Localization.Common.Triggers.Remove}" Command="{Binding RemoveCommand}"/>
+            <Button HorizontalAlignment="Right" Content="{DynamicResource Localization.Common.Triggers.Add}"  Command="{Binding AddCommand}"/>
         </StackPanel>
         <DataGrid MinHeight="150" MaxHeight="400" ItemsSource="{Binding Triggers}" SelectedItem="{Binding SelectedTrigger}">
             <DataGrid.Columns>
-                <DataGridCheckBoxColumn Header="Enabled" Binding="{Binding Enabled}" />
-                <DataGridTextColumn Header="Description" Binding="{Binding TriggerDescription}" Width="*" />
+                <DataGridCheckBoxColumn Header="{DynamicResource Localization.Common.Triggers.Enabled}" Binding="{Binding Enabled}" />
+                <DataGridTextColumn Header="{DynamicResource Localization.Common.Triggers.Description}" Binding="{Binding TriggerDescription}" Width="*" />
             </DataGrid.Columns>
         </DataGrid>
 
         <StackPanel>
-            <ToggleSwitch Classes="theme-solid accent" Content="Enabled" IsChecked="{Binding SelectedTrigger.Enabled }" HorizontalAlignment="Left" />
+            <ToggleSwitch Classes="theme-solid accent" Content="{DynamicResource Localization.Common.Triggers.Enabled}" IsChecked="{Binding SelectedTrigger.Enabled }" HorizontalAlignment="Left" />
             <WrapPanel Orientation="Horizontal" IsVisible="{Binding ShowEditor}">
 
 
-                <TextBlock VerticalAlignment="Center"  Text="When " HorizontalAlignment="Left"/>
+                <TextBlock VerticalAlignment="Center"  Text="{DynamicResource Localization.Common.Triggers.When}" HorizontalAlignment="Left"/>
                 <ComboBox HorizontalAlignment="Left" MinWidth="150" MaxWidth="250" ItemsSource="{Binding Properties}" SelectedValue="{Binding SelectedTrigger.TriggerProperty}" />
-                <TextBlock  VerticalAlignment="Center" Text=" is "/>
+                <TextBlock  VerticalAlignment="Center" Text="{DynamicResource Localization.Common.Triggers.Is}"/>
                 <ComboBox MinWidth="150" MaxWidth="250" ItemsSource="{Binding Comparisons}" SelectedValue="{Binding SelectedTrigger.Comparison}" />
-                <TextBlock VerticalAlignment="Center"  Text=" than "/>
+                <TextBlock VerticalAlignment="Center"  Text="{DynamicResource Localization.Common.Triggers.Than}"/>
                 <ComboBox MinWidth="150" MaxWidth="250" ItemsSource="{Binding Againsts}" SelectedValue="{Binding SelectedTrigger.TargetType}"/>
 
                 <!--If tartget type is value-->
@@ -38,7 +38,7 @@
                 <!--If tartget type is percentage-->
                 <StackPanel Orientation="Horizontal"  IsVisible="{Binding ShowTPercentage}">
                     <NumericUpDown MinWidth="100" MaxWidth="150" FormatString="n5" Value="{Binding SelectedTrigger.Percentage}"></NumericUpDown>
-                    <TextBlock VerticalAlignment="Center"  Text="% Of "/>
+                    <TextBlock VerticalAlignment="Center"  Text="{DynamicResource Localization.Common.Triggers.PercOf}"/>
                     <ComboBox MinWidth="150" MaxWidth="250" SelectedItem="{Binding SelectedTrigger.Target}"  ItemsSource="{Binding Properties}"/>
 
                 </StackPanel>
@@ -46,21 +46,21 @@
                 <ComboBox SelectedItem="{Binding SelectedTrigger.Target}"  IsVisible="{Binding ShowTPrperty}" ItemsSource="{Binding Properties}"></ComboBox>
 
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center"  Text=" Then ">
+                    <TextBlock VerticalAlignment="Center"  Text="{DynamicResource Localization.Common.Triggers.Then}">
 
                     </TextBlock>
                     <ComboBox MinWidth="150" MaxWidth="250" SelectedItem="{Binding SelectedTrigger.Action}" ItemsSource="{Binding Actions}"/>
                 </StackPanel>
                 <!-- if Action is amount action -->
                 <WrapPanel Orientation="Vertical" IsVisible="{Binding ShowAmount}">
-                    <TextBlock Text="Amount"/>
+                    <TextBlock Text="{DynamicResource Localization.Common.Triggers.Amount}"/>
                     <ComboBox MinWidth="150" MaxWidth="250" ItemsSource="{Binding Againsts}" SelectedItem="{Binding SelectedTrigger.ValueType }" />
                     <!-- if targettype = value-->
                     <NumericUpDown MinWidth="100" MaxWidth="150" Value="{Binding SelectedTrigger.ValueValue}" IsVisible="{Binding ShowVValue}" />
                     <!-- if targettype = percentage-->
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" IsVisible="{Binding ShowVPercentage}">
                         <NumericUpDown MinWidth="100" MaxWidth="150" FormatString="n5" Value="{Binding SelectedTrigger.ValueValue}" />
-                        <TextBlock VerticalAlignment="Center" Text="% of "></TextBlock>
+                        <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Common.Triggers.PercOf}"></TextBlock>
                         <ComboBox MinWidth="150" MaxWidth="250" SelectedItem="{Binding SelectedTrigger.ValueProperty}" ItemsSource="{Binding Properties}"/>
                     </StackPanel>
                     <!-- if targettype = property-->
@@ -68,7 +68,7 @@
                 </WrapPanel>
                 <!-- if action is destination action-->
                 <StackPanel Orientation="Horizontal" IsVisible="{Binding ShowDestination}">
-                    <TextBlock Text=" To "></TextBlock>
+                    <TextBlock Text="{DynamicResource Localization.Common.Triggers.To}"></TextBlock>
                     <TextBox MinWidth="150" MaxWidth="300" Text="{Binding SelectedTrigger.Destination}"></TextBox>
                 </StackPanel>
             </WrapPanel>

@@ -12,17 +12,17 @@
     <StackPanel Orientation="Vertical">
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button HorizontalAlignment="Left" Command="{Binding AddCommand}">Add</Button>
-            <Button HorizontalAlignment="Left"  Command="{Binding OpenCommand}">Open</Button>
-            <Button HorizontalAlignment="Right"  Command="{Binding SaveCommand}">Save</Button>
+            <Button HorizontalAlignment="Left" Command="{Binding AddCommand}" Content="{DynamicResource Localization.Common.Triggers.Add}"/>
+            <Button HorizontalAlignment="Left"  Command="{Binding OpenCommand}" Content="{DynamicResource Localization.Strategy.Labouchere.Open}"/>
+            <Button HorizontalAlignment="Right"  Command="{Binding SaveCommand}" Content="{DynamicResource Localization.InstanceView.Menu.Save}"/>
         </StackPanel>
 
         <DataGrid ItemsSource="{Binding BetList}" MinHeight="200">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Amount" Binding="{Binding Amount}"></DataGridTextColumn>
-                <DataGridTextColumn Header="High" Binding="{Binding High}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Switch" Binding="{Binding Switch}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Chance" Binding="{Binding Chance}"></DataGridTextColumn>
+                <DataGridTextColumn Header="{DynamicResource Localization.Game.Amount}" Binding="{Binding Amount}"></DataGridTextColumn>
+                <DataGridTextColumn Header="{DynamicResource Localization.Games.Dice.High}" Binding="{Binding High}"></DataGridTextColumn>
+                <DataGridTextColumn Header="{DynamicResource Localization.Strategy.Preset.Switch}" Binding="{Binding Switch}"></DataGridTextColumn>
+                <DataGridTextColumn Header="{DynamicResource Localization.Games.Dice.Chance}" Binding="{Binding Chance}"></DataGridTextColumn>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate >
@@ -37,7 +37,7 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Expander Margin="2"  Header="End of list" IsExpanded="True" >
+        <Expander Margin="2"  Header="{DynamicResource Localization.Strategy.Preset.EndList}" IsExpanded="True" >
             <Expander.HeaderTemplate>
                 <DataTemplate x:DataType="system:String" >
                     <Grid>
@@ -51,12 +51,12 @@
                     <NumericUpDown Value="{Binding Strategy.EndStep}">
 
                     </NumericUpDown>
-                    <TextBlock VerticalAlignment="Center"> Steps backward</TextBlock>
+                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Strategy.Preset.StepsBackward}"/>
                 </StackPanel>
             </StackPanel>
 
         </Expander>
-        <Expander Margin="2"  Header="On Loss" IsExpanded="True" >
+        <Expander Margin="2"  Header="{DynamicResource Localization.Common.Reset.OnLoss}" IsExpanded="True" >
             <Expander.HeaderTemplate>
                 <DataTemplate x:DataType="system:String" >
                     <Grid>
@@ -70,14 +70,14 @@
                     <NumericUpDown Value="{Binding Strategy.LossStep}">
 
                     </NumericUpDown>
-                    <TextBlock VerticalAlignment="Center"> Steps forward</TextBlock>
+                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Strategy.Preset.StepsForward}"/>
                 </StackPanel>
 
 
             </StackPanel>
 
         </Expander>
-        <Expander Margin="2"  Header="On Win" IsExpanded="True" >
+        <Expander Margin="2"  Header="{DynamicResource Localization.Common.Reset.OnWin}" IsExpanded="True" >
             <Expander.HeaderTemplate>
                 <DataTemplate x:DataType="system:String" >
                     <Grid>
@@ -91,7 +91,7 @@
                     <NumericUpDown Value="{Binding Strategy.WinStep}">
 
                     </NumericUpDown>
-                    <TextBlock VerticalAlignment="Center"> Steps backward</TextBlock>
+                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Strategy.Preset.StepsBackward}"/>
                 </StackPanel>
 
 

@@ -9,16 +9,16 @@
              x:DataType="vm:ErrorsViewModel"
              >
     <Grid ColumnDefinitions="*,*" RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto">
-        <TextBlock Text="Invalid Bet" Grid.Column="0" Grid.Row="0"></TextBlock>
-        <TextBlock Text="Balance too low" Grid.Column="0" Grid.Row="1"></TextBlock>
-        <TextBlock Text="Bet too low" Grid.Column="0" Grid.Row="2"></TextBlock>
-        <TextBlock Text="Reset Seed" Grid.Column="0" Grid.Row="3"></TextBlock>
-        <TextBlock Text="Withdrawal" Grid.Column="0" Grid.Row="4"></TextBlock>
-        <TextBlock Text="Tip" Grid.Column="0" Grid.Row="5"></TextBlock>
-        <TextBlock Text="Not Implemented" Grid.Column="0" Grid.Row="6"></TextBlock>
-        <TextBlock Text="Other" Grid.Column="0" Grid.Row="7"></TextBlock>
-        <TextBlock Text="Bet Mismatch" Grid.Column="0" Grid.Row="8"></TextBlock>
-        <TextBlock Text="Unknown" Grid.Column="0" Grid.Row="9"></TextBlock>
+        <TextBlock Text="{DynamicResource Localization.AppSettings.Error.InvalidBet}" Grid.Column="0" Grid.Row="0"></TextBlock>
+        <TextBlock Text="{DynamicResource Localization.AppSettings.Error.BalanceTooLow}" Grid.Column="0" Grid.Row="1"></TextBlock>
+        <TextBlock Text="{DynamicResource Localization.AppSettings.Error.BetTooLow}" Grid.Column="0" Grid.Row="2"></TextBlock>
+        <TextBlock Text="{DynamicResource Localization.AppSettings.Error.ResetSeed}" Grid.Column="0" Grid.Row="3"></TextBlock>
+        <TextBlock Text="{DynamicResource Localization.AppSettings.Error.Withdrawal}" Grid.Column="0" Grid.Row="4"></TextBlock>
+        <TextBlock Text="{DynamicResource Localization.AppSettings.Error.Tip}" Grid.Column="0" Grid.Row="5"></TextBlock>
+        <TextBlock Text="{DynamicResource Localization.AppSettings.Error.NotImplemented}" Grid.Column="0" Grid.Row="6"></TextBlock>
+        <TextBlock Text="{DynamicResource Localization.AppSettings.Error.Other}" Grid.Column="0" Grid.Row="7"></TextBlock>
+        <TextBlock Text="{DynamicResource Localization.AppSettings.Error.BetMismatch}" Grid.Column="0" Grid.Row="8"></TextBlock>
+        <TextBlock Text="{DynamicResource Localization.AppSettings.Error.Unknown}" Grid.Column="0" Grid.Row="9"></TextBlock>
         <ComboBox ItemsSource="{Binding Actions}" SelectedItem="{Binding InvalidBet}" Grid.Column="1" Grid.Row="0"/>
         <ComboBox ItemsSource="{Binding Actions}" SelectedItem="{Binding BalanceTooLow}" Grid.Column="1" Grid.Row="1"/>
         <ComboBox ItemsSource="{Binding Actions}" SelectedItem="{Binding BetTooLow}" Grid.Column="1" Grid.Row="2"/>

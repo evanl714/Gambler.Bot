@@ -33,53 +33,53 @@
 
 
             </Grid.RowDefinitions>
-            <TextBlock Grid.Column="0" Grid.Row="0" Text="Starting balance"/>
+            <TextBlock Grid.Column="0" Grid.Row="0" Text="{DynamicResource Localization.Common.Simulation.StartingBalance}"/>
             <NumericUpDown Grid.Column="1" Grid.Row="0" FormatString="n8" Value="{Binding StartingBalance}" />
-            <TextBlock Grid.Column="0" Grid.Row="1" Text="Number of bets"/>
+            <TextBlock Grid.Column="0" Grid.Row="1" Text="{DynamicResource Localization.Common.RollVerify.NoBets}"/>
             <NumericUpDown Grid.Column="1" Grid.Row="1" FormatString="n0" Maximum="10000000000" Minimum="10" Value="{Binding NumberOfBets}" />
             <!--
             <TextBlock Grid.Column="0" Grid.Row="2"  Text="{Binding CurrentSite.SiteName}"/>
             <TextBlock Grid.Column="0" Grid.Row="3"  Text="{Binding Strategy.StrategyName}"/>-->
             <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" HorizontalAlignment="Right">
-                <Button HorizontalAlignment="Right" VerticalAlignment="Top"  Content="Start Simulation" Command="{Binding StartCommand}" IsEnabled="{Binding NotRunning}"/>
-                <Button HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Column="1" Grid.Row="2" Content="Stop Simulation" Command="{Binding StopCommand}" IsEnabled="{Binding Running}"/>
+                <Button HorizontalAlignment="Right" VerticalAlignment="Top"  Content="{DynamicResource Localization.Common.Simulation.StartSimulation}" Command="{Binding StartCommand}" IsEnabled="{Binding NotRunning}"/>
+                <Button HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Column="1" Grid.Row="2" Content="{DynamicResource Localization.Common.Simulation.StopSimulation}" Command="{Binding StopCommand}" IsEnabled="{Binding Running}"/>
             </StackPanel>
-            <TextBlock Grid.Column="0" Grid.Row="3"  Text="Enable bet log"/>
+            <TextBlock Grid.Column="0" Grid.Row="3"  Text="{DynamicResource Localization.Common.Simulation.EnableBetLog}"/>
             <ToggleSwitch IsChecked="{Binding Log}" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" IsEnabled="{Binding NotRunning}" />
-            <Button HorizontalAlignment="Right" IsEnabled="{Binding CanSave}" VerticalAlignment="Top" Grid.Column="1" Grid.Row="3"  Content="Save Bets" Command="{Binding SaveCommand}"/>
-            <SelectableTextBlock Grid.Column="0" Grid.Row="4" Text="Balance" />
+            <Button HorizontalAlignment="Right" IsEnabled="{Binding CanSave}" VerticalAlignment="Top" Grid.Column="1" Grid.Row="3"  Content="{DynamicResource Localization.Common.Simulation.SaveBets}" Command="{Binding SaveCommand}"/>
+            <SelectableTextBlock Grid.Column="0" Grid.Row="4" Text="{DynamicResource Localization.Common.Balance}" />
             <SelectableTextBlock Grid.Column="1" Grid.Row="4"  >
                 <i:Interaction.Behaviors>
                     <behaviours:NumberFormatBehaviour Mask="n0" Text="{Binding CurrentSimulation.Balance, Mode=OneWay}" />
                 </i:Interaction.Behaviors>
             </SelectableTextBlock>
-            <SelectableTextBlock Grid.Column="0" Grid.Row="5" Text="Progress"/>
+            <SelectableTextBlock Grid.Column="0" Grid.Row="5" Text="{DynamicResource Localization.Common.Simulation.Progress}"/>
             <SelectableTextBlock Grid.Column="1" Grid.Row="5"   >
                 <i:Interaction.Behaviors>
                     <behaviours:NumberFormatBehaviour Mask="p5" Text="{Binding Progress, Mode=OneWay}" />
                 </i:Interaction.Behaviors>
             </SelectableTextBlock>
 
-            <TextBlock Grid.Column="2" Grid.Row="0" Text="Server seed"/>
+            <TextBlock Grid.Column="2" Grid.Row="0" Text="{DynamicResource Localization.Common.RollVerify.ServerSeed}"/>
             <SelectableTextBlock Grid.Column="3" Grid.Row="0"  Text="{Binding CurrentSimulation.serverseed}"  />
-            <TextBlock Grid.Column="2" Grid.Row="1" Text="Server seed hash"/>
+            <TextBlock Grid.Column="2" Grid.Row="1" Text="{DynamicResource Localization.Common.RollVerify.ServerSeedHash}"/>
             <SelectableTextBlock Grid.Column="3" Grid.Row="1"   Text="{Binding CurrentSimulation.serverseedhash}" />
-            <TextBlock Grid.Column="2" Grid.Row="2" Text="Client Seed"/>
+            <TextBlock Grid.Column="2" Grid.Row="2" Text="{DynamicResource Localization.Common.RollVerify.ClientSeed}"/>
             <SelectableTextBlock Grid.Column="3" Grid.Row="2"   Text="{Binding CurrentSimulation.clientseed}"  />
 
-            <TextBlock Grid.Column="2" Grid.Row="3" Text="Time Running"/>
+            <TextBlock Grid.Column="2" Grid.Row="3" Text="{DynamicResource Localization.Common.Simulation.TimeRunning}"/>
             <SelectableTextBlock Grid.Column="3" Grid.Row="3"    >
                 <i:Interaction.Behaviors>
                     <behaviours:NumberFormatBehaviour Mask="d\,hh\:mm\:ss"  Text="{Binding TimeRunning , Mode=OneWay}" />
                 </i:Interaction.Behaviors>
             </SelectableTextBlock>
-            <TextBlock Grid.Column="2" Grid.Row="4" Text="Projected Time"/>
+            <TextBlock Grid.Column="2" Grid.Row="4" Text="{DynamicResource Localization.Common.Simulation.ProjectedTime}"/>
             <SelectableTextBlock Grid.Column="3" Grid.Row="4"     >
                 <i:Interaction.Behaviors>
                     <behaviours:NumberFormatBehaviour Mask="d\,hh\:mm\:ss"  Text="{Binding ProjectedTime , Mode=OneWay}" />
                 </i:Interaction.Behaviors>
             </SelectableTextBlock>
-            <TextBlock Grid.Column="2" Grid.Row="5" Text="Projected remaining"/>
+            <TextBlock Grid.Column="2" Grid.Row="5" Text="{DynamicResource Localization.Common.Simulation.ProjectedRemaining}"/>
             <SelectableTextBlock Grid.Column="3" Grid.Row="5"    >
                 <i:Interaction.Behaviors>
                     <behaviours:NumberFormatBehaviour Mask="d\,hh\:mm\:ss"  Text="{Binding ProjectedRemaining , Mode=OneWay}" />

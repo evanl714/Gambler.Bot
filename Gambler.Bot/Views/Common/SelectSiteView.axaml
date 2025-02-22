@@ -95,10 +95,10 @@
                                             CommandParameter="{Binding}" />
 
                                     <Grid ColumnDefinitions="*,*">
-                                        <Button Margin="5,0,5,5" Content="Simulate"
+                                        <Button Margin="5,0,5,5" Content="{DynamicResource Localization.InstanceView.Menu.Simulate}"
                                                 Command="{Binding $parent[DataGrid].((vm:SelectSiteViewModel)DataContext).SimulateCommand}" Grid.Column="0"
                                                 CommandParameter="{Binding}" />
-                                        <Button Margin="0,0,5,5" Content="View Site"
+                                        <Button Margin="0,0,5,5" Content="{DynamicResource Localization.Common.SelectSite.ViewSite}"
                                                 Command="{Binding $parent[DataGrid].((vm:SelectSiteViewModel)DataContext).ViewSiteCommand}" Grid.Column="1"
                                                 CommandParameter="{Binding}" />
                                     </Grid>

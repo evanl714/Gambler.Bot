@@ -25,12 +25,12 @@
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Column="0" Grid.Row="0">Balance</TextBlock>
-                <TextBlock Grid.Column="0" Grid.Row="01">Profit</TextBlock>
-                <TextBlock Grid.Column="0" Grid.Row="02">Wagered</TextBlock>
-                <TextBlock Grid.Column="0" Grid.Row="03">Wins</TextBlock>
-                <TextBlock Grid.Column="0" Grid.Row="04">Losses</TextBlock>
-                <TextBlock Grid.Column="0" Grid.Row="05">Total Bets</TextBlock>
+                <TextBlock Grid.Column="0" Grid.Row="0" Text="{DynamicResource Localization.Common.Balance}"/>
+                <TextBlock Grid.Column="0" Grid.Row="01" Text="{DynamicResource Localization.Common.Profit}"/>
+                <TextBlock Grid.Column="0" Grid.Row="02" Text="{DynamicResource Localization.Common.SessionStats.Wagered}"/>
+                <TextBlock Grid.Column="0" Grid.Row="03" Text="{DynamicResource Localization.Common.Wins}"/>
+                <TextBlock Grid.Column="0" Grid.Row="04" Text="{DynamicResource Localization.Common.Losses}"/>
+                <TextBlock Grid.Column="0" Grid.Row="05" Text="{DynamicResource Localization.Common.Bets}"/>
                 <SelectableTextBlock Grid.Column="1" Grid.Row="0" >
                     <i:Interaction.Behaviors>
                         <behaviours:NumberFormatBehaviour Mask="n8"  Text="{Binding Stats.Balance, Mode=OneWay}"/>

@@ -12,22 +12,22 @@
 
         <StackPanel Orientation="Horizontal" Grid.Row="0">
 
-            <Button Content="First" Command="{Binding FirstPage}" Margin="3" />
-            <Button Content="Previous" Command="{Binding PreviousPage}" Margin="3" />
-            <TextBlock VerticalAlignment="Center">Page</TextBlock>
+            <Button Content="{DynamicResource Localization.Common.First}" Command="{Binding FirstPage}" Margin="3" />
+            <Button Content="{DynamicResource Localization.Common.Previous}" Command="{Binding PreviousPage}" Margin="3" />
+            <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Common.Page}"></TextBlock>
             <NumericUpDown Margin="3" IsReadOnly="True" Value="{Binding CurrentPage}" Minimum="1" Maximum="{Binding TotalPages}" />
-            <TextBlock VerticalAlignment="Center" Text=" of "></TextBlock>
+            <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Common.of}"></TextBlock>
             <TextBlock VerticalAlignment="Center" Text="{Binding TotalPages}"/>
-            <Button Content="Next"  Margin="3" Command="{Binding NextPage}" />
-            <Button Content="Last" Margin="3" Command="{Binding LastPage}" />
+            <Button Content="{DynamicResource Localization.Common.Next}"  Margin="3" Command="{Binding NextPage}" />
+            <Button Content="{DynamicResource Localization.Common.Last}" Margin="3" Command="{Binding LastPage}" />
         </StackPanel>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
-            <TextBlock VerticalAlignment="Center" Text="Page Size" HorizontalAlignment="Right"/>
+            <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Common.PageSize}" HorizontalAlignment="Right"/>
             <NumericUpDown  Margin="3" Value="{Binding PageSize}" HorizontalAlignment="Right" Minimum="1" Maximum="100" MinWidth="100" />
 
         </StackPanel>
         <Grid Grid.Row="1">
-            <TextBlock Text="More filters and settings coming soon (tm)"/>
+            <TextBlock Text="{DynamicResource Localization.Common.Filters}"/>
         </Grid>
         <DataGrid IsReadOnly="True"
                   CanUserSortColumns="True"

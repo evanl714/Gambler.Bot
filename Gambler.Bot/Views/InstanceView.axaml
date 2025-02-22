@@ -78,7 +78,7 @@
                     </MenuItem>
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Tutorials}">
                         <MenuItem Header="YouTube"  Command="{Binding OpenLink}" CommandParameter="https://youtube.com/@GamblerdotBot"/>
-                        <MenuItem Header="Written Tutorials"  Command="{Binding OpenLink}" CommandParameter="https://gambler.bot/tutorials"/>
+                        <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.WrittenTutorials}"  Command="{Binding OpenLink}" CommandParameter="https://gambler.bot/tutorials"/>
                     </MenuItem>
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.FAQ}" Command="{Binding OpenLink}" CommandParameter="https://gambler.bot/FAQ"/>
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Contact}"  Command="{Binding OpenLink}" CommandParameter="https://gambler.bot/Contact"/>
@@ -98,11 +98,11 @@
                         <Image Source="{SvgImage /Assets/Images/bxs-user-x.svg}" IsVisible="{Binding NotLoggedIn}"/>
                         <Image Source="{SvgImage /Assets/Images/bx-run.svg}" IsVisible="{Binding Running}"/>
                         <Image Source="{SvgImage /Assets/Images/bx-stop.svg}" IsVisible="{Binding Stopped}"/>
-                        <TextBlock Text="Status: " VerticalAlignment="Bottom"/>
+                        <TextBlock Text="{DynamicResource Localization.InstanceView.Status}" VerticalAlignment="Bottom"/>
                         <TextBlock Text="{Binding StatusMessage}"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" >
-                        <TextBlock Text="Last Action: "/>
+                        <TextBlock Text="{DynamicResource Localization.InstanceView.LastAction}"/>
                         <TextBlock Text="{Binding LastAction}"/>
                     </StackPanel>
                     <actipro:ToggleThemeButton Grid.Column="2" Command="{Binding ThemeToggled}" />
@@ -158,7 +158,7 @@
                             <Button Margin="5" Command="{Binding StopOnWinCommand}" IsEnabled="{Binding Running}">Stop On Win</Button>
                         </StackPanel>
                         <TabControl>
-                            <TabItem Header="Strategy">
+                            <TabItem Header="{DynamicResource Localization.Common.Strategy}">
                                 <DockPanel>
                                     <ComboBox DockPanel.Dock="Top" ItemsSource="{Binding Strategies}" SelectedItem="{Binding SelectedStrategy}" IsEnabled="{Binding Stopped}" >
 
@@ -196,17 +196,17 @@
                                     </ContentControl>
                                 </DockPanel>
                             </TabItem>
-                            <TabItem Header="Reset Settings">
+                            <TabItem Header="{DynamicResource Localization.Common.ResetSettings}">
                                 <common:ResetSettingsView DataContext="{Binding ResetSettingsVM}"/>
                             </TabItem>
-                            <TabItem Header="Advanced Settings">
+                            <TabItem Header="{DynamicResource Localization.Common.AdvancedSettings}">
                                 <common:AdvancedView DataContext="{Binding AdvancedSettingsVM}"/>
                             </TabItem>
-                            <TabItem Header="Custom Triggers">
+                            <TabItem Header="{DynamicResource Localization.Common.CustomTriggers}">
                                 <common:TriggersView DataContext="{Binding TriggersVM}"/>
                             </TabItem>
 
-                            <TabItem Header="Manual">
+                            <TabItem Header="{DynamicResource Localization.Common.Manual}">
                                 <ContentControl Content="{Binding PlaceBetVM}" VerticalAlignment="Top">
                                     <ContentControl.DataTemplates>
                                         <DataTemplate DataType="diceVM:DicePlaceBetViewModel">
@@ -216,7 +216,7 @@
                                     </ContentControl.DataTemplates>
                                 </ContentControl>
                             </TabItem>
-                            <TabItem Header="Console">
+                            <TabItem Header="{DynamicResource Localization.Common.Console}">
                                 <common:ConsoleView DataContext="{Binding ConsoleVM}"/>
                             </TabItem>
                         </TabControl>

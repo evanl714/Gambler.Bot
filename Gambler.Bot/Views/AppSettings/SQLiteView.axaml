@@ -13,8 +13,8 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-        <TextBlock Text="Database File" Grid.Column="0"/>
+        <TextBlock Text="{DynamicResource Localization.AppSettings.SQLite.DBFile}" Grid.Column="0"/>
         <TextBox Grid.Column="1" Text="{Binding FileName}"/>
-        <Button Content="Browse" Command="{Binding SelectFile}"/>
+        <Button Content="{DynamicResource Localization.Common.Browse}" Command="{Binding SelectFile}"/>
     </Grid>
 </UserControl>
