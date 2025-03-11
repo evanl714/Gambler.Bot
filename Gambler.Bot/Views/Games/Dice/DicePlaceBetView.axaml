@@ -6,15 +6,29 @@
              x:Class="Gambler.Bot.Views.Games.Dice.DicePlaceBetView"
              xmlns:vm="using:Gambler.Bot.ViewModels.Games.Dice"
              x:DataType="vm:DicePlaceBetViewModel">
-    <Grid ColumnDefinitions="*,2*,*" RowDefinitions="*,*,*,*">
+    <Grid ColumnDefinitions="Auto,2*,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
         <TextBlock IsVisible="{Binding ShowAmount}" Grid.Column="0" Grid.Row="0" Text="{DynamicResource Localization.Common.Bet}" />
         <TextBlock IsVisible="{Binding ShowChance}" Grid.Column="0" Grid.Row="1" Text="{DynamicResource Localization.Games.Dice.Chance}" />
         <TextBlock IsVisible="{Binding ShowChance}" Grid.Column="0" Grid.Row="2" Text="{DynamicResource Localization.Game.Payout}" />
         <TextBlock IsVisible="{Binding ShowAmount}"  Grid.Column="0" Grid.Row="3" Text="{DynamicResource Localization.Common.Profit}" />
-        <NumericUpDown IsVisible="{Binding ShowAmount}" Value="{Binding Amount}" Minimum="0" Maximum="9999999999" Grid.Column="1" Grid.Row="0" FormatString="n8" />
-        <NumericUpDown IsVisible="{Binding ShowChance}" Value="{Binding Chance}" Minimum="0" Maximum="99.9999" Grid.Column="1" Grid.Row="1" FormatString="n5"/>
-        <NumericUpDown IsVisible="{Binding ShowChance}" Value="{Binding Payout}" Minimum="0" Maximum="9999999999" Grid.Column="1" Grid.Row="2" FormatString="n8"/>
-        <NumericUpDown IsVisible="{Binding ShowAmount}"  Value="{Binding Profit}" Minimum="0" Maximum="9999999999" Grid.Column="1" Grid.Row="3" FormatString="n8"/>
+        <Grid Grid.Column="1" Grid.Row="0" ColumnDefinitions="*,Auto,Auto" IsVisible="{Binding ShowAmount}">
+            <NumericUpDown IsVisible="{Binding ShowAmount}" Grid.Column="0" HorizontalAlignment="Stretch" Value="{Binding Amount}" Increment="0.00000100" Minimum="0" Maximum="9999999999" FormatString="n8" />
+            <Button  Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Content="1/2" VerticalContentAlignment="Center" HorizontalAlignment="Right" HorizontalContentAlignment="Center" VerticalAlignment="Stretch" Command="{Binding HalfAmountCommand}"/>
+            <Button  Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" Content="2x" VerticalContentAlignment="Center" HorizontalAlignment="Right" HorizontalContentAlignment="Center" VerticalAlignment="Stretch" Command="{Binding DoubleAmountCommand}"/>
+        </Grid>
+        <Grid Grid.Column="1" Grid.Row="1" ColumnDefinitions="*,Auto,Auto" IsVisible="{Binding ShowChance}">
+            <NumericUpDown  Value="{Binding Chance}" Minimum="0" Maximum="99.9999" Grid.Column="0" FormatString="n5"/>
+            <Button  Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Content="1/2" VerticalContentAlignment="Center" HorizontalAlignment="Right" HorizontalContentAlignment="Center" VerticalAlignment="Stretch" Command="{Binding HalfChanceCommand}"/>
+            <Button  Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" Content="2x" VerticalContentAlignment="Center" HorizontalAlignment="Right" HorizontalContentAlignment="Center" VerticalAlignment="Stretch" Command="{Binding DoubleChanceCommand}"/>
+        </Grid>
+        <Grid Grid.Column="1" Grid.Row="2" ColumnDefinitions="*,Auto,Auto" IsVisible="{Binding ShowChance}">
+            <NumericUpDown  Value="{Binding Payout}" Minimum="0" Maximum="9999999999" Grid.Column="0" FormatString="n8"/>
+            <Button  Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Content="1/2" VerticalContentAlignment="Center" HorizontalAlignment="Right" HorizontalContentAlignment="Center" VerticalAlignment="Stretch" Command="{Binding HalfPayoutCommand}"/>
+            <Button  Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" Content="2x" VerticalContentAlignment="Center" HorizontalAlignment="Right" HorizontalContentAlignment="Center" VerticalAlignment="Stretch" Command="{Binding DoublePayoutCommand}"/>
+        </Grid>
+        <Grid Grid.Column="1" Grid.Row="3" ColumnDefinitions="*,Auto,Auto" IsVisible="{Binding ShowAmount}">
+            <NumericUpDown   Value="{Binding Profit}" Minimum="0" Maximum="9999999999" Grid.Column="0" FormatString="n8"/>
+        </Grid>
         <Button IsVisible="{Binding ShowButton}"  Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" Content="Bet High" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalAlignment="Stretch" Command="{Binding BetHighCommand}"/>
         <Button IsVisible="{Binding ShowButton}"  Grid.Column="2" Grid.Row="2" Grid.RowSpan="2" Content="Bet Low" VerticalContentAlignment="Center" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Command="{Binding BetLowCommand}"/>
         <ToggleButton IsChecked="{Binding HighChecked}" IsVisible="{Binding ShowToggle}" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" Content="{DynamicResource Localization.Games.Dice.BetHigh}" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalAlignment="Stretch" Command="{Binding BetHighCommand}"/>

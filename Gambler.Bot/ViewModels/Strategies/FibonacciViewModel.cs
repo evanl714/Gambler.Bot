@@ -69,7 +69,7 @@ namespace Gambler.Bot.ViewModels.Strategies
             switch (e.PropertyName)
             {
                 case "Amount":
-                    Strategy.Amount = (decimal)value;
+                    Strategy.minbet = (decimal)value;
                     break;
                 case "Chance":
                     Strategy.Chance = (decimal)value;

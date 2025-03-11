@@ -51,15 +51,8 @@
                                         <ControlTheme TargetType="actipro:Avatar" BasedOn="{StaticResource {x:Type actipro:Avatar}}" x:DataType="vm:AvaCurrency">
                                             <Setter Property="BorderBrush" Value="{actipro:ThemeResource Container2BackgroundBrush}" />
                                             <Setter Property="BorderThickness" Value="2" />
-                                            <Setter Property="Content" >
-                                                <Template>
-                                                    <Image>
-                                                        <Image.Source>
-                                                            <svg:SvgImage Source="{Binding Image}" />
-                                                        </Image.Source>
-                                                    </Image>
-                                                </Template>
-                                            </Setter>
+                                            <Setter Property="Content" Value="{Binding Image}"  />
+
                                             <Setter Property="Description" Value="{Binding Currency}" />
                                         </ControlTheme>
                                     </actipro:AvatarGroup.ItemContainerTheme>
@@ -70,15 +63,7 @@
                                         <ControlTheme TargetType="actipro:Avatar" BasedOn="{StaticResource {x:Type actipro:Avatar}}" x:DataType="vm:AvaGame">
                                             <Setter Property="BorderBrush" Value="{actipro:ThemeResource Container2BackgroundBrush}" />
                                             <Setter Property="BorderThickness" Value="2" />
-                                            <Setter Property="Content" >
-                                                <Template>
-                                                    <Image>
-                                                        <Image.Source>
-                                                            <svg:SvgImage Source="{Binding Image}" />
-                                                        </Image.Source>
-                                                    </Image>
-                                                </Template>
-                                            </Setter>
+                                            <Setter Property="Content" Value="{Binding Image}" />
                                             <Setter Property="Description" Value="{Binding Game}" />
                                         </ControlTheme>
                                     </actipro:AvatarGroup.ItemContainerTheme>

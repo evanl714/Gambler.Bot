@@ -27,12 +27,12 @@
             <StackPanel>
 
                 <StackPanel Orientation="Horizontal">
-                    <RadioButton IsChecked="{Binding Strategy.EnableFiboLossIncrement}" GroupName="" Content="{DynamicResource Localization.Strategy.Fibonacci.Increment}"></RadioButton>
+                    <RadioButton GroupName="rdbOnLoss" IsChecked="{Binding Strategy.EnableFiboLossIncrement}" Content="{DynamicResource Localization.Strategy.Fibonacci.Increment}"></RadioButton>
                     <NumericUpDown Value="{Binding Strategy.FiboLossIncrement}" Margin="5,0" MinWidth="200" />
                     <TextBlock VerticalAlignment="Center">steps</TextBlock>
                 </StackPanel>
-                <RadioButton IsChecked="{Binding Strategy.EnableFiboLossReset}" Content="{DynamicResource Localization.Common.Reset}"></RadioButton>
-                <RadioButton IsChecked="{Binding Strategy.EnableFiboLossStop}" Content="{DynamicResource Localization.Common.Stop}"></RadioButton>
+                <RadioButton GroupName="rdbOnLoss" IsChecked="{Binding Strategy.EnableFiboLossReset}" Content="{DynamicResource Localization.Common.Reset}"></RadioButton>
+                <RadioButton GroupName="rdbOnLoss" IsChecked="{Binding Strategy.EnableFiboLossStop}" Content="{DynamicResource Localization.Common.Stop}"></RadioButton>
 
             </StackPanel>
         </Expander>
@@ -47,12 +47,12 @@
             <StackPanel>
 
                 <StackPanel Orientation="Horizontal">
-                    <RadioButton IsChecked="{Binding Strategy.EnableFiboWinIncrement}" GroupName="" Content="{DynamicResource Localization.Strategy.Fibonacci.Increment}"></RadioButton>
+                    <RadioButton GroupName="rdbOnWin" IsChecked="{Binding Strategy.EnableFiboWinIncrement}" Content="{DynamicResource Localization.Strategy.Fibonacci.Increment}"></RadioButton>
                     <NumericUpDown Value="{Binding Strategy.FiboWinIncrement}" Margin="5,0" MinWidth="200" />
                     <TextBlock VerticalAlignment="Center">steps</TextBlock>
                 </StackPanel>
-                <RadioButton IsChecked="{Binding Strategy.EnableFiboWinReset}" Content="{DynamicResource Localization.Common.Reset}"></RadioButton>
-                <RadioButton IsChecked="{Binding Strategy.EnableFiboWinStop}" Content="{DynamicResource Localization.Common.Stop}"></RadioButton>
+                <RadioButton GroupName="rdbOnWin" IsChecked="{Binding Strategy.EnableFiboWinReset}" Content="{DynamicResource Localization.Common.Reset}"></RadioButton>
+                <RadioButton GroupName="rdbOnWin" IsChecked="{Binding Strategy.EnableFiboWinStop}" Content="{DynamicResource Localization.Common.Stop}"></RadioButton>
 
             </StackPanel>
 

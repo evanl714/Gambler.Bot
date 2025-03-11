@@ -23,7 +23,7 @@
 - [ ] *Auto updates	
 - [x] *triggers for notifications (This seems to work but still having the weird issue on the settings screen.)
 - [ ] *improve programmer mode documentation
-- [ ] *manual betting extra buttons (x2, 1/2, max, min, etc)
+- [x] *manual betting extra buttons (x2, 1/2, max, min, etc)
 - [ ] multiple tabs
 - [ ] proxy
 - [ ] Telemtry (???The stats could be tremendously important but need to be really carefull about what is logged and how.???)
@@ -60,6 +60,8 @@
 
 
 ### Known issues
+- [ ] *Lable colours not setting correctly
+- [ ] *Betamounts not set correctly when changing strategies
 - [ ] *Double check site settings
 - [ ] *reset seed caused betting to stop (this probably just needs to implemented on all of the sites?)
 - [x] *SiteDetails and SiteStats class are not defined before until we do a first bet

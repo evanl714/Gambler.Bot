@@ -1,7 +1,10 @@
-﻿using Avalonia.Media.Imaging;
+﻿using Avalonia.Controls;
+using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using Avalonia.Svg;
 using Gambler.Bot.Core.Helpers;
 using ReactiveUI;
+using Svg.Skia;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -96,60 +99,32 @@ namespace Gambler.Bot.ViewModels.Common
         public AvaCurrency(string currency)
         {
             Currency = currency;
-            Image = $"Assets/Images/Currencies/{Currency.ToLower()}.svg";
-            if (File.Exists(Image))
-            {
 
-            }
-            else
-            {
-
-            }
-            /*Image = new SKSvg();
+            var tmpImage = new SKSvg();
             Uri image = new Uri($"avares://Gambler.Bot/Assets/Images/Currencies/{Currency.ToLower()}.svg");
             if (AssetLoader.Exists(image))
             {
                 var asset = AssetLoader.Open(image);
-                Image.Load(asset);
-
-            }*/
-        }
-        /*    private DrawingImage? _photo;
-        /// <summary>
-        /// The photo loaded from the <see cref="PhotoUri"/>.
-        /// </summary>
-        public IImage Photo
-        {
-            get
-            {
-                if (_photo is null)
-                {
-                    var svg = new SKSvg().Load(Image);
-                    // Bitmap is not an AvaloniaObject and doesn't support attached properties, so wrap it in a DrawingImage that does
-                    _photo = new DrawingImage
-                    {
-                        Drawing = new ImageDrawing
-                        {
-                            
-                            ImageSource = new SKSvg().Load(Image),
-                            Rect = new Rect(0, 0, 192, 192)
-                        }
-                    };
-
-                    // Prevent the photo from being adapted for dark themes
-                    ImageProvider.SetCanAdapt(_photo, false);
-                }
-
-                return _photo;
+                tmpImage.Load(asset);
+                Svg = new SvgImage();
+                Svg.Source = new SvgSource();
+                Svg.Source.Picture = tmpImage.Model;
             }
+            
         }
-        */
+        
     
         public string Currency { get; set; }
-        public string? Image 
+        public string? Img 
         { 
             get; 
             set; 
+        }
+
+        SvgImage Svg;
+        public Image Image
+        {
+            get => Svg != null ? new Image { Source = Svg } : null;
         }
     }
     public class AvaGame
@@ -157,22 +132,25 @@ namespace Gambler.Bot.ViewModels.Common
         public AvaGame(string game)
         {
             Game = game;
-            Image = $"Assets/Images/Games/{Game.ToLower()}.svg";
-            /*Image = new SKSvg();
-            Uri image = new Uri($"avares://Gambler.Bot/Assets/Images/Currencies/{Currency.ToLower()}.svg");
+            //Image = $"Assets/Images/Games/{Game.ToLower()}.svg";
+
+            var tmpImage = new SKSvg();
+            Uri image = new Uri($"avares://Gambler.Bot/Assets/Images/Games/{Game.ToLower()}.svg");
             if (AssetLoader.Exists(image))
             {
                 var asset = AssetLoader.Open(image);
-                Image.Load(asset);
-
-            }*/
-
+                tmpImage.Load(asset);
+                Svg = new SvgImage();
+                Svg.Source = new SvgSource();
+                Svg.Source.Picture = tmpImage.Model;
+            }            
         }
+
+        SvgImage Svg; 
         public string Game { get; set; }
-        public string? Image
+        public Image Image
         {
-            get;
-            set;
+            get => Svg != null ? new Image { Source = Svg } : null;            
         }
     }
 }

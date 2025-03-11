@@ -15,7 +15,7 @@
         <TextBox Text="{Binding fileName}" Grid.Row="0"/>
         <StackPanel Orientation="Horizontal"  Grid.Row="1">
             <Button Content="{DynamicResource Localization.Strategy.Programmer.New}" Command="{Binding NewCommand}"/>
-            <Button Content="{Localization.Strategy.Labouchere.Open}" Command="{Binding OpenCommand}"/>
+            <Button Content="{DynamicResource Localization.Strategy.Labouchere.Open}" Command="{Binding OpenCommand}"/>
             <Button Content="{DynamicResource Localization.InstanceView.Menu.Save}" Command="{Binding SaveCommand}"/>
             <Button Content="{DynamicResource Localization.Strategy.Programmer.SaveAs}" Command="{Binding SaveAsCommand}"/>
         </StackPanel>

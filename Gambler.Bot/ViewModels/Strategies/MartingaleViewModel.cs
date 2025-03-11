@@ -66,7 +66,7 @@ namespace Gambler.Bot.ViewModels.Strategies
             switch (e.PropertyName)
             {
                 case "Amount":
-                    Strategy.Amount = (decimal)value;
+                    Strategy.MinBet = (decimal)value;
                     break;
                 case "Chance":
                     Strategy.Chance = (decimal)value;
@@ -91,7 +91,13 @@ namespace Gambler.Bot.ViewModels.Strategies
         }
         public void Saving()
         {
-
+            if (PlaceBetVM is DicePlaceBetViewModel dice)
+            {
+                Strategy.MinBet = dice.Amount;
+                
+                Strategy.Chance = dice.Chance;
+                
+            }
         }
         public bool TopAlign()
         {

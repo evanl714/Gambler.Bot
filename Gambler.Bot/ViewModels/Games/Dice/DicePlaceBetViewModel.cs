@@ -42,6 +42,13 @@ namespace Gambler.Bot.ViewModels.Games.Dice
         public ICommand BetHighCommand { get; }
         public ICommand BetLowCommand { get; }
 
+        public ICommand DoubleAmountCommand { get; }
+        public ICommand HalfAmountCommand { get; }
+        public ICommand DoubleChanceCommand { get; }
+        public ICommand HalfChanceCommand { get; }
+        public ICommand DoublePayoutCommand { get; }
+        public ICommand HalfPayoutCommand { get; }
+
         private decimal amount=0.00000100m;
 
         public decimal Amount
@@ -81,9 +88,52 @@ namespace Gambler.Bot.ViewModels.Games.Dice
         {
             BetHighCommand = ReactiveCommand.Create(BetHigh);
             BetLowCommand = ReactiveCommand.Create(BetLow);
+
+            DoubleAmountCommand = ReactiveCommand.Create(DoubleAmount);
+            HalfAmountCommand = ReactiveCommand.Create(HalveAmount);
+            DoubleChanceCommand = ReactiveCommand.Create(DoubleChance);
+            HalfChanceCommand = ReactiveCommand.Create(HalveChance);
+            DoublePayoutCommand = ReactiveCommand.Create(DoublePayout);
+            HalfPayoutCommand = ReactiveCommand.Create(HalvePayout);
             Calculate(nameof(Amount));
         }
 
+        void DoubleAmount()
+        {
+            Amount = Amount * 2;
+            if (Amount< 0.00000001m )
+            {
+                amount = 0.00000001m;
+            }
+        }
+
+        void HalveAmount()
+        {
+            Amount = Amount / 2;
+            if (Amount < 0.00000001m )
+            {
+                amount = 0;
+            }
+        }
+
+        void DoubleChance()
+        {
+            if (Chance < 50)
+                Chance *= 2m;
+            else Chance += 100m - (Chance/2m);
+        }
+        void HalveChance()
+        { 
+            Chance /= 2m;
+        }
+        void HalvePayout()
+        {
+            Payout /= 2m;
+        }
+        void DoublePayout()
+        {
+            Payout *= 2m;
+        }
         void Calculate(string s)
         {
             switch (s)

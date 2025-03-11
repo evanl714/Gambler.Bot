@@ -38,4 +38,12 @@ public partial class SelectSiteView : UserControl
             control.Background = Brushes.Transparent;
         }
     }
+
+    private void Image_Loaded(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+    }
+
+    private void Image_PointerEntered(object? sender, Avalonia.Input.PointerEventArgs e)
+    {
+    }
 }

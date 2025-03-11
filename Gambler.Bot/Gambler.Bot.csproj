@@ -59,7 +59,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <AvaloniaResource Remove="Assets\Lang\af-ZA.axaml" />
+	  <AvaloniaResource Remove="Assets\Lang\af-ZA_.axaml" />
 	  <AvaloniaResource Remove="Assets\Lang\en-US.axaml" />
 	</ItemGroup>
 
@@ -1595,6 +1595,9 @@
 	  <AvaloniaResource Update="Assets\Sounds\chime.wav">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </AvaloniaResource>
+	  <AvaloniaXaml Update="Assets\Lang\af-ZA.axaml">
+	    <SubType>Designer</SubType>
+	  </AvaloniaXaml>
 	  <AvaloniaXaml Update="Assets\Lang\en-US.axaml">
 	    <SubType>Designer</SubType>
 	  </AvaloniaXaml>
