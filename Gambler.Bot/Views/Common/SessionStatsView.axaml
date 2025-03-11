@@ -9,6 +9,7 @@
              xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
              xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
              xmlns:behaviours="using:Gambler.Bot.Behaviours"
+             xmlns:controls="using:Gambler.Bot.Controls"
              >
 
     <Grid>
@@ -48,23 +49,24 @@
                             <behaviours:NumberFormatBehaviour Mask="d\,hh\:mm\:ss"  Text="{Binding Stats.RunningTimeSpan , Mode=OneWay}" />
                         </i:Interaction.Behaviors>
                     </SelectableTextBlock>
-                    <SelectableTextBlock x:Name="lblProfit" Grid.Column="1" Grid.Row="1"  >
-                        <!--<i:Interaction.Behaviors>
-                        <behaviours:NumberFormatBehaviour Mask="n8"  Text="{Binding Stats.Profit, Mode=OneWay}"/>
-                        <ia:DataTriggerBehavior Binding="{Binding Stats.Profit}"
-                        ComparisonCondition="GreaterThan"
-                        Value="0">
-                        <ia:ChangePropertyAction PropertyName="Classes"
-                        Value="theme-text-heading success" />
-                        </ia:DataTriggerBehavior>
-                        <ia:DataTriggerBehavior Binding="{Binding Stats.Profit}"
-                        ComparisonCondition="LessThan"
-                        Value="0">
-                        <ia:ChangePropertyAction PropertyName="Classes" Value="theme-text-body danger" />
-                        </ia:DataTriggerBehavior>
-                        </i:Interaction.Behaviors>-->
+                    <controls:ColourChangeSelTextBlock Classes="theme-text-body danger" x:Name="lblProfit" Grid.Column="1" Grid.Row="1"  >
+                        <i:Interaction.Behaviors>
+                            <behaviours:NumberFormatBehaviour Mask="n8"  Text="{Binding Stats.Profit, Mode=OneWay}"/>
+                            <ia:DataTriggerBehavior Binding="{Binding Stats.Profit}"
+                                                    ComparisonCondition="GreaterThanOrEqual"
+                                                    Value="0">
+                                <ia:ChangePropertyAction PropertyName="SetClasses"
+                                                         Value="theme-text-body success" />
+                            </ia:DataTriggerBehavior>
+                            <ia:DataTriggerBehavior Binding="{Binding Stats.Profit}"
+                                                    ComparisonCondition="LessThan"
+                                                    Value="0">
+                                <ia:ChangePropertyAction PropertyName="SetClasses"  Value="theme-text-body danger" />
 
-                    </SelectableTextBlock>
+                            </ia:DataTriggerBehavior>
+                        </i:Interaction.Behaviors>
+
+                    </controls:ColourChangeSelTextBlock>
                     <SelectableTextBlock Grid.Column="3" Grid.Row="1"  >
                         <i:Interaction.Behaviors>
                             <behaviours:NumberFormatBehaviour Mask="n8" Text="{Binding Stats.Wagered, Mode=OneWay}"/>
@@ -95,81 +97,81 @@
                             <behaviours:NumberFormatBehaviour Mask="n0" Text="{Binding Stats.WorstStreak, Mode=OneWay}"/>
                         </i:Interaction.Behaviors>
                     </SelectableTextBlock>
-                    <SelectableTextBlock Grid.Column="1" Grid.Row="5"   >
-                        <!--<i:Interaction.Behaviors>
-                        <behaviours:NumberFormatBehaviour Mask="n8" Text="{Binding Stats.ProfitPerHour, Mode=OneWay}"/>
-                        <ia:DataTriggerBehavior Binding="{Binding Stats.ProfitPerHour}"
-                        ComparisonCondition="GreaterThan"
-                        Value="0">
-                        <ia:ChangePropertyAction PropertyName="Classes" Value="theme-text-body success"/>
-                        </ia:DataTriggerBehavior>
-                        <ia:DataTriggerBehavior Binding="{Binding Stats.ProfitPerHour}"
-                        ComparisonCondition="LessThan"
-                        Value="0">
-                        <ia:ChangePropertyAction  PropertyName="Classes" Value="theme-text-body danger"/>
-                        </ia:DataTriggerBehavior>
-                        </i:Interaction.Behaviors>-->
-                    </SelectableTextBlock>
-                    <SelectableTextBlock Grid.Column="1" Grid.Row="6"   >
-                        <!--<i:Interaction.Behaviors>
-                        <behaviours:NumberFormatBehaviour Mask="n8" Text="{Binding Stats.ProfitPer24Hour, Mode=OneWay}"/>
-                        <ia:DataTriggerBehavior Binding="{Binding Stats.ProfitPer24Hour}"
-                        ComparisonCondition="GreaterThan"
-                        Value="0">
-                        <ia:ChangePropertyAction PropertyName="Classes" Value="theme-text-body success"/>
-                        </ia:DataTriggerBehavior>
-                        <ia:DataTriggerBehavior Binding="{Binding Stats.ProfitPer24Hour}"
-                        ComparisonCondition="LessThan"
-                        Value="0">
-                        <ia:ChangePropertyAction PropertyName="Classes" Value="theme-text-body danger" />
-                        </ia:DataTriggerBehavior>
-                        </i:Interaction.Behaviors>-->
-                    </SelectableTextBlock>
-                    <SelectableTextBlock Grid.Column="3" Grid.Row="2"  >
-                        <!--<i:Interaction.Behaviors>
-                        <behaviours:NumberFormatBehaviour Mask="n0" Text="{Binding Stats.CurrentStreak, Mode=OneWay}" />
-                        <ia:DataTriggerBehavior Binding="{Binding Stats.CurrentStreak}"
-                        ComparisonCondition="GreaterThan"
-                        Value="0">
-                        <ia:ChangePropertyAction PropertyName="Classes" Value="theme-text-body success"/>
-                        </ia:DataTriggerBehavior>
-                        <ia:DataTriggerBehavior Binding="{Binding Stats.CurrentStreak}"
-                        ComparisonCondition="LessThan"
-                        Value="0">
-                        <ia:ChangePropertyAction PropertyName="Classes" Value="theme-text-body danger" />
-                        </ia:DataTriggerBehavior>
-                        </i:Interaction.Behaviors>-->
-                    </SelectableTextBlock>
-                    <SelectableTextBlock Grid.Column="3" Grid.Row="5"  >
-                        <!--<i:Interaction.Behaviors>
-                        <behaviours:NumberFormatBehaviour Mask="n8" Text="{Binding Stats.ProfitPerBet, Mode=OneWay}" />
-                        <ia:DataTriggerBehavior Binding="{Binding Stats.ProfitPerBet}"
-                        ComparisonCondition="GreaterThan"
-                        Value="0">
-                        <ia:ChangePropertyAction PropertyName="Classes" Value="theme-text-body success"/>
-                        </ia:DataTriggerBehavior>
-                        <ia:DataTriggerBehavior Binding="{Binding Stats.ProfitPerBet}"
-                        ComparisonCondition="LessThan"
-                        Value="0">
-                        <ia:ChangePropertyAction PropertyName="Classes" Value="theme-text-body danger" />
-                        </ia:DataTriggerBehavior>
-                        </i:Interaction.Behaviors>-->
-                    </SelectableTextBlock>
-                    <SelectableTextBlock Grid.Column="3" Grid.Row="6" >
-                        <!--<i:Interaction.Behaviors>
-                        <behaviours:NumberFormatBehaviour Mask="n5" Text="{Binding Stats.Luck, Mode=OneWay}" />
-                        <ia:DataTriggerBehavior Binding="{Binding Stats.Luck}"
-                        ComparisonCondition="GreaterThan"
-                        Value="0">
-                        <ia:ChangePropertyAction PropertyName="Classes" Value="theme-text-body success"/>
-                        </ia:DataTriggerBehavior>
-                        <ia:DataTriggerBehavior Binding="{Binding Stats.Luck}"
-                        ComparisonCondition="LessThan"
-                        Value="0">
-                        <ia:ChangePropertyAction PropertyName="Classes" Value="theme-text-body danger" />
-                        </ia:DataTriggerBehavior>
-                        </i:Interaction.Behaviors>-->
-                    </SelectableTextBlock>
+                    <controls:ColourChangeSelTextBlock Grid.Column="1" Grid.Row="5"   >
+                        <i:Interaction.Behaviors>
+                            <behaviours:NumberFormatBehaviour Mask="n8" Text="{Binding Stats.ProfitPerHour, Mode=OneWay}"/>
+                            <ia:DataTriggerBehavior Binding="{Binding Stats.ProfitPerHour}"
+                                                    ComparisonCondition="GreaterThanOrEqual"
+                                                    Value="0">
+                                <ia:ChangePropertyAction PropertyName="SetClasses" Value="theme-text-body success"/>
+                            </ia:DataTriggerBehavior>
+                            <ia:DataTriggerBehavior Binding="{Binding Stats.ProfitPerHour}"
+                                                    ComparisonCondition="LessThan"
+                                                    Value="0">
+                                <ia:ChangePropertyAction  PropertyName="SetClasses" Value="theme-text-body danger"/>
+                            </ia:DataTriggerBehavior>
+                        </i:Interaction.Behaviors>
+                    </controls:ColourChangeSelTextBlock>
+                    <controls:ColourChangeSelTextBlock Grid.Column="1" Grid.Row="6"   >
+                        <i:Interaction.Behaviors>
+                            <behaviours:NumberFormatBehaviour Mask="n8" Text="{Binding Stats.ProfitPer24Hour, Mode=OneWay}"/>
+                            <ia:DataTriggerBehavior Binding="{Binding Stats.ProfitPer24Hour}"
+                                                    ComparisonCondition="GreaterThanOrEqual"
+                                                    Value="0">
+                                <ia:ChangePropertyAction PropertyName="SetClasses" Value="theme-text-body success"/>
+                            </ia:DataTriggerBehavior>
+                            <ia:DataTriggerBehavior Binding="{Binding Stats.ProfitPer24Hour}"
+                                                    ComparisonCondition="LessThan"
+                                                    Value="0">
+                                <ia:ChangePropertyAction PropertyName="SetClasses" Value="theme-text-body danger" />
+                            </ia:DataTriggerBehavior>
+                        </i:Interaction.Behaviors>
+                    </controls:ColourChangeSelTextBlock>
+                    <controls:ColourChangeSelTextBlock Grid.Column="3" Grid.Row="2"  >
+                        <i:Interaction.Behaviors>
+                            <behaviours:NumberFormatBehaviour Mask="n0" Text="{Binding Stats.CurrentStreak, Mode=OneWay}" />
+                            <ia:DataTriggerBehavior Binding="{Binding Stats.CurrentStreak}"
+                                                    ComparisonCondition="GreaterThanOrEqual"
+                                                    Value="0">
+                                <ia:ChangePropertyAction PropertyName="SetClasses" Value="theme-text-body success"/>
+                            </ia:DataTriggerBehavior>
+                            <ia:DataTriggerBehavior Binding="{Binding Stats.CurrentStreak}"
+                                                    ComparisonCondition="LessThan"
+                                                    Value="0">
+                                <ia:ChangePropertyAction PropertyName="SetClasses" Value="theme-text-body danger" />
+                            </ia:DataTriggerBehavior>
+                        </i:Interaction.Behaviors>
+                    </controls:ColourChangeSelTextBlock>
+                    <controls:ColourChangeSelTextBlock Grid.Column="3" Grid.Row="5"  >
+                        <i:Interaction.Behaviors>
+                            <behaviours:NumberFormatBehaviour Mask="n8" Text="{Binding Stats.ProfitPerBet, Mode=OneWay}" />
+                            <ia:DataTriggerBehavior Binding="{Binding Stats.ProfitPerBet}"
+                                                    ComparisonCondition="GreaterThanOrEqual"
+                                                    Value="0">
+                                <ia:ChangePropertyAction PropertyName="SetClasses" Value="theme-text-body success"/>
+                            </ia:DataTriggerBehavior>
+                            <ia:DataTriggerBehavior Binding="{Binding Stats.ProfitPerBet}"
+                                                    ComparisonCondition="LessThan"
+                                                    Value="0">
+                                <ia:ChangePropertyAction PropertyName="SetClasses" Value="theme-text-body danger" />
+                            </ia:DataTriggerBehavior>
+                        </i:Interaction.Behaviors>
+                    </controls:ColourChangeSelTextBlock>
+                    <controls:ColourChangeSelTextBlock Grid.Column="3" Grid.Row="6" >
+                        <i:Interaction.Behaviors>
+                            <behaviours:NumberFormatBehaviour Mask="n5" Text="{Binding Stats.Luck, Mode=OneWay}" />
+                            <ia:DataTriggerBehavior Binding="{Binding Stats.Luck}"
+                                                    ComparisonCondition="GreaterThanOrEqual"
+                                                    Value="0">
+                                <ia:ChangePropertyAction PropertyName="SetClasses" Value="theme-text-body success"/>
+                            </ia:DataTriggerBehavior>
+                            <ia:DataTriggerBehavior Binding="{Binding Stats.Luck}"
+                                                    ComparisonCondition="LessThan"
+                                                    Value="0">
+                                <ia:ChangePropertyAction PropertyName="SetClasses" Value="theme-text-body danger" />
+                            </ia:DataTriggerBehavior>
+                        </i:Interaction.Behaviors>
+                    </controls:ColourChangeSelTextBlock>
                 </Grid>
             </TabItem>
             <TabItem Header="{DynamicResource Localization.Common.SessionStats.More}">
@@ -198,21 +200,21 @@
                     <TextBlock Grid.Column="0" Grid.Row="5" Text="{DynamicResource Localization.Common.SessionStats.LargestBet}" />
                     <TextBlock Grid.Column="0" Grid.Row="6" Text="{DynamicResource Localization.Common.SessionStats.LargestWin}" />
                     <TextBlock Grid.Column="2" Grid.Row="6" Text="{DynamicResource Localization.Common.SessionStats.largestLoss}" />
-                    <SelectableTextBlock Grid.Column="1" Grid.Row="0"  >
-                        <!--<i:Interaction.Behaviors>
-                        <behaviours:NumberFormatBehaviour Mask="n5"  Text="{Binding Stats.AvgStreak, Mode=OneWay}"/>
-                        <ia:DataTriggerBehavior Binding="{Binding Stats.AvgStreak}"
-                        ComparisonCondition="GreaterThan"
-                        Value="0">
-                        <ia:ChangePropertyAction PropertyName="Classes" Value="theme-text-body success"/>
-                        </ia:DataTriggerBehavior>
-                        <ia:DataTriggerBehavior Binding="{Binding Stats.AvgStreak}"
-                        ComparisonCondition="LessThan"
-                        Value="0">
-                        <ia:ChangePropertyAction PropertyName="Classes" Value="theme-text-body danger" />
-                        </ia:DataTriggerBehavior>
-                        </i:Interaction.Behaviors>-->
-                    </SelectableTextBlock>
+                    <controls:ColourChangeSelTextBlock Grid.Column="1" Grid.Row="0"  >
+                        <i:Interaction.Behaviors>
+                            <behaviours:NumberFormatBehaviour Mask="n5"  Text="{Binding Stats.AvgStreak, Mode=OneWay}"/>
+                            <ia:DataTriggerBehavior Binding="{Binding Stats.AvgStreak}"
+                                                    ComparisonCondition="GreaterThanOrEqual"
+                                                    Value="0">
+                                <ia:ChangePropertyAction PropertyName="SetClasses" Value="theme-text-body success"/>
+                            </ia:DataTriggerBehavior>
+                            <ia:DataTriggerBehavior Binding="{Binding Stats.AvgStreak}"
+                                                    ComparisonCondition="LessThan"
+                                                    Value="0">
+                                <ia:ChangePropertyAction PropertyName="SetClasses" Value="theme-text-body danger" />
+                            </ia:DataTriggerBehavior>
+                        </i:Interaction.Behaviors>
+                    </controls:ColourChangeSelTextBlock>
                     <SelectableTextBlock Grid.Column="1" Grid.Row="1"  Classes="theme-text-body success" >
                         <i:Interaction.Behaviors>
                             <behaviours:NumberFormatBehaviour Mask="n8"  Text="{Binding Stats.AvgWin, Mode=OneWay}"/>
@@ -268,6 +270,7 @@
                             <behaviours:NumberFormatBehaviour Mask="n8"  Text="{Binding Stats.LargestLoss, Mode=OneWay}"/>
                         </i:Interaction.Behaviors>
                     </SelectableTextBlock>
+
 
                 </Grid>
             </TabItem>

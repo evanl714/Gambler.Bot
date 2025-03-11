@@ -60,7 +60,7 @@
 
 
 ### Known issues
-- [ ] *Lable colours not setting correctly
+- [x] *Lable colours not setting correctly
 - [ ] *Betamounts not set correctly when changing strategies
 - [ ] *Double check site settings
 - [ ] *reset seed caused betting to stop (this probably just needs to implemented on all of the sites?)
