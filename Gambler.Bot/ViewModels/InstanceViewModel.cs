@@ -365,6 +365,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             }
             StrategyVM?.Dispose();
             StrategyVM = tmpStrat;
+            this.RaisePropertyChanged(nameof(SelectedStrategy));
             setTitle();
         }
 

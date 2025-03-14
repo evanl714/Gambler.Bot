@@ -87,7 +87,7 @@ namespace Gambler.Bot.ViewModels.Strategies
             this.Strategy = mart;
             if (PlaceBetVM is DicePlaceBetViewModel dice)
             {
-                dice.Amount = mart.Amount;
+                dice.Amount = mart.MinBet;
                 dice.Chance = mart.Chance; 
                 dice.ShowAmount = false;
             }
