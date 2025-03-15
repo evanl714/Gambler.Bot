@@ -148,7 +148,7 @@ namespace Gambler.Bot.ViewModels.Strategies
                 PresetDiceBet tmp = BetList[tmpindex - 1];
                 BetList[tmpindex - 1] = BetList[tmpindex];
                 BetList[tmpindex] = tmp;
-                SelectedIndex = tmpindex;
+                SelectedIndex = tmpindex-1;
             }
         }
 
@@ -161,7 +161,7 @@ namespace Gambler.Bot.ViewModels.Strategies
                 PresetDiceBet tmp = BetList[tmpindex];
                 BetList[tmpindex] = BetList[tmpindex + 1];
                 BetList[tmpindex + 1] = tmp;
-                SelectedIndex = tmpindex;
+                SelectedIndex = tmpindex+1;
             }
         }
 

@@ -47,7 +47,7 @@ namespace Gambler.Bot.ViewModels.Strategies
             get => Strategy?.WinBaseMultiplier;
             set
             {
-                Strategy.BaseMultiplier = value ?? 2;
+                Strategy.WinBaseMultiplier = value ?? 2;
                 this.RaisePropertyChanged(nameof(WinMultiplier));
                 this.RaisePropertyChanged(nameof(WinPercIncrease));
             }

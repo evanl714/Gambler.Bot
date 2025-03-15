@@ -220,4 +220,17 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
            
 	
     }
+
+    private void Expander_Expanding(object? sender, Avalonia.Interactivity.CancelRoutedEventArgs e)
+    {
+        
+    }
+
+    private void Expander_Collapsing_1(object? sender, Avalonia.Interactivity.CancelRoutedEventArgs e)
+    {
+        if (e.Source == sender)
+        {
+            e.Cancel = true;
+        }
+    }
 }

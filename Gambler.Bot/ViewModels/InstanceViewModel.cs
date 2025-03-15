@@ -65,66 +65,68 @@ namespace Gambler.Bot.ViewModels
         private MediaPlayer _alarm;
 
         public InstanceViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
-{
-    GetLanguages();
-            _chime = new MediaPlayer(new Media(_libvlc, new Uri(Path.Combine(Environment.CurrentDirectory, @"Assets/Sounds/chime.wav"))));
-            _alarm = new MediaPlayer(new Media(_libvlc, new Uri(Path.Combine(Environment.CurrentDirectory, @"Assets/Sounds/alarm.wav"))));
+        {
+            GetLanguages();
+            _chime = new MediaPlayer(
+                new Media(_libvlc, new Uri(Path.Combine(Environment.CurrentDirectory, @"Assets/Sounds/chime.wav"))));
+            _alarm = new MediaPlayer(
+                new Media(_libvlc, new Uri(Path.Combine(Environment.CurrentDirectory, @"Assets/Sounds/alarm.wav"))));
             tmrStats.Interval = TimeSpan.FromSeconds(1);
-    tmrStats.Tick += TmrStats_Tick;
-    AdvancedSettingsVM = new AdvancedViewModel(_logger);
+            tmrStats.Tick += TmrStats_Tick;
+            AdvancedSettingsVM = new AdvancedViewModel(_logger);
             ConsoleVM = new ConsoleViewModel(_logger);
-    ResetSettingsVM = new ResetSettingsViewModel(_logger);
-    ChartData = new ProfitChartViewModel(_logger);
-    SiteStatsData = new SiteStatsViewModel(_logger);
-    SessionStatsData = new SessionStatsViewModel(_logger);
-    TriggersVM = new TriggersViewModel(_logger);
+            ResetSettingsVM = new ResetSettingsViewModel(_logger);
+            ChartData = new ProfitChartViewModel(_logger);
+            SiteStatsData = new SiteStatsViewModel(_logger);
+            SessionStatsData = new SessionStatsViewModel(_logger);
+            TriggersVM = new TriggersViewModel(_logger);
 
-    SessionStatsData.OnResetStats += SessionStatsData_OnResetStats;
+            SessionStatsData.OnResetStats += SessionStatsData_OnResetStats;
 
-    StartCommand = ReactiveCommand.Create(Start);
-    StopCommand = ReactiveCommand.Create(Stop);
-    ResumeCommand = ReactiveCommand.Create(Resume);
-    StopOnWinCommand = ReactiveCommand.Create(StopOnWin);
+            StartCommand = ReactiveCommand.Create(Start);
+            StopCommand = ReactiveCommand.Create(Stop);
+            ResumeCommand = ReactiveCommand.Create(Resume);
+            StopOnWinCommand = ReactiveCommand.Create(StopOnWin);
 
-    LogOutCommand = ReactiveCommand.Create(LogOut);
-    ChangeSiteCommand = ReactiveCommand.Create(ChangeSite);
-    SimulateCommand = ReactiveCommand.Create(Simulate);
+            LogOutCommand = ReactiveCommand.Create(LogOut);
+            ChangeSiteCommand = ReactiveCommand.Create(ChangeSite);
+            SimulateCommand = ReactiveCommand.Create(Simulate);
 
-    ExitCommand = ReactiveCommand.Create(Exit);
-    OpenCommand = ReactiveCommand.Create(Open);
-    SaveCommand = ReactiveCommand.Create(Save);
+            ExitCommand = ReactiveCommand.Create(Exit);
+            OpenCommand = ReactiveCommand.Create(Open);
+            SaveCommand = ReactiveCommand.Create(Save);
 
-    var tmp = new Classes.AutoBet(_logger);
-    SelectSite = new SelectSiteViewModel(_logger);
-    SelectSite.SelectedSiteChanged += SelectSite_SelectedSiteChanged;
-    IsSelectSiteViewVisible = true;
-    ShowDialog = new Interaction<LoginViewModel, LoginViewModel?>();
+            var tmp = new Classes.AutoBet(_logger);
+            SelectSite = new SelectSiteViewModel(_logger);
+            SelectSite.SelectedSiteChanged += SelectSite_SelectedSiteChanged;
+            IsSelectSiteViewVisible = true;
+            ShowDialog = new Interaction<LoginViewModel, LoginViewModel?>();
             ShowAbout = new Interaction<AboutViewModel, Unit?>();
             ShowSimulation = new Interaction<SimulationViewModel, SimulationViewModel?>();
-    ShowRollVerifier = new Interaction<RollVerifierViewModel, Unit?>();
-    ExitInteraction = new Interaction<Unit?, Unit?>();
-    ShowSettings = new Interaction<GlobalSettingsViewModel, Unit?>();
-    ShowBetHistory = new Interaction<BetHistoryViewModel, Unit?>();
+            ShowRollVerifier = new Interaction<RollVerifierViewModel, Unit?>();
+            ExitInteraction = new Interaction<Unit?, Unit?>();
+            ShowSettings = new Interaction<GlobalSettingsViewModel, Unit?>();
+            ShowBetHistory = new Interaction<BetHistoryViewModel, Unit?>();
             ShowNotification = new Interaction<INotification, Unit?>();
             ShowUserInput = new Interaction<UserInputViewModel, Unit?>();
             tmp.Strategy = new Martingale(_logger);
-    PlaceBetVM = new DicePlaceBetViewModel(_logger);
-    PlaceBetVM.PlaceBet += PlaceBetVM_PlaceBet;
-    tmp.OnGameChanged += BotIns_OnGameChanged;
-    tmp.OnNotification += BotIns_OnNotification;
-    tmp.OnSiteAction += BotIns_OnSiteAction;
-    tmp.OnSiteBetFinished += BotIns_OnSiteBetFinished;
-    tmp.OnStarted += BotIns_OnStarted;
-    tmp.OnStopped += BotIns_OnStopped;
-    tmp.OnStrategyChanged += BotIns_OnStrategyChanged;
-    tmp.OnSiteLoginFinished += BotIns_OnSiteLoginFinished;
-    tmp.OnBypassRequired += Tmp_OnBypassRequired;
-    tmp.OnSiteNotify += Tmp_OnSiteNotify;
-    tmp.OnSiteError += Tmp_OnSiteError;
-            
-    BotInstance = tmp;
-    botIns.CurrentGame = Bot.Common.Games.Games.Dice;
-}
+            PlaceBetVM = new DicePlaceBetViewModel(_logger);
+            PlaceBetVM.PlaceBet += PlaceBetVM_PlaceBet;
+            tmp.OnGameChanged += BotIns_OnGameChanged;
+            tmp.OnNotification += BotIns_OnNotification;
+            tmp.OnSiteAction += BotIns_OnSiteAction;
+            tmp.OnSiteBetFinished += BotIns_OnSiteBetFinished;
+            tmp.OnStarted += BotIns_OnStarted;
+            tmp.OnStopped += BotIns_OnStopped;
+            tmp.OnStrategyChanged += BotIns_OnStrategyChanged;
+            tmp.OnSiteLoginFinished += BotIns_OnSiteLoginFinished;
+            tmp.OnBypassRequired += Tmp_OnBypassRequired;
+            tmp.OnSiteNotify += Tmp_OnSiteNotify;
+            tmp.OnSiteError += Tmp_OnSiteError;
+            tmp.GetStrats();
+            BotInstance = tmp;
+            botIns.CurrentGame = Bot.Common.Games.Games.Dice;
+        }
 
         public List<string> Languages { get; set; }
 
@@ -189,7 +191,6 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         private void BotIns_OnNotification(object? sender, NotificationEventArgs e)
         {
-            
             switch(e.NotificationTrigger.Action)
             {
                 case TriggerAction.Alarm:
@@ -202,23 +203,23 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                     break;
                 case TriggerAction.Popup:
                     Avalonia.Controls.Notifications.Notification notification = new Avalonia.Controls.Notifications.Notification(
-                       e.NotificationTrigger.ToString(), e.NotificationTrigger.ToString(), NotificationType.Information);
-                    
+                        e.NotificationTrigger.ToString(),
+                        e.NotificationTrigger.ToString(),
+                        NotificationType.Information);
+
                     NotificationAsync(notification);
                     break;
             }
         }
-        
 
-      
-       
 
-        async Task NotificationAsync(INotification notification)
+        async Task NotificationAsync(INotification notification) { await ShowNotification.Handle(notification); }
+
+        private void BotIns_OnSiteAction(object sender, GenericEventArgs e)
         {
-            await ShowNotification.Handle(notification);
+            LastAction = e.Message;
+            ConsoleVM.AddLine(e.Message);
         }
-
-        private void BotIns_OnSiteAction(object sender, GenericEventArgs e) { LastAction = e.Message; ConsoleVM.AddLine(e.Message); }
 
         private async void BotIns_OnSiteBetFinished(object sender, BetFinisedEventArgs e)
         {
@@ -241,21 +242,21 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         void PlaySound(MediaPlayer sound)
         {
-            if (!Dispatcher.UIThread.CheckAccess())
+            if(!Dispatcher.UIThread.CheckAccess())
             {
-                Dispatcher.UIThread.Invoke(() =>
-                {
-                    PlaySound(sound);
-                });
+                Dispatcher.UIThread
+                    .Invoke(
+                        () =>
+                        {
+                            PlaySound(sound);
+                        });
             }
             try
             {
                 sound.Stop();
                 sound.Play();
-            }
-            catch (Exception ex)
+            } catch(Exception ex)
             {
-
             }
         }
 
@@ -269,7 +270,6 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             setCanStart();
             setTitle();
             tmrStats.Start();
-            
         }
 
         private void BotIns_OnStopped(object? sender, GenericEventArgs e)
@@ -339,12 +339,12 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                 tmpStrat.SetStrategy(BotInstance.Strategy);
                 tmpStrat.GameChanged(BotInstance.CurrentGame);
             }
-            if (BotInstance.Strategy is IProgrammerMode prog)
+            if(BotInstance.Strategy is IProgrammerMode prog)
             {
                 ConsoleVM.Strategy = prog;
                 prog.OnAlarm -= Prog_OnAlarm;
                 prog.OnAlarm += Prog_OnAlarm;
-                prog.OnChing -= Prog_OnChing;    
+                prog.OnChing -= Prog_OnChing;
                 prog.OnChing += Prog_OnChing;
                 prog.OnExportSim -= Prog_OnExportSim;
                 prog.OnExportSim += Prog_OnExportSim;
@@ -358,8 +358,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                 prog.OnRunSim += Prog_OnRunSim;
                 prog.OnScriptError -= Prog_OnScriptError;
                 prog.OnScriptError += Prog_OnScriptError;
-            }
-            else
+            } else
             {
                 ConsoleVM.Strategy = null;
             }
@@ -369,20 +368,16 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             setTitle();
         }
 
-        private void Prog_OnScriptError(object? sender, PrintEventArgs e)
-        {
-            ConsoleVM.AddLine(e.Message);
-        }
+        private void Prog_OnScriptError(object? sender, PrintEventArgs e) { ConsoleVM.AddLine(e.Message); }
 
         private void Prog_OnRunSim(object? sender, RunSimEventArgs e)
         {
-            if (simControl?.Running??false)
+            if(simControl?.Running ?? false)
             {
                 ConsoleVM.AddLine("Cannot start simulation, already running");
-            }
-            else
+            } else
             {
-                simControl = simControl?? new SimulationViewModel(_logger);
+                simControl = simControl ?? new SimulationViewModel(_logger);
                 simControl.Bot = BotInstance;
                 simControl.CanStart += SimControl_CanStart;
                 simControl.NumberOfBets = e.Bets;
@@ -394,63 +389,61 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         private void Prog_OnReadAdv(object? sender, ReadEventArgs e)
         {
-            using (var source = new CancellationTokenSource())
+            using(var source = new CancellationTokenSource())
             {
                 Read(e).ContinueWith(t => source.Cancel(), TaskScheduler.FromCurrentSynchronizationContext());
                 Dispatcher.UIThread.MainLoop(source.Token);
             }
         }
+
         bool WaitForInput = false;
+
         private void Prog_OnRead(object? sender, ReadEventArgs e)
         {
-            if (e.DataType == 0)
+            if(e.DataType == 0)
             {
                 e.btncanceltext = "No";
                 e.btnoktext = "Yes";
-            }
-            else
+            } else
             {
                 e.btncanceltext = "Cancel";
                 e.btnoktext = "Ok";
             }
-            using (var source = new CancellationTokenSource())
+            using(var source = new CancellationTokenSource())
             {
                 Read(e).ContinueWith(t => source.Cancel(), TaskScheduler.FromCurrentSynchronizationContext());
                 Dispatcher.UIThread.MainLoop(source.Token);
-            }   
+            }
         }
 
         public async Task Read(ReadEventArgs e)
         {
             UserInputViewModel tmp = new UserInputViewModel(_logger);
             tmp.Args = e;
-                      
+
             await ShowUserInput.Handle(tmp);
         }
 
-        private void Prog_OnPrint(object? sender, PrintEventArgs e)
-        {
-            ConsoleVM.AddLine(e.Message);
-        }
+        private void Prog_OnPrint(object? sender, PrintEventArgs e) { ConsoleVM.AddLine(e.Message); }
 
         private void Prog_OnExportSim(object? sender, ExportSimEventArgs e)
         {
-            if (simControl == null)
+            if(simControl == null)
             {
                 ConsoleVM.AddLine("No simulation to export");
                 return;
             }
-            if (simControl.Running)
+            if(simControl.Running)
             {
                 ConsoleVM.AddLine("Cannot export simulation, it is still running");
                 return;
             }
-            if (simControl.CurrentSimulation == null)
+            if(simControl.CurrentSimulation == null)
             {
                 ConsoleVM.AddLine("No simulation to export");
                 return;
             }
-            if (!simControl.Log)
+            if(!simControl.Log)
             {
                 ConsoleVM.AddLine("Cannot export simulation, log was not enabled");
                 return;
@@ -458,15 +451,9 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             simControl.Save(e.FileName);
         }
 
-        private void Prog_OnChing(object? sender, EventArgs e)
-        {
-            PlaySound(_chime);
-        }
+        private void Prog_OnChing(object? sender, EventArgs e) { PlaySound(_chime); }
 
-        private void Prog_OnAlarm(object? sender, EventArgs e)
-        {
-            PlaySound(_alarm);
-        }
+        private void Prog_OnAlarm(object? sender, EventArgs e) { PlaySound(_alarm); }
 
         void ChangeSite()
         {
@@ -490,7 +477,6 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             var tmpsite = Classes.AutoBet.Sites.FirstOrDefault(m => m.Name == tmp.Site);
             if(tmpsite != null)
             {
-                
                 ShowSites = false;
                 SiteChanged(tmpsite, tmp.Currency, tmp.Game);
             } else
@@ -540,11 +526,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
         {
             if(sender is SelectSiteViewModel selectSiteViewModel)
             {
-                SiteChanged(
-                    e,
-                    e.SelectedCurrency?.Name,
-                    e.SelectedGame?.Name,
-                    !selectSiteViewModel.BypassLogIn);
+                SiteChanged(e, e.SelectedCurrency?.Name, e.SelectedGame?.Name, !selectSiteViewModel.BypassLogIn);
             }
             if(SiteStatsData != null)
                 SiteStatsData.SiteName = botIns?.SiteName;
@@ -585,8 +567,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                 BaseStrategy newStrat = null;
                 foreach(PropertyInfo x in Props)
                 {
-                    BaseStrategy strat = (BaseStrategy)x.GetValue(
-                        Settings);
+                    BaseStrategy strat = (BaseStrategy)x.GetValue(Settings);
                     if(strat != null)
                     {
                         PropertyInfo StratNameProp = strat.GetType().GetProperty("StrategyName");
@@ -622,25 +603,32 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             {
             }
         }
+
         SimulationViewModel simControl;
+
         async Task Simulate()
         {
-            if (!(simControl?.Running ?? false))
-            { 
+            if(!(simControl?.Running ?? false))
+            {
                 simControl = new SimulationViewModel(_logger);
                 simControl.Bot = botIns;
                 simControl.CanStart += SimControl_CanStart;
                 await ShowSimulation.Handle(simControl);
-            }
-            else
+            } else
             {
-                await MessageBox.Show("There is already a simulation running. Please wait for it to finish or close the simulation window.", "Already running");
+                await MessageBox.Show(
+                    "There is already a simulation running. Please wait for it to finish or close the simulation window.",
+                    "Already running");
             }
         }
 
         private void SimControl_CanStart(object? sender, CanSimulateEventArgs e)
         {
-            e.CanSimulate = !BotInstance.Running && BotInstance.CurrentGame!=null && BotInstance.SiteName!=null && BotInstance.Strategy!=null && !(simControl?.Running??false);
+            e.CanSimulate = !BotInstance.Running &&
+                BotInstance.CurrentGame != null &&
+                BotInstance.SiteName != null &&
+                BotInstance.Strategy != null &&
+                !(simControl?.Running ?? false);
         }
 
         public async Task RollVerifier()
@@ -657,7 +645,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
         {
             botIns.SetSite(SiteName);
             if(currency != null && Array.IndexOf(botIns.Currencies, currency) >= 0)
-                botIns.CurrentCurrency =  currency;
+                botIns.CurrentCurrency = currency;
             object curGame = Bot.Common.Games.Games.Dice;
             if(game != null &&
                 Enum.TryParse(typeof(Bot.Common.Games.Games), game, out curGame) &&
@@ -666,7 +654,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             this.RaisePropertyChanged(nameof(Currencies));
             this.RaisePropertyChanged(nameof(CurrentCurrency));
             this.RaisePropertyChanged(nameof(SiteName));
-            if (showLogin)
+            if(showLogin)
                 ShowLogin();//.Wait();
             else
                 ShowSites = false;
@@ -711,7 +699,6 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                         () =>
                         {
                             Tmp_OnSiteNotify(sender, e);
-                            
                         });
             else
             {
@@ -753,12 +740,12 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
 
             //if password is available, log in.
-                                                                //do all of this async to the gui somewhow?
-                                                                }
+                                                                            //do all of this async to the gui somewhow?
+                                                                            }
 
         public void OnClosing()
         {
-            botIns.StopStrategy("Application Closing");            
+            botIns.StopStrategy("Application Closing");
             botIns.Disconnect();
             if(!UISettings.Resetting)
             {
@@ -770,7 +757,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         internal async Task Loaded()
         {
-            botIns.GetStrats();
+            //botIns.GetStrats();
             this.RaisePropertyChanged(nameof(Strategies));
             if(UISettings.Portable)
             {
@@ -794,6 +781,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
         }
 
         public AdvancedViewModel AdvancedSettingsVM { get; set; }// = new AdvancedViewModel();
+
         public ConsoleViewModel ConsoleVM { get; set; }// = new AdvancedViewModel();
 
         public Classes.AutoBet? BotInstance
@@ -913,6 +901,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
         public ICommand SaveCommand { get; }
 
         public IEnumerable<string> Strategies { get { return BotInstance?.Strategies?.Keys; } }
+
         public string SelectedStrategy
         {
             get { return BotInstance?.Strategy?.StrategyName; }
@@ -937,6 +926,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
         }
 
         public Interaction<LoginViewModel, LoginViewModel?> ShowDialog { get; }
+
         public Interaction<AboutViewModel, Unit?> ShowAbout { get; }
 
         public bool ShowLiveBets
@@ -951,12 +941,8 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         public Interaction<SimulationViewModel, SimulationViewModel?> ShowSimulation { get; }
 
-        
 
-        public string SiteName
-        {
-            get { return BotInstance?.SiteName ??"Site"; }
-        }
+        public string SiteName { get { return BotInstance?.SiteName ?? "Site"; } }
 
         public bool ShowSites
         {
@@ -1055,7 +1041,9 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
         public Interaction<GlobalSettingsViewModel, Unit?> ShowSettings { get; internal set; }
 
         public Interaction<BetHistoryViewModel, Unit?> ShowBetHistory { get; internal set; }
+
         public Interaction<INotification, Unit?> ShowNotification { get; internal set; }
+
         public Interaction<UserInputViewModel, Unit?> ShowUserInput { get; internal set; }
 
         public void ThemeToggled()
@@ -1080,8 +1068,8 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             var result = await MessageBox.Show(
                 @"Are you sure you want to reset Gambler.Bot to its default settings?
 
-This will clear your bet settings, interface settings and personal settings.
-It will not delete or clear your bet history and it will not delete any programmer mode scripts from your computer.",
+                                                                                                This will clear your bet settings, interface settings and personal settings.
+                                                                                                It will not delete or clear your bet history and it will not delete any programmer mode scripts from your computer.",
                 "Reset Gambler.Bot to default",
                 MessageBoxButtons.YesNo);
             if(result == MessageBoxResult.Yes)
@@ -1101,9 +1089,6 @@ It will not delete or clear your bet history and it will not delete any programm
             }
         }
 
-        public async Task AboutClicked()
-        {
-            await ShowAbout.Handle(new AboutViewModel(_logger));
-        }
+        public async Task AboutClicked() { await ShowAbout.Handle(new AboutViewModel(_logger)); }
     }
 }

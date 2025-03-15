@@ -8,6 +8,7 @@
              x:DataType="vm:LabouchereViewModel"
              x:Class="Gambler.Bot.Views.Games.Strategies.Labouchere.LabouchereView"
              xmlns:system="using:System"
+             xmlns:i="https://github.com/projektanker/icons.avalonia"
              >
     <Grid ColumnDefinitions="*,*">
         <StackPanel Margin="5" Grid.Column="0">
@@ -23,9 +24,9 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="system:Decimal">
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Content="R" Command="{Binding $parent[DataGrid].((vm:LabouchereViewModel)DataContext).RemoveCommand}" />
-                                    <Button Content="U" Command="{Binding $parent[DataGrid].((vm:LabouchereViewModel)DataContext).MoveUpCommand}"/>
-                                    <Button Content="D" Command="{Binding $parent[DataGrid].((vm:LabouchereViewModel)DataContext).MoveDownCommand}"/>
+                                    <Button i:Attached.Icon="mdi-delete"  Command="{Binding $parent[DataGrid].((vm:LabouchereViewModel)DataContext).RemoveCommand}" />
+                                    <Button i:Attached.Icon="mdi-arrow-up-bold"  Command="{Binding $parent[DataGrid].((vm:LabouchereViewModel)DataContext).MoveUpCommand}"/>
+                                    <Button i:Attached.Icon="mdi-arrow-down-bold" Command="{Binding $parent[DataGrid].((vm:LabouchereViewModel)DataContext).MoveDownCommand}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

@@ -29,7 +29,7 @@ namespace Gambler.Bot.ViewModels.Strategies
         public iPlaceBet PlaceBetVM
         {
             get { return _placeBetVM; }
-            set { _placeBetVM = value; this.RaisePropertyChanged(); }
+            set { _placeBetVM = value; SyncStartControl(); this.RaisePropertyChanged(); }
         }
 
 
@@ -69,7 +69,7 @@ namespace Gambler.Bot.ViewModels.Strategies
             switch (e.PropertyName)
             {
                 case "Amount":
-                    Strategy.Amount = (decimal)value;
+                    Strategy.MinBet = (decimal)value;
                     break;
                 case "Chance":
                     Strategy.Chance = (decimal)value;
@@ -85,16 +85,27 @@ namespace Gambler.Bot.ViewModels.Strategies
                 throw new ArgumentException("Must be martingale to use thise viewmodel");
 
             this.Strategy = mart;
+            SyncStartControl();
+        }
+
+        void SyncStartControl()
+        {
             if (PlaceBetVM is DicePlaceBetViewModel dice)
             {
-                dice.Amount = mart.MinBet;
-                dice.Chance = mart.Chance; 
-                dice.ShowAmount = false;
+                dice.Amount = Strategy.MinBet;
+                dice.Chance = Strategy.Chance;
+                //dice.ShowAmount = false;
             }
         }
         public void Saving()
         {
+            if (PlaceBetVM is DicePlaceBetViewModel dice)
+            {
+                Strategy.MinBet = dice.Amount;
 
+                Strategy.Chance = dice.Chance;
+
+            }
         }
         public bool TopAlign()
         {

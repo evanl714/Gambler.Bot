@@ -160,40 +160,48 @@
                         <TabControl>
                             <TabItem Header="{DynamicResource Localization.Common.Strategy}">
                                 <DockPanel>
-                                    <ComboBox DockPanel.Dock="Top" ItemsSource="{Binding Strategies}" SelectedItem="{Binding SelectedStrategy}" IsEnabled="{Binding Stopped}" >
+                                    <Expander Margin="2"  IsExpanded="True" Expanding="Expander_Expanding" Collapsing="Expander_Collapsing_1" Header="{Binding}"  >
+                                        <Expander.HeaderTemplate>
+                                            <DataTemplate x:DataType="vm:InstanceViewModel">
+                                                <Grid>
+                                                    <ComboBox DockPanel.Dock="Top" ItemsSource="{Binding Strategies}" SelectedItem="{Binding SelectedStrategy}" IsEnabled="{Binding Stopped}" >
 
-                                    </ComboBox>
-                                    <ContentControl Content="{Binding StrategyVM}" VerticalAlignment="Stretch">
-                                        <ContentControl.DataTemplates>
-                                            <DataTemplate DataType="stratVM:MartingaleViewModel">
-                                                <mart:MartingaleView/>
+                                                    </ComboBox>
+                                                </Grid>
                                             </DataTemplate>
-                                            <DataTemplate DataType="stratVM:DAlembertViewModel">
-                                                <dalembert:DAlembertView/>
-                                            </DataTemplate>
-                                            <DataTemplate DataType="stratVM:FibonacciViewModel">
-                                                <fibonacci:FibonacciView/>
-                                            </DataTemplate>
-                                            <DataTemplate DataType="stratVM:LabouchereViewModel">
-                                                <labouchere:LabouchereView/>
-                                            </DataTemplate>
-                                            <DataTemplate DataType="stratVM:PresetListViewModel">
-                                                <presetlist:PresetListView/>
-                                            </DataTemplate>
-                                            <DataTemplate DataType="stratVM:ProgrammerModeCSViewModel">
-                                                <strat:ProgrammerModeCSView/>
-                                            </DataTemplate>
-                                            <DataTemplate DataType="stratVM:ProgrammerModeLUAViewModel">
-                                                <strat:ProgrammerModeLuaView/>
-                                            </DataTemplate>
-                                            <DataTemplate DataType="stratVM:ProgrammerModeJSViewModel">
-                                                <strat:ProgrammerModeJSView/>
-                                            </DataTemplate>
-                                            <DataTemplate DataType="stratVM:ProgrammerModePYViewModel">
-                                                <strat:ProgrammerModePyView/>
-                                            </DataTemplate>
-                                        </ContentControl.DataTemplates>
-                                    </ContentControl>
+                                        </Expander.HeaderTemplate>
+                                        <ContentControl Content="{Binding StrategyVM}" VerticalAlignment="Stretch">
+                                            <ContentControl.DataTemplates>
+                                                <DataTemplate DataType="stratVM:DAlembertViewModel">
+                                                    <dalembert:DAlembertView/>
+                                                </DataTemplate>
+                                                <DataTemplate DataType="stratVM:MartingaleViewModel">
+                                                    <mart:MartingaleView/>
+                                                </DataTemplate>
+                                                <DataTemplate DataType="stratVM:FibonacciViewModel">
+                                                    <fibonacci:FibonacciView/>
+                                                </DataTemplate>
+                                                <DataTemplate DataType="stratVM:LabouchereViewModel">
+                                                    <labouchere:LabouchereView/>
+                                                </DataTemplate>
+                                                <DataTemplate DataType="stratVM:PresetListViewModel">
+                                                    <presetlist:PresetListView/>
+                                                </DataTemplate>
+                                                <DataTemplate DataType="stratVM:ProgrammerModeCSViewModel">
+                                                    <strat:ProgrammerModeCSView/>
+                                                </DataTemplate>
+                                                <DataTemplate DataType="stratVM:ProgrammerModeLUAViewModel">
+                                                    <strat:ProgrammerModeLuaView/>
+                                                </DataTemplate>
+                                                <DataTemplate DataType="stratVM:ProgrammerModeJSViewModel">
+                                                    <strat:ProgrammerModeJSView/>
+                                                </DataTemplate>
+                                                <DataTemplate DataType="stratVM:ProgrammerModePYViewModel">
+                                                    <strat:ProgrammerModePyView/>
+                                                </DataTemplate>
+                                            </ContentControl.DataTemplates>
+                                        </ContentControl>
+                                    </Expander>
                                 </DockPanel>
                             </TabItem>
                             <TabItem Header="{DynamicResource Localization.Common.ResetSettings}">

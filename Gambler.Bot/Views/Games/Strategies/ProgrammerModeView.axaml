@@ -11,15 +11,17 @@
              xmlns:behaviours="using:Gambler.Bot.Behaviours"
              >
     <Grid Grid.RowDefinitions="auto,auto,*">
-
-        <TextBox Text="{Binding fileName}" Grid.Row="0"/>
-        <StackPanel Orientation="Horizontal"  Grid.Row="1">
+        <Grid ColumnDefinitions="auto,*" Grid.Row="0" Margin="3">
+            <Label Grid.Column="0" VerticalAlignment="Center" Margin="3" >File: </Label>
+            <TextBox Grid.Column="1" Text="{Binding fileName}"  />
+        </Grid>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  Grid.Row="1" Margin="3">
             <Button Content="{DynamicResource Localization.Strategy.Programmer.New}" Command="{Binding NewCommand}"/>
             <Button Content="{DynamicResource Localization.Strategy.Labouchere.Open}" Command="{Binding OpenCommand}"/>
             <Button Content="{DynamicResource Localization.InstanceView.Menu.Save}" Command="{Binding SaveCommand}"/>
             <Button Content="{DynamicResource Localization.Strategy.Programmer.SaveAs}" Command="{Binding SaveAsCommand}"/>
         </StackPanel>
-        <avaloniaedit:TextEditor Name="Editor" MinHeight="500" VerticalAlignment="Stretch"
+        <avaloniaedit:TextEditor Name="Editor" MinHeight="300" VerticalAlignment="Stretch"
                                  HorizontalAlignment="Stretch"
                                  ShowLineNumbers="True"
                                  HorizontalScrollBarVisibility="Auto"

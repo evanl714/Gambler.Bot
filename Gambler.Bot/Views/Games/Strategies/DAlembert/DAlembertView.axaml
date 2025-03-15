@@ -27,9 +27,9 @@
             </Expander.HeaderTemplate>
             <Grid RowDefinitions="*,*" ColumnDefinitions="*,*">
                 <TextBlock Text="{DynamicResource Localization.Strategy.DAlembert.Increment}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                <NumericUpDown Value="{Binding Strategy.AlembertIncrementLoss}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" FormatString="n5"/>
+                <NumericUpDown Value="{Binding Strategy.AlembertIncrementLoss}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" FormatString="n8"/>
                 <TextBlock Text="{DynamicResource Localization.Strategy.DAlembert.Stretch}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
-                <NumericUpDown Value="{Binding Strategy.AlembertStretchLoss}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" FormatString="n5"/>
+                <NumericUpDown Value="{Binding Strategy.AlembertStretchLoss}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" FormatString="n0"/>
             </Grid>
 
         </Expander>
@@ -43,9 +43,9 @@
             </Expander.HeaderTemplate>
             <Grid RowDefinitions="*,*" ColumnDefinitions="*,*">
                 <TextBlock Text="{DynamicResource Localization.Strategy.DAlembert.Increment}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                <NumericUpDown Value="{DynamicResource Localization.Strategy.DAlembert.Increment}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" FormatString="n5"/>
+                <NumericUpDown Value="{Binding Strategy.AlembertIncrementWin}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" FormatString="n8"/>
                 <TextBlock Text="{DynamicResource Localization.Strategy.DAlembert.Stretch}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
-                <NumericUpDown Value="{Binding Strategy.AlembertStretchWin}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" FormatString="n5"/>
+                <NumericUpDown  Value="{Binding Strategy.AlembertStretchWin}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" FormatString="n0"/>
             </Grid>
 
         </Expander>

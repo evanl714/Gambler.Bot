@@ -8,6 +8,7 @@
              xmlns:dice="using:Gambler.Bot.Views.Games.Dice"
              x:DataType="vm:PresetListViewModel"
              xmlns:system="using:System"
+             xmlns:i="https://github.com/projektanker/icons.avalonia"
              >
     <StackPanel Orientation="Vertical">
 
@@ -17,19 +18,19 @@
             <Button HorizontalAlignment="Right"  Command="{Binding SaveCommand}" Content="{DynamicResource Localization.InstanceView.Menu.Save}"/>
         </StackPanel>
 
-        <DataGrid ItemsSource="{Binding BetList}" MinHeight="200">
+        <DataGrid ItemsSource="{Binding BetList}" SelectedIndex="{Binding SelectedIndex}" MinHeight="200">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="{DynamicResource Localization.Game.Amount}" Binding="{Binding Amount}"></DataGridTextColumn>
-                <DataGridTextColumn Header="{DynamicResource Localization.Games.Dice.High}" Binding="{Binding High}"></DataGridTextColumn>
-                <DataGridTextColumn Header="{DynamicResource Localization.Strategy.Preset.Switch}" Binding="{Binding Switch}"></DataGridTextColumn>
+                <DataGridCheckBoxColumn Header="{DynamicResource Localization.Games.Dice.High}" IsThreeState="True" Binding="{Binding High}"></DataGridCheckBoxColumn>
+                <DataGridCheckBoxColumn Header="{DynamicResource Localization.Strategy.Preset.Switch}" Binding="{Binding Switch}"></DataGridCheckBoxColumn>
                 <DataGridTextColumn Header="{DynamicResource Localization.Games.Dice.Chance}" Binding="{Binding Chance}"></DataGridTextColumn>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate >
                             <StackPanel Orientation="Horizontal">
-                                <Button Content="R" Command="{Binding $parent[DataGrid].((vm:LabouchereViewModel)DataContext).RemoveCommand}" />
-                                <Button Content="U" Command="{Binding $parent[DataGrid].((vm:LabouchereViewModel)DataContext).MoveUpCommand}"/>
-                                <Button Content="D" Command="{Binding $parent[DataGrid].((vm:LabouchereViewModel)DataContext).MoveDownCommand}"/>
+                                <Button i:Attached.Icon="mdi-delete" Command="{Binding $parent[DataGrid].((vm:PresetListViewModel)DataContext).RemoveCommand}" />
+                                <Button i:Attached.Icon="mdi-arrow-up-bold" Command="{Binding $parent[DataGrid].((vm:PresetListViewModel)DataContext).MoveUpCommand}"/>
+                                <Button i:Attached.Icon="mdi-arrow-down-bold" Command="{Binding $parent[DataGrid].((vm:PresetListViewModel)DataContext).MoveDownCommand}"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

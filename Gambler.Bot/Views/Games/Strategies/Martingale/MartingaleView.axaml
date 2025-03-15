@@ -84,7 +84,7 @@
                                 <TextBlock Text="{DynamicResource Localization.Strategy.Martingale.Multiplier}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
                                 <NumericUpDown Value="{Binding WinMultiplier}" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" FormatString="n5"/>
                                 <TextBlock Text="{DynamicResource Localization.Strategy.Martingale.PercIncrease}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
-                                <NumericUpDown Value="{Binding WinPercIncrease}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" FormatString="p5"/>
+                                <NumericUpDown Value="{Binding WinPercIncrease}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" FormatString="n5"/>
                                 <TextBlock Text="%" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center"/>
                                 <TextBlock  Text="{DynamicResource Localization.Strategy.Martingale.MultiplyMode}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
                                 <ComboBox ItemsSource="{Binding MultiplierModes}" SelectedValue="{Binding WinMultiMode}" Grid.Row="2"  Grid.ColumnSpan="2" Grid.Column="1" HorizontalAlignment="Stretch"/>

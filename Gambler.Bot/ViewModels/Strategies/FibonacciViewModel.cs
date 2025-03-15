@@ -29,7 +29,7 @@ namespace Gambler.Bot.ViewModels.Strategies
         public iPlaceBet PlaceBetVM
         {
             get { return _placeBetVM; }
-            set { _placeBetVM = value; this.RaisePropertyChanged(); }
+            set { _placeBetVM = value; SyncStartControl(); this.RaisePropertyChanged(); }
         }
 
 
@@ -60,7 +60,15 @@ namespace Gambler.Bot.ViewModels.Strategies
                 notify2.PropertyChanged += Notify2_PropertyChanged;
             }
         }
-
+        void SyncStartControl()
+        {
+            if (PlaceBetVM is DicePlaceBetViewModel dice)
+            {
+                dice.Amount = Strategy.minbet;
+                dice.Chance = Strategy.Chance;
+                //dice.ShowAmount = false;
+            }
+        }
         private void Notify2_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(e.PropertyName))

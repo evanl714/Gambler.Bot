@@ -31,7 +31,7 @@ namespace Gambler.Bot.ViewModels.Strategies
         public iPlaceBet PlaceBetVM
         {
             get { return _placeBetVM; }
-            set { _placeBetVM = value; this.RaisePropertyChanged(); }
+            set { _placeBetVM = value; SyncStartControl(); this.RaisePropertyChanged(); }
         }
 
         private ObservableCollection<LabListItem> _betList;
@@ -109,12 +109,7 @@ namespace Gambler.Bot.ViewModels.Strategies
                 throw new ArgumentException("Must be martingale to use thise viewmodel");
 
             this.Strategy = mart;
-            if (PlaceBetVM is DicePlaceBetViewModel dice)
-            {
-                dice.Amount = mart.Amount;
-                dice.Chance = mart.Chance;
-                dice.ShowAmount = false;
-            }
+            SyncStartControl();
             BetList = new ObservableCollection<LabListItem>(mart.BetList.Select(x=> new LabListItem(_logger) { Item=x }));
         }
         public void Saving()
@@ -124,6 +119,15 @@ namespace Gambler.Bot.ViewModels.Strategies
         public bool TopAlign()
         {
             return true;
+        }
+        void SyncStartControl()
+        {
+            if (PlaceBetVM is DicePlaceBetViewModel dice)
+            {
+                //dice.Amount = Strategy.MinBet;
+                dice.Chance = Strategy.Chance;
+                dice.ShowAmount = false;
+            }
         }
 
         public ICommand MoveUpCommand { get; set; }
