@@ -19,6 +19,7 @@
              xmlns:presetlist="using:Gambler.Bot.Views.Games.Strategies.PresetList"
              Tag="{Binding}"
              xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+             xmlns:i="https://github.com/projektanker/icons.avalonia"
              >
 
     <Grid>
@@ -152,10 +153,30 @@
                     </Grid>
                     <DockPanel Grid.Column="2" Grid.RowSpan="3" >
                         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Button Margin="5" Command="{Binding StartCommand}" IsEnabled="{Binding CanStart}">Start</Button>
-                            <Button Margin="5"  Command="{Binding ResumeCommand}" IsEnabled="{Binding CanResume}">Resume</Button>
-                            <Button Margin="5" Command="{Binding StopCommand}" >Stop</Button>
-                            <Button Margin="5" Command="{Binding StopOnWinCommand}" IsEnabled="{Binding Running}">Stop On Win</Button>
+                            <Button Margin="5" Command="{Binding StartCommand}" IsEnabled="{Binding CanStart}">
+                                <StackPanel Orientation="Horizontal">
+                                    <i:Icon Value="mdi-play" />
+                                    <TextBlock Text="Start"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Margin="5" i:Attached.Icon="mdi-replay" Command="{Binding ResumeCommand}" IsEnabled="{Binding CanResume}">
+                                <StackPanel Orientation="Horizontal">
+                                    <i:Icon Value="mdi-replay" />
+                                    <TextBlock Text="Resume"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Margin="5" i:Attached.Icon="mdi-stop" Command="{Binding StopCommand}" >
+                                <StackPanel Orientation="Horizontal">
+                                    <i:Icon Value="mdi-stop" />
+                                    <TextBlock Text="Stop"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Margin="5" i:Attached.Icon="mdi-stop-circle-outline" Command="{Binding StopOnWinCommand}" IsEnabled="{Binding Running}">
+                                <StackPanel Orientation="Horizontal">
+                                    <i:Icon Value="mdi-stop-circle-outline" />
+                                    <TextBlock Text="Stop on win"/>
+                                </StackPanel>
+                            </Button>
                         </StackPanel>
                         <TabControl>
                             <TabItem Header="{DynamicResource Localization.Common.Strategy}">

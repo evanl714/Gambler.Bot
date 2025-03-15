@@ -227,4 +227,5 @@
 
             <system:String x:Key="Localization.Strategy.Programmer.New">New</system:String>
             <system:String x:Key="Localization.Strategy.Programmer.SaveAs">Save as</system:String>
+            <system:String x:Key="Localization.Strategy.Programmer.FileName">File: </system:String>
         </ResourceDictionary>

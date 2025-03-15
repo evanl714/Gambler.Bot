@@ -2,6 +2,7 @@
 using Avalonia.Xaml.Interactivity;
 using AvaloniaEdit;
 using AvaloniaEdit.TextMate;
+using Gambler.Bot.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,16 +42,33 @@ namespace Gambler.Bot.Behaviours
 
             if (AssociatedObject is TextEditor textEditor)
             {
-                
 
+                
                 _textEditor = textEditor;
                 _registryOptions = new RegistryOptions(ThemeName.DarkPlus);
                 //Initial setup of TextMate.
                 _textMateInstallation = _textEditor.InstallTextMate(_registryOptions);
+                if (UISettings.Settings?.DarkMode??true)
+                    _textMateInstallation?.SetTheme(_registryOptions.LoadTheme(ThemeName.Dark));
+                else
+                    _textMateInstallation?.SetTheme(_registryOptions.LoadTheme(ThemeName.Light));
                 _textEditor.TextChanged += TextChanged;
-
+                
                 this.GetObservable(TextProperty).Subscribe(TextPropertyChanged);
                 this.GetObservable(LanguageProperty).Subscribe(LanguagePropertyChanged);
+                UISettings.Settings.PropertyChanged += Settings_PropertyChanged;
+            }
+        }
+
+        private void Settings_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(UISettings.DarkMode))
+            {
+                if (UISettings.Settings?.DarkMode ?? true)
+                    _textMateInstallation?.SetTheme(_registryOptions.LoadTheme(ThemeName.Dark));
+                else
+                    _textMateInstallation?.SetTheme(_registryOptions.LoadTheme(ThemeName.Light));
+                
             }
         }
 
@@ -62,6 +80,7 @@ namespace Gambler.Bot.Behaviours
             {
                 _textEditor.TextChanged -= TextChanged;
             }
+            UISettings.Settings.PropertyChanged -= Settings_PropertyChanged;
         }
 
         private void TextChanged(object sender, EventArgs eventArgs)
