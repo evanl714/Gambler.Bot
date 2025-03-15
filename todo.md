@@ -61,7 +61,7 @@
 
 ### Known issues
 - [x] *Lable colours not setting correctly
-- [ ] *Betamounts not set correctly when changing strategies
+- [x] *Betamounts not set correctly when changing strategies
 - [ ] *Double check site settings
 - [ ] *reset seed caused betting to stop (this probably just needs to implemented on all of the sites?)
 - [x] *SiteDetails and SiteStats class are not defined before until we do a first bet
