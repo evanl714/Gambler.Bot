@@ -14,6 +14,7 @@ namespace Gambler.Bot.Classes.BetsPanel
     {
 
         event EventHandler<PlaceBetEventArgs> PlaceBet;
+        void BetCommand();
     }
 
     public interface iBetResult

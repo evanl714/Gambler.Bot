@@ -7,8 +7,11 @@
              x:DataType="vm:InstanceViewModel"
              xmlns:vm="using:Gambler.Bot.ViewModels"
              xmlns:local="using:Gambler.Bot.Views"
-             xmlns:common="using:Gambler.Bot.Views.Common" xmlns:dice="using:Gambler.Bot.Views.Games.Dice"
+             xmlns:common="using:Gambler.Bot.Views.Common"
+             xmlns:dice="using:Gambler.Bot.Views.Games.Dice"
+             xmlns:limbo="using:Gambler.Bot.Views.Games.Limbo"
              xmlns:diceVM="using:Gambler.Bot.ViewModels.Games.Dice"
+             xmlns:limboVM="using:Gambler.Bot.ViewModels.Games.Limbo"
              xmlns:stratVM="using:Gambler.Bot.ViewModels.Strategies"
              xmlns:strat="using:Gambler.Bot.Views.Games.Strategies"
              xmlns:system="using:System"
@@ -146,7 +149,9 @@
                                 <DataTemplate DataType="diceVM:DiceLiveBetViewModel">
                                     <dice:DiceLiveBetView/>
                                 </DataTemplate>
-
+                                <DataTemplate DataType="limboVM:LimboLiveBetViewModel">
+                                    <limbo:LimboLiveBetView/>
+                                </DataTemplate>
                             </ContentControl.DataTemplates>
                         </ContentControl>
 
@@ -236,14 +241,19 @@
                             </TabItem>
 
                             <TabItem Header="{DynamicResource Localization.Common.Manual}">
-                                <ContentControl Content="{Binding PlaceBetVM}" VerticalAlignment="Top">
-                                    <ContentControl.DataTemplates>
-                                        <DataTemplate DataType="diceVM:DicePlaceBetViewModel">
-                                            <dice:DicePlaceBetView/>
-                                        </DataTemplate>
+                                <Grid RowDefinitions="auto,auto">
 
-                                    </ContentControl.DataTemplates>
-                                </ContentControl>
+
+                                    <ContentControl Grid.Row="0" Content="{Binding PlaceBetVM}" VerticalAlignment="Top">
+                                        <ContentControl.DataTemplates>
+                                            <DataTemplate DataType="diceVM:DicePlaceBetViewModel">
+                                                <dice:DicePlaceBetView/>
+                                            </DataTemplate>
+
+                                        </ContentControl.DataTemplates>
+                                    </ContentControl>
+                                    <Button Grid.Row="1" Content="Place Bet" HorizontalAlignment="Right" Command="{Binding ManualBetCommand}"/>
+                                </Grid>
                             </TabItem>
                             <TabItem Header="{DynamicResource Localization.Common.Console}">
                                 <common:ConsoleView DataContext="{Binding ConsoleVM}"/>

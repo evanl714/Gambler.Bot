@@ -29,10 +29,8 @@
         <Grid Grid.Column="1" Grid.Row="3" ColumnDefinitions="*,Auto,Auto" IsVisible="{Binding ShowAmount}">
             <NumericUpDown   Value="{Binding Profit}" Minimum="0" Maximum="9999999999" Grid.Column="0" FormatString="n8"/>
         </Grid>
-        <Button IsVisible="{Binding ShowButton}"  Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" Content="Bet High" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalAlignment="Stretch" Command="{Binding BetHighCommand}"/>
-        <Button IsVisible="{Binding ShowButton}"  Grid.Column="2" Grid.Row="2" Grid.RowSpan="2" Content="Bet Low" VerticalContentAlignment="Center" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Command="{Binding BetLowCommand}"/>
-        <ToggleButton IsChecked="{Binding HighChecked}" IsVisible="{Binding ShowToggle}" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" Content="{DynamicResource Localization.Games.Dice.BetHigh}" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalAlignment="Stretch" Command="{Binding BetHighCommand}"/>
-        <ToggleButton IsChecked="{Binding LowChecked}" IsVisible="{Binding ShowToggle}" Grid.Column="2" Grid.Row="2" Grid.RowSpan="2" Content="{DynamicResource Localization.Games.Dice.BetLow}" VerticalContentAlignment="Center" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Command="{Binding BetLowCommand}"/>
+        <ToggleButton IsChecked="{Binding HighChecked}" IsVisible="{Binding ShowHighLow}" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" Content="{DynamicResource Localization.Games.Dice.BetHigh}" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalAlignment="Stretch" />
+        <ToggleButton IsChecked="{Binding LowChecked}" IsVisible="{Binding ShowHighLow}" Grid.Column="2" Grid.Row="2" Grid.RowSpan="2" Content="{DynamicResource Localization.Games.Dice.BetLow}" VerticalContentAlignment="Center" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
 
     </Grid>
 </UserControl>

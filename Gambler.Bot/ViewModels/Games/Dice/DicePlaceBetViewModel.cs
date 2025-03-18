@@ -32,7 +32,15 @@ namespace Gambler.Bot.ViewModels.Games.Dice
             set { _highChecked = value; this.RaisePropertyChanged(); this.RaisePropertyChanged(nameof(LowChecked)); }
         }
 
-       
+        private bool showHighLow=true;
+
+        public bool ShowHighLow
+        {
+            get { return showHighLow; }
+            set { showHighLow = value; this.RaisePropertyChanged(); this.RaisePropertyChanged(nameof(ShowButton)); this.RaisePropertyChanged(nameof(ShowToggle)); }
+        }
+
+
 
         public bool LowChecked
         {
@@ -172,11 +180,11 @@ namespace Gambler.Bot.ViewModels.Games.Dice
 
         public bool ShowToggle
         {
-            get { return showToggle; }
+            get { return showToggle && showHighLow; }
             set { showToggle = value; this.RaisePropertyChanged();this.RaisePropertyChanged(nameof(ShowButton)); }
         }
 
-        public bool ShowButton { get=>!ShowToggle; }
+        public bool ShowButton { get=>!ShowToggle && showHighLow; }
 
         public event EventHandler<PlaceBetEventArgs> PlaceBet;
 
@@ -192,6 +200,11 @@ namespace Gambler.Bot.ViewModels.Games.Dice
         private void BetLow()
         {
             Bet(false);
+        }
+
+        public void BetCommand()
+        {
+            Bet(HighChecked);
         }
     }
 }

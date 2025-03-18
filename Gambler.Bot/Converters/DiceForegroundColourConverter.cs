@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
+using Gambler.Bot.Common.Games;
 using Gambler.Bot.Common.Games.Dice;
 using Gambler.Bot.Core.Sites;
 using System;
@@ -54,6 +55,14 @@ namespace Gambler.Bot.Converters
                     
                     
                 }
+            }
+            else if (values[0] is Bet bbet)
+            {
+                if (bbet.IsWin)
+                    resource = ThemeResourceKind.ControlBackgroundBrushSoftSuccess.ToResourceKey();
+                else
+                    resource = ThemeResourceKind.ControlBackgroundBrushSoftWarningPressed.ToResourceKey();
+
             }
             if (Application.Current.TryFindResource(resource, App.Current.ActualThemeVariant, out object brush))
             {

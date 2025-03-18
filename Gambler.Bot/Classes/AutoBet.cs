@@ -1,4 +1,5 @@
-﻿using Gambler.Bot.Common.Enums;
+﻿using DryIoc.ImTools;
+using Gambler.Bot.Common.Enums;
 using Gambler.Bot.Common.Events;
 using Gambler.Bot.Common.Games;
 using Gambler.Bot.Common.Games.Dice;
@@ -240,7 +241,15 @@ namespace Gambler.Bot.Classes
                     baseSite.RegisterFinished += BaseSite_RegisterFinished;
                     baseSite.StatsUpdated += BaseSite_StatsUpdated;
                     baseSite.OnBrowserBypassRequired += BaseSite_OnBrowserBypassRequired;
-                    
+                    int tmpcurrency = baseSite.Currencies.IndexOf(x=>x.ToLower() == CurrentCurrency.ToLower());
+                    if (tmpcurrency < 0)
+                    {
+                        CurrentCurrency = baseSite.Currencies.First();
+                    }
+                    else
+                    {
+                        CurrentCurrency = baseSite.Currencies[tmpcurrency];
+                    }
                     if (!new List<Games>(baseSite.SupportedGames).Contains(CurrentGame))
                     {
                         CurrentGame = baseSite.SupportedGames[0];
@@ -249,7 +258,7 @@ namespace Gambler.Bot.Classes
                 }
                 if (Strategy is IProgrammerMode prog)
                 {
-                    prog.UpdateSite(CopyHelper.CreateCopy<SiteDetails>(baseSite.SiteDetails));
+                    prog.UpdateSite(baseSite.SiteDetails);//CopyHelper.CreateCopy<SiteDetails>(baseSite.SiteDetails));
                 }
             }
         }
@@ -329,7 +338,7 @@ namespace Gambler.Bot.Classes
                             StopStrategy(be.Type.ToString() + " error occurred - Set to stop.");
                             break;
                         case ErrorActions.Reset:
-                            NextBext = (Strategy.RunReset());
+                            NextBext = (Strategy.RunReset(CurrentGame));
                             CalculateNextBet();
                             break;
                         case ErrorActions.Resume:
@@ -369,7 +378,7 @@ namespace Gambler.Bot.Classes
                             {
                                 if (Retries <= PersonalSettings.RetryAttempts)
                                 {
-                                    NextBext = (Strategy.RunReset());
+                                    NextBext = (Strategy.RunReset(CurrentGame));
                                     Thread.Sleep(PersonalSettings.RetryDelay);
                                     Retries++;
                                     CalculateNextBet();
@@ -402,7 +411,7 @@ namespace Gambler.Bot.Classes
                                 {
                                     if (Retries <= PersonalSettings.RetryAttempts)
                                     {
-                                        NextBext = (Strategy.RunReset());
+                                        NextBext = (Strategy.RunReset(CurrentGame));
                                         Thread.Sleep(PersonalSettings.RetryDelay);
                                         Retries++;
                                         if (Running)
@@ -530,7 +539,7 @@ namespace Gambler.Bot.Classes
                         prog.CreateRuntime();
                         if (CurrentSite != null)
                         {
-                            prog.UpdateSite(CopyHelper.CreateCopy<SiteDetails>(CurrentSite.SiteDetails));
+                            prog.UpdateSite(CurrentSite.SiteDetails);
                             prog.UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
                             prog.UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
                         }
@@ -610,7 +619,7 @@ namespace Gambler.Bot.Classes
 
         private void Autobet_OnResetBuiltIn(object sender, EventArgs e)
         {
-            Strategy.RunReset();
+            Strategy.RunReset(CurrentGame);
         }
 
         private void Autobet_OnInvest(object sender, InvestEventArgs e)
@@ -687,7 +696,7 @@ namespace Gambler.Bot.Classes
         {
             await Task.Run(async () =>
             {
-                Bet NewBet = await PlaceBet(Strategy.Start());
+                Bet NewBet = await PlaceBet(Strategy.Start(CurrentGame));
                 while (Running && NewBet != null)
                 {
 
@@ -701,7 +710,7 @@ namespace Gambler.Bot.Classes
                         if (BetSettings?.CheckResetPreStats(NewBet, win, Stats, CurrentSite.Stats) ?? false)
                         {
                             Reset = true;
-                            NextBext = Strategy.RunReset();
+                            NextBext = Strategy.RunReset(CurrentGame);
                         }
                         if (BetSettings?.CheckStopPreStats(NewBet, win, Stats, out Response, CurrentSite.Stats) ?? false)
                         {
@@ -763,7 +772,7 @@ namespace Gambler.Bot.Classes
 
                                         case TriggerAction.Bank: throw new NotImplementedException(); break;
                                         case TriggerAction.Invest: await CurrentSite.Invest(x.GetValue(Stats, CurrentSite.Stats)); break;
-                                        case TriggerAction.Reset: NextBext = Strategy.RunReset(); Reset = true; break;
+                                        case TriggerAction.Reset: NextBext = Strategy.RunReset(CurrentGame); Reset = true; break;
                                         case TriggerAction.ResetSeed: await CurrentSite.ResetSeed(CurrentSite.GenerateNewClientSeed()); break;
                                         case TriggerAction.Stop: StopStrategy($"Stop trigger fired: {x.ToString()}"); break;
                                         //case TriggerAction.Switch: Strategy.High = !Strategy.High; if (NewBetObject != null)NewBetObject.High = !NewBet.High;  break;
@@ -777,7 +786,7 @@ namespace Gambler.Bot.Classes
                         if (BetSettings.CheckResetPostStats(NewBet, win, Stats, CurrentSite.Stats))
                         {
                             Reset = true;
-                            NextBext = Strategy.RunReset();
+                            NextBext = Strategy.RunReset(CurrentGame);
                         }
                         if (BetSettings.CheckStopPOstStats(NewBet, win, Stats, out Response, CurrentSite.Stats))
                         {

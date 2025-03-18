@@ -15,6 +15,7 @@ using Gambler.Bot.Strategies.Strategies.Abstractions;
 using Gambler.Bot.ViewModels.AppSettings;
 using Gambler.Bot.ViewModels.Common;
 using Gambler.Bot.ViewModels.Games.Dice;
+using Gambler.Bot.ViewModels.Games.Limbo;
 using Gambler.Bot.ViewModels.Strategies;
 using Gambler.Bot.Views;
 using LibVLCSharp.Shared;
@@ -95,6 +96,8 @@ namespace Gambler.Bot.ViewModels
             ExitCommand = ReactiveCommand.Create(Exit);
             OpenCommand = ReactiveCommand.Create(Open);
             SaveCommand = ReactiveCommand.Create(Save);
+
+            ManualBetCommand = ReactiveCommand.Create(ManualBet);
 
             var tmp = new Classes.AutoBet(_logger);
             SelectSite = new SelectSiteViewModel(_logger);
@@ -182,10 +185,16 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                     PlaceBetVM = new DicePlaceBetViewModel(_logger);
                     LiveBets = new DiceLiveBetViewModel(_logger);
                     break;
+                case
+                    Bot.Common.Games.Games.Limbo:
+                    PlaceBetVM = new DicePlaceBetViewModel(_logger) { ShowHighLow = false };                    
+                    LiveBets = new LimboLiveBetViewModel(_logger);
+                    break;
             }
             if(PlaceBetVM != null)
                 PlaceBetVM.PlaceBet += PlaceBetVM_PlaceBet;
-
+            if (StrategyVM!=null)
+                StrategyVM.GameChanged(botIns.CurrentGame);
             setTitle();
         }
 
@@ -509,6 +518,11 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         void Save() { throw new NotImplementedException(); }
 
+        void ManualBet()
+        {
+            PlaceBetVM.BetCommand();
+        }
+
         void SaveINstanceSettings(string FileLocation)
         {
             string Settings = JsonSerializer.Serialize<InstanceSettings>(
@@ -651,8 +665,15 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                 Enum.TryParse(typeof(Bot.Common.Games.Games), game, out curGame) &&
                 Array.IndexOf(botIns.SiteGames, (Bot.Common.Games.Games)curGame) >= 0)
                 botIns.CurrentGame = (Bot.Common.Games.Games)curGame;
+
+            string tmpCurrency = CurrentCurrency;
+            int? tmpGame = CurrentGame;
+
             this.RaisePropertyChanged(nameof(Currencies));
-            this.RaisePropertyChanged(nameof(CurrentCurrency));
+            CurrentCurrency = tmpCurrency;
+            this.RaisePropertyChanged(nameof(Games));
+            CurrentGame = tmpGame;
+            this.RaisePropertyChanged(nameof(CurrentGame));
             this.RaisePropertyChanged(nameof(SiteName));
             if(showLogin)
                 ShowLogin();//.Wait();
@@ -899,6 +920,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
         public bool Running { get { return botIns?.Running ?? false; } }
 
         public ICommand SaveCommand { get; }
+        public ICommand ManualBetCommand { get; }
 
         public IEnumerable<string> Strategies { get { return BotInstance?.Strategies?.Keys; } }
 
@@ -1092,3 +1114,4 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
         public async Task AboutClicked() { await ShowAbout.Handle(new AboutViewModel(_logger)); }
     }
 }
+
