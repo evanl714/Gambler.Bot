@@ -61,7 +61,7 @@ namespace Gambler.Bot.Converters
                 if (bbet.IsWin)
                     resource = ThemeResourceKind.ControlBackgroundBrushSoftSuccess.ToResourceKey();
                 else
-                    resource = ThemeResourceKind.ControlBackgroundBrushSoftWarningPressed.ToResourceKey();
+                    resource = ThemeResourceKind.ControlBackgroundBrushSoftDanger.ToResourceKey();
 
             }
             if (Application.Current.TryFindResource(resource, App.Current.ActualThemeVariant, out object brush))

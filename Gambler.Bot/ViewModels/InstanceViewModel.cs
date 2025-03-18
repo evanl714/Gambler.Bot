@@ -187,7 +187,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                     break;
                 case
                     Bot.Common.Games.Games.Limbo:
-                    PlaceBetVM = new DicePlaceBetViewModel(_logger) { ShowHighLow = false };                    
+                    PlaceBetVM = new LimboPlaceBetViewModel(_logger) { ShowHighLow = false };                    
                     LiveBets = new LimboLiveBetViewModel(_logger);
                     break;
             }

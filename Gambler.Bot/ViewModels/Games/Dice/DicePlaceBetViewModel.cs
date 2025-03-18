@@ -163,7 +163,7 @@ namespace Gambler.Bot.ViewModels.Games.Dice
                     }
                     break;
                 case nameof(Payout):
-                    if (Chance != 0)
+                    if (Payout != 0)
                     {
                         if (Chance != (100m - Edge) / Payout)
                         {
@@ -186,9 +186,9 @@ namespace Gambler.Bot.ViewModels.Games.Dice
 
         public bool ShowButton { get=>!ShowToggle && showHighLow; }
 
-        public event EventHandler<PlaceBetEventArgs> PlaceBet;
+        public virtual event EventHandler<PlaceBetEventArgs> PlaceBet;
 
-        private void Bet(bool High)
+        protected virtual void Bet(bool High)
         {
             PlaceBet?.Invoke(this, new PlaceBetEventArgs(new PlaceDiceBet(Amount, High, Chance)));
         }

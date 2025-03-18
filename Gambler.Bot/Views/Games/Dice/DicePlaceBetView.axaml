@@ -7,10 +7,10 @@
              xmlns:vm="using:Gambler.Bot.ViewModels.Games.Dice"
              x:DataType="vm:DicePlaceBetViewModel">
     <Grid ColumnDefinitions="Auto,2*,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
-        <TextBlock IsVisible="{Binding ShowAmount}" Grid.Column="0" Grid.Row="0" Text="{DynamicResource Localization.Common.Bet}" />
-        <TextBlock IsVisible="{Binding ShowChance}" Grid.Column="0" Grid.Row="1" Text="{DynamicResource Localization.Games.Dice.Chance}" />
-        <TextBlock IsVisible="{Binding ShowChance}" Grid.Column="0" Grid.Row="2" Text="{DynamicResource Localization.Game.Payout}" />
-        <TextBlock IsVisible="{Binding ShowAmount}"  Grid.Column="0" Grid.Row="3" Text="{DynamicResource Localization.Common.Profit}" />
+        <TextBlock IsVisible="{Binding ShowAmount}" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Text="{DynamicResource Localization.Common.Bet}" />
+        <TextBlock IsVisible="{Binding ShowChance}" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" Text="{DynamicResource Localization.Games.Dice.Chance}" />
+        <TextBlock IsVisible="{Binding ShowChance}" VerticalAlignment="Center" Grid.Column="0" Grid.Row="2" Text="{DynamicResource Localization.Game.Payout}" />
+        <TextBlock IsVisible="{Binding ShowAmount}" VerticalAlignment="Center" Grid.Column="0" Grid.Row="3" Text="{DynamicResource Localization.Common.Profit}" />
         <Grid Grid.Column="1" Grid.Row="0" ColumnDefinitions="*,Auto,Auto" IsVisible="{Binding ShowAmount}">
             <NumericUpDown IsVisible="{Binding ShowAmount}" Grid.Column="0" HorizontalAlignment="Stretch" Value="{Binding Amount}" Increment="0.00000100" Minimum="0" Maximum="9999999999" FormatString="n8" />
             <Button  Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Content="1/2" VerticalContentAlignment="Center" HorizontalAlignment="Right" HorizontalContentAlignment="Center" VerticalAlignment="Stretch" Command="{Binding HalfAmountCommand}"/>
