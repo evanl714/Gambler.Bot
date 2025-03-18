@@ -2,6 +2,7 @@
 using Gambler.Bot.Classes;
 using Gambler.Bot.Classes.BetsPanel;
 using Gambler.Bot.Common.Games;
+using Gambler.Bot.Common.Games.Dice;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.ObjectModel;

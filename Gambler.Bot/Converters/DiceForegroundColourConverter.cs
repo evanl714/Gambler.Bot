@@ -3,7 +3,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
-using Gambler.Bot.Common.Games;
+using Gambler.Bot.Common.Games.Dice;
 using Gambler.Bot.Core.Sites;
 using System;
 using System.Collections.Generic;
@@ -17,14 +17,14 @@ namespace Gambler.Bot.Converters
         {
             string resource = "";
             
-            if (values[0] is DiceBet bet && values[1] is BaseSite site)
+            if (values[0] is DiceBet bet && values[1] is iDice site)
             {
-                if (!((bool)bet.High ? (decimal)bet.Roll > (decimal)site.MaxRoll - (decimal)(bet.Chance) : (decimal)bet.Roll < (decimal)(bet.Chance)))
+                if (!((bool)bet.High ? (decimal)bet.Roll > (decimal)site.DiceSettings.MaxRoll - (decimal)(bet.Chance) : (decimal)bet.Roll < (decimal)(bet.Chance)))
                 {
                     if (bet.Chance <= 50)
                     {
                         if (
-                            (decimal)bet.Roll < (decimal)site.MaxRoll - (decimal)(bet.Chance) &&
+                            (decimal)bet.Roll < (decimal)site.DiceSettings.MaxRoll - (decimal)(bet.Chance) &&
                             (decimal)bet.Roll > (decimal)(bet.Chance))
                         {
                             resource = ThemeResourceKind.ControlBackgroundBrushSoftPressed.ToResourceKey();
@@ -40,7 +40,7 @@ namespace Gambler.Bot.Converters
                     if (bet.Chance > 50)
                     {
 
-                        if ((decimal)bet.Roll > (decimal)site.MaxRoll - (decimal)(bet.Chance) &&
+                        if ((decimal)bet.Roll > (decimal)site.DiceSettings.MaxRoll - (decimal)(bet.Chance) &&
                             (decimal)bet.Roll < (decimal)(bet.Chance))
                         {
                             resource = ThemeResourceKind.ControlBackgroundBrushSoftWarningPressed.ToResourceKey();

@@ -1,6 +1,5 @@
 ﻿using Avalonia.Collections;
 using Gambler.Bot.Core.Storage;
-using Gambler.Bot.Common.Games;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using System;

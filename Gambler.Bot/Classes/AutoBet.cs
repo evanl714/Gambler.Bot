@@ -1,6 +1,7 @@
 ﻿using Gambler.Bot.Common.Enums;
 using Gambler.Bot.Common.Events;
 using Gambler.Bot.Common.Games;
+using Gambler.Bot.Common.Games.Dice;
 using Gambler.Bot.Common.Helpers;
 using Gambler.Bot.Core.Events;
 using Gambler.Bot.Core.Helpers;

@@ -1,10 +1,13 @@
 ﻿using Gambler.Bot.Strategies.Helpers;
-using Gambler.Bot.Common.Games;
 using Gambler.Bot.Common.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using Gambler.Bot.Classes;
+using Gambler.Bot.Common.Games.Dice;
+using Gambler.Bot.Common.Games.Crash;
+using Gambler.Bot.Common.Games.Plinko;
+using Gambler.Bot.Common.Games.Roulette;
 
 namespace Gambler.Bot.Core.Storage
 {

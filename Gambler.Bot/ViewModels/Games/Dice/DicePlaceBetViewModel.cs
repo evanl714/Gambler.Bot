@@ -1,5 +1,6 @@
 ﻿using Gambler.Bot.Classes.BetsPanel;
 using Gambler.Bot.Common.Games;
+using Gambler.Bot.Common.Games.Dice;
 using ReactiveUI;
 using System;
 using System.Windows.Input;
