@@ -53,17 +53,17 @@
 
                     <CheckBox IsChecked="{Binding BetSettings.EnableResetAfterBtcStreakLoss}" Grid.Column="0" Grid.Row="2"/>
                     <TextBlock Grid.Column="1" Grid.Row="2" Text="{DynamicResource Localization.Common.Reset.ResetAfter}" VerticalAlignment="Center"/>
-                    <NumericUpDown Value="{Binding BetSettings.ResetAfterBtcStreakLoss}" Grid.Column="2" Grid.Row="2"/>
+                    <NumericUpDown FormatString="n8"  Value="{Binding BetSettings.ResetAfterBtcStreakLoss}" Grid.Column="2" Grid.Row="2"/>
                     <TextBlock Text="{DynamicResource Localization.Common.Reset.ValueLostRow}" Grid.Column="3" Grid.Row="2" VerticalAlignment="Center"/>
 
                     <CheckBox IsChecked="{Binding BetSettings.EnableResetAfterBtcLoss}" Grid.Column="0" Grid.Row="3"/>
                     <TextBlock Grid.Column="1" Grid.Row="3" Text="{DynamicResource Localization.Common.Reset.ResetAfterEvery}" VerticalAlignment="Center"/>
-                    <NumericUpDown Value="{Binding BetSettings.ResetAfterBtcLoss}" Grid.Column="2" Grid.Row="3"/>
+                    <NumericUpDown FormatString="n8" Value="{Binding BetSettings.ResetAfterBtcLoss}" Grid.Column="2" Grid.Row="3"/>
                     <TextBlock Text="{DynamicResource Localization.Common.Reset.ValueLost}" Grid.Column="3" Grid.Row="3" VerticalAlignment="Center"/>
 
                     <CheckBox IsChecked="{Binding BetSettings.EnableResetLossFromMaxProfit}" Grid.Column="0" Grid.Row="4"/>
                     <TextBlock Grid.Column="1" Grid.Row="4" Text="{DynamicResource Localization.Common.Reset.ResetAfter}" VerticalAlignment="Center"/>
-                    <NumericUpDown Value="{Binding BetSettings.ResetLossFromMaxProfit}" Grid.Column="2" Grid.Row="4"/>
+                    <NumericUpDown FormatString="n8" Value="{Binding BetSettings.ResetLossFromMaxProfit}" Grid.Column="2" Grid.Row="4"/>
                     <TextBlock Text="{DynamicResource Localization.Common.Reset.ValueLostSinceMxProfit}" Grid.Column="3" Grid.Row="4" VerticalAlignment="Center"/>
 
                     <CheckBox IsChecked="{Binding BetSettings.EnableStopAfterLoseStreak}" Grid.Column="0" Grid.Row="5"/>
@@ -78,17 +78,17 @@
 
                     <CheckBox IsChecked="{Binding BetSettings.EnableStopAfterBtcLoseStreak}" Grid.Column="0" Grid.Row="7"/>
                     <TextBlock Grid.Column="1" Grid.Row="7" Text="{DynamicResource Localization.Common.Reset.StopAfter}" VerticalAlignment="Center"/>
-                    <NumericUpDown Value="{Binding BetSettings.StopAfterBtcLoseStreak}" Grid.Column="2" Grid.Row="7"/>
+                    <NumericUpDown FormatString="n8" Value="{Binding BetSettings.StopAfterBtcLoseStreak}" Grid.Column="2" Grid.Row="7"/>
                     <TextBlock Text="{DynamicResource Localization.Common.Reset.ValueLostRow}" Grid.Column="3" Grid.Row="7" VerticalAlignment="Center"/>
 
                     <CheckBox IsChecked="{Binding BetSettings.EnableStopAfterBtcLoss}" Grid.Column="0" Grid.Row="8"/>
                     <TextBlock Grid.Column="1" Grid.Row="8" Text="{DynamicResource Localization.Common.Reset.StopAfter}" VerticalAlignment="Center"/>
-                    <NumericUpDown Value="{Binding BetSettings.StopAfterBtcLoss}" Grid.Column="2" Grid.Row="8"/>
+                    <NumericUpDown FormatString="n8" Value="{Binding BetSettings.StopAfterBtcLoss}" Grid.Column="2" Grid.Row="8"/>
                     <TextBlock Text="{DynamicResource Localization.Common.Reset.ValueLost}" Grid.Column="3" Grid.Row="8" VerticalAlignment="Center"/>
 
                     <CheckBox IsChecked="{Binding BetSettings.EnableStopLossFromMaxProfit}" Grid.Column="0" Grid.Row="9"/>
                     <TextBlock Grid.Column="1" Grid.Row="9" Text="{DynamicResource Localization.Common.Reset.StopAfter}" VerticalAlignment="Center"/>
-                    <NumericUpDown Value="{Binding BetSettings.StopLossFromMaxProfit}" Grid.Column="2" Grid.Row="9"/>
+                    <NumericUpDown FormatString="n8" Value="{Binding BetSettings.StopLossFromMaxProfit}" Grid.Column="2" Grid.Row="9"/>
                     <TextBlock Text="{DynamicResource Localization.Common.Reset.ValueLostSinceMxProfit}" Grid.Column="3" Grid.Row="9" VerticalAlignment="Center"/>
                 </Grid>
 
@@ -114,17 +114,17 @@
 
                     <CheckBox IsChecked="{Binding BetSettings.EnableResetAfterBtcStreakWin}" Grid.Column="0" Grid.Row="2"/>
                     <TextBlock Grid.Column="1" Grid.Row="2" Text="{DynamicResource Localization.Common.Reset.ResetAfter}" VerticalAlignment="Center"/>
-                    <NumericUpDown Value="{Binding BetSettings.ResetAfterBtcStreakWin}" Grid.Column="2" Grid.Row="2"/>
+                    <NumericUpDown FormatString="n8" Value="{Binding BetSettings.ResetAfterBtcStreakWin}" Grid.Column="2" Grid.Row="2"/>
                     <TextBlock Text="{DynamicResource Localization.Common.Reset.ValueWonRow}" Grid.Column="3" Grid.Row="2" VerticalAlignment="Center"/>
 
                     <CheckBox IsChecked="{Binding BetSettings.EnableResetAfterBtcWin}" Grid.Column="0" Grid.Row="3"/>
                     <TextBlock Grid.Column="1" Grid.Row="3" Text="{DynamicResource Localization.Common.Reset.ResetAfterEvery}" VerticalAlignment="Center"/>
-                    <NumericUpDown Value="{Binding BetSettings.ResetAfterBtcWin}" Grid.Column="2" Grid.Row="3"/>
+                    <NumericUpDown FormatString="n8" Value="{Binding BetSettings.ResetAfterBtcWin}" Grid.Column="2" Grid.Row="3"/>
                     <TextBlock Text="{DynamicResource Localization.Common.Reset.ValueWon}" Grid.Column="3" Grid.Row="3" VerticalAlignment="Center"/>
 
                     <CheckBox IsChecked="{Binding BetSettings.EnableResetWinFromMinProfit}" Grid.Column="0" Grid.Row="4"/>
                     <TextBlock Grid.Column="1" Grid.Row="4" Text="{DynamicResource Localization.Common.Reset.ResetAfter}" VerticalAlignment="Center"/>
-                    <NumericUpDown Value="{Binding BetSettings.ResetWinFromMinProfit}" Grid.Column="2" Grid.Row="4"/>
+                    <NumericUpDown FormatString="n8" Value="{Binding BetSettings.ResetWinFromMinProfit}" Grid.Column="2" Grid.Row="4"/>
                     <TextBlock Text="{DynamicResource Localization.Common.Reset.ValueWonSinceMnProfit}" Grid.Column="3" Grid.Row="4" VerticalAlignment="Center"/>
 
                     <CheckBox IsChecked="{Binding BetSettings.EnableStopAfterWinStreak}" Grid.Column="0" Grid.Row="5"/>
@@ -139,17 +139,17 @@
 
                     <CheckBox IsChecked="{Binding BetSettings.EnableStopAfterBtcLoseStreak}" Grid.Column="0" Grid.Row="7"/>
                     <TextBlock Grid.Column="1" Grid.Row="7" Text="{DynamicResource Localization.Common.Reset.StopAfter}" VerticalAlignment="Center"/>
-                    <NumericUpDown Value="{Binding BetSettings.StopAfterBtcLoseStreak}" Grid.Column="2" Grid.Row="7"/>
+                    <NumericUpDown FormatString="n8" Value="{Binding BetSettings.StopAfterBtcLoseStreak}" Grid.Column="2" Grid.Row="7"/>
                     <TextBlock Text="{DynamicResource Localization.Common.Reset.ValueWonRow}" Grid.Column="3" Grid.Row="7" VerticalAlignment="Center"/>
 
                     <CheckBox IsChecked="{Binding BetSettings.EnableStopAfterBtcWin}" Grid.Column="0" Grid.Row="8"/>
                     <TextBlock Grid.Column="1" Grid.Row="8" Text="{DynamicResource Localization.Common.Reset.StopAfter}" VerticalAlignment="Center"/>
-                    <NumericUpDown Value="{Binding BetSettings.StopAfterBtcWin}" Grid.Column="2" Grid.Row="8"/>
+                    <NumericUpDown FormatString="n8" Value="{Binding BetSettings.StopAfterBtcWin}" Grid.Column="2" Grid.Row="8"/>
                     <TextBlock Text="{DynamicResource Localization.Common.Reset.ValueWon}" Grid.Column="3" Grid.Row="8" VerticalAlignment="Center"/>
 
                     <CheckBox IsChecked="{Binding BetSettings.EnableStopWinFromMinProfit}" Grid.Column="0" Grid.Row="9"/>
                     <TextBlock Grid.Column="1" Grid.Row="9" Text="{DynamicResource Localization.Common.Reset.StopAfter}" VerticalAlignment="Center"/>
-                    <NumericUpDown Value="{Binding BetSettings.StopWinFromMinProfit}" Grid.Column="2" Grid.Row="9"/>
+                    <NumericUpDown FormatString="n8" Value="{Binding BetSettings.StopWinFromMinProfit}" Grid.Column="2" Grid.Row="9"/>
                     <TextBlock Text="{DynamicResource Localization.Common.Reset.ValueWonSinceMnProfit}" Grid.Column="3" Grid.Row="9" VerticalAlignment="Center"/>
                 </Grid>
 

@@ -6,6 +6,10 @@
 - [x] *stop simulation
 - [x] *update stats window on timer if bot is running but stalled
 - [x] *Indicate but running status in status bar/title bar
+- [x] Multi game support
+- [ ] *Bank
+- [ ] *Finish crash for ethercrash
+- [ ] Add extra games - Twist, Boom, keno, plinko, roulette, hilo
 
 	
 ### Tabs
@@ -20,21 +24,23 @@
 
 ### General
 - [x] *notifications (only in app notifications that kind of go over the stop button, but sounds working. need to add an option to move audio sounds again.)
+- [ ] *Prettify UI a bit with icons and loaders where possible
 - [ ] *Auto updates	
+- [ ] *Improve logging - adding debug and info logging where needed, ensure exceptions are logged and log warnings where relevant. Include logging level option either in config or settings
 - [x] *triggers for notifications (This seems to work but still having the weird issue on the settings screen.)
 - [ ] *improve programmer mode documentation
 - [x] *manual betting extra buttons (x2, 1/2, max, min, etc)
 - [ ] multiple tabs
 - [ ] proxy
-- [ ] Telemtry (???The stats could be tremendously important but need to be really carefull about what is logged and how.???)
-- [ ] CLI interface? old one should still be somewhere in the github repo, maybe compile a secondary exe for it?
+- [ ] Telemetry (???The stats could be tremendously important but need to be really carefull about what is logged and how.???)
+- [ ] CLI interface? old one should still be somewhere in the github repo, maybe compile a secondary exe for it? Should it be an interface or only accept command line arguments in run without a UI?
 - [ ] Include site name in charts and titles?
 - [x] *disable/enable start/stop/resume/stoponwin based on bot state
 - [x] option to run simulation without bet history
 
 ### Sites
 - [ ] *wolfbet
-- [ ] BCH.game
+- [ ] **BCH.game
 
 ### Help windows:
 - [ ] Setup wizard
@@ -60,6 +66,9 @@
 
 
 ### Known issues
+- [ ] *Bet storage!
+- [x] *Advanced settings dropdowns not working
+- [x] *Programmer mode templates and testing after multi game changes
 - [x] *Lable colours not setting correctly
 - [x] *Betamounts not set correctly when changing strategies
 - [ ] *Double check site settings
@@ -69,7 +78,7 @@
 - [x] *Balance variable is not updated in programmer mode
 - [ ] *Sqlite update tables needs to be implemented (I have the EF migrations but not quite sure if that's going to work.... meh)
 - [x] *Script conversion tool /legacy script support (untested but there for lua)
-- [ ] *bot speed
+- [x] *bot speed
 - [ ] ???Specify system requirements in the readme file???
 - [ ] charting line colours
 - [x] *Programmer mode crash when file dialog cancelled

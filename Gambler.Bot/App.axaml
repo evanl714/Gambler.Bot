@@ -5,6 +5,7 @@
              xmlns:converters="using:Gambler.Bot.Converters"
              RequestedThemeVariant="Default"
 
+             xmlns:generation="using:ActiproSoftware.UI.Avalonia.Themes.Generation"
              xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
              >
     <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
@@ -25,8 +26,13 @@
     </Application.Resources>
     <Application.Styles>
         <FluentTheme DensityStyle="Compact" />
+
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
         <StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml" />
-        <actipro:ModernTheme Includes="NativeDataGrid, Pro" />
+        <actipro:ModernTheme Includes="NativeDataGrid, Pro" >
+            <actipro:ModernTheme.Definition>
+                <generation:ThemeDefinition UserInterfaceDensity="Compact" />
+            </actipro:ModernTheme.Definition>
+        </actipro:ModernTheme>
     </Application.Styles>
 </Application>

@@ -464,15 +464,19 @@ namespace Gambler.Bot.Classes
                 NextBext = Strategy.CalculateNextBet(MostRecentBet, win);
             if (Running)
             {
-                while (CurrentSite.TimeToBet(NextBext) > 0 
-                    && (decimal)(DateTime.Now - MostRecentBetTime).TotalMilliseconds>= NextBext.BetDelay
-                    && (!BetSettings.EnableBotSpeed || (decimal)(DateTime.Now - MostRecentBetTime).TotalMilliseconds >= (1m/BetSettings.BotSpeed))
+                decimal secondsPerBet = 1m /BetSettings.BotSpeed;
+                decimal msPerBet = secondsPerBet * 1000m;
+                decimal timetoBet = CurrentSite.TimeToBet(NextBext);
+                while (timetoBet > 0 
+                    || (decimal)(DateTime.Now - MostRecentBetTime).TotalMilliseconds< (NextBext?.BetDelay??0)
+                    || (BetSettings.EnableBotSpeed && (decimal)(DateTime.Now - MostRecentBetTime).TotalMilliseconds < msPerBet)
                     )
                 {
-                    int TimeToBet = CurrentSite.TimeToBet(NextBext);
-                    if (TimeToBet < 0)
-                        TimeToBet = (10);
-                    Thread.Sleep(TimeToBet);
+                    
+                    if (timetoBet <= 0)
+                        timetoBet = (10);
+                    Thread.Sleep((int)timetoBet);
+                    timetoBet = 0;
                 }
                 return NextBext;
             }
@@ -525,7 +529,7 @@ namespace Gambler.Bot.Classes
                         (Strategy as IProgrammerMode).OnWithdraw -= Autobet_OnWithdraw;
                         (Strategy as IProgrammerMode).OnScriptError -= Autobet_OnScriptError;
                         (Strategy as IProgrammerMode).OnSetCurrency -= Autobet_OnSetCurrency;
-
+                        (Strategy as IProgrammerMode).OnBank -= Prog_OnBank;
                     }
                 }
                 strategy = value;
@@ -550,6 +554,7 @@ namespace Gambler.Bot.Classes
                         prog.OnWithdraw += Autobet_OnWithdraw;
                         prog.OnScriptError += Autobet_OnScriptError;
                         prog.OnSetCurrency += Autobet_OnSetCurrency;
+                        prog.OnBank += Prog_OnBank;
                     }
                 }
                 StoredBetSettings.SetStrategy(value);
@@ -557,6 +562,8 @@ namespace Gambler.Bot.Classes
                 
             }
         }
+
+        
 
         public string SiteName { get => CurrentSite?.SiteName; }
         public SiteStats SiteStats { get => CurrentSite?.Stats; }
@@ -621,7 +628,11 @@ namespace Gambler.Bot.Classes
         {
             Strategy.RunReset(CurrentGame);
         }
-
+        private void Prog_OnBank(object? sender, InvestEventArgs e)
+        {
+            if (CurrentSite.AutoBank)
+                CurrentSite.Bank(e.Amount);
+        }
         private void Autobet_OnInvest(object sender, InvestEventArgs e)
         {
             if (CurrentSite.AutoInvest)
@@ -667,7 +678,7 @@ namespace Gambler.Bot.Classes
                     prog.LoadScript();
                     prog.UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
                     prog.UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
-                    prog.UpdateSite(CopyHelper.CreateCopy<SiteDetails>(CurrentSite.SiteDetails));
+                    prog.UpdateSite(CurrentSite.SiteDetails);
                     
                 }
                 Running = true;

@@ -8,6 +8,7 @@ using Gambler.Bot.Common.Games.Dice;
 using Gambler.Bot.Common.Games.Crash;
 using Gambler.Bot.Common.Games.Plinko;
 using Gambler.Bot.Common.Games.Roulette;
+using Gambler.Bot.Common.Games.Limbo;
 
 namespace Gambler.Bot.Core.Storage
 {
@@ -22,6 +23,7 @@ namespace Gambler.Bot.Core.Storage
         public DbSet<Currency> Currencies { get; set; }
         public DbSet<SessionStats> Sessions { get; set; }
         public DbSet<DiceBet> DiceBets { get; set; }
+        public DbSet<LimboBet> LimboBets { get; set; }
         public DbSet<CrashBet> CrashBets { get; set; }
         public DbSet<PlinkoBet> PlinkoBets { get; set; }
         public DbSet<RouletteBet> RouletteBets { get; set; }

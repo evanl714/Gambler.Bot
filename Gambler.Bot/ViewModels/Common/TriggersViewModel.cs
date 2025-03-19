@@ -245,15 +245,15 @@ namespace Gambler.Bot.ViewModels.Common
 
         public bool ShowVValue
         {
-            get { return SelectedTrigger?.ValueType == CompareAgainst.Value; }
+            get { return SelectedTrigger?.ValueType == CompareAgainst.Value && ShowAmount; }
         }
         public bool ShowVPercentage
         {
-            get { return SelectedTrigger?.ValueType == CompareAgainst.Percentage; }
+            get { return SelectedTrigger?.ValueType == CompareAgainst.Percentage && ShowAmount; }
         }
         public bool ShowVPrperty
         {
-            get { return SelectedTrigger?.ValueType == CompareAgainst.Property; }
+            get { return SelectedTrigger?.ValueType == CompareAgainst.Property && ShowAmount; }
         }
 
         public bool ShowAmount
