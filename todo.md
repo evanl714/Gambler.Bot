@@ -67,6 +67,7 @@
 
 ### Known issues
 - [ ] *Bet storage!
+- [ ] *Manual bets not added to chart/history/storage probably
 - [x] *Advanced settings dropdowns not working
 - [x] *Programmer mode templates and testing after multi game changes
 - [x] *Lable colours not setting correctly

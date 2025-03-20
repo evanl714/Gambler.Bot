@@ -3,6 +3,7 @@ using System;
 using Gambler.Bot.Core.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gambler.Bot.Strategies.Migrations
 {
     [DbContext(typeof(BotContext))]
-    partial class BotContextModelSnapshot : ModelSnapshot
+    [Migration("20250320075743_multigamesupport")]
+    partial class multigamesupport
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.3");
@@ -87,6 +90,7 @@ namespace Gambler.Bot.Strategies.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ClientSeed")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Currency")

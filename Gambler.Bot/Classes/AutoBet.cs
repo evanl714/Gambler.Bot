@@ -180,8 +180,15 @@ namespace Gambler.Bot.Classes
 
                 if (DBInterface != null)
                 {
-                    _Logger?.LogInformation("Updating Sites Table");
-                    DBInterface.SaveChanges();
+                    try
+                    {
+                        _Logger?.LogInformation("Updating Sites Table");
+                        DBInterface.SaveChanges();
+                    }
+                    catch (Exception ex)
+                    {
+                        _Logger?.LogError(ex.ToString());
+                    }
                 }
                 else
                 {
@@ -734,7 +741,7 @@ namespace Gambler.Bot.Classes
                             prog.UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
                             prog.UpdateSite(CopyHelper.CreateCopy<SiteDetails>(CurrentSite.SiteDetails));
                         }
-                        OnSiteBetFinished?.Invoke(CurrentSite, new BetFinisedEventArgs(NewBet));
+                        
 
 
                         if (NewBet.Guid != LastBetGuid || LastBetsGuids.Contains(NewBet.Guid))
@@ -875,6 +882,10 @@ namespace Gambler.Bot.Classes
         
         private void BetTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
+            if (!Running)
+            {
+                return;
+            }
             if ((DateTime.Now-MostRecentBetTime).TotalSeconds> PersonalSettings.RetryDelay && (Retries< PersonalSettings.RetryAttempts || PersonalSettings.RetryAttempts<0))
             {
                 if (NextBext != null && ((DateTime.Now - MostRecentBetTime).Milliseconds > NextBext.BetDelay))
@@ -905,7 +916,7 @@ namespace Gambler.Bot.Classes
                     }
                     catch (Exception e)
                     {
-                        
+                        _Logger.LogError(e.ToString());
                     }
                 }
             }
@@ -926,7 +937,14 @@ namespace Gambler.Bot.Classes
             if (this.DBInterface != null)
             {
                this.DBInterface.Add(Stats);
-                this.DBInterface.SaveChanges();
+                try
+                {
+                    this.DBInterface.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    _Logger?.LogError(ex.ToString());
+                }
             }
 
             Stats = new SessionStats();
@@ -963,6 +981,7 @@ namespace Gambler.Bot.Classes
             MostRecentBet = NewBet;
             MostRecentBetTime = DateTime.Now;
             Retries = 0;
+            OnSiteBetFinished?.Invoke(CurrentSite, new BetFinisedEventArgs(NewBet));
             return NewBet;
         }
 
@@ -1136,7 +1155,7 @@ namespace Gambler.Bot.Classes
                 DBInterface = new BotContext(_Logger);//create a bot context here. 
                 
                 DBInterface.Settings = PersonalSettings;
-                if (!DBInterface.Database.EnsureCreated())
+                //if (!DBInterface.Database.EnsureCreated())
                 {
                     try
                     {

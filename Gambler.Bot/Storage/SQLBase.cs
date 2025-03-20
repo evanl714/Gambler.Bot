@@ -55,13 +55,18 @@ namespace Gambler.Bot.Core.Storage
                 case "Sqlite": optionsBuilder.UseSqlite(connectionstring); break;
                 case "SQLServer": optionsBuilder.UseSqlServer(connectionstring); break;
                 case "PostGres": optionsBuilder.UseNpgsql(connectionstring); break;
-                case "MongoDB": optionsBuilder.UseMongoDB(connectionstring, "GamblerBot"); break;
-                case "MySQL": optionsBuilder.UseMySql(connectionstring, ServerVersion.AutoDetect(connectionstring)); break;
+                //case "MongoDB": optionsBuilder.UseMongoDB(connectionstring, "GamblerBot"); break;
+                case "MySQL": optionsBuilder.UseMySQL(connectionstring); break;
             }
             
             base.OnConfiguring(optionsBuilder);
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<SiteDetails>().Ignore(t => t.GameSettings);
+            base.OnModelCreating(modelBuilder);
+        }
         public string ProviderName { get; protected set; }
 
         protected BotContext(string ConnectionString)
