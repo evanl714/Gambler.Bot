@@ -17,6 +17,7 @@ using System.Windows.Input;
 using static Community.CsharpSqlite.Sqlite3;
 using DryIoc;
 using Gambler.Bot.Classes;
+using System.Threading;
 
 namespace Gambler.Bot.ViewModels.Common
 {
@@ -25,6 +26,14 @@ namespace Gambler.Bot.ViewModels.Common
         
         public event EventHandler<CanSimulateEventArgs> CanStart;
         Stopwatch SimTimer = new Stopwatch();
+        private ProfitChartViewModel chrt;
+
+        public ProfitChartViewModel Chart
+        {
+            get { return chrt; }
+            set { chrt = value; }
+        }
+
 
         private AutoBet bot;
 
@@ -75,6 +84,7 @@ namespace Gambler.Bot.ViewModels.Common
             set { progress = value; this.RaisePropertyChanged(); }
         }
 
+        public decimal Balance { get => CurrentSimulation?.Balance ?? 0; }
         public TimeSpan TimeRunning { get; set; }
         public TimeSpan ProjectedTime { get; set; }
         public TimeSpan ProjectedRemaining { get; set; }
@@ -86,6 +96,7 @@ namespace Gambler.Bot.ViewModels.Common
             StopCommand = ReactiveCommand.Create(Stop);
             SaveCommand = ReactiveCommand.Create(Save);
             Stats = new SessionStatsViewModel(logger);
+            Chart = new ProfitChartViewModel(logger) { Enabled = false, MaxItems=10000 };
         }
 
         private bool canSave;
@@ -160,19 +171,27 @@ namespace Gambler.Bot.ViewModels.Common
             CanSave = false;
             CurrentSimulation.Start();
             Stats.Stats = CurrentSimulation.Stats;
+            Chart.Reset();
+            //chrt.MaxItems = 10000;
         }
         List<decimal> Bets = new List<decimal>();
         private void CurrentSimulation_OnBetSimulated(object? sender, BetFinisedEventArgs e)
         {
-            //Bets.Add(e.NewBet.Profit);
-            if (Bets.Count > 0 && Bets.Count % 100 == 0)
+            
+            Bets.Add(e.NewBet.Profit);
+            if (chrt.Enabled)
             {
-               /* if (chrt.Enabled)
+                //chrt.AddPoint(e.NewBet.Profit, e.NewBet.IsWin);
+                if (Bets.Count %100 ==0)
                 {
-                    chrt.AddRange(Bets);
-                    Bets = new List<decimal>();
-                }*/
+                    chrt.AddRange(Bets).Wait();
+                    //Thread.Sleep(10);
+                    
+                    Bets.Clear();
+                }
             }
+            /*if (Bets.Count > 100)
+                Bets.RemoveAt(0);*/
         }
 
         private void CurrentSimulation_OnSimulationComplete(object? sender, EventArgs e)
@@ -209,6 +228,8 @@ namespace Gambler.Bot.ViewModels.Common
             }
         }
 
+        
+
         void UpdateStats()
         {
             if (!Dispatcher.UIThread.CheckAccess())
@@ -228,6 +249,7 @@ namespace Gambler.Bot.ViewModels.Common
                     ProjectedTime = TimeSpan.FromMilliseconds((double)totaltime);
                     ProjectedRemaining = TimeSpan.FromMilliseconds((double)totaltime - ElapsedMilliseconds);
 
+                    this.RaisePropertyChanged(nameof(Balance));
                     this.RaisePropertyChanged(nameof(Progress));
                     this.RaisePropertyChanged(nameof(TimeRunning));
                     this.RaisePropertyChanged(nameof(ProjectedTime));
@@ -240,7 +262,10 @@ namespace Gambler.Bot.ViewModels.Common
 
         private void CurrentSimulation_OnSimulationWriting(object? sender, EventArgs e)
         {
-            UpdateStats();
+            UpdateStats();            
+            
+            Bets.Clear();
+            
         }
 
         public ICommand SaveCommand { get; }

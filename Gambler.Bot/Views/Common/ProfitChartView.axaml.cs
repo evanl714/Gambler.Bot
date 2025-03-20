@@ -8,5 +8,13 @@ namespace Gambler.Bot.Views.Common
         {
             InitializeComponent();
         }
+
+        private void CartesianChart_UpdateFinished(LiveChartsCore.Kernel.Sketches.IChartView<LiveChartsCore.SkiaSharpView.Drawing.SkiaSharpDrawingContext> chart)
+        {
+        }
+
+        private void CartesianChart_Loaded(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+        }
     }
 }

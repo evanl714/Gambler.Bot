@@ -10,6 +10,7 @@
              xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
              xmlns:behaviours="using:Gambler.Bot.Behaviours"
              xmlns:controls="using:Gambler.Bot.Controls"
+             xmlns:img="https://github.com/projektanker/icons.avalonia"
              >
 
     <Grid>
@@ -276,6 +277,11 @@
             </TabItem>
 
         </TabControl>
-        <Button Content="Reset Stats" HorizontalAlignment="Right" VerticalAlignment="Bottom" Command="{Binding ResetStatsCommand}"/>
+        <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Command="{Binding ResetStatsCommand}">
+            <StackPanel Orientation="Horizontal">
+                <img:Icon Classes="btnIcon" Value="mdi-restore" />
+                <TextBlock>Reset Stats</TextBlock>
+            </StackPanel>
+        </Button>
     </Grid>
 </UserControl>

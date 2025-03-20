@@ -8,11 +8,22 @@
              x:DataType="vm:TriggersViewModel"
              xmlns:classes="using:Gambler.Bot.Classes"
 
+             xmlns:img="https://github.com/projektanker/icons.avalonia"
              >
     <StackPanel Orientation="Vertical">
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button HorizontalAlignment="Right" Content="{DynamicResource Localization.Common.Triggers.Remove}" Command="{Binding RemoveCommand}"/>
-            <Button HorizontalAlignment="Right" Content="{DynamicResource Localization.Common.Triggers.Add}"  Command="{Binding AddCommand}"/>
+            <Button HorizontalAlignment="Right" Command="{Binding RemoveCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <img:Icon Classes="btnIcon" Value="mdi-delete" />
+                    <TextBlock Text="{DynamicResource Localization.Common.Triggers.Remove}"/>
+                </StackPanel>
+            </Button>
+            <Button HorizontalAlignment="Right" Command="{Binding AddCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <img:Icon Classes="btnIcon" Value="mdi-plus" />
+                    <TextBlock Text="{DynamicResource Localization.Common.Triggers.Add}"/>
+                </StackPanel>
+            </Button>
         </StackPanel>
         <DataGrid MinHeight="150" MaxHeight="400" ItemsSource="{Binding Triggers}" SelectedItem="{Binding SelectedTrigger}">
             <DataGrid.Columns>

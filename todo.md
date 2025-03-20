@@ -13,7 +13,7 @@
 
 	
 ### Tabs
-- [x] *Console (still needs read methods)
+- [x] *Console (still needs read methods ???? )
 
 ### Windows
 - [ ] *settings import/export
@@ -37,6 +37,9 @@
 - [ ] Include site name in charts and titles?
 - [x] *disable/enable start/stop/resume/stoponwin based on bot state
 - [x] option to run simulation without bet history
+- [ ] Simulator for other games
+- [x] Chart for simulator
+- [ ] Enable chart animation for normal bets but disable for simulation
 
 ### Sites
 - [ ] *wolfbet
@@ -72,6 +75,7 @@
 - [x] *Programmer mode templates and testing after multi game changes
 - [x] *Lable colours not setting correctly
 - [x] *Betamounts not set correctly when changing strategies
+- [ ] *Retry Bet not restarting bet loop - errors also won't...
 - [ ] *Double check site settings
 - [ ] *reset seed caused betting to stop (this probably just needs to implemented on all of the sites?)
 - [x] *SiteDetails and SiteStats class are not defined before until we do a first bet

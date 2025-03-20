@@ -4,18 +4,29 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:vm="using:Gambler.Bot.ViewModels.Common"
-			       x:DataType="vm:ProfitChartViewModel"
-             x:Class="Gambler.Bot.Views.Common.ProfitChartView" 
-             xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia">
-	<Grid>
-		<lvc:CartesianChart
-			Series="{Binding Series}"
-			Title="{Binding Title}">
+             x:DataType="vm:ProfitChartViewModel"
+             x:Class="Gambler.Bot.Views.Common.ProfitChartView"
+             xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+             xmlns:img="https://github.com/projektanker/icons.avalonia">
+    <Grid>
+        <lvc:CartesianChart EasingFunction="{x:Null}"
+                            Series="{Binding Series}"
+                            Title="{Binding Title}" UpdateFinished="CartesianChart_UpdateFinished" Loaded="CartesianChart_Loaded"  >
 
-		</lvc:CartesianChart>
-		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
-			<Button Content="{Binding FreezeText}" Command="{Binding FreezeCommand}" />
-			<Button Content="Reset" Command="{Binding ResetCommand}" />
-		</StackPanel>
-	</Grid>
+        </lvc:CartesianChart>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <Button Command="{Binding FreezeCommand}" >
+                <StackPanel Orientation="Horizontal">
+                    <img:Icon Classes="btnIcon" Value="mdi-pause" />
+                    <TextBlock Text="{Binding FreezeText}"/>
+                </StackPanel>
+            </Button>
+            <Button  Command="{Binding ResetCommand}" >
+                <StackPanel Orientation="Horizontal">
+                    <img:Icon Classes="btnIcon" Value="mdi-restore" />
+                    <TextBlock Text="Reset"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </Grid>
 </UserControl>

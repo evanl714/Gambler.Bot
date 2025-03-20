@@ -134,6 +134,9 @@
         <system:String x:Key="Localization.Common.Simulation.ProjectedTime">Projected Time</system:String>
         <system:String x:Key="Localization.Common.Simulation.ProjectedRemaining">Projected remaining</system:String>
         <system:String x:Key="Localization.Common.Simulation.EnableBetLog">Enable bet log</system:String>
+        <system:String x:Key="Localization.Common.Simulation.ShowChart">Show Chart</system:String>
+        <system:String x:Key="Localization.Common.Simulation.ChartBets">Bets in chart</system:String>
+        <system:String x:Key="Localization.Common.Simulation.ChartSlow">Enabling the chart will have a severe impact on simulation performance.</system:String>
 
         <system:String x:Key="Localization.Common.Triggers.Enabled">Enabled</system:String>
         <system:String x:Key="Localization.Common.Triggers.Description">Description</system:String>
@@ -187,12 +190,12 @@
             <system:String x:Key="Localization.Game.Amount">Amount</system:String>
             <system:String x:Key="Localization.Game.Payout">Payout</system:String>
             <system:String x:Key="Localization.Games.Dice.High">High</system:String>
-            <system:String x:Key="Localization.Games.Dice.BetHigh">Bet High</system:String>
-            <system:String x:Key="Localization.Games.Dice.BetLow">Bet Low</system:String>
+            <system:String x:Key="Localization.Games.Dice.BetHigh">High</system:String>
+            <system:String x:Key="Localization.Games.Dice.BetLow">Low</system:String>
             <system:String x:Key="Localization.Games.Dice.Chance">Chance</system:String>
             <system:String x:Key="Localization.Games.Dice.Roll">Roll</system:String>
-	<system:String x:Key="Localization.Games.Limbo.Result">Result</system:String>
-	
+            <system:String x:Key="Localization.Games.Limbo.Result">Result</system:String>
+
 
             <system:String x:Key="Localization.Strategy.DAlembert.Increment">Increment</system:String>
             <system:String x:Key="Localization.Strategy.DAlembert.Stretch">Stretch</system:String>

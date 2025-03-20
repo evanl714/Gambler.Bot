@@ -13,8 +13,9 @@
              >
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <sg:SpacedGrid Margin="5" VerticalAlignment="Top" RowSpacing="3" ColumnSpacing="6" Grid.Column="0">
             <Grid.ColumnDefinitions>
@@ -24,6 +25,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -46,15 +48,20 @@
             </StackPanel>
             <TextBlock Grid.Column="0" Grid.Row="3"  Text="{DynamicResource Localization.Common.Simulation.EnableBetLog}"/>
             <ToggleSwitch IsChecked="{Binding Log}" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" IsEnabled="{Binding NotRunning}" />
+            <TextBlock Grid.Column="0" Grid.Row="4"  Text="{DynamicResource Localization.Common.Simulation.ShowChart}"/>
+
+            <ToggleSwitch IsChecked="{Binding Chart.Enabled}"  ToolTip.Tip="{DynamicResource Localization.Common.Simulation.ChartSlow}"  Grid.Column="1" Grid.Row="4" HorizontalAlignment="Left"  />
             <Button HorizontalAlignment="Right" IsEnabled="{Binding CanSave}" VerticalAlignment="Top" Grid.Column="1" Grid.Row="3"  Content="{DynamicResource Localization.Common.Simulation.SaveBets}" Command="{Binding SaveCommand}"/>
-            <SelectableTextBlock Grid.Column="0" Grid.Row="4" Text="{DynamicResource Localization.Common.Balance}" />
-            <SelectableTextBlock Grid.Column="1" Grid.Row="4"  >
+            <TextBlock Grid.Column="0" Grid.Row="5"  Text="{DynamicResource Localization.Common.Simulation.ShowChart}"/>
+            <NumericUpDown Value="{Binding Chart.MaxItems}" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left"  />
+            <SelectableTextBlock Grid.Column="0" Grid.Row="6" Text="{DynamicResource Localization.Common.Balance}" />
+            <SelectableTextBlock Grid.Column="1" Grid.Row="6"  >
                 <i:Interaction.Behaviors>
-                    <behaviours:NumberFormatBehaviour Mask="n0" Text="{Binding CurrentSimulation.Balance, Mode=OneWay}" />
+                    <behaviours:NumberFormatBehaviour Mask="n8" Text="{Binding Balance, Mode=OneWay}" />
                 </i:Interaction.Behaviors>
             </SelectableTextBlock>
-            <SelectableTextBlock Grid.Column="0" Grid.Row="5" Text="{DynamicResource Localization.Common.Simulation.Progress}"/>
-            <SelectableTextBlock Grid.Column="1" Grid.Row="5"   >
+            <SelectableTextBlock Grid.Column="2" Grid.Row="6" Text="{DynamicResource Localization.Common.Simulation.Progress}"/>
+            <SelectableTextBlock Grid.Column="3" Grid.Row="6"   >
                 <i:Interaction.Behaviors>
                     <behaviours:NumberFormatBehaviour Mask="p5" Text="{Binding Progress, Mode=OneWay}" />
                 </i:Interaction.Behaviors>
@@ -89,5 +96,6 @@
 
         </sg:SpacedGrid>
         <common:SessionStatsView Grid.Row="1" DataContext="{Binding Stats}"  />
+        <common:ProfitChartView MinHeight="300" Grid.Row="2" DataContext="{Binding Chart}" IsVisible="{Binding Enabled}" />
     </Grid>
 </UserControl>

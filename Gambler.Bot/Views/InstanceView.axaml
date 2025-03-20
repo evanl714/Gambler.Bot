@@ -98,12 +98,12 @@
                         <ColumnDefinition  Width="auto"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" >
-                        <Image Source="{SvgImage /Assets/Images/bxs-user-check.svg}" IsVisible="{Binding LoggedIn}"/>
-                        <Image Source="{SvgImage /Assets/Images/bxs-user-x.svg}" IsVisible="{Binding NotLoggedIn}"/>
-                        <Image Source="{SvgImage /Assets/Images/bx-run.svg}" IsVisible="{Binding Running}"/>
-                        <Image Source="{SvgImage /Assets/Images/bx-stop.svg}" IsVisible="{Binding Stopped}"/>
+                        <i:Icon Classes="btnIcon" Value="mdi-link" IsVisible="{Binding LoggedIn}" />
+                        <i:Icon Classes="btnIcon" Value="mdi-link-off"  IsVisible="{Binding NotLoggedIn}"/>
+                        <i:Icon Classes="btnIcon" Value="mdi-run"  IsVisible="{Binding Running}"/>
+                        <i:Icon Classes="btnIcon" Value="mdi-stop"  IsVisible="{Binding Stopped}"/>
                         <TextBlock Text="{DynamicResource Localization.InstanceView.Status}" VerticalAlignment="Bottom"/>
-                        <TextBlock Text="{Binding StatusMessage}"/>
+                        <TextBlock Text="{Binding StatusMessage}" VerticalAlignment="Bottom"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" >
                         <TextBlock Text="{DynamicResource Localization.InstanceView.LastAction}"/>
@@ -160,25 +160,28 @@
                         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
                             <Button Margin="5" Command="{Binding StartCommand}" IsEnabled="{Binding CanStart}">
                                 <StackPanel Orientation="Horizontal">
-                                    <i:Icon Value="mdi-play" />
+                                    <i:Icon Classes="btnIcon" Value="mdi-play" IsVisible="{Binding CanStart}" />
+                                    <actipro:RingSpinner Width="16" Height="16" Classes="accent"
+                                                         Background="{actipro:ThemeResource Container5BackgroundBrush}"
+                                                         LineThickness="3" LineCap="Flat" IsSpinning="True" IsVisible="{Binding Running}" />
                                     <TextBlock Text="Start"/>
                                 </StackPanel>
                             </Button>
                             <Button Margin="5" i:Attached.Icon="mdi-replay" Command="{Binding ResumeCommand}" IsEnabled="{Binding CanResume}">
                                 <StackPanel Orientation="Horizontal">
-                                    <i:Icon Value="mdi-replay" />
+                                    <i:Icon Classes="btnIcon" Value="mdi-replay" />
                                     <TextBlock Text="Resume"/>
                                 </StackPanel>
                             </Button>
                             <Button Margin="5" i:Attached.Icon="mdi-stop" Command="{Binding StopCommand}" >
                                 <StackPanel Orientation="Horizontal">
-                                    <i:Icon Value="mdi-stop" />
+                                    <i:Icon Classes="btnIcon" Value="mdi-stop" />
                                     <TextBlock Text="Stop"/>
                                 </StackPanel>
                             </Button>
                             <Button Margin="5" i:Attached.Icon="mdi-stop-circle-outline" Command="{Binding StopOnWinCommand}" IsEnabled="{Binding Running}">
                                 <StackPanel Orientation="Horizontal">
-                                    <i:Icon Value="mdi-stop-circle-outline" />
+                                    <i:Icon Classes="btnIcon" Value="mdi-stop-circle-outline" />
                                     <TextBlock Text="Stop on win"/>
                                 </StackPanel>
                             </Button>
@@ -254,7 +257,7 @@
                                             </DataTemplate>
                                         </ContentControl.DataTemplates>
                                     </ContentControl>
-                                    <Button Grid.Row="1" Content="Place Bet" HorizontalAlignment="Right" Command="{Binding ManualBetCommand}"/>
+                                    <Button Grid.Row="1" Content="Place Bet" HorizontalAlignment="Center" Margin="5" Padding="15" FontSize="18" Command="{Binding ManualBetCommand}"/>
                                 </Grid>
                             </TabItem>
                             <TabItem Header="{DynamicResource Localization.Common.Console}">

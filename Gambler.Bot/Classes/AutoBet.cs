@@ -459,7 +459,7 @@ namespace Gambler.Bot.Classes
             {
                 (Strategy as IProgrammerMode).UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
                 (Strategy as IProgrammerMode).UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
-                (Strategy as IProgrammerMode).UpdateSite(CopyHelper.CreateCopy<SiteDetails>(CurrentSite.SiteDetails));
+                (Strategy as IProgrammerMode).UpdateSite((CurrentSite.SiteDetails));
             }
             bool win = MostRecentBet.IsWin;
             if (StopOnWin && win)
@@ -471,7 +471,9 @@ namespace Gambler.Bot.Classes
                 NextBext = Strategy.CalculateNextBet(MostRecentBet, win);
             if (Running)
             {
-                decimal secondsPerBet = 1m /BetSettings.BotSpeed;
+                decimal secondsPerBet = 0;
+                if (BetSettings.EnableBotSpeed && BetSettings.BotSpeed>0)
+                    secondsPerBet = 1m / BetSettings.BotSpeed;
                 decimal msPerBet = secondsPerBet * 1000m;
                 decimal timetoBet = CurrentSite.TimeToBet(NextBext);
                 while (timetoBet > 0 
@@ -709,42 +711,45 @@ namespace Gambler.Bot.Classes
              * run dicebet thread to place initial bet
              */
         }
-
-        private async Task RunBot()
+        
+        private async Task RunBot(bool resume = false)
         {
             await Task.Run(async () =>
             {
-                Bet NewBet = await PlaceBet(Strategy.Start(CurrentGame));
-                while (Running && NewBet != null)
+                if (!resume)
+                    await PlaceBet(Strategy.Start(CurrentGame));
+                while (Running && MostRecentBet != null)
                 {
-
-                    if (NewBet == null)
-                        return;
+                    
+                    while (MostRecentBet == null && Running)
+                    {
+                        await Task.Delay(1000);
+                    }
                     try
                     {
-                        bool win = NewBet.IsWin;
+                        bool win = MostRecentBet.IsWin;
                         string Response = "";
                         bool Reset = false;
-                        if (BetSettings?.CheckResetPreStats(NewBet, win, Stats, CurrentSite.Stats) ?? false)
+                        if (BetSettings?.CheckResetPreStats(MostRecentBet, win, Stats, CurrentSite.Stats) ?? false)
                         {
                             Reset = true;
                             NextBext = Strategy.RunReset(CurrentGame);
                         }
-                        if (BetSettings?.CheckStopPreStats(NewBet, win, Stats, out Response, CurrentSite.Stats) ?? false)
+                        if (BetSettings?.CheckStopPreStats(MostRecentBet, win, Stats, out Response, CurrentSite.Stats) ?? false)
                         {
                             StopStrategy(Response);
                         }
-                        Stats.UpdateStats(NewBet, win);
+                        Stats.UpdateStats(MostRecentBet, win);
                         if (Strategy is IProgrammerMode prog)
                         {
                             prog.UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
                             prog.UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
-                            prog.UpdateSite(CopyHelper.CreateCopy<SiteDetails>(CurrentSite.SiteDetails));
+                            prog.UpdateSite((CurrentSite.SiteDetails));
                         }
                         
 
 
-                        if (NewBet.Guid != LastBetGuid || LastBetsGuids.Contains(NewBet.Guid))
+                        if (MostRecentBet.Guid != LastBetGuid || LastBetsGuids.Contains(MostRecentBet.Guid))
                         {
                             StopStrategy("Last bet did not match the latest bet placed.");
                             //stop
@@ -752,14 +757,10 @@ namespace Gambler.Bot.Classes
                         }
                         else
                         {
-                            LastBetsGuids.Enqueue(NewBet.Guid);
+                            LastBetsGuids.Enqueue(MostRecentBet.Guid);
                             if (LastBetsGuids.Count > 10)
                                 LastBetsGuids.Dequeue();
                         }
-
-
-
-
 
                         foreach (Trigger x in PersonalSettings.Notifications)
                         {
@@ -801,35 +802,33 @@ namespace Gambler.Bot.Classes
                                 }
                             }
                         }
-                        if (BetSettings.CheckResetPostStats(NewBet, win, Stats, CurrentSite.Stats))
+                        if (BetSettings.CheckResetPostStats(MostRecentBet, win, Stats, CurrentSite.Stats))
                         {
                             Reset = true;
                             NextBext = Strategy.RunReset(CurrentGame);
                         }
-                        if (BetSettings.CheckStopPOstStats(NewBet, win, Stats, out Response, CurrentSite.Stats))
+                        if (BetSettings.CheckStopPOstStats(MostRecentBet, win, Stats, out Response, CurrentSite.Stats))
                         {
                             StopStrategy(Response);
                         }
                         decimal withdrawamount = 0;
                         string address = null;
-                        if (BetSettings.CheckWithdraw(NewBet, win, Stats, out withdrawamount, CurrentSite.Stats, out address))
+                        if (BetSettings.CheckWithdraw(MostRecentBet, win, Stats, out withdrawamount, CurrentSite.Stats, out address))
                         {
-
                             await CurrentSite.Withdraw(address, withdrawamount);
-
                         }
-                        if (BetSettings.CheckBank(NewBet, win, Stats, out withdrawamount, CurrentSite.Stats))
+                        if (BetSettings.CheckBank(MostRecentBet, win, Stats, out withdrawamount, CurrentSite.Stats))
                         {
                             throw new NotImplementedException();
                             //this.Balance -= withdrawamount;
                         }
-                        if (BetSettings.CheckTips(NewBet, win, Stats, out withdrawamount, CurrentSite.Stats, out address))
+                        if (BetSettings.CheckTips(MostRecentBet, win, Stats, out withdrawamount, CurrentSite.Stats, out address))
                         {
                             await CurrentSite.SendTip(address, withdrawamount);
                             //this.Balance -= withdrawamount;
                         }
                         bool NewHigh = false;
-                        if (BetSettings.CheckResetSeed(NewBet, win, Stats, CurrentSite.Stats))
+                        if (BetSettings.CheckResetSeed(MostRecentBet, win, Stats, CurrentSite.Stats))
                         {
                             if (CurrentSite.CanChangeSeed)
                                 await CurrentSite.ResetSeed("");
@@ -839,7 +838,7 @@ namespace Gambler.Bot.Classes
                             var nextbet = CalculateNextBet();
                             if (nextbet == null)
                                 break;
-                            NewBet = await PlaceBet(nextbet);
+                            MostRecentBet = await PlaceBet(nextbet);
                         }
                     }
                     catch (Exception E)
@@ -868,7 +867,7 @@ namespace Gambler.Bot.Classes
                     (Strategy as IProgrammerMode).LoadScript();
                     (Strategy as IProgrammerMode).UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
                     (Strategy as IProgrammerMode).UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
-                    (Strategy as IProgrammerMode).UpdateSite(CopyHelper.CreateCopy<SiteDetails>(CurrentSite.SiteDetails));
+                    (Strategy as IProgrammerMode).UpdateSite((CurrentSite.SiteDetails));
                 }
                 Running = true;
                 Stats.StartTime = DateTime.Now;
@@ -876,7 +875,8 @@ namespace Gambler.Bot.Classes
                 MostRecentBetTime = DateTime.Now;
                 BetTimer.Enabled = true;
                 OnStarted?.Invoke(this, new EventArgs());
-                CalculateNextBet();
+                //CalculateNextBet();
+                RunningThread = RunBot();
             }
         }
         
@@ -952,6 +952,7 @@ namespace Gambler.Bot.Classes
 
         public async Task<Bet> PlaceBet(PlaceBet Bet)
         {
+            
             if (Bet == null)
             {
                 //notify of an error?
@@ -982,6 +983,7 @@ namespace Gambler.Bot.Classes
             MostRecentBetTime = DateTime.Now;
             Retries = 0;
             OnSiteBetFinished?.Invoke(CurrentSite, new BetFinisedEventArgs(NewBet));
+            
             return NewBet;
         }
 

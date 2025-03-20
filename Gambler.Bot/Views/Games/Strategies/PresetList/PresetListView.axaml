@@ -9,13 +9,29 @@
              x:DataType="vm:PresetListViewModel"
              xmlns:system="using:System"
              xmlns:i="https://github.com/projektanker/icons.avalonia"
+             xmlns:img="https://github.com/projektanker/icons.avalonia"
              >
     <StackPanel Orientation="Vertical">
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button HorizontalAlignment="Left" Command="{Binding AddCommand}" Content="{DynamicResource Localization.Common.Triggers.Add}"/>
-            <Button HorizontalAlignment="Left"  Command="{Binding OpenCommand}" Content="{DynamicResource Localization.Strategy.Labouchere.Open}"/>
-            <Button HorizontalAlignment="Right"  Command="{Binding SaveCommand}" Content="{DynamicResource Localization.InstanceView.Menu.Save}"/>
+            <Button HorizontalAlignment="Left" Command="{Binding AddCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <img:Icon Classes="btnIcon" Value="mdi-plus" />
+                    <TextBlock Text="{DynamicResource Localization.Common.Triggers.Add}"/>
+                </StackPanel>
+            </Button>
+            <Button HorizontalAlignment="Left"  Command="{Binding OpenCommand}" >
+                <StackPanel Orientation="Horizontal">
+                    <img:Icon Classes="btnIcon" Value="mdi-dots-horizontal" />
+                    <TextBlock Text="{DynamicResource Localization.Strategy.Labouchere.Open}"/>
+                </StackPanel>
+            </Button>
+            <Button HorizontalAlignment="Right"  Command="{Binding SaveCommand}" >
+                <StackPanel Orientation="Horizontal">
+                    <img:Icon Classes="btnIcon" Value="mdi-content-save" />
+                    <TextBlock Text="{DynamicResource Localization.InstanceView.Menu.Save}"/>
+                </StackPanel>
+            </Button>
         </StackPanel>
 
         <DataGrid ItemsSource="{Binding BetList}" SelectedIndex="{Binding SelectedIndex}" MinHeight="200">

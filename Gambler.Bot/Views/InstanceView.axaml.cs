@@ -14,6 +14,7 @@ using System;
 using System.Reactive;
 using System.Threading.Tasks;
 using System.Reactive.Linq;
+using Avalonia.Platform;
 
 namespace Gambler.Bot.Views;
 
@@ -56,6 +57,10 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
         window.DataContext = context.Input;
         var dialog = new UserInputView();
         window.Content = dialog;
+        window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+        window.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
+        window.ExtendClientAreaToDecorationsHint = true;
+        window.Title = context.Input.Args.Prompt;
         dialog.DataContext = context.Input;
         window.SizeToContent = SizeToContent.WidthAndHeight;
         window.Title = $"User input";

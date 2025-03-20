@@ -3,11 +3,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             xmlns:vm="using:Gambler.Bot.ViewModels.Common"xmlns:bot="using:Gambler.Bot"
+             xmlns:vm="using:Gambler.Bot.ViewModels.Common"
+             xmlns:bot="using:Gambler.Bot"
              x:DataType="vm:UserInputViewModel"
-             x:Class="Gambler.Bot.Views.Common.UserInputView">
+             x:Class="Gambler.Bot.Views.Common.UserInputView" Padding="5">
     <Grid RowDefinitions="auto,auto,auto">
-        <TextBlock Text="{Binding Args.Prompt}" MinHeight="25" Grid.Row="0"/>
+        <TextBlock Text="{Binding Args.Prompt}" MinHeight="25" Grid.Row="0" Margin="5"/>
         <ContentControl Content="{Binding}" Grid.Row="1" MinWidth="100">
             <ContentControl.DataTemplates>
                 <bot:UserInputSelector>
@@ -26,7 +27,7 @@
                 </bot:UserInputSelector>
             </ContentControl.DataTemplates>
         </ContentControl>
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+        <StackPanel Margin="5" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="{Binding Args.btncanceltext}" Command="{Binding Cancel}"/>
             <Button Content="{Binding Args.btnoktext}" Command="{Binding Ok}"/>
         </StackPanel>
