@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 
 namespace Gambler.Bot.Views.Common;
 
-public partial class LoginView : ReactiveWindow<LoginViewModel>
+public partial class LoginView : ReactiveUserControl<LoginViewModel>
 {
     public LoginView()
     {
         InitializeComponent();
-        this.WhenActivated(action => 
-        action(ViewModel!.CloseDialog.RegisterHandler(CloseDialogAsync)));
+        /*this.WhenActivated(action => 
+        action(ViewModel!.CloseDialog.RegisterHandler(CloseDialogAsync)));*/
     }
 
     private async Task CloseDialogAsync(IInteractionContext<LoginViewModel,
                                         LoginViewModel?> interaction)
     {
-        Dispatcher.UIThread.Invoke(Close);
+        //Dispatcher.UIThread.Invoke(Close);
         
     }
 }

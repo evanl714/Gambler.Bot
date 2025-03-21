@@ -131,6 +131,7 @@
                     <GridSplitter Margin="3" Grid.Column="1" Grid.RowSpan="2" Background="{actipro:ThemeResource Container3BorderBrush}" ResizeDirection="Columns"/>
 
                     <StackPanel IsVisible="{Binding ShowStats}" Grid.Column="0" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Stretch">
+                        <common:LoginView DataContext="{Binding LoginVM}" IsVisible="{Binding $parent[StackPanel].((vm:InstanceViewModel)DataContext).NotLoggedIn}"/>
                         <common:SiteStatsView VerticalAlignment="Top" HorizontalAlignment="Stretch" MinWidth="300" Grid.Row="0" DataContext="{Binding SiteStatsData}"/>
                         <common:SessionStatsView  MinWidth="600" Grid.Row="2" DataContext="{Binding SessionStatsData}" VerticalAlignment="Top" HorizontalAlignment="Stretch" />
                     </StackPanel>

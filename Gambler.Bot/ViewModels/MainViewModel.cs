@@ -1,5 +1,6 @@
 ﻿using ActiproSoftware.UI.Avalonia.Themes;
 using Gambler.Bot.Classes;
+using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using System;
 using System.IO;
@@ -12,8 +13,10 @@ namespace Gambler.Bot.ViewModels
         private InstanceViewModel _instance;
         public InstanceViewModel Instance { get =>_instance; set { _instance = value; this.RaisePropertyChanged(); } }
         static string uiSettingsFile;
+        internal static ILogger log = null;
         public MainViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
         {
+            log = logger;
             uiSettingsFile = string.Empty;
             UISettings.Portable = File.Exists("portable"); ;
             if (UISettings.Portable)

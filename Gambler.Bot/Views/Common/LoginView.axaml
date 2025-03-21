@@ -1,15 +1,15 @@
-<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="Gambler.Bot.Views.Common.LoginView"
-        xmlns:vm="using:Gambler.Bot.ViewModels.Common"
-        x:DataType="vm:LoginViewModel"
-        SizeToContent="WidthAndHeight"
-        Title="{Binding Title}" WindowStartupLocation="CenterOwner"
-        xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
-        >
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Gambler.Bot.Views.Common.LoginView"
+             xmlns:vm="using:Gambler.Bot.ViewModels.Common"
+             x:DataType="vm:LoginViewModel"
+
+
+             xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+             >
 
     <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
         <ItemsControl IsEnabled="{Binding CanLogIn}"  Width="300" Padding="5,0,0,0" Margin="5" Grid.Column="2" ItemsSource="{Binding LoginParams}" VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -40,8 +40,7 @@
                     <TextBlock Text="{DynamicResource Localization.InstanceView.Menu.LogIn}"></TextBlock>
                 </StackPanel>
             </Button>
-            <Button Margin="5" Content="{DynamicResource Localization.Common.Canel}" Command="{Binding CancelCommand}" />
-            <Button Margin="5" Content="{DynamicResource Localization.Common.Skip}" Command="{Binding SkipCommand}" />
+            <Button Margin="5" Content="{DynamicResource Localization.InstanceView.Menu.ChangeSite}" Command="{Binding CancelCommand}" />
         </StackPanel>
     </StackPanel>
-</Window>
+</UserControl>

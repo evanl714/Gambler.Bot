@@ -55,7 +55,7 @@ if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
                 {
                 IconProvider.Current
                 .Register<MaterialDesignIconProvider>();
-services.AddLogging(configure => configure.AddConsole());
+services.AddLogging(configure => configure.AddConsole().SetMinimumLevel(LogLevel.Debug).AddDebug());
 
 
                         services.AddTransient<MainWindowViewModel>();

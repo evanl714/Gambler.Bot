@@ -16,7 +16,7 @@ namespace Gambler.Bot.ViewModels.Common
 {
     public class LoginViewModel: ViewModelBase
     {
-        public Interaction<LoginViewModel, LoginViewModel?> CloseDialog { get; }
+        //public Interaction<LoginViewModel, LoginViewModel?> CloseDialog { get; }
 
         public Action<bool> LoginFinished;
 
@@ -107,7 +107,7 @@ namespace Gambler.Bot.ViewModels.Common
             LoginCommand = ReactiveCommand.Create(LogIn);
             SkipCommand = ReactiveCommand.Create(Skip);
             CancelCommand = ReactiveCommand.Create(Cancel);
-            CloseDialog = new Interaction<LoginViewModel, LoginViewModel?>();
+            //CloseDialog = new Interaction<LoginViewModel, LoginViewModel?>();
 
         }
 
@@ -142,7 +142,8 @@ namespace Gambler.Bot.ViewModels.Common
         async Task Cancel()
         {
             //close the dialog without changing anything about the display
-            var result = await CloseDialog.Handle(this);
+            //var result = await CloseDialog.Handle(this);
+
         }
     }
 }

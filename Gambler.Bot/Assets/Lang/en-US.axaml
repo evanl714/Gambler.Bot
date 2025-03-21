@@ -53,6 +53,7 @@
     <system:String x:Key="Localization.Common.Profit">Profit</system:String>
     <system:String x:Key="Localization.Common.Loss">Loss</system:String>
     <system:String x:Key="Localization.Common.Canel">Cancel</system:String>
+	
     <system:String x:Key="Localization.Common.Browse">Browse</system:String>
     <system:String x:Key="Localization.Common.First">First</system:String>
     <system:String x:Key="Localization.Common.Previous">Previous</system:String>

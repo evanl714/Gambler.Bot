@@ -64,7 +64,7 @@ namespace Gambler.Bot.ViewModels
         private LibVLC _libvlc = new LibVLC();
         private MediaPlayer _chime;
         private MediaPlayer _alarm;
-
+        
         public InstanceViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
         {
             GetLanguages();
@@ -232,10 +232,13 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         private async void BotIns_OnSiteBetFinished(object sender, BetFinisedEventArgs e)
         {
-            SiteStatsData.StatsUpdated(botIns.SiteStats);
-            SessionStatsData.StatsUpdated(botIns.Stats);
-            ChartData.AddPoint(e.NewBet.Profit, e.NewBet.IsWin);
-            LiveBets.AddBet(e.NewBet);
+            if (e.NewBet != null)
+            {
+                SiteStatsData.StatsUpdated(botIns.SiteStats);
+                SessionStatsData.StatsUpdated(botIns.Stats);
+                ChartData.AddPoint(e.NewBet.Profit, e.NewBet.IsWin);
+                LiveBets.AddBet(e.NewBet);
+            }
         }
 
         private void BotIns_OnSiteLoginFinished(object sender, LoginFinishedEventArgs e)
@@ -610,10 +613,11 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
         {
             try
             {
-                var store = new LoginViewModel(botIns, _logger);
-                store.LoginFinished = LoginFinished;
-                var result = await ShowDialog.Handle(store);
-            } catch(Exception e)
+                LoginVM = new LoginViewModel(botIns, _logger);
+                LoginVM.LoginFinished = LoginFinished;
+                /*var result = await ShowDialog.Handle(store);*/
+            }
+            catch (Exception e)
             {
             }
         }
@@ -675,9 +679,10 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             CurrentGame = tmpGame;
             this.RaisePropertyChanged(nameof(CurrentGame));
             this.RaisePropertyChanged(nameof(SiteName));
-            if(showLogin)
-                ShowLogin();//.Wait();
-            else
+            ShowLogin();
+            /*if (showLogin)
+               //.Wait();
+            else*/
                 ShowSites = false;
         }
 
@@ -911,6 +916,14 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                 _placeBetVM = value;
                 this.RaisePropertyChanged();
             }
+        }
+
+        private LoginViewModel LoginViewModel;
+
+        public LoginViewModel LoginVM
+        {
+            get { return LoginViewModel; }
+            set { LoginViewModel = value; this.RaisePropertyChanged(); }
         }
 
         public ResetSettingsViewModel ResetSettingsVM { get; set; }// = new ResetSettingsViewModel();

@@ -141,7 +141,7 @@ namespace Gambler.Bot.Classes
                         if (x.IsSubclassOf(typeof(Gambler.Bot.Core.Sites.BaseSite)))
                         {
                             _Logger?.LogDebug("Found Type - " + x.Name, 6);
-                            sites.Add(x.Name);
+                            //sites.Add(x.Name);
                             string[] currenices = new string[] { "btc" };
                             string url = "";
                             Games[] games = new Games[] { Games.Dice };
@@ -149,8 +149,14 @@ namespace Gambler.Bot.Classes
                             {
                                 _Logger?.LogDebug("Fetching currencies for - {Description}",x.Name);
                                 BaseSite SiteInst = Activator.CreateInstance(x, _Logger) as BaseSite;
+                                if (!SiteInst.IsEnabled)
+                                    continue;
+                                sites.Add(SiteInst.SiteName);
                                 currenices = (SiteInst).Currencies;
+                                games = (Activator.CreateInstance(x, _Logger) as BaseSite).SupportedGames;
                                 url = SiteInst.SiteURL;
+                                Sites.Add(new SitesList { Name = SiteInst.SiteName, Currencies = currenices, SupportedGames = games, URL = url }.SetType(x));
+
                                 if (DBInterface != null)
                                 {
                                     DBInterface.Sites.Add(SiteInst.SiteDetails);
@@ -161,17 +167,7 @@ namespace Gambler.Bot.Classes
                             {
                                 _Logger?.LogError(e.ToString());
                             }
-                            try
-                            {
-                                _Logger?.LogDebug("Fetching currencies for - {Description}",x.Name);
-
-                                games = (Activator.CreateInstance(x, _Logger) as BaseSite).SupportedGames;
-                            }
-                            catch (Exception e)
-                            {
-                                _Logger?.LogError(e.ToString());
-                            }
-                            Sites.Add(new SitesList { Name = x.Name, Currencies = currenices, SupportedGames = games, URL= url }.SetType(x));
+                            
                             
                         }
                     }

@@ -54,6 +54,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.3" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.3" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.3" />
     <PackageReference Include="MySql.EntityFrameworkCore" Version="9.0.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
     <PackageReference Include="Projektanker.Icons.Avalonia" Version="9.6.1" />
@@ -1589,7 +1590,7 @@
 	  <AvaloniaResource Update="Assets\Images\Sites\freebitcoin.png">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </AvaloniaResource>
-	  <AvaloniaResource Update="Assets\Images\Sites\nitrogensports.png">
+	  <AvaloniaResource Update="Assets\Images\Sites\ns.png">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </AvaloniaResource>
 	  <AvaloniaResource Update="Assets\Images\Sites\primedice.png">
@@ -1604,7 +1605,7 @@
 	  <AvaloniaResource Update="Assets\Images\Sites\windice.png">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </AvaloniaResource>
-	  <AvaloniaResource Update="Assets\Images\Sites\wolfbet.png">
+	  <AvaloniaResource Update="Assets\Images\Sites\wolf.bet.png">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </AvaloniaResource>
 	  <AvaloniaResource Update="Assets\Sounds\alarm.wav">

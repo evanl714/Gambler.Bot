@@ -129,8 +129,8 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
         var dialog = new LoginView();
         dialog.DataContext = interaction.Input;
         var ParentWindow = this.FindAncestorOfType<Window>();
-        var result = await dialog.ShowDialog<LoginViewModel?>(ParentWindow);
-        interaction.SetOutput(result);
+        //var result = await dialog.ShowDialog<LoginViewModel?>(ParentWindow);
+        //interaction.SetOutput(result);
     }
 
     private async Task ShowRollVerifier(IInteractionContext<RollVerifierViewModel,
