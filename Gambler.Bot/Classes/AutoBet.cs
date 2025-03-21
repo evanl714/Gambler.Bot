@@ -38,6 +38,7 @@ namespace Gambler.Bot.Classes
         List<Common.Events.ErrorEventArgs> ActiveErrors = new List<ErrorEventArgs>();
         //PwDatabase Passdb = new PwDatabase();
         System.Timers.Timer BetTimer = new System.Timers.Timer { Interval=1000, Enabled=false, AutoReset=true };
+        
 
         public bool KeepassOpen
         {
@@ -1228,6 +1229,7 @@ namespace Gambler.Bot.Classes
         internal void Disconnect()
         {
             CurrentSite?.Disconnect();
+            LoggedIn = CurrentSite?.LoggedIn??false;
         }
 
         internal void SetSite(SitesList newSite)

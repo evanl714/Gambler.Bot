@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -17,7 +18,7 @@ namespace Gambler.Bot.ViewModels.Common
     public class LoginViewModel: ViewModelBase
     {
         //public Interaction<LoginViewModel, LoginViewModel?> CloseDialog { get; }
-
+        public event EventHandler ChangeSite;
         public Action<bool> LoginFinished;
 
         public string Title
@@ -66,7 +67,9 @@ namespace Gambler.Bot.ViewModels.Common
             else
             {
                 LoginParams.Clear();
-                Cancel();
+                CanLogIn = true;
+                ShowError = false;
+                //Cancel();
                 Dispatcher.UIThread.Invoke(() => { LoginFinished(true); });
 
             }
@@ -102,8 +105,6 @@ namespace Gambler.Bot.ViewModels.Common
 
         public LoginViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
         {
-                
-        
             LoginCommand = ReactiveCommand.Create(LogIn);
             SkipCommand = ReactiveCommand.Create(Skip);
             CancelCommand = ReactiveCommand.Create(Cancel);
@@ -116,6 +117,11 @@ namespace Gambler.Bot.ViewModels.Common
         {
             Site = site;
             LoginParams = site.GetLoginParams();
+        }
+
+        public void RefreshParams()
+        {
+            LoginParams = Site.GetLoginParams();
         }
 
         public ICommand LoginCommand { get; }
@@ -134,8 +140,8 @@ namespace Gambler.Bot.ViewModels.Common
         void Skip()
         {
             //close the dialog and show the bot controls
-            LoginFinished(true);
-            Cancel();
+            //LoginFinished(true);
+            //Cancel();
         }
         public ICommand CancelCommand { get; }
 
@@ -143,7 +149,7 @@ namespace Gambler.Bot.ViewModels.Common
         {
             //close the dialog without changing anything about the display
             //var result = await CloseDialog.Handle(this);
-
+            ChangeSite?.Invoke(this, new EventArgs());
         }
     }
 }

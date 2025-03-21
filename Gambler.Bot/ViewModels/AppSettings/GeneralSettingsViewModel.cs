@@ -45,7 +45,7 @@ namespace Gambler.Bot.ViewModels.AppSettings
         public ColorRampViewModel SelectedRamp
         {
             get { return selectedRamp; }
-            set { selectedRamp = value; UpdateTheme(); }
+            set { selectedRamp = value; UpdateTheme(); this.OnPropertyChanged(); }
         }
 
         private void UpdateTheme()
@@ -71,6 +71,7 @@ namespace Gambler.Bot.ViewModels.AppSettings
             _colorPalette = new DefaultColorPaletteFactory().Create();
             
             UpdateRamps();
+            SelectedRamp = Ramps.FirstOrDefault(x => x.Name == UiSettings.ThemeName);
         }
         private void UpdateRamps()
         {

@@ -114,6 +114,8 @@ namespace Gambler.Bot.ViewModels
             ShowUserInput = new Interaction<UserInputViewModel, Unit?>();
             tmp.Strategy = new Martingale(_logger);
             PlaceBetVM = new DicePlaceBetViewModel(_logger);
+            LoginVM = new LoginViewModel(_logger) { Site = tmp, LoginFinished = LoginFinished };
+            LoginVM.ChangeSite += LoginVM_ChangeSite;
             PlaceBetVM.PlaceBet += PlaceBetVM_PlaceBet;
             tmp.OnGameChanged += BotIns_OnGameChanged;
             tmp.OnNotification += BotIns_OnNotification;
@@ -129,6 +131,11 @@ namespace Gambler.Bot.ViewModels
             tmp.GetStrats();
             BotInstance = tmp;
             botIns.CurrentGame = Bot.Common.Games.Games.Dice;
+        }
+
+        private void LoginVM_ChangeSite(object? sender, EventArgs e)
+        {
+            ChangeSite();
         }
 
         public List<string> Languages { get; set; }
@@ -512,6 +519,8 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             botIns.StopStrategy("Logging Out");
             botIns.Disconnect();
             ShowLogin();
+            this.RaisePropertyChanged(nameof(LoggedIn));
+            this.RaisePropertyChanged(nameof(NotLoggedIn));
         }
 
         void Open() { throw new NotImplementedException(); }
@@ -613,7 +622,8 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
         {
             try
             {
-                LoginVM = new LoginViewModel(botIns, _logger);
+                //LoginVM.Site = botIns;
+                LoginVM.RefreshParams();
                 LoginVM.LoginFinished = LoginFinished;
                 /*var result = await ShowDialog.Handle(store);*/
             }

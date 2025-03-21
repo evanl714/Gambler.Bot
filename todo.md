@@ -70,6 +70,7 @@
 
 ### Known issues
 - [ ] *resume does not
+- [ ] **Selected theme doesn't show in settings
 - [x] *Some sites are not remembered but others are
 - [ ] *Disconnecting/logging out does not
 - [ ] *browser bypass sometimes only works on second/third attempt
