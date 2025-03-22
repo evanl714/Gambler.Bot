@@ -45,8 +45,7 @@ stages:
         dotnet sln $(solution) remove Gambler.Bot/Platforms/Gambler.Bot.Browser/Gambler.Bot.Browser.csproj
       displayName: 'Remove WASM project from solution'
 
-    - task: PowerShell@2
-      displayName: 'Update the version in the desktop project's csproj file.'
+    - task: PowerShell@2      
       inputs:
         targetType: 'inline'
         script: |
