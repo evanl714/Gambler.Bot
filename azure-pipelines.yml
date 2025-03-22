@@ -44,7 +44,8 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          $csprojPath = Get-ChildItem -Path "$(Build.SourcesDirectory)" -Filter "Gambler.Bot.csproj" -Recurse | Select-Object -First 1 -ExpandProperty FullName
+          # Update the version in the desktop project's csproj file.
+          $csprojPath = Get-ChildItem -Path "$(Build.SourcesDirectory)" -Filter "Gambler.Bot.Desktop.csproj" -Recurse | Select-Object -First 1 -ExpandProperty FullName
           [xml]$csproj = Get-Content -Path $csprojPath
           $versionNode = $csproj.SelectNodes("//Project/PropertyGroup/Version") | Select-Object -First 1
           if ($versionNode -eq $null) {
@@ -64,6 +65,11 @@ stages:
       inputs:
         restoreSolution: '$(solution)'
 
+    # New step: Install wasm-tools for .NET 8
+    - script: |
+        dotnet workload install wasm-tools --skip-manifest-update
+      displayName: 'Install wasm-tools for .NET 8'
+
     - task: VSBuild@1
       inputs:
         solution: '$(solution)'
@@ -71,7 +77,7 @@ stages:
         configuration: '$(buildConfiguration)'
 
     - script: |
-        dotnet publish Gambler.Bot/Gambler.Bot.csproj -c $(buildConfiguration) -r $(publishRuntime) --self-contained $(selfContained) -o "$(Build.ArtifactStagingDirectory)\Artifacts\$(publishRuntime)"
+        dotnet publish Platforms/Gambler.Bot.Desktop/Gambler.Bot.Desktop.csproj -c $(buildConfiguration) -r $(publishRuntime) --self-contained $(selfContained) -o "$(Build.ArtifactStagingDirectory)\Artifacts\$(publishRuntime)"
       displayName: 'Publish for $(publishRuntime)'
 
     - task: PublishBuildArtifacts@1
@@ -106,7 +112,7 @@ stages:
         buildType: 'current'
         downloadType: 'specific'
         artifactName: 'BuildArtifacts-osx-x64'
-        downloadPath: '$(Pipeline.Workspace)/Assets/osx-x64'
+        downloadPath: '$(Pipeline.Workspace)/Assets/osx-x86'
       displayName: 'Download macOS artifacts'
 
     - task: PowerShell@2
