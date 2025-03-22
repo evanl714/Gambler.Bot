@@ -1122,6 +1122,7 @@ namespace Gambler.Bot.Classes
             }
             _Logger?.LogInformation("Loaded Personal Settings File");
             PersonalSettings tmp = JsonSerializer.Deserialize<PersonalSettings>(Settings);
+            tmp.EnsureErrorSettings();
             _Logger?.LogInformation("Parsed Personal Settings File");
             this.PersonalSettings = tmp;
             string pw = "";

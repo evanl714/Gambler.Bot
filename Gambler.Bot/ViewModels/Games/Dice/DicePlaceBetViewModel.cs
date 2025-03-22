@@ -90,7 +90,6 @@ namespace Gambler.Bot.ViewModels.Games.Dice
             set { profit = value; this.RaisePropertyChanged(nameof(Profit)); Calculate(nameof(Profit)); }
         }
 
-        public decimal Edge { get; set; } = 1;
 
 
         public DicePlaceBetViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
@@ -156,18 +155,18 @@ namespace Gambler.Bot.ViewModels.Games.Dice
                 case nameof(Chance):
                     if (Chance != 0)
                     {
-                        if (Payout != (100m - Edge) / Chance)
+                        if (Payout != (100m - (GameSettings?.Edge??1)) / Chance)
                         {
-                            Payout = (100m - Edge) / Chance;
+                            Payout = (100m - (GameSettings?.Edge ?? 1)) / Chance;
                         }
                     }
                     break;
                 case nameof(Payout):
                     if (Payout != 0)
                     {
-                        if (Chance != (100m - Edge) / Payout)
+                        if (Chance != (100m - (GameSettings?.Edge ?? 1)) / Payout)
                         {
-                            Chance = (100m - Edge) / Payout;
+                            Chance = (100m - (GameSettings?.Edge ?? 1)) / Payout;
                         }
                         if (Profit != Amount * Payout - Amount)
                             Profit = Amount * Payout - Amount;
@@ -185,6 +184,7 @@ namespace Gambler.Bot.ViewModels.Games.Dice
         }
 
         public bool ShowButton { get=>!ShowToggle && showHighLow; }
+        public IGameConfig GameSettings { get; set; }
 
         public virtual event EventHandler<PlaceBetEventArgs> PlaceBet;
 

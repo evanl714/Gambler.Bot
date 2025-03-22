@@ -95,7 +95,13 @@ namespace Gambler.Bot.ViewModels.AppSettings
             get { return unkown; }
             set { unkown = value; this.RaisePropertyChanged(); Errors[ErrorType.Unknown].Action = value; }
         }
+        private ErrorActions bank;
 
+        public ErrorActions Bank
+        {
+            get { return unkown; }
+            set { unkown = value; this.RaisePropertyChanged(); Errors[ErrorType.Bank].Action = value; }
+        }
 
         public ErrorsViewModel(ILogger logger) : base(logger)
         {
@@ -138,6 +144,9 @@ namespace Gambler.Bot.ViewModels.AppSettings
                     break;
                     case Bot.Common.Enums.ErrorType.Unknown:
                     Unkown = error.Action;
+                    break;
+                case Bot.Common.Enums.ErrorType.Bank:
+                    Bank = error.Action;
                     break;
 
             }

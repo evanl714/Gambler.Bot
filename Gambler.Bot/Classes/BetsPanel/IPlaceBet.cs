@@ -1,4 +1,5 @@
 ﻿using Gambler.Bot.Common.Games;
+using Gambler.Bot.Common.Games.Dice;
 using System;
 
 namespace Gambler.Bot.Classes.BetsPanel
@@ -14,6 +15,7 @@ namespace Gambler.Bot.Classes.BetsPanel
     {
 
         event EventHandler<PlaceBetEventArgs> PlaceBet;
+        public IGameConfig GameSettings { get; set; }
         void BetCommand();
     }
 

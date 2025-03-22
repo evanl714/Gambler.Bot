@@ -8,6 +8,8 @@ using Gambler.Bot.Classes;
 using Gambler.Bot.Classes.BetsPanel;
 using Gambler.Bot.Classes.Strategies;
 using Gambler.Bot.Common.Events;
+using Gambler.Bot.Common.Games.Dice;
+using Gambler.Bot.Common.Games.Limbo;
 using Gambler.Bot.Core.Events;
 using Gambler.Bot.Core.Helpers;
 using Gambler.Bot.Strategies.Helpers;
@@ -17,6 +19,7 @@ using Gambler.Bot.ViewModels.AppSettings;
 using Gambler.Bot.ViewModels.Common;
 using Gambler.Bot.ViewModels.Games.Dice;
 using Gambler.Bot.ViewModels.Games.Limbo;
+using Gambler.Bot.ViewModels.Games.Twist;
 using Gambler.Bot.ViewModels.Strategies;
 using Gambler.Bot.Views;
 using LibVLCSharp.Shared;
@@ -194,19 +197,33 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                     break;
                 case
                     Bot.Common.Games.Games.Dice:
-                    PlaceBetVM = new DicePlaceBetViewModel(_logger);
-                    LiveBets = new DiceLiveBetViewModel(_logger);
-                    break;
+                    
+                        {
+                            PlaceBetVM = new DicePlaceBetViewModel(_logger) ;
+                            LiveBets = new DiceLiveBetViewModel(_logger);
+                            break;
+                        }
+                case
+                Bot.Common.Games.Games.Twist:
+
+                    {
+                        PlaceBetVM = new TwistPlaceBetViewModel(_logger) ;
+                        LiveBets = new DiceLiveBetViewModel(_logger);
+                        break;
+                    }
                 case
                     Bot.Common.Games.Games.Limbo:
                     PlaceBetVM = new LimboPlaceBetViewModel(_logger) { ShowHighLow = false };                    
                     LiveBets = new LimboLiveBetViewModel(_logger);
                     break;
             }
-            if(PlaceBetVM != null)
+            if (PlaceBetVM != null)
+            {
                 PlaceBetVM.PlaceBet += PlaceBetVM_PlaceBet;
+                PlaceBetVM.GameSettings = botIns?.GetCurrentSite()?.GetGameSettings(botIns.CurrentGame);
+            }
             if (StrategyVM!=null)
-                StrategyVM.GameChanged(botIns.CurrentGame);
+                StrategyVM.GameChanged(botIns.CurrentGame, botIns?.GetCurrentSite()?.GetGameSettings(botIns.CurrentGame));
             setTitle();
         }
 
@@ -361,7 +378,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             if(tmpStrat != null)
             {
                 tmpStrat.SetStrategy(BotInstance.Strategy);
-                tmpStrat.GameChanged(BotInstance.CurrentGame);
+                tmpStrat.GameChanged(BotInstance.CurrentGame, botIns?.GetCurrentSite()?.GetGameSettings(BotInstance.CurrentGame));
             }
             if(BotInstance.Strategy is IProgrammerMode prog)
             {
@@ -725,7 +742,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                 Enum.TryParse(typeof(Bot.Common.Games.Games), game, out curGame) &&
                 Array.IndexOf(botIns.SiteGames, (Bot.Common.Games.Games)curGame) >= 0)
                 botIns.CurrentGame = (Bot.Common.Games.Games)curGame;
-
+            PlaceBetVM.GameSettings = botIns.GetCurrentSite().GetGameSettings(botIns.CurrentGame);
             string tmpCurrency = CurrentCurrency;
             int? tmpGame = CurrentGame;
 

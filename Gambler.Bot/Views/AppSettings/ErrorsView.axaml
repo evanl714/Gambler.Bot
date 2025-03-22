@@ -8,7 +8,7 @@
              xmlns:vm="using:Gambler.Bot.ViewModels.AppSettings"
              x:DataType="vm:ErrorsViewModel"
              >
-    <Grid ColumnDefinitions="*,*" RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto">
+    <Grid ColumnDefinitions="*,*" RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto">
         <TextBlock Text="{DynamicResource Localization.AppSettings.Error.InvalidBet}" Grid.Column="0" Grid.Row="0"></TextBlock>
         <TextBlock Text="{DynamicResource Localization.AppSettings.Error.BalanceTooLow}" Grid.Column="0" Grid.Row="1"></TextBlock>
         <TextBlock Text="{DynamicResource Localization.AppSettings.Error.BetTooLow}" Grid.Column="0" Grid.Row="2"></TextBlock>
@@ -19,6 +19,7 @@
         <TextBlock Text="{DynamicResource Localization.AppSettings.Error.Other}" Grid.Column="0" Grid.Row="7"></TextBlock>
         <TextBlock Text="{DynamicResource Localization.AppSettings.Error.BetMismatch}" Grid.Column="0" Grid.Row="8"></TextBlock>
         <TextBlock Text="{DynamicResource Localization.AppSettings.Error.Unknown}" Grid.Column="0" Grid.Row="9"></TextBlock>
+        <TextBlock Text="{DynamicResource Localization.AppSettings.Error.Bank}" Grid.Column="0" Grid.Row="10"></TextBlock>
         <ComboBox ItemsSource="{Binding Actions}" SelectedItem="{Binding InvalidBet}" Grid.Column="1" Grid.Row="0"/>
         <ComboBox ItemsSource="{Binding Actions}" SelectedItem="{Binding BalanceTooLow}" Grid.Column="1" Grid.Row="1"/>
         <ComboBox ItemsSource="{Binding Actions}" SelectedItem="{Binding BetTooLow}" Grid.Column="1" Grid.Row="2"/>
@@ -29,6 +30,7 @@
         <ComboBox ItemsSource="{Binding Actions}" SelectedItem="{Binding Other}" Grid.Column="1" Grid.Row="7"/>
         <ComboBox ItemsSource="{Binding Actions}" SelectedItem="{Binding BetMisMatch}" Grid.Column="1" Grid.Row="8"/>
         <ComboBox ItemsSource="{Binding Actions}" SelectedItem="{Binding Unkown}" Grid.Column="1" Grid.Row="9"/>
+        <ComboBox ItemsSource="{Binding Actions}" SelectedItem="{Binding Bank}" Grid.Column="1" Grid.Row="10"/>
 
 
     </Grid>

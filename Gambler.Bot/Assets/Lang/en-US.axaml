@@ -53,7 +53,7 @@
     <system:String x:Key="Localization.Common.Profit">Profit</system:String>
     <system:String x:Key="Localization.Common.Loss">Loss</system:String>
     <system:String x:Key="Localization.Common.Canel">Cancel</system:String>
-	
+
     <system:String x:Key="Localization.Common.Browse">Browse</system:String>
     <system:String x:Key="Localization.Common.First">First</system:String>
     <system:String x:Key="Localization.Common.Previous">Previous</system:String>
@@ -185,6 +185,7 @@
             <system:String x:Key="Localization.AppSettings.Error.Other">Other</system:String>
             <system:String x:Key="Localization.AppSettings.Error.BetMismatch">Bet Mismatch</system:String>
             <system:String x:Key="Localization.AppSettings.Error.Unknown">Unknown</system:String>
+            <system:String x:Key="Localization.AppSettings.Error.Bank">Bank/Vault</system:String>
 
             <system:String x:Key="Localization.Game.BetId">Bet Id</system:String>
             <system:String x:Key="Localization.Game.Time">Time</system:String>

@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Gambler.Bot.Common.Games.Dice;
 
 namespace Gambler.Bot.ViewModels.Strategies
 {
@@ -67,7 +68,7 @@ namespace Gambler.Bot.ViewModels.Strategies
             SaveCommand = ReactiveCommand.Create(Save);
         }
 
-        public void GameChanged(Bot.Common.Games.Games newGame)
+        public void GameChanged(Bot.Common.Games.Games newGame, IGameConfig config)
         {
             if (PlaceBetVM != null && PlaceBetVM is INotifyPropertyChanged notify)
             {

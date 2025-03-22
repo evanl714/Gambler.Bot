@@ -99,6 +99,33 @@ namespace Gambler.Bot.Classes
             }
         }
 
+        public void EnsureErrorSettings()
+        {
+            if (!_Errors.ContainsKey(ErrorType.BalanceTooLow))
+                _Errors.Add(ErrorType.BalanceTooLow,new PersonalSettings.ErrorSetting { Type = ErrorType.BalanceTooLow, Action = ErrorActions.Retry });
+            if (!_Errors.ContainsKey(ErrorType.BetMismatch))
+                _Errors.Add(ErrorType.BetMismatch, new PersonalSettings.ErrorSetting { Type = ErrorType.BetMismatch, Action = ErrorActions.Stop });
+            if (!_Errors.ContainsKey(ErrorType.InvalidBet))
+                _Errors.Add(ErrorType.InvalidBet, new PersonalSettings.ErrorSetting { Type = ErrorType.InvalidBet, Action = ErrorActions.Stop });
+            if (!_Errors.ContainsKey(ErrorType.NotImplemented))
+                _Errors.Add(ErrorType.NotImplemented, new PersonalSettings.ErrorSetting { Type = ErrorType.NotImplemented, Action = ErrorActions.Stop });
+            if (!_Errors.ContainsKey(ErrorType.Other))
+                _Errors.Add(ErrorType.Other, new PersonalSettings.ErrorSetting { Type = ErrorType.Other, Action = ErrorActions.Stop });
+            if (!_Errors.ContainsKey(ErrorType.ResetSeed))
+                _Errors.Add(ErrorType.ResetSeed, new PersonalSettings.ErrorSetting { Type = ErrorType.ResetSeed, Action = ErrorActions.Resume });
+            if (!_Errors.ContainsKey(ErrorType.Tip))
+                _Errors.Add(ErrorType.Tip, new PersonalSettings.ErrorSetting { Type = ErrorType.Tip, Action = ErrorActions.Resume });
+            if (!_Errors.ContainsKey(ErrorType.Unknown))
+                _Errors.Add(ErrorType.Unknown, new PersonalSettings.ErrorSetting { Type = ErrorType.Unknown, Action = ErrorActions.Stop });
+            if (!_Errors.ContainsKey(ErrorType.Withdrawal))
+                _Errors.Add(ErrorType.Withdrawal, new PersonalSettings.ErrorSetting { Type = ErrorType.Withdrawal, Action = ErrorActions.Resume });
+            if (!_Errors.ContainsKey(ErrorType.BetTooLow))
+                _Errors.Add(ErrorType.BetTooLow, new PersonalSettings.ErrorSetting { Type = ErrorType.BetTooLow, Action = ErrorActions.Stop });
+            if (!_Errors.ContainsKey(ErrorType.Bank))
+                _Errors.Add(ErrorType.Bank, new PersonalSettings.ErrorSetting { Type = ErrorType.Bank, Action = ErrorActions.Resume });
+            
+        }
+
         public ErrorSetting GetErrorSetting(ErrorType Type)
         {
             if (_Errors.ContainsKey(Type))
@@ -140,21 +167,11 @@ namespace Gambler.Bot.Classes
             settings.EncrConnectionString = string.Format("Data Source={0};",Path.Combine( Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) , "Gambler.Bot","GamblerBot.db"));
             settings.RetryAttempts = 5;
             settings.RetryDelay = 30;
-            PersonalSettings.ErrorSetting[] tmp = new PersonalSettings.ErrorSetting[Enum.GetNames(typeof(ErrorType)).Length];
-            tmp[0] = new PersonalSettings.ErrorSetting { Type = ErrorType.BalanceTooLow, Action = ErrorActions.Retry };
-            tmp[1] = new PersonalSettings.ErrorSetting { Type = ErrorType.BetMismatch, Action = ErrorActions.Stop };
-            tmp[2] = new PersonalSettings.ErrorSetting { Type = ErrorType.InvalidBet, Action = ErrorActions.Stop };
-            tmp[3] = new PersonalSettings.ErrorSetting { Type = ErrorType.NotImplemented, Action = ErrorActions.Stop };
-            tmp[4] = new PersonalSettings.ErrorSetting { Type = ErrorType.Other, Action = ErrorActions.Stop };
-            tmp[5] = new PersonalSettings.ErrorSetting { Type = ErrorType.ResetSeed, Action = ErrorActions.Resume };
-            tmp[6] = new PersonalSettings.ErrorSetting { Type = ErrorType.Tip, Action = ErrorActions.Resume };
-            tmp[7] = new PersonalSettings.ErrorSetting { Type = ErrorType.Unknown, Action = ErrorActions.Stop };
-            tmp[8] = new PersonalSettings.ErrorSetting { Type = ErrorType.Withdrawal, Action = ErrorActions.Resume };
-            tmp[9] = new PersonalSettings.ErrorSetting { Type = ErrorType.BetTooLow, Action = ErrorActions.Stop };
-            settings.ErrorSettings = new List<ErrorSetting>(tmp);
+            settings.EnsureErrorSettings();
             
             return settings;
         }
     }
    
 }
+

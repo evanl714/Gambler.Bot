@@ -7,9 +7,10 @@
 - [x] *update stats window on timer if bot is running but stalled
 - [x] *Indicate but running status in status bar/title bar
 - [x] Multi game support
-- [ ] *Bank
+- [x] *Bank, (still needs to be added and tested for Bitsler, WinDice, WolfBet, DuckDice but waiting for feedback from sites.)
 - [ ] *Finish crash for ethercrash
-- [ ] Add extra games - Twist, Boom, keno, plinko, roulette, hilo
+- [ ] Add extra games - _Twist_, _Boom_, keno, plinko, roulette, hilo
+- [ ] Bet settings need to get the game settings to accomodate edge etc
 
 	
 ### Tabs
@@ -38,6 +39,7 @@
 - [x] *disable/enable start/stop/resume/stoponwin based on bot state
 - [x] option to run simulation without bet history
 - [ ] Simulator for other games
+- [ ] verifiers for other games
 - [x] Chart for simulator
 - [ ] Enable chart animation for normal bets but disable for simulation
 

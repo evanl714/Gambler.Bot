@@ -9,6 +9,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
+using Gambler.Bot.Common.Games.Dice;
 
 namespace Gambler.Bot.ViewModels.Strategies
 {
@@ -98,7 +99,7 @@ namespace Gambler.Bot.ViewModels.Strategies
                 BetList.Insert(SelectedIndex + 1, new PresetDiceBet { Amount = 0 });
         }
 
-        public void GameChanged(Bot.Common.Games.Games newGame)
+        public void GameChanged(Bot.Common.Games.Games newGame, IGameConfig config)
         {
            
         }

@@ -9,8 +9,10 @@
              xmlns:local="using:Gambler.Bot.Views"
              xmlns:common="using:Gambler.Bot.Views.Common"
              xmlns:dice="using:Gambler.Bot.Views.Games.Dice"
+             xmlns:twist="using:Gambler.Bot.Views.Games.Twist"
              xmlns:limbo="using:Gambler.Bot.Views.Games.Limbo"
              xmlns:diceVM="using:Gambler.Bot.ViewModels.Games.Dice"
+             xmlns:twistVM="using:Gambler.Bot.ViewModels.Games.Twist"
              xmlns:limboVM="using:Gambler.Bot.ViewModels.Games.Limbo"
              xmlns:stratVM="using:Gambler.Bot.ViewModels.Strategies"
              xmlns:strat="using:Gambler.Bot.Views.Games.Strategies"
@@ -150,6 +152,9 @@
                                 <DataTemplate DataType="diceVM:DiceLiveBetViewModel">
                                     <dice:DiceLiveBetView/>
                                 </DataTemplate>
+                                <DataTemplate DataType="twistVM:TwistLiveBetViewModel">
+                                    <dice:DiceLiveBetView/>
+                                </DataTemplate>
                                 <DataTemplate DataType="limboVM:LimboLiveBetViewModel">
                                     <limbo:LimboLiveBetView/>
                                 </DataTemplate>
@@ -254,6 +259,9 @@
                                                 <dice:DicePlaceBetView/>
                                             </DataTemplate>
                                             <DataTemplate DataType="limboVM:LimboPlaceBetViewModel">
+                                                <dice:DicePlaceBetView/>
+                                            </DataTemplate>
+                                            <DataTemplate DataType="twistVM:TwistPlaceBetViewModel">
                                                 <dice:DicePlaceBetView/>
                                             </DataTemplate>
                                         </ContentControl.DataTemplates>

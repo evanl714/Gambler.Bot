@@ -10,6 +10,7 @@ using System.IO;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Gambler.Bot.Common.Games.Dice;
 
 namespace Gambler.Bot.ViewModels.Strategies
 {
@@ -106,7 +107,7 @@ namespace Gambler.Bot.ViewModels.Strategies
             }
         }
 
-        public void GameChanged(Bot.Common.Games.Games newGame)
+        public void GameChanged(Bot.Common.Games.Games newGame, IGameConfig config)
         {
             
         }
