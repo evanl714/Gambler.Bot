@@ -67,9 +67,9 @@ stages:
     - task: NuGetToolInstaller@1
 
     # New step: Install wasm-tools for .NET 8 (if needed for other projects, ignore if not)
-    - script: |
-        dotnet workload install wasm-tools --skip-manifest-update
-      displayName: 'Install wasm-tools for .NET 8'
+    #- script: |
+    #    dotnet workload install wasm-tools --skip-manifest-update
+    #  displayName: 'Install wasm-tools for .NET 8'
 
     - task: NuGetCommand@2
       inputs:
