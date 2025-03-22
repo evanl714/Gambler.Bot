@@ -42,7 +42,7 @@ stages:
 
     # Remove the WASM project from the solution to exclude it from the build.
     - script: |
-        dotnet sln $(solution) remove Platforms/Gambler.Bot.Wasm/Gambler.Bot.Browser.csproj
+        dotnet sln $(solution) remove Platforms/Gambler.Bot.Browser/Gambler.Bot.Browser.csproj
       displayName: 'Remove WASM project from solution'
 
     - task: PowerShell@2
