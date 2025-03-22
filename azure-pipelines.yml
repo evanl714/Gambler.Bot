@@ -4,10 +4,10 @@ resources:
     type: github
     endpoint: Seuntjie900
     name: Seuntjie900/Gambler.Bot.Core
-  - repository: Gambler.Bot.AutoBet # The name used to reference this repository in the checkout step
+  - repository: Gambler.Bot.Strategies # The name used to reference this repository in the checkout step
     type: github
     endpoint: Seuntjie900
-    name: Seuntjie900/Gambler.Bot.AutoBet
+    name: Seuntjie900/Gambler.Bot.Strategies
 
 trigger:
 - master
@@ -21,11 +21,20 @@ variables:
   solution: '**/Gambler.Bot.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  selfContained: 'true'
 
 stages:
 - stage: Build
   jobs:
   - job: BuildJob
+    strategy:
+      matrix:
+        Windows:
+          publishRuntime: win-x64
+        Linux:
+          publishRuntime: linux-x64
+        macOS:
+          publishRuntime: osx-x64
     steps:
     - checkout: Gambler.Bot.Core
     - checkout: Gambler.Bot.AutoBet
@@ -49,7 +58,6 @@ stages:
           }
           $csproj.Save($csprojPath)
 
-
     - task: NuGetToolInstaller@1
 
     - task: NuGetCommand@2
@@ -63,20 +71,63 @@ stages:
         configuration: '$(buildConfiguration)'
 
     - script: |
-        mkdir $(Build.ArtifactStagingDirectory)\Artifacts
-      displayName: 'Make artifacts common dir'
+        dotnet publish Gambler.Bot/Gambler.Bot.csproj -c $(buildConfiguration) -r $(publishRuntime) --self-contained $(selfContained) -o "$(Build.ArtifactStagingDirectory)\Artifacts\$(publishRuntime)"
+      displayName: 'Publish for $(publishRuntime)'
 
-    - script: |
-        dir
-        xcopy /I /E /Y "Gambler.Bot\Gambler.Bot\bin\Release\net8.0\*" "$(Build.ArtifactStagingDirectory)\Artifacts"
-      displayName: 'Copy Artifacts to a Common Directory'
-
-    - script: |        
-        xcopy /I /E /Y "Gambler.Bot\Gambler.Bot\bin\Release\*" "$(Build.ArtifactStagingDirectory)\Artifacts"
-      displayName: 'Copy Artifacts to a Common Directory'
-    
     - task: PublishBuildArtifacts@1
       inputs:
-            PathtoPublish: '$(Build.ArtifactStagingDirectory)\Artifacts'
-            ArtifactName: 'BuildArtifacts'
-            publishLocation: 'container'
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)\Artifacts'
+        ArtifactName: 'BuildArtifacts-$(publishRuntime)'
+        publishLocation: 'container'
+
+- stage: Release
+  dependsOn: Build
+  jobs:
+  - job: ReleaseJob
+    steps:
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'specific'
+        artifactName: 'BuildArtifacts-win-x64'
+        downloadPath: '$(Pipeline.Workspace)/Assets/win-x64'
+      displayName: 'Download Windows artifacts'
+
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'specific'
+        artifactName: 'BuildArtifacts-linux-x64'
+        downloadPath: '$(Pipeline.Workspace)/Assets/linux-x64'
+      displayName: 'Download Linux artifacts'
+
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'specific'
+        artifactName: 'BuildArtifacts-osx-x64'
+        downloadPath: '$(Pipeline.Workspace)/Assets/osx-x64'
+      displayName: 'Download macOS artifacts'
+
+    - task: PowerShell@2
+      name: CreateRelease
+      inputs:
+        targetType: 'inline'
+        script: |
+          $tag = "$(Build.BuildId)"
+          $releaseName = "Release $tag"
+          $description = "Aggregated release for Windows, Linux and macOS."
+          
+          # Create or update the GitHub release using Velopack CLI.
+          velopack create-release --repo Seuntjie900/Gambler.Bot --tag $tag --name "$releaseName" --description "$description" --token "$(GitHubToken)"
+          
+          # For each runtime, compress its assets and attach as release asset.
+          Get-ChildItem -Path "$(Pipeline.Workspace)\Assets" -Directory | ForEach-Object {
+              $assetPath = $_.FullName
+              $zipPath = "$assetPath.zip"
+              if (Test-Path $zipPath) { Remove-Item $zipPath }
+              Compress-Archive -Path "$assetPath\*" -DestinationPath $zipPath
+              Write-Output "Attaching $zipPath to release $tag..."
+              velopack attach-asset --repo Seuntjie900/Gambler.Bot --tag $tag --file $zipPath --token "$(GitHubToken)"
+          }
+      displayName: 'Create GitHub Release with All Artifacts'
