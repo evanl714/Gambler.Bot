@@ -2,7 +2,7 @@
 using ActiproSoftware.UI.Avalonia.Themes;
 using ActiproSoftware.UI.Avalonia.Themes.Generation;
 using Avalonia.Controls;
-using Gambler.Bot.AutoBet.Helpers;
+using Gambler.Bot.Strategies.Helpers;
 using Gambler.Bot.Classes;
 using Gambler.Bot.ViewModels.AppSettings.Utilities;
 using Gambler.Bot.ViewModels.Common;
@@ -23,7 +23,7 @@ namespace Gambler.Bot.ViewModels.AppSettings
         private readonly ColorPalette _colorPalette;
         private PersonalSettings settings;
 
-        private IEnumerable<ColorRampViewModel>? _ramps;
+        private List<ColorRampViewModel>? _ramps;
         
 
         public PersonalSettings Settings
@@ -45,7 +45,7 @@ namespace Gambler.Bot.ViewModels.AppSettings
         public ColorRampViewModel SelectedRamp
         {
             get { return selectedRamp; }
-            set { selectedRamp = value; UpdateTheme(); }
+            set { selectedRamp = value; UpdateTheme(); this.OnPropertyChanged(); }
         }
 
         private void UpdateTheme()
@@ -71,12 +71,13 @@ namespace Gambler.Bot.ViewModels.AppSettings
             _colorPalette = new DefaultColorPaletteFactory().Create();
             
             UpdateRamps();
+            SelectedRamp = Ramps.FirstOrDefault(x => x.Name == UiSettings.ThemeName);
         }
         private void UpdateRamps()
         {
-            Ramps = _colorPalette.Ramps.Select(colorRamp => new ColorRampViewModel(colorRamp, 5));
+            Ramps = _colorPalette.Ramps.Select(colorRamp => new ColorRampViewModel(colorRamp, 5)).ToList();
         }
-        public IEnumerable<ColorRampViewModel>? Ramps
+        public List<ColorRampViewModel>? Ramps
         {
             get => _ramps;
             set => SetProperty(ref _ramps, value);

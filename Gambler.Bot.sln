@@ -11,10 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gambler.Bot", "Gambler.Bot\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gambler.Bot.Core", "..\Gambler.Bot.Core\Gambler.Bot.Core\Gambler.Bot.Core\Gambler.Bot.Core.csproj", "{A8B3E6CC-7125-42EB-B828-8B003599688E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gambler.Bot.AutoBet", "..\Gambler.Bot.AutoBet\Gambler.Bot.AutoBet\Gambler.Bot.AutoBet.csproj", "{DD17BB01-1938-49AF-83CF-EC0CB523C31B}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gambler.Bot.AutoBet.Tests", "..\Gambler.Bot.AutoBet\Gambler.Bot.AutoBet.Tests\Gambler.Bot.AutoBet.Tests.csproj", "{7C20D4AB-9BD8-406F-9FAF-7DCA6BA6A7DB}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gambler.Bot.Core.Tests", "..\Gambler.Bot.Core\Gambler.Bot.Core\Gambler.Bot.Core.Tests\Gambler.Bot.Core.Tests.csproj", "{7917657A-476E-41CC-8603-F76EE18B2DFC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gambler.Bot.Desktop", "Platforms\Gambler.Bot.Desktop\Gambler.Bot.Desktop.csproj", "{9B8F8AA1-B5F2-4541-911F-AC680360AEBB}"
@@ -24,6 +20,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gambler.Bot.Browser", "Platforms\Gambler.Bot.Browser\Gambler.Bot.Browser.csproj", "{74FAD3C5-1563-4CE9-875F-60DD8B5B3089}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gambler.Bot.iOS", "Platforms\Gambler.Bot.iOS\Gambler.Bot.iOS.csproj", "{326ED9C9-BA02-4480-9866-E66C20FAD9BE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gambler.Bot.Common", "..\Gambler.Bot.Core\Gambler.Bot.Core\Gambler.Bot.Common\Gambler.Bot.Common.csproj", "{00ADC7AC-1B73-45D8-A909-B95A0F90DBB4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gambler.Bot.Strategies", "..\Gambler.Bot.Strategies\Gambler.Bot.Strategies\Gambler.Bot.Strategies.csproj", "{6465A24B-9796-4B12-831C-0A265BA320D6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gambler.Bot.Strategies.Tests", "..\Gambler.Bot.Strategies\Gambler.Bot.Strategies.Tests\Gambler.Bot.Strategies.Tests.csproj", "{ABEBECBA-0F93-48ED-B3DB-7ACCB1B2D981}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,14 +41,6 @@ Global
 		{A8B3E6CC-7125-42EB-B828-8B003599688E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8B3E6CC-7125-42EB-B828-8B003599688E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8B3E6CC-7125-42EB-B828-8B003599688E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DD17BB01-1938-49AF-83CF-EC0CB523C31B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DD17BB01-1938-49AF-83CF-EC0CB523C31B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DD17BB01-1938-49AF-83CF-EC0CB523C31B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DD17BB01-1938-49AF-83CF-EC0CB523C31B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7C20D4AB-9BD8-406F-9FAF-7DCA6BA6A7DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7C20D4AB-9BD8-406F-9FAF-7DCA6BA6A7DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7C20D4AB-9BD8-406F-9FAF-7DCA6BA6A7DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7C20D4AB-9BD8-406F-9FAF-7DCA6BA6A7DB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7917657A-476E-41CC-8603-F76EE18B2DFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7917657A-476E-41CC-8603-F76EE18B2DFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7917657A-476E-41CC-8603-F76EE18B2DFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -71,17 +65,29 @@ Global
 		{326ED9C9-BA02-4480-9866-E66C20FAD9BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{326ED9C9-BA02-4480-9866-E66C20FAD9BE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{326ED9C9-BA02-4480-9866-E66C20FAD9BE}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{00ADC7AC-1B73-45D8-A909-B95A0F90DBB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00ADC7AC-1B73-45D8-A909-B95A0F90DBB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00ADC7AC-1B73-45D8-A909-B95A0F90DBB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00ADC7AC-1B73-45D8-A909-B95A0F90DBB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6465A24B-9796-4B12-831C-0A265BA320D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6465A24B-9796-4B12-831C-0A265BA320D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6465A24B-9796-4B12-831C-0A265BA320D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6465A24B-9796-4B12-831C-0A265BA320D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABEBECBA-0F93-48ED-B3DB-7ACCB1B2D981}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABEBECBA-0F93-48ED-B3DB-7ACCB1B2D981}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABEBECBA-0F93-48ED-B3DB-7ACCB1B2D981}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABEBECBA-0F93-48ED-B3DB-7ACCB1B2D981}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{7C20D4AB-9BD8-406F-9FAF-7DCA6BA6A7DB} = {84486CF5-B4E9-4118-BF6D-21E998DD3017}
 		{7917657A-476E-41CC-8603-F76EE18B2DFC} = {84486CF5-B4E9-4118-BF6D-21E998DD3017}
 		{9B8F8AA1-B5F2-4541-911F-AC680360AEBB} = {8F9C7DF7-1122-4418-B30A-416B9F531FE5}
 		{52AF9E9F-525F-4993-B25A-B7E873D28599} = {8F9C7DF7-1122-4418-B30A-416B9F531FE5}
 		{74FAD3C5-1563-4CE9-875F-60DD8B5B3089} = {8F9C7DF7-1122-4418-B30A-416B9F531FE5}
 		{326ED9C9-BA02-4480-9866-E66C20FAD9BE} = {8F9C7DF7-1122-4418-B30A-416B9F531FE5}
+		{ABEBECBA-0F93-48ED-B3DB-7ACCB1B2D981} = {84486CF5-B4E9-4118-BF6D-21E998DD3017}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7387205E-CA7B-4592-8D90-8FBF3CF2F584}

@@ -1,9 +1,6 @@
-﻿using Gambler.Bot.Core.Games;
+﻿using Gambler.Bot.Common.Games;
+using Gambler.Bot.Common.Games.Dice;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gambler.Bot.Classes.BetsPanel
 {
@@ -18,6 +15,8 @@ namespace Gambler.Bot.Classes.BetsPanel
     {
 
         event EventHandler<PlaceBetEventArgs> PlaceBet;
+        public IGameConfig GameSettings { get; set; }
+        void BetCommand();
     }
 
     public interface iBetResult

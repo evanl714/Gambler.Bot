@@ -29,12 +29,12 @@ namespace Gambler.Bot.Views.Games.Strategies
 
         }
 
-        async Task SaveFile(InteractionContext<FilePickerSaveOptions, string?> interaction)
+        async Task SaveFile(IInteractionContext<FilePickerSaveOptions, string?> interaction)
         {
             await IOHelper.SaveFile(interaction, TopLevel.GetTopLevel(this));
         }
 
-        async Task OpenFile(InteractionContext<FilePickerOpenOptions, string?> interaction)
+        async Task OpenFile(IInteractionContext<FilePickerOpenOptions, string?> interaction)
         {
             await IOHelper.OpenFile(interaction, TopLevel.GetTopLevel(this));
         }

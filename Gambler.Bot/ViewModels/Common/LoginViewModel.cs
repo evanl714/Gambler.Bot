@@ -1,4 +1,5 @@
 ﻿using Avalonia.Threading;
+using Gambler.Bot.Classes;
 using Gambler.Bot.Core.Events;
 using Gambler.Bot.Core.Sites;
 using Gambler.Bot.Core.Sites.Classes;
@@ -6,8 +7,10 @@ using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -15,8 +18,8 @@ namespace Gambler.Bot.ViewModels.Common
 {
     public class LoginViewModel: ViewModelBase
     {
-        public Interaction<LoginViewModel, LoginViewModel?> CloseDialog { get; }
-
+        //public Interaction<LoginViewModel, LoginViewModel?> CloseDialog { get; }
+        public event EventHandler ChangeSite;
         public Action<bool> LoginFinished;
 
         public string Title
@@ -25,22 +28,22 @@ namespace Gambler.Bot.ViewModels.Common
         }
 
 
-        private BaseSite _site;
+        private AutoBet _site;
 
-        public BaseSite Site
+        public AutoBet Site
         {
             get { return _site; }
             set {
                 if (_site!=null)
                 {
-                    _site.LoginFinished -= _site_LoginFinished;
+                    _site.OnSiteLoginFinished -= _site_LoginFinished;
                 }
                 _site = value; 
                 this.RaisePropertyChanged();
                 this.RaisePropertyChanged(nameof(Title));
                 if (_site != null)
                 {
-                    _site.LoginFinished += _site_LoginFinished;
+                    _site.OnSiteLoginFinished += _site_LoginFinished;
                 }
             }
              
@@ -52,7 +55,7 @@ namespace Gambler.Bot.ViewModels.Common
             {
                 foreach(var x in LoginParams)
                 {
-                    if (x.Param.ClearAfterLogin || x.Param.ClearAfterEnter)
+                    if (x.Param.ClearAfterEnter)
                     {
                         x.Value = null;
                     }
@@ -63,18 +66,27 @@ namespace Gambler.Bot.ViewModels.Common
                 
             }
             else
-            {
+            {                
+                foreach (var x in LoginParams)
+                {
+                    if (x.Param.ClearAfterLogin)
+                    {
+                        x.Value = null;
+                    }
+                }
                 LoginParams.Clear();
-                Cancel();
+                CanLogIn = true;
+                ShowError = false;
+                //Cancel();
                 Dispatcher.UIThread.Invoke(() => { LoginFinished(true); });
 
             }
 
         }
 
-        private List<LoginParamValue> _loginParams;
+        private ObservableCollection<LoginParamValue> _loginParams;
 
-        public List<LoginParamValue> LoginParams
+        public ObservableCollection<LoginParamValue> LoginParams
         {
             get { return _loginParams; }
             set { _loginParams = value; this.RaisePropertyChanged(); }
@@ -101,31 +113,34 @@ namespace Gambler.Bot.ViewModels.Common
 
         public LoginViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
         {
-                
-        
             LoginCommand = ReactiveCommand.Create(LogIn);
             SkipCommand = ReactiveCommand.Create(Skip);
             CancelCommand = ReactiveCommand.Create(Cancel);
-            CloseDialog = new Interaction<LoginViewModel, LoginViewModel?>();
+            //CloseDialog = new Interaction<LoginViewModel, LoginViewModel?>();
 
         }
 
 
-        public LoginViewModel(BaseSite site, ILogger logger): this(logger)
+        public LoginViewModel(AutoBet site, ILogger logger): this(logger)
         {
             Site = site;
-            LoginParams = site.LoginParams.Select(x => new LoginParamValue { Param = x }).ToList();
+            LoginParams = new ObservableCollection<LoginParamValue>(site.GetLoginParams());
+        }
+
+        public void RefreshParams()
+        {
+            LoginParams = new ObservableCollection<LoginParamValue>(Site.GetLoginParams());
         }
 
         public ICommand LoginCommand { get; }
 
-        void LogIn()
+        async Task LogIn()
         {
             if (Site!=null)
             {
                 CanLogIn = false;
                 ShowError = false;
-                Site.LogIn(LoginParams.ToArray());
+                await Site.Login(LoginParams.ToArray());
             }
         }
         public ICommand SkipCommand { get; }
@@ -133,15 +148,16 @@ namespace Gambler.Bot.ViewModels.Common
         void Skip()
         {
             //close the dialog and show the bot controls
-            LoginFinished(true);
-            Cancel();
+            //LoginFinished(true);
+            //Cancel();
         }
         public ICommand CancelCommand { get; }
 
         async Task Cancel()
         {
             //close the dialog without changing anything about the display
-            var result = await CloseDialog.Handle(this);
+            //var result = await CloseDialog.Handle(this);
+            ChangeSite?.Invoke(this, new EventArgs());
         }
     }
 }

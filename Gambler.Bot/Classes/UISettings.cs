@@ -24,7 +24,7 @@ namespace Gambler.Bot.Classes
         int liveBets = 100;
         public int LiveBets { get => liveBets; set { liveBets = value; RaisePropertyChanged(); } }
         string donateMode;
-        string updateMode;
+        string updateMode ="Prompt";
         public string UpdateMode 
         { 
             get =>updateMode; 

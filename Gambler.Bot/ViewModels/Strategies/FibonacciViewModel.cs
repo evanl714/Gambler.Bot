@@ -1,4 +1,5 @@
-﻿using Gambler.Bot.AutoBet.Strategies;
+﻿using Gambler.Bot.Strategies.Strategies;
+using Gambler.Bot.Strategies.Strategies.Abstractions;
 using Gambler.Bot.Classes.BetsPanel;
 using Gambler.Bot.Classes.Strategies;
 using Gambler.Bot.ViewModels.Games.Dice;
@@ -9,6 +10,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Gambler.Bot.Common.Games.Dice;
 
 namespace Gambler.Bot.ViewModels.Strategies
 {
@@ -21,18 +23,18 @@ namespace Gambler.Bot.ViewModels.Strategies
             get { return _strategy; }
             set { _strategy = value; this.RaisePropertyChanged(); }
         }
-        private Gambler.Bot.Core.Games.Games _game;
+        private Bot.Common.Games.Games _game;
 
         private iPlaceBet _placeBetVM;
 
         public iPlaceBet PlaceBetVM
         {
             get { return _placeBetVM; }
-            set { _placeBetVM = value; this.RaisePropertyChanged(); }
+            set { _placeBetVM = value; SyncStartControl(); this.RaisePropertyChanged(); }
         }
 
 
-        public Gambler.Bot.Core.Games.Games Game
+        public Bot.Common.Games.Games Game
         {
             get { return _game; }
             set { _game = value; this.RaisePropertyChanged(); }
@@ -42,7 +44,7 @@ namespace Gambler.Bot.ViewModels.Strategies
         {
             
         }
-        public void GameChanged(Gambler.Bot.Core.Games.Games newGame)
+        public void GameChanged(Bot.Common.Games.Games newGame, IGameConfig config)
         {
             if (PlaceBetVM != null && PlaceBetVM is INotifyPropertyChanged notify)
             {
@@ -51,15 +53,27 @@ namespace Gambler.Bot.ViewModels.Strategies
             Game = newGame;
             switch (Game)
             {
-                case Gambler.Bot.Core.Games.Games.Dice: PlaceBetVM = new DicePlaceBetViewModel(_logger) { ShowToggle = true }; break;
+                case Bot.Common.Games.Games.Dice: PlaceBetVM = new DicePlaceBetViewModel(_logger) { ShowToggle = true }; break;
+                case Bot.Common.Games.Games.Twist: PlaceBetVM = new DicePlaceBetViewModel(_logger) { ShowToggle = true }; break;
+                case Bot.Common.Games.Games.Limbo: PlaceBetVM = new DicePlaceBetViewModel(_logger) { ShowHighLow = false }; break;
                 default: PlaceBetVM = null; break;
             }
+            if (PlaceBetVM!=null)
+                PlaceBetVM.GameSettings = config;
             if (PlaceBetVM != null && PlaceBetVM is INotifyPropertyChanged notify2)
             {
                 notify2.PropertyChanged += Notify2_PropertyChanged;
             }
         }
-
+        void SyncStartControl()
+        {
+            if (PlaceBetVM is DicePlaceBetViewModel dice)
+            {
+                dice.Amount = Strategy.minbet;
+                dice.Chance = Strategy.Chance;
+                //dice.ShowAmount = false;
+            }
+        }
         private void Notify2_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(e.PropertyName))
@@ -68,7 +82,7 @@ namespace Gambler.Bot.ViewModels.Strategies
             switch (e.PropertyName)
             {
                 case "Amount":
-                    Strategy.Amount = (decimal)value;
+                    Strategy.minbet = (decimal)value;
                     break;
                 case "Chance":
                     Strategy.Chance = (decimal)value;
@@ -86,7 +100,7 @@ namespace Gambler.Bot.ViewModels.Strategies
             this.Strategy = mart;
             if (PlaceBetVM is DicePlaceBetViewModel dice)
             {
-                dice.Amount = mart.Amount;
+                dice.Amount = mart.minbet;
                 dice.Chance = mart.Chance;
                 dice.ShowAmount = false;
             }

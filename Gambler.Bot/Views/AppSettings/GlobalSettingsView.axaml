@@ -27,8 +27,8 @@
         </TabControl>
         <Border Padding="5" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="1" >
             <StackPanel Orientation="Horizontal">
-                <Button Content="Cancel" Margin="2" Command="{Binding Cancel}" />
-                <Button Content="Save" Margin="2" Command="{Binding Save}"/>
+                <Button Content="{DynamicResource Localization.Common.Canel}" Margin="2" Command="{Binding Cancel}" />
+                <Button Content="{DynamicResource Localization.InstanceView.Menu.Save}" Margin="2" Command="{Binding Save}"/>
 
             </StackPanel>
         </Border>

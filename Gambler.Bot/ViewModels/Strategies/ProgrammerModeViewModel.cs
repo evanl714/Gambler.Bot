@@ -1,6 +1,6 @@
 ﻿using Avalonia.Platform.Storage;
 using Avalonia.Threading;
-using Gambler.Bot.AutoBet.Strategies;
+using Gambler.Bot.Strategies.Strategies.Abstractions;
 using Gambler.Bot.Classes.Strategies;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
@@ -10,6 +10,7 @@ using System.IO;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Gambler.Bot.Common.Games.Dice;
 
 namespace Gambler.Bot.ViewModels.Strategies
 {
@@ -36,7 +37,7 @@ namespace Gambler.Bot.ViewModels.Strategies
 
         public string TemplateName { get; protected set; } = "LUATemplate.lua";
 
-        public Gambler.Bot.AutoBet.Strategies.ProgrammerMode Strat { get; private set; }
+        public IProgrammerMode Strat { get; private set; }
         DateTime LastChanged = DateTime.Now;
         FileSystemWatcher FileWatcher;
         private readonly ILogger _logger;
@@ -106,7 +107,7 @@ namespace Gambler.Bot.ViewModels.Strategies
             }
         }
 
-        public void GameChanged(Gambler.Bot.Core.Games.Games newGame)
+        public void GameChanged(Bot.Common.Games.Games newGame, IGameConfig config)
         {
             
         }
@@ -120,7 +121,7 @@ namespace Gambler.Bot.ViewModels.Strategies
 
         public void SetStrategy(BaseStrategy Strategy)
         {
-            Strat = Strategy as ProgrammerMode;
+            Strat = Strategy as IProgrammerMode;
             LoadDocument();
             CreateWatcher();
         }

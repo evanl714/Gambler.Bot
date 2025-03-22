@@ -8,28 +8,45 @@
              xmlns:dice="using:Gambler.Bot.Views.Games.Dice"
              x:DataType="vm:PresetListViewModel"
              xmlns:system="using:System"
+             xmlns:i="https://github.com/projektanker/icons.avalonia"
+             xmlns:img="https://github.com/projektanker/icons.avalonia"
              >
     <StackPanel Orientation="Vertical">
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button HorizontalAlignment="Left" Command="{Binding AddCommand}">Add</Button>
-            <Button HorizontalAlignment="Left"  Command="{Binding OpenCommand}">Open</Button>
-            <Button HorizontalAlignment="Right"  Command="{Binding SaveCommand}">Save</Button>
+            <Button HorizontalAlignment="Left" Command="{Binding AddCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <img:Icon Classes="btnIcon" Value="mdi-plus" />
+                    <TextBlock Text="{DynamicResource Localization.Common.Triggers.Add}"/>
+                </StackPanel>
+            </Button>
+            <Button HorizontalAlignment="Left"  Command="{Binding OpenCommand}" >
+                <StackPanel Orientation="Horizontal">
+                    <img:Icon Classes="btnIcon" Value="mdi-dots-horizontal" />
+                    <TextBlock Text="{DynamicResource Localization.Strategy.Labouchere.Open}"/>
+                </StackPanel>
+            </Button>
+            <Button HorizontalAlignment="Right"  Command="{Binding SaveCommand}" >
+                <StackPanel Orientation="Horizontal">
+                    <img:Icon Classes="btnIcon" Value="mdi-content-save" />
+                    <TextBlock Text="{DynamicResource Localization.InstanceView.Menu.Save}"/>
+                </StackPanel>
+            </Button>
         </StackPanel>
 
-        <DataGrid ItemsSource="{Binding BetList}" MinHeight="200">
+        <DataGrid ItemsSource="{Binding BetList}" SelectedIndex="{Binding SelectedIndex}" MinHeight="200">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Amount" Binding="{Binding Amount}"></DataGridTextColumn>
-                <DataGridTextColumn Header="High" Binding="{Binding High}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Switch" Binding="{Binding Switch}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Chance" Binding="{Binding Chance}"></DataGridTextColumn>
+                <DataGridTextColumn Header="{DynamicResource Localization.Game.Amount}" Binding="{Binding Amount}"></DataGridTextColumn>
+                <DataGridCheckBoxColumn Header="{DynamicResource Localization.Games.Dice.High}" IsThreeState="True" Binding="{Binding High}"></DataGridCheckBoxColumn>
+                <DataGridCheckBoxColumn Header="{DynamicResource Localization.Strategy.Preset.Switch}" Binding="{Binding Switch}"></DataGridCheckBoxColumn>
+                <DataGridTextColumn Header="{DynamicResource Localization.Games.Dice.Chance}" Binding="{Binding Chance}"></DataGridTextColumn>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate >
                             <StackPanel Orientation="Horizontal">
-                                <Button Content="R" Command="{Binding $parent[DataGrid].((vm:LabouchereViewModel)DataContext).RemoveCommand}" />
-                                <Button Content="U" Command="{Binding $parent[DataGrid].((vm:LabouchereViewModel)DataContext).MoveUpCommand}"/>
-                                <Button Content="D" Command="{Binding $parent[DataGrid].((vm:LabouchereViewModel)DataContext).MoveDownCommand}"/>
+                                <Button i:Attached.Icon="mdi-delete" Command="{Binding $parent[DataGrid].((vm:PresetListViewModel)DataContext).RemoveCommand}" />
+                                <Button i:Attached.Icon="mdi-arrow-up-bold" Command="{Binding $parent[DataGrid].((vm:PresetListViewModel)DataContext).MoveUpCommand}"/>
+                                <Button i:Attached.Icon="mdi-arrow-down-bold" Command="{Binding $parent[DataGrid].((vm:PresetListViewModel)DataContext).MoveDownCommand}"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -37,7 +54,7 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Expander Margin="2"  Header="End of list" IsExpanded="True" >
+        <Expander Margin="2"  Header="{DynamicResource Localization.Strategy.Preset.EndList}" IsExpanded="True" >
             <Expander.HeaderTemplate>
                 <DataTemplate x:DataType="system:String" >
                     <Grid>
@@ -51,12 +68,12 @@
                     <NumericUpDown Value="{Binding Strategy.EndStep}">
 
                     </NumericUpDown>
-                    <TextBlock VerticalAlignment="Center"> Steps backward</TextBlock>
+                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Strategy.Preset.StepsBackward}"/>
                 </StackPanel>
             </StackPanel>
 
         </Expander>
-        <Expander Margin="2"  Header="On Loss" IsExpanded="True" >
+        <Expander Margin="2"  Header="{DynamicResource Localization.Common.Reset.OnLoss}" IsExpanded="True" >
             <Expander.HeaderTemplate>
                 <DataTemplate x:DataType="system:String" >
                     <Grid>
@@ -70,14 +87,14 @@
                     <NumericUpDown Value="{Binding Strategy.LossStep}">
 
                     </NumericUpDown>
-                    <TextBlock VerticalAlignment="Center"> Steps forward</TextBlock>
+                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Strategy.Preset.StepsForward}"/>
                 </StackPanel>
 
 
             </StackPanel>
 
         </Expander>
-        <Expander Margin="2"  Header="On Win" IsExpanded="True" >
+        <Expander Margin="2"  Header="{DynamicResource Localization.Common.Reset.OnWin}" IsExpanded="True" >
             <Expander.HeaderTemplate>
                 <DataTemplate x:DataType="system:String" >
                     <Grid>
@@ -91,7 +108,7 @@
                     <NumericUpDown Value="{Binding Strategy.WinStep}">
 
                     </NumericUpDown>
-                    <TextBlock VerticalAlignment="Center"> Steps backward</TextBlock>
+                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Strategy.Preset.StepsBackward}"/>
                 </StackPanel>
 
 

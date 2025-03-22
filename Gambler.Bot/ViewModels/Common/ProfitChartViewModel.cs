@@ -2,11 +2,13 @@
 using Gambler.Bot.Classes;
 using Gambler.Bot.Classes.Charts;
 using LiveChartsCore;
+using LiveChartsCore.ConditionalDraw;
 using LiveChartsCore.Drawing;
 using LiveChartsCore.Kernel;
 using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Drawing;
+using LiveChartsCore.SkiaSharpView.Drawing.Geometries;
 using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore.SkiaSharpView.VisualElements;
 using ReactiveUI;
@@ -20,15 +22,19 @@ using System.Windows.Input;
 
 namespace Gambler.Bot.ViewModels.Common
 {
-    public class ProfitChartViewModel:ViewModelBase
+    public class ProfitChartViewModel : ViewModelBase
     {
         public int MaxItems { get; set; } = -1;
         RealTimeDataCollection DataPoints = new RealTimeDataCollection();
 
-        public ISeries[] Series { get; set; } 
+        public ISeries[] Series { get; set; }
 
-        public LabelVisual Title { get; set; } =
-        new LabelVisual
+        public LabelVisual Title
+        {
+            get;
+            set;
+        } =
+new LabelVisual
         {
             Text = "Profit over bets",
             TextSize = 25,
@@ -38,96 +44,134 @@ namespace Gambler.Bot.ViewModels.Common
 
         int ChartItems = 0;
         decimal ChartProfit = 0;
-        delegate void dAddPoint(decimal profit);
-        public bool Enabled { get; set; } = true;
-        private string _freezeText= "Freeze";
+delegate void dAddPoint(decimal profit);
+        bool enabled = true;
+
+        public bool Enabled
+        {
+            get => enabled;
+            set
+            {
+                enabled = value;
+                this.RaisePropertyChanged();
+            }
+        }
+
+        private string _freezeText = "Freeze";
 
         public string FreezeText
         {
             get { return _freezeText; }
-            set { _freezeText = value; this.RaisePropertyChanged(); }
+            set
+            {
+                _freezeText = value;
+                this.RaisePropertyChanged();
+            }
         }
-        
+
         public ProfitChartViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
         {
             ResetCommand = ReactiveCommand.Create(Reset);
             FreezeCommand = ReactiveCommand.Create(ToggleFreeze);
             FreezeText = "Freeze Chart";
             LineSeries<SimpleDataPoint> series =
-               new LineSeries<SimpleDataPoint>
-               {
-                   Values = DataPoints,
-                   Fill= null,
-                   Stroke = new SolidColorPaint(SKColors.LightBlue, 1),
-                   //Mapping = (sample, index) => new(sample.Argument, sample.Value),
-                   GeometrySize = 3,
-                   LineSmoothness = 0,
-
-
-               };
-            series.PointMeasured += Series_PointMeasured;
-            series.PointCreated += Series_PointCreated; ;
-               Series = new ISeries[] { series };
-            
-        }
-
-        private void Series_PointCreated(LiveChartsCore.Kernel.ChartPoint<SimpleDataPoint, LiveChartsCore.SkiaSharpView.Drawing.Geometries.CircleGeometry, LiveChartsCore.SkiaSharpView.Drawing.Geometries.LabelGeometry> obj)
-        {
-            foreach ( var x in obj.Context.Entity.MetaData.ChartPoints)
+        new LineSeries<SimpleDataPoint>
             {
-                
-            }
+                Values = DataPoints,
+                Fill = null,
+                   
+                Stroke = new SolidColorPaint(SKColors.LightBlue, 1) ,
+                //Mapping = (sample, index) => new(sample.Argument, sample.Value),
+                GeometrySize = 3,
+                LineSmoothness = 0,
+            };
+            
+            series.PointMeasured += Series_PointMeasured;
+            series.PointCreated += Series_PointCreated;
+            
+            ;
+
+            Series = new ISeries[] { series };
         }
 
-        private void Series_PointMeasured(LiveChartsCore.Kernel.ChartPoint<SimpleDataPoint, LiveChartsCore.SkiaSharpView.Drawing.Geometries.CircleGeometry, LiveChartsCore.SkiaSharpView.Drawing.Geometries.LabelGeometry> obj)
+        private void Series_PointCreated(
+            LiveChartsCore.Kernel.ChartPoint<SimpleDataPoint, LiveChartsCore.SkiaSharpView.Drawing.Geometries.CircleGeometry, LiveChartsCore.SkiaSharpView.Drawing.Geometries.LabelGeometry> obj)
+        {
+            /*foreach(var x in obj.Context.Entity.MetaData.ChartPoints)
+            {
+            }*/
+        }
+
+        private void Series_PointMeasured(
+            LiveChartsCore.Kernel.ChartPoint<SimpleDataPoint, LiveChartsCore.SkiaSharpView.Drawing.Geometries.CircleGeometry, LiveChartsCore.SkiaSharpView.Drawing.Geometries.LabelGeometry> obj)
         {
             //if going up: green
-            if (obj.Model.Win)
-            {                
+            if(obj.Model.Win)
+            {        
+                
                 obj.Visual.Fill = new SolidColorPaint(SKColors.Green);
                 obj.Visual.Stroke = new SolidColorPaint(SKColors.Green);
                 
-            }
-            else
+                //obj.Visual.
+            } else
             { //if going down: red
                 obj.Visual.Fill = new SolidColorPaint(SKColors.Red);
                 obj.Visual.Stroke = new SolidColorPaint(SKColors.Red);
+                
             }
+            //(obj.Context.Series as LineSeries<SimpleDataPoint>).Stroke = obj.Visual.Stroke;
         }
 
         public void AddPoint(decimal BetProfit, bool win)
         {
-            if (Enabled)
+            if(Enabled)
             {
-                if (!Dispatcher.UIThread.CheckAccess())
-                    Dispatcher.UIThread.Invoke(()=> { AddPoint(BetProfit, win); });
+                if(!Dispatcher.UIThread.CheckAccess())
+                    Dispatcher.UIThread
+                        .Invoke(
+                            () =>
+                            {
+                                AddPoint(BetProfit, win);
+                            });
                 else
                 {
                     ChartProfit += BetProfit;
                     DataPoints.Add(new SimpleDataPoint(ChartItems++, (double)ChartProfit, win));
                     //profitChart.AddPoint(ChartItems++, (double)Profit);
-                    while (DataPoints.Count > (MaxItems > 0 ? MaxItems : UISettings.Settings.ChartBets))
+                    while(DataPoints.Count > (MaxItems > 0 ? MaxItems : UISettings.Settings.ChartBets))
                     {
-                        DataPoints.RemoveRangeAt(0, (DataPoints.Count - (MaxItems > 0 ? MaxItems : UISettings.Settings.ChartBets)) + 1);
+                        DataPoints.RemoveRangeAt(
+                            0,
+                            (DataPoints.Count - (MaxItems > 0 ? MaxItems : UISettings.Settings.ChartBets)) + 1);
                     }
                 }
             }
         }
-        public void AddRange(List<decimal> points)
+
+        public async Task AddRange(List<decimal> points)
         {
-            if (!Dispatcher.UIThread.CheckAccess())
-                Dispatcher.UIThread.Invoke(() => { AddRange(points); });
+            if(!Dispatcher.UIThread.CheckAccess())
+                await Dispatcher.UIThread
+                    .InvokeAsync(
+                        async () =>
+                        {
+                            await AddRange(points);
+                        });
             else
             {
-                DataPoints.AddRange(points.Select(m => new SimpleDataPoint(ChartItems++, (double)(ChartProfit += m), m>0)).ToList());
-                while (DataPoints.Count > (MaxItems > 0 ? MaxItems : UISettings.Settings.ChartBets))
+                DataPoints.AddRange(
+                    points.Select(m => new SimpleDataPoint(ChartItems++, (double)(ChartProfit += m), m > 0)).ToList());
+                while(DataPoints.Count > (MaxItems > 0 ? MaxItems : UISettings.Settings.ChartBets))
                 {
-                    DataPoints.RemoveRangeAt(0, (DataPoints.Count - (MaxItems > 0 ? MaxItems : UISettings.Settings.ChartBets)) + 1);
+                    DataPoints.RemoveRangeAt(
+                        0,
+                        (DataPoints.Count - (MaxItems > 0 ? MaxItems : UISettings.Settings.ChartBets)) + 1);
                 }
             }
         }
 
         public ICommand ResetCommand { get; }
+
         public void Reset()
         {
             bool OriginalEnabled = Enabled;
@@ -140,10 +184,11 @@ namespace Gambler.Bot.ViewModels.Common
 
 
         public ICommand FreezeCommand { get; }
+
         private void ToggleFreeze()
         {
             Enabled = !Enabled;
-            if (Enabled)
+            if(Enabled)
                 FreezeText = "Freeze";
             else
                 FreezeText = "Resume";

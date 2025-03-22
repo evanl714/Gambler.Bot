@@ -6,19 +6,20 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Gambler.Bot.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/Images/logo3.png"
         Title="Gambler.Bot"
-		 xmlns:vws="using:Gambler.Bot.Views.Common"
-		xmlns:local="using:Gambler.Bot.Views"
-		>
+        xmlns:vws="using:Gambler.Bot.Views.Common"
+        xmlns:local="using:Gambler.Bot.Views"
+
+        >
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
-	<Grid>
-		
-		<local:MainView DataContext="{Binding MainVM}"/>
-	</Grid>
+    <Grid>
+
+        <local:MainView DataContext="{Binding MainVM}"/>
+    </Grid>
 </Window>

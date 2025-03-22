@@ -1,17 +1,14 @@
 ﻿using ActiproSoftware.UI.Avalonia.Themes;
-using Amazon.Auth.AccessControlPolicy;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
-using Gambler.Bot.Core.Games;
+using Gambler.Bot.Common.Games;
+using Gambler.Bot.Common.Games.Dice;
 using Gambler.Bot.Core.Sites;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gambler.Bot.Converters
 {
@@ -21,14 +18,14 @@ namespace Gambler.Bot.Converters
         {
             string resource = "";
             
-            if (values[0] is DiceBet bet && values[1] is BaseSite site)
+            if (values[0] is DiceBet bet && values[1] is iDice site)
             {
-                if (!((bool)bet.High ? (decimal)bet.Roll > (decimal)site.MaxRoll - (decimal)(bet.Chance) : (decimal)bet.Roll < (decimal)(bet.Chance)))
+                if (!((bool)bet.High ? (decimal)bet.Roll > (decimal)site.DiceSettings.MaxRoll - (decimal)(bet.Chance) : (decimal)bet.Roll < (decimal)(bet.Chance)))
                 {
                     if (bet.Chance <= 50)
                     {
                         if (
-                            (decimal)bet.Roll < (decimal)site.MaxRoll - (decimal)(bet.Chance) &&
+                            (decimal)bet.Roll < (decimal)site.DiceSettings.MaxRoll - (decimal)(bet.Chance) &&
                             (decimal)bet.Roll > (decimal)(bet.Chance))
                         {
                             resource = ThemeResourceKind.ControlBackgroundBrushSoftPressed.ToResourceKey();
@@ -44,7 +41,7 @@ namespace Gambler.Bot.Converters
                     if (bet.Chance > 50)
                     {
 
-                        if ((decimal)bet.Roll > (decimal)site.MaxRoll - (decimal)(bet.Chance) &&
+                        if ((decimal)bet.Roll > (decimal)site.DiceSettings.MaxRoll - (decimal)(bet.Chance) &&
                             (decimal)bet.Roll < (decimal)(bet.Chance))
                         {
                             resource = ThemeResourceKind.ControlBackgroundBrushSoftWarningPressed.ToResourceKey();
@@ -58,6 +55,14 @@ namespace Gambler.Bot.Converters
                     
                     
                 }
+            }
+            else if (values[0] is Bet bbet)
+            {
+                if (bbet.IsWin)
+                    resource = ThemeResourceKind.ControlBackgroundBrushSoftSuccess.ToResourceKey();
+                else
+                    resource = ThemeResourceKind.ControlBackgroundBrushSoftDanger.ToResourceKey();
+
             }
             if (Application.Current.TryFindResource(resource, App.Current.ActualThemeVariant, out object brush))
             {

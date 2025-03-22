@@ -8,24 +8,40 @@
              x:DataType="vm:LabouchereViewModel"
              x:Class="Gambler.Bot.Views.Games.Strategies.Labouchere.LabouchereView"
              xmlns:system="using:System"
+             xmlns:i="https://github.com/projektanker/icons.avalonia"
              >
     <Grid ColumnDefinitions="*,*">
         <StackPanel Margin="5" Grid.Column="0">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button HorizontalAlignment="Left" Command="{Binding AddCommand}">Add</Button>
-                <Button HorizontalAlignment="Left"  Command="{Binding OpenCommand}">Open</Button>
-                <Button HorizontalAlignment="Right"  Command="{Binding SaveCommand}">Save</Button>
+                <Button HorizontalAlignment="Left" Command="{Binding AddCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <i:Icon Classes="btnIcon" Value="mdi-plus" />
+                        <TextBlock Text="{DynamicResource Localization.Common.Triggers.Add}"/>
+                    </StackPanel>
+                </Button>
+                <Button HorizontalAlignment="Left"  Command="{Binding OpenCommand}" >
+                    <StackPanel Orientation="Horizontal">
+                        <i:Icon Classes="btnIcon" Value="mdi-dots-horizontal" />
+                        <TextBlock Text="{DynamicResource Localization.Strategy.Labouchere.Open}"/>
+                    </StackPanel>
+                </Button>
+                <Button HorizontalAlignment="Right"  Command="{Binding SaveCommand}" >
+                    <StackPanel Orientation="Horizontal">
+                        <i:Icon Classes="btnIcon" Value="mdi-content-save" />
+                        <TextBlock Text="{DynamicResource Localization.InstanceView.Menu.Save}"/>
+                    </StackPanel>
+                </Button>
             </StackPanel>
             <DataGrid SelectedIndex="{Binding SelectedIndex}" IsReadOnly="False" MinHeight="400" ItemsSource="{Binding BetList}"  VerticalAlignment="Stretch" >
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Amount" IsReadOnly="False" Binding="{Binding Item}"/>
+                    <DataGridTextColumn Header="{DynamicResource Localization.Game.Amount}" IsReadOnly="False" Binding="{Binding Item}"/>
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="system:Decimal">
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Content="R" Command="{Binding $parent[DataGrid].((vm:LabouchereViewModel)DataContext).RemoveCommand}" />
-                                    <Button Content="U" Command="{Binding $parent[DataGrid].((vm:LabouchereViewModel)DataContext).MoveUpCommand}"/>
-                                    <Button Content="D" Command="{Binding $parent[DataGrid].((vm:LabouchereViewModel)DataContext).MoveDownCommand}"/>
+                                    <Button i:Attached.Icon="mdi-delete"  Command="{Binding $parent[DataGrid].((vm:LabouchereViewModel)DataContext).RemoveCommand}" />
+                                    <Button i:Attached.Icon="mdi-arrow-up-bold"  Command="{Binding $parent[DataGrid].((vm:LabouchereViewModel)DataContext).MoveUpCommand}"/>
+                                    <Button i:Attached.Icon="mdi-arrow-down-bold" Command="{Binding $parent[DataGrid].((vm:LabouchereViewModel)DataContext).MoveDownCommand}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -42,8 +58,8 @@
                     </DataTemplate>
                 </ContentControl.DataTemplates>
             </ContentControl>
-            <CheckBox IsChecked="{Binding Strategy.chkReverseLab}" Content="Reverse Labouchere"/>
-            <Expander Margin="2"  Header="General" IsExpanded="True" >
+            <CheckBox IsChecked="{Binding Strategy.chkReverseLab}" Content="{DynamicResource Localization.Strategy.Labouchere.Reverse}"/>
+            <Expander Margin="2"  Header="{DynamicResource Localization.Strategy.Labouchere.General}" IsExpanded="True" >
                 <Expander.HeaderTemplate>
                     <DataTemplate x:DataType="system:String" >
                         <Grid>
@@ -52,8 +68,8 @@
                     </DataTemplate>
                 </Expander.HeaderTemplate>
                 <StackPanel>
-                    <RadioButton IsChecked="{Binding Strategy.rdbLabStop}" Content="Stop"/>
-                    <RadioButton IsChecked="{Binding Strategy.rdbLabReset}" Content="Restart"/>
+                    <RadioButton IsChecked="{Binding Strategy.rdbLabStop}" Content="{DynamicResource Localization.Common.Stop}"/>
+                    <RadioButton IsChecked="{Binding Strategy.rdbLabReset}" Content="{DynamicResource Localization.Common.Reset}"/>
 
                 </StackPanel>
             </Expander>

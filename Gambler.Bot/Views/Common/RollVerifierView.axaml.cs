@@ -18,7 +18,7 @@ namespace Gambler.Bot.Views.Common
                 ViewModel.SaveFileInteraction.RegisterHandler(SaveFile);
             });
         }
-        async Task SaveFile(InteractionContext<FilePickerSaveOptions, string?> interaction)
+        async Task SaveFile(IInteractionContext<FilePickerSaveOptions, string?> interaction)
         {
             await IOHelper.SaveFile(interaction, TopLevel.GetTopLevel(this));
         }

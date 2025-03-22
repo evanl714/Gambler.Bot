@@ -6,9 +6,9 @@
              x:Class="Gambler.Bot.Views.Common.SelectSiteView"
              xmlns:vm="using:Gambler.Bot.ViewModels.Common"
              x:DataType="vm:SelectSiteViewModel"
-             xmlns:bot="using:Gambler.Bot.Core.Helpers"
              xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
-             xmlns:svg="clr-namespace:Avalonia.Svg;assembly=Avalonia.Svg"xmlns:converters="using:Gambler.Bot.Converters"
+             xmlns:svg="clr-namespace:Avalonia.Svg;assembly=Avalonia.Svg"
+             xmlns:converters="using:Gambler.Bot.Converters"
              >
 
     <UserControl.Resources>
@@ -51,15 +51,8 @@
                                         <ControlTheme TargetType="actipro:Avatar" BasedOn="{StaticResource {x:Type actipro:Avatar}}" x:DataType="vm:AvaCurrency">
                                             <Setter Property="BorderBrush" Value="{actipro:ThemeResource Container2BackgroundBrush}" />
                                             <Setter Property="BorderThickness" Value="2" />
-                                            <Setter Property="Content" >
-                                                <Template>
-                                                    <Image>
-                                                        <Image.Source>
-                                                            <svg:SvgImage Source="{Binding Image}" />
-                                                        </Image.Source>
-                                                    </Image>
-                                                </Template>
-                                            </Setter>
+                                            <Setter Property="Content" Value="{Binding Image}"  />
+
                                             <Setter Property="Description" Value="{Binding Currency}" />
                                         </ControlTheme>
                                     </actipro:AvatarGroup.ItemContainerTheme>
@@ -70,15 +63,7 @@
                                         <ControlTheme TargetType="actipro:Avatar" BasedOn="{StaticResource {x:Type actipro:Avatar}}" x:DataType="vm:AvaGame">
                                             <Setter Property="BorderBrush" Value="{actipro:ThemeResource Container2BackgroundBrush}" />
                                             <Setter Property="BorderThickness" Value="2" />
-                                            <Setter Property="Content" >
-                                                <Template>
-                                                    <Image>
-                                                        <Image.Source>
-                                                            <svg:SvgImage Source="{Binding Image}" />
-                                                        </Image.Source>
-                                                    </Image>
-                                                </Template>
-                                            </Setter>
+                                            <Setter Property="Content" Value="{Binding Image}" />
                                             <Setter Property="Description" Value="{Binding Game}" />
                                         </ControlTheme>
                                     </actipro:AvatarGroup.ItemContainerTheme>
@@ -95,10 +80,10 @@
                                             CommandParameter="{Binding}" />
 
                                     <Grid ColumnDefinitions="*,*">
-                                        <Button Margin="5,0,5,5" Content="Simulate"
+                                        <Button Margin="5,0,5,5" Content="{DynamicResource Localization.InstanceView.Menu.Simulate}"
                                                 Command="{Binding $parent[DataGrid].((vm:SelectSiteViewModel)DataContext).SimulateCommand}" Grid.Column="0"
                                                 CommandParameter="{Binding}" />
-                                        <Button Margin="0,0,5,5" Content="View Site"
+                                        <Button Margin="0,0,5,5" Content="{DynamicResource Localization.Common.SelectSite.ViewSite}"
                                                 Command="{Binding $parent[DataGrid].((vm:SelectSiteViewModel)DataContext).ViewSiteCommand}" Grid.Column="1"
                                                 CommandParameter="{Binding}" />
                                     </Grid>

@@ -26,6 +26,8 @@ namespace Gambler.Bot.Classes.Charts
             if (count > 0)
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, removedItems, startingIndex));
         }
+       
+
     }
     public class SimpleDataPoint : IChartEntity
     {

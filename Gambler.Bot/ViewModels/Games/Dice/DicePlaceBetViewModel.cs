@@ -1,11 +1,8 @@
-﻿using Gambler.Bot.Core.Games;
-using Gambler.Bot.Classes.BetsPanel;
+﻿using Gambler.Bot.Classes.BetsPanel;
+using Gambler.Bot.Common.Games;
+using Gambler.Bot.Common.Games.Dice;
 using ReactiveUI;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Gambler.Bot.ViewModels.Games.Dice
@@ -35,7 +32,15 @@ namespace Gambler.Bot.ViewModels.Games.Dice
             set { _highChecked = value; this.RaisePropertyChanged(); this.RaisePropertyChanged(nameof(LowChecked)); }
         }
 
-       
+        private bool showHighLow=true;
+
+        public bool ShowHighLow
+        {
+            get { return showHighLow; }
+            set { showHighLow = value; this.RaisePropertyChanged(); this.RaisePropertyChanged(nameof(ShowButton)); this.RaisePropertyChanged(nameof(ShowToggle)); }
+        }
+
+
 
         public bool LowChecked
         {
@@ -45,6 +50,13 @@ namespace Gambler.Bot.ViewModels.Games.Dice
 
         public ICommand BetHighCommand { get; }
         public ICommand BetLowCommand { get; }
+
+        public ICommand DoubleAmountCommand { get; }
+        public ICommand HalfAmountCommand { get; }
+        public ICommand DoubleChanceCommand { get; }
+        public ICommand HalfChanceCommand { get; }
+        public ICommand DoublePayoutCommand { get; }
+        public ICommand HalfPayoutCommand { get; }
 
         private decimal amount=0.00000100m;
 
@@ -78,16 +90,58 @@ namespace Gambler.Bot.ViewModels.Games.Dice
             set { profit = value; this.RaisePropertyChanged(nameof(Profit)); Calculate(nameof(Profit)); }
         }
 
-        public decimal Edge { get; set; } = 1;
 
 
         public DicePlaceBetViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
         {
             BetHighCommand = ReactiveCommand.Create(BetHigh);
             BetLowCommand = ReactiveCommand.Create(BetLow);
+
+            DoubleAmountCommand = ReactiveCommand.Create(DoubleAmount);
+            HalfAmountCommand = ReactiveCommand.Create(HalveAmount);
+            DoubleChanceCommand = ReactiveCommand.Create(DoubleChance);
+            HalfChanceCommand = ReactiveCommand.Create(HalveChance);
+            DoublePayoutCommand = ReactiveCommand.Create(DoublePayout);
+            HalfPayoutCommand = ReactiveCommand.Create(HalvePayout);
             Calculate(nameof(Amount));
         }
 
+        void DoubleAmount()
+        {
+            Amount = Amount * 2;
+            if (Amount< 0.00000001m )
+            {
+                amount = 0.00000001m;
+            }
+        }
+
+        void HalveAmount()
+        {
+            Amount = Amount / 2;
+            if (Amount < 0.00000001m )
+            {
+                amount = 0;
+            }
+        }
+
+        void DoubleChance()
+        {
+            if (Chance < 50)
+                Chance *= 2m;
+            else Chance += 100m - (Chance/2m);
+        }
+        void HalveChance()
+        { 
+            Chance /= 2m;
+        }
+        void HalvePayout()
+        {
+            Payout /= 2m;
+        }
+        void DoublePayout()
+        {
+            Payout *= 2m;
+        }
         void Calculate(string s)
         {
             switch (s)
@@ -101,18 +155,18 @@ namespace Gambler.Bot.ViewModels.Games.Dice
                 case nameof(Chance):
                     if (Chance != 0)
                     {
-                        if (Payout != (100m - Edge) / Chance)
+                        if (Payout != (100m - (GameSettings?.Edge??1)) / Chance)
                         {
-                            Payout = (100m - Edge) / Chance;
+                            Payout = (100m - (GameSettings?.Edge ?? 1)) / Chance;
                         }
                     }
                     break;
                 case nameof(Payout):
-                    if (Chance != 0)
+                    if (Payout != 0)
                     {
-                        if (Chance != (100m - Edge) / Payout)
+                        if (Chance != (100m - (GameSettings?.Edge ?? 1)) / Payout)
                         {
-                            Chance = (100m - Edge) / Payout;
+                            Chance = (100m - (GameSettings?.Edge ?? 1)) / Payout;
                         }
                         if (Profit != Amount * Payout - Amount)
                             Profit = Amount * Payout - Amount;
@@ -125,15 +179,16 @@ namespace Gambler.Bot.ViewModels.Games.Dice
 
         public bool ShowToggle
         {
-            get { return showToggle; }
+            get { return showToggle && showHighLow; }
             set { showToggle = value; this.RaisePropertyChanged();this.RaisePropertyChanged(nameof(ShowButton)); }
         }
 
-        public bool ShowButton { get=>!ShowToggle; }
+        public bool ShowButton { get=>!ShowToggle && showHighLow; }
+        public IGameConfig GameSettings { get; set; }
 
-        public event EventHandler<PlaceBetEventArgs> PlaceBet;
+        public virtual event EventHandler<PlaceBetEventArgs> PlaceBet;
 
-        private void Bet(bool High)
+        protected virtual void Bet(bool High)
         {
             PlaceBet?.Invoke(this, new PlaceBetEventArgs(new PlaceDiceBet(Amount, High, Chance)));
         }
@@ -145,6 +200,11 @@ namespace Gambler.Bot.ViewModels.Games.Dice
         private void BetLow()
         {
             Bet(false);
+        }
+
+        public void BetCommand()
+        {
+            Bet(HighChecked);
         }
     }
 }

@@ -9,17 +9,40 @@
              x:DataType="vm:ProgrammerModeViewModel"
              xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
              xmlns:behaviours="using:Gambler.Bot.Behaviours"
+             xmlns:img="https://github.com/projektanker/icons.avalonia"
              >
-    <StackPanel Orientation="Vertical" VerticalAlignment="Stretch">
-
-        <TextBox Text="{Binding fileName}"/>
-        <StackPanel Orientation="Horizontal">
-            <Button Content="New" Command="{Binding NewCommand}"/>
-            <Button Content="Open" Command="{Binding OpenCommand}"/>
-            <Button Content="Save" Command="{Binding SaveCommand}"/>
-            <Button Content="Save As" Command="{Binding SaveAsCommand}"/>
+    <Grid Grid.RowDefinitions="auto,auto,*">
+        <Grid ColumnDefinitions="auto,*" Grid.Row="0" Margin="3">
+            <TextBlock Grid.Column="0" VerticalAlignment="Center" Margin="3" Text="{DynamicResource Localization.Strategy.Programmer.FileName}" />
+            <TextBox Grid.Column="1" Text="{Binding fileName}"  />
+        </Grid>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  Grid.Row="1" Margin="3">
+            <Button Command="{Binding NewCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <img:Icon Classes="btnIcon" Value="mdi-plus" />
+                    <TextBlock Text="{DynamicResource Localization.Strategy.Programmer.New}"/>
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding OpenCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <img:Icon Classes="btnIcon" Value="mdi-dots-horizontal" />
+                    <TextBlock Text="{DynamicResource Localization.Strategy.Labouchere.Open}"/>
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding SaveCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <img:Icon Classes="btnIcon" Value="mdi-content-save" />
+                    <TextBlock Text="{DynamicResource Localization.InstanceView.Menu.Save}"/>
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding SaveAsCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <img:Icon Classes="btnIcon" Value="mdi-content-save-plus" />
+                    <TextBlock Text="{DynamicResource Localization.Strategy.Programmer.SaveAs}"/>
+                </StackPanel>
+            </Button>
         </StackPanel>
-        <avaloniaedit:TextEditor Name="Editor" MinHeight="500" VerticalAlignment="Stretch"
+        <avaloniaedit:TextEditor Name="Editor" MinHeight="300" VerticalAlignment="Stretch"
                                  HorizontalAlignment="Stretch"
                                  ShowLineNumbers="True"
                                  HorizontalScrollBarVisibility="Auto"
@@ -27,10 +50,10 @@
                                  FontFamily="{DynamicResource CodeFontFamily}"
                                  FontWeight="Normal"
                                  FontSize="14"
-                                 WordWrap="False"  >
+                                 WordWrap="False"  Grid.Row="2"  >
             <i:Interaction.Behaviors>
                 <behaviours:EditorBindingBehavior Text="{Binding Content, Mode=TwoWay}" Language="{Binding FileExtension}"/>
             </i:Interaction.Behaviors>
         </avaloniaedit:TextEditor>
-    </StackPanel>
+    </Grid>
 </UserControl>

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Browser;
 using Avalonia.ReactiveUI;
-using Gambler.Bot.Avalonia;
+using Gambler.Bot;
 
 [assembly: SupportedOSPlatform("browser")]
 

@@ -1,6 +1,8 @@
 ﻿using Avalonia.Threading;
-using Gambler.Bot.AutoBet.Helpers;
-using Gambler.Bot.AutoBet.Strategies;
+using Gambler.Bot.Strategies.Helpers;
+using Gambler.Bot.Strategies.Strategies.Abstractions;
+using Gambler.Bot.Common.Events;
+using Gambler.Bot.Common.Interfaces;
 using Gambler.Bot.Core.Events;
 using Gambler.Bot.Core.Sites;
 using Microsoft.Extensions.Logging;
@@ -13,34 +15,38 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using static Community.CsharpSqlite.Sqlite3;
+using DryIoc;
+using Gambler.Bot.Classes;
+using System.Threading;
 
 namespace Gambler.Bot.ViewModels.Common
 {
     public class SimulationViewModel:ViewModelBase
     {
+        
+        public event EventHandler<CanSimulateEventArgs> CanStart;
         Stopwatch SimTimer = new Stopwatch();
+        private ProfitChartViewModel chrt;
 
-        private BaseSite currentsite;
-
-        public BaseSite CurrentSite
+        public ProfitChartViewModel Chart
         {
-            get { return currentsite; }
-            set { currentsite = value; }
+            get { return chrt; }
+            set { chrt = value; }
         }
 
-        private BaseStrategy strategy;
 
-        public BaseStrategy Strategy
+        private AutoBet bot;
+
+        public AutoBet Bot
         {
-            get { return strategy; }
-            set { strategy = value; }
+            get { return bot; }
+            set { bot = value; }
         }
 
-        public InternalBetSettings BetSettings { get; set; }
 
-        private Gambler.Bot.AutoBet.Helpers.Simulation simulation;
+        private Gambler.Bot.Strategies.Helpers.Simulation simulation;
 
-        public Gambler.Bot.AutoBet.Helpers.Simulation CurrentSimulation
+        public Gambler.Bot.Strategies.Helpers.Simulation CurrentSimulation
         {
             get { return simulation; }
             set { simulation = value; }
@@ -54,7 +60,7 @@ namespace Gambler.Bot.ViewModels.Common
             set { statsViewModel = value; }
         }
 
-        private decimal startingBalance;
+        private decimal startingBalance=1;
 
         public decimal StartingBalance
         {
@@ -62,7 +68,7 @@ namespace Gambler.Bot.ViewModels.Common
             set { startingBalance = value; }
         }
 
-        private long numberOfBets;
+        private long numberOfBets=1000000;
 
         public long NumberOfBets
         {
@@ -78,6 +84,7 @@ namespace Gambler.Bot.ViewModels.Common
             set { progress = value; this.RaisePropertyChanged(); }
         }
 
+        public decimal Balance { get => CurrentSimulation?.Balance ?? 0; }
         public TimeSpan TimeRunning { get; set; }
         public TimeSpan ProjectedTime { get; set; }
         public TimeSpan ProjectedRemaining { get; set; }
@@ -89,6 +96,7 @@ namespace Gambler.Bot.ViewModels.Common
             StopCommand = ReactiveCommand.Create(Stop);
             SaveCommand = ReactiveCommand.Create(Save);
             Stats = new SessionStatsViewModel(logger);
+            Chart = new ProfitChartViewModel(logger) { Enabled = false, MaxItems=10000 };
         }
 
         private bool canSave;
@@ -126,13 +134,34 @@ namespace Gambler.Bot.ViewModels.Common
             CurrentSimulation?.StopSim();
         }
 
+        private string error;
+
+        public string Error
+        {
+            get { return error; }
+            set { error = value; this.RaisePropertyChanged(); this.RaisePropertyChanged(nameof(showError)); }
+        }
+        public bool showError { get => !string.IsNullOrWhiteSpace(Error); }
+
         public ICommand StartCommand { get; }
         void Start()
         {
-            if (Running)
+            var args = new CanSimulateEventArgs() { CanSimulate = true };
+            CanStart?.Invoke(this, args);
+            if (!args.CanSimulate)
+            {
+                Error = "Cannot start simulation. The bot might be betting or running a simulation in the programmer mode.";
                 return;
-            CurrentSimulation = new Gambler.Bot.AutoBet.Helpers.Simulation(null);
-            CurrentSimulation.Initialize(StartingBalance, NumberOfBets, CurrentSite, Strategy, BetSettings, "tmp.sim", Log);
+            }
+            if (Running )
+            {
+                Error = "Simulation already running";
+                
+                return;
+            }
+            Error = "";
+            CurrentSimulation = bot.InitializeSim(startingBalance, NumberOfBets, "tmp.csv",Log);
+            
             CanSave = false;
             CurrentSimulation.OnSimulationWriting += CurrentSimulation_OnSimulationWriting;
             CurrentSimulation.OnSimulationComplete += CurrentSimulation_OnSimulationComplete;
@@ -142,19 +171,27 @@ namespace Gambler.Bot.ViewModels.Common
             CanSave = false;
             CurrentSimulation.Start();
             Stats.Stats = CurrentSimulation.Stats;
+            Chart.Reset();
+            //chrt.MaxItems = 10000;
         }
         List<decimal> Bets = new List<decimal>();
         private void CurrentSimulation_OnBetSimulated(object? sender, BetFinisedEventArgs e)
         {
-            //Bets.Add(e.NewBet.Profit);
-            if (Bets.Count > 0 && Bets.Count % 100 == 0)
+            
+            Bets.Add(e.NewBet.Profit);
+            if (chrt.Enabled)
             {
-               /* if (chrt.Enabled)
+                //chrt.AddPoint(e.NewBet.Profit, e.NewBet.IsWin);
+                if (Bets.Count %100 ==0)
                 {
-                    chrt.AddRange(Bets);
-                    Bets = new List<decimal>();
-                }*/
+                    chrt.AddRange(Bets).Wait();
+                    //Thread.Sleep(10);
+                    
+                    Bets.Clear();
+                }
             }
+            /*if (Bets.Count > 100)
+                Bets.RemoveAt(0);*/
         }
 
         private void CurrentSimulation_OnSimulationComplete(object? sender, EventArgs e)
@@ -170,7 +207,7 @@ namespace Gambler.Bot.ViewModels.Common
             {
                 
                 SimTimer.Stop();
-                Gambler.Bot.AutoBet.Helpers.Simulation tmp = CurrentSimulation;
+                Gambler.Bot.Strategies.Helpers.Simulation tmp = CurrentSimulation;
                 Stats.StatsUpdated(tmp.Stats);
                 long ElapsedMilliseconds = SimTimer.ElapsedMilliseconds;
                 Progress = (decimal)tmp.TotalBetsPlaced / (decimal)tmp.Bets;
@@ -191,13 +228,15 @@ namespace Gambler.Bot.ViewModels.Common
             }
         }
 
+        
+
         void UpdateStats()
         {
             if (!Dispatcher.UIThread.CheckAccess())
                 Dispatcher.UIThread.Invoke(UpdateStats);
             else
             {
-                Gambler.Bot.AutoBet.Helpers.Simulation tmp = CurrentSimulation;
+                Gambler.Bot.Strategies.Helpers.Simulation tmp = CurrentSimulation;
                 //Console.WriteLine("Simulation Progress: " + tmp.TotalBetsPlaced + " bets of " + tmp.Bets);
 
                 if (tmp.TotalBetsPlaced > 0)
@@ -210,6 +249,7 @@ namespace Gambler.Bot.ViewModels.Common
                     ProjectedTime = TimeSpan.FromMilliseconds((double)totaltime);
                     ProjectedRemaining = TimeSpan.FromMilliseconds((double)totaltime - ElapsedMilliseconds);
 
+                    this.RaisePropertyChanged(nameof(Balance));
                     this.RaisePropertyChanged(nameof(Progress));
                     this.RaisePropertyChanged(nameof(TimeRunning));
                     this.RaisePropertyChanged(nameof(ProjectedTime));
@@ -222,7 +262,10 @@ namespace Gambler.Bot.ViewModels.Common
 
         private void CurrentSimulation_OnSimulationWriting(object? sender, EventArgs e)
         {
-            UpdateStats();
+            UpdateStats();            
+            
+            Bets.Clear();
+            
         }
 
         public ICommand SaveCommand { get; }
@@ -234,5 +277,15 @@ namespace Gambler.Bot.ViewModels.Common
                 CurrentSimulation.MoveLog(dg.FileName);
             }*/
         }
+
+        public void Save(string path)
+        {
+            CurrentSimulation.MoveLog(path);
+        }
+        
+    }
+    public class CanSimulateEventArgs : EventArgs
+    {
+        public bool CanSimulate { get; set; }
     }
 }

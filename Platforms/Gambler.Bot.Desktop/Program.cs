@@ -5,6 +5,8 @@ using Gambler.Bot;
 using Avalonia.WebView.Desktop;
 using Microsoft.Extensions.Configuration;
 using Gambler.Bot.Classes;
+using Projektanker.Icons.Avalonia.MaterialDesign;
+using Projektanker.Icons.Avalonia;
 
 namespace Gambler.Bot.Desktop;
 
@@ -21,9 +23,9 @@ class Program
     public static AppBuilder BuildAvaloniaApp()
     {
         var config = new ConfigurationBuilder()
-           .AddUserSecrets<Program>()
+           .AddUserSecrets<Program>()           
            .Build();
-
+        
         return  AppBuilder.Configure<App>()
                 .RegisterActiproLicense(config.GetValue<string>("ActiproLicense:Licensee"), config.GetValue<string>("ActiproLicense:LisenceKey"))
               .UsePlatformDetect()
@@ -31,6 +33,8 @@ class Program
               .WithInterFont()
               .LogToTrace()
               .UseReactiveUI()
-              .UseDesktopWebView();
+              .UseDesktopWebView()
+              
+              ;
     }
 }

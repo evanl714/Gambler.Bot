@@ -21,15 +21,15 @@
                 </Expander.HeaderTemplate>
                 <Grid RowDefinitions="*,*,*,*,*" ColumnDefinitions="*,2*">
                     <TextBlock Grid.Row="0" Grid.Column="0" Text="{DynamicResource Localization.Common.When}" VerticalAlignment="Center"/>
-                    <ComboBox SelectedValue="{Binding BetSettings.UpperLimitCompare}" Margin="1" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch"/>
+                    <ComboBox ItemsSource="{Binding Compares}" SelectedValue="{Binding BetSettings.UpperLimitCompare}" Margin="1" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch"/>
                     <TextBlock Grid.Row="1" Grid.Column="0" Text="{DynamicResource Localization.Common.IsMoreThan}" VerticalAlignment="Center"/>
-                    <NumericUpDown Value="{Binding BetSettings.UpperLimit}" Margin="1" Grid.Row="1" Grid.Column="1"/>
+                    <NumericUpDown FormatString="n8" Value="{Binding BetSettings.UpperLimit}" Margin="1" Grid.Row="1" Grid.Column="1"/>
                     <TextBlock Grid.Row="2" Grid.Column="0" Text="{DynamicResource Localization.Common.Then}" VerticalAlignment="Center"/>
-                    <ComboBox SelectedValue="{Binding BetSettings.UpperLimitAction}" Margin="1" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch"/>
-                    <TextBlock Grid.Row="3" Grid.Column="0" Text="{DynamicResource Localization.Common.ThisAmount}" VerticalAlignment="Center"/>
-                    <NumericUpDown  Value="{Binding BetSettings.UpperLimitActionAmount}" Margin="1" Grid.Row="3" Grid.Column="1"/>
-                    <TextBlock Grid.Row="4" Grid.Column="0" Text="{DynamicResource Localization.Common.To}" VerticalAlignment="Center"/>
-                    <TextBox Text="{Binding BetSettings.UpperLimitAddress}" Margin="1" Grid.Row="4" Grid.Column="1"/>
+                    <ComboBox ItemsSource="{Binding Actions}" SelectedValue="{Binding UpperLimitAction}" Margin="1" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch"/>
+                    <TextBlock IsVisible="{Binding ShowUpperAmount}" Grid.Row="3" Grid.Column="0" Text="{DynamicResource Localization.Common.ThisAmount}" VerticalAlignment="Center"/>
+                    <NumericUpDown FormatString="n8" IsVisible="{Binding ShowUpperAmount}" Value="{Binding BetSettings.UpperLimitActionAmount}" Margin="1" Grid.Row="3" Grid.Column="1"/>
+                    <TextBlock IsVisible="{Binding ShowUpperTo}" Grid.Row="4" Grid.Column="0" Text="{DynamicResource Localization.Common.To}" VerticalAlignment="Center"/>
+                    <TextBox IsVisible="{Binding ShowUpperTo}" Text="{Binding BetSettings.UpperLimitAddress}" Margin="1" Grid.Row="4" Grid.Column="1"/>
                 </Grid>
             </Expander>
 
@@ -44,15 +44,15 @@
                 </Expander.HeaderTemplate>
                 <Grid RowDefinitions="*,*,*,*,*" ColumnDefinitions="*,2*">
                     <TextBlock Grid.Row="0" Grid.Column="0" Text="{DynamicResource Localization.Common.When}" VerticalAlignment="Center"/>
-                    <ComboBox SelectedValue="{Binding BetSettings.LowerLimitCompare}" Margin="1" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch"/>
+                    <ComboBox ItemsSource="{Binding Compares}" SelectedValue="{Binding BetSettings.LowerLimitCompare}" Margin="1" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch"/>
                     <TextBlock Grid.Row="1" Grid.Column="0" Text="{DynamicResource Localization.Common.IsLessThan}" VerticalAlignment="Center"/>
-                    <NumericUpDown Value="{Binding BetSettings.LowerLimit}" Margin="1" Grid.Row="1" Grid.Column="1"/>
+                    <NumericUpDown FormatString="n8"  Value="{Binding BetSettings.LowerLimit}" Margin="1" Grid.Row="1" Grid.Column="1"/>
                     <TextBlock Grid.Row="2" Grid.Column="0" Text="{DynamicResource Localization.Common.Then}" VerticalAlignment="Center"/>
-                    <ComboBox SelectedValue="{Binding BetSettings.LowerLimit}" Margin="1" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch"/>
-                    <TextBlock Grid.Row="3" Grid.Column="0" Text="{DynamicResource Localization.Common.ThisAmount}" VerticalAlignment="Center"/>
-                    <NumericUpDown Value="{Binding BetSettings.LowerLimitActionAmount}" Margin="1" Grid.Row="3" Grid.Column="1"/>
-                    <TextBlock Grid.Row="4" Grid.Column="0" Text="{DynamicResource Localization.Common.To}" VerticalAlignment="Center"/>
-                    <TextBox Text="{Binding BetSettings.LowerLimitAddress}" Margin="1" Grid.Row="4" Grid.Column="1"/>
+                    <ComboBox ItemsSource="{Binding Actions}" SelectedValue="{Binding LowerLimitAction}" Margin="1" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch"/>
+                    <TextBlock IsVisible="{Binding ShowLowerAmount}" Grid.Row="3" Grid.Column="0" Text="{DynamicResource Localization.Common.ThisAmount}" VerticalAlignment="Center"/>
+                    <NumericUpDown FormatString="n8" IsVisible="{Binding ShowLowerAmount}" Value="{Binding BetSettings.LowerLimitActionAmount}" Margin="1" Grid.Row="3" Grid.Column="1"/>
+                    <TextBlock IsVisible="{Binding ShowLowerTo}" Grid.Row="4" Grid.Column="0" Text="{DynamicResource Localization.Common.To}" VerticalAlignment="Center"/>
+                    <TextBox IsVisible="{Binding ShowLowerTo}" Text="{Binding BetSettings.LowerLimitAddress}" Margin="1" Grid.Row="4" Grid.Column="1"/>
                 </Grid>
 
             </Expander>
@@ -92,12 +92,12 @@
 
                     <CheckBox IsChecked="{Binding BetSettings.EnableResetSeedProfit}" Margin="1" Grid.Row="5" Grid.Column="0"/>
                     <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Common.AfterEvery}" Margin="1" Grid.Row="5" Grid.Column="1"/>
-                    <NumericUpDown Value="{Binding BetSettings.ResetSeedProfit}" Margin="1" Grid.Row="5" Grid.Column="2" HorizontalAlignment="Stretch"/>
+                    <NumericUpDown FormatString="n8"  Value="{Binding BetSettings.ResetSeedProfit}" Margin="1" Grid.Row="5" Grid.Column="2" HorizontalAlignment="Stretch"/>
                     <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Common.Profit}" Margin="1" Grid.Row="5" Grid.Column="3"/>
 
                     <CheckBox IsChecked="{Binding BetSettings.EnableResetSeedLoss}" Margin="1" Grid.Row="6" Grid.Column="0"/>
                     <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Common.AfterEvery}" Margin="1" Grid.Row="6" Grid.Column="1"/>
-                    <NumericUpDown Value="{Binding BetSettings.ResetSeedLoss}" Margin="1" Grid.Row="6" Grid.Column="2" HorizontalAlignment="Stretch"/>
+                    <NumericUpDown FormatString="n8"  Value="{Binding BetSettings.ResetSeedLoss}" Margin="1" Grid.Row="6" Grid.Column="2" HorizontalAlignment="Stretch"/>
                     <TextBlock VerticalAlignment="Center" Text="{DynamicResource Localization.Common.Loss}" Margin="1" Grid.Row="6" Grid.Column="3"/>
                 </Grid>
 
@@ -114,7 +114,7 @@
                 </Expander.HeaderTemplate>
 
                 <Grid RowDefinitions="*,*" ColumnDefinitions="2*,*">
-                    <NumericUpDown Value="{Binding BetSettings.BotSpeed}" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch"/>
+                    <NumericUpDown FormatString="n5" Value="{Binding BetSettings.BotSpeed}" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch"/>
                     <TextBlock Grid.Row="0" Grid.Column="1" Text="{DynamicResource Localization.Common.Advanced.BetsPS}" VerticalAlignment="Center"></TextBlock>
                     <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="Wrap"
                                Text="{DynamicResource Localization.Common.Advanced.BotSpeedExplain}">

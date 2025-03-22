@@ -1,0 +1,15 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:vm="using:Gambler.Bot.ViewModels.Common"
+             x:DataType="vm:ConsoleViewModel"
+             x:Class="Gambler.Bot.Views.Common.ConsoleView">
+    <Grid RowDefinitions="*,auto">
+        <TextBox CaretIndex="{Binding SelectedIndex}" Text="{Binding HistoryString}" TextWrapping="Wrap" IsReadOnly="True" Grid.Row="0"  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+        <TextBox x:Name="txtCommand" IsEnabled="{Binding IsEnabled}" Text="{Binding Command}" Grid.Row="1" MinHeight="50" MaxHeight="250" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto" AcceptsTab="True" AcceptsReturn="True" />
+    </Grid>
+</UserControl>

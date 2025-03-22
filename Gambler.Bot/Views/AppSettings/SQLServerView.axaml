@@ -18,13 +18,13 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="DataSource" Grid.Column="0" Grid.Row="0"/>
+        <TextBlock Text="{DynamicResource Localization.AppSettings.SQLServer.DataSource}" Grid.Column="0" Grid.Row="0"/>
         <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding DataSource}"/>
-        <TextBlock Text="Database" Grid.Column="0" Grid.Row="1"/>
+        <TextBlock Text="{DynamicResource Localization.AppSettings.SQLServer.Database}" Grid.Column="0" Grid.Row="1"/>
         <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Database}"/>
-        <TextBlock Text="Username" Grid.Column="0" Grid.Row="2"/>
+        <TextBlock Text="{DynamicResource Localization.AppSettings.SQLServer.Username}" Grid.Column="0" Grid.Row="2"/>
         <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Username}"/>
-        <TextBlock Text="Password" Grid.Column="0" Grid.Row="3"/>
+        <TextBlock Text="{DynamicResource Localization.AppSettings.SQLServer.Password}" Grid.Column="0" Grid.Row="3"/>
         <TextBox Grid.Column="1" Grid.Row="3" PasswordChar="*" Text="{Binding Pw}"/>
     </Grid>
 </UserControl>

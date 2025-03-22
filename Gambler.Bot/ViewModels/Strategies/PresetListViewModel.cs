@@ -1,5 +1,6 @@
-﻿using Gambler.Bot.AutoBet.Strategies;
-using Gambler.Bot.AutoBet.Strategies.PresetListModels;
+﻿using Gambler.Bot.Strategies.Strategies;
+using Gambler.Bot.Strategies.Strategies.Abstractions;
+using Gambler.Bot.Strategies.Strategies.PresetListModels;
 using Gambler.Bot.Classes.BetsPanel;
 using Gambler.Bot.Classes.Strategies;
 using Gambler.Bot.ViewModels.Games.Dice;
@@ -8,6 +9,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
+using Gambler.Bot.Common.Games.Dice;
 
 namespace Gambler.Bot.ViewModels.Strategies
 {
@@ -54,7 +56,7 @@ namespace Gambler.Bot.ViewModels.Strategies
             get { return _strategy; }
             set { _strategy = value; this.RaisePropertyChanged(); }
         }
-        private Gambler.Bot.Core.Games.Games _game;
+        private Bot.Common.Games.Games _game;
 
         private ObservableCollection<PresetDiceBet> _betList;
 
@@ -64,7 +66,7 @@ namespace Gambler.Bot.ViewModels.Strategies
             set { _betList = value; }
         }
 
-        public Gambler.Bot.Core.Games.Games Game
+        public Bot.Common.Games.Games Game
         {
             get { return _game; }
             set { _game = value; this.RaisePropertyChanged(); }
@@ -97,7 +99,7 @@ namespace Gambler.Bot.ViewModels.Strategies
                 BetList.Insert(SelectedIndex + 1, new PresetDiceBet { Amount = 0 });
         }
 
-        public void GameChanged(Gambler.Bot.Core.Games.Games newGame)
+        public void GameChanged(Bot.Common.Games.Games newGame, IGameConfig config)
         {
            
         }
@@ -147,7 +149,7 @@ namespace Gambler.Bot.ViewModels.Strategies
                 PresetDiceBet tmp = BetList[tmpindex - 1];
                 BetList[tmpindex - 1] = BetList[tmpindex];
                 BetList[tmpindex] = tmp;
-                SelectedIndex = tmpindex;
+                SelectedIndex = tmpindex-1;
             }
         }
 
@@ -160,7 +162,7 @@ namespace Gambler.Bot.ViewModels.Strategies
                 PresetDiceBet tmp = BetList[tmpindex];
                 BetList[tmpindex] = BetList[tmpindex + 1];
                 BetList[tmpindex + 1] = tmp;
-                SelectedIndex = tmpindex;
+                SelectedIndex = tmpindex+1;
             }
         }
 

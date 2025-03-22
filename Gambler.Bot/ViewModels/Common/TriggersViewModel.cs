@@ -1,9 +1,12 @@
-﻿using Gambler.Bot.Core.Helpers;
+﻿using Gambler.Bot.Common.Helpers;
+using Gambler.Bot.Core.Helpers;
 using Gambler.Bot.Core.Sites.Classes;
+using Gambler.Bot.Strategies.Helpers;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 
@@ -43,7 +46,7 @@ namespace Gambler.Bot.ViewModels.Common
         {
             
             List<string> newproperties = new List<string>();
-            var props = typeof(Gambler.Bot.AutoBet.Helpers.SessionStats).GetProperties().ToList();
+            var props = typeof(Gambler.Bot.Strategies.Helpers.SessionStats).GetProperties().ToList();
             props.AddRange(typeof(SiteStats).GetProperties());
             foreach (System.Reflection.PropertyInfo x in props)
             {
@@ -179,9 +182,9 @@ namespace Gambler.Bot.ViewModels.Common
             }
         }
 
-        private List<Trigger> triggers;
+        private ObservableCollection<Trigger> triggers;
 
-        public List<Trigger> Triggers
+        public ObservableCollection<Trigger> Triggers
         {
             get { return triggers; }
             protected set
@@ -191,7 +194,7 @@ namespace Gambler.Bot.ViewModels.Common
             }
         }
 
-        public void SetTriggers(List<Trigger> triggers)
+        public void SetTriggers(ObservableCollection<Trigger> triggers)
         {
             Load();
             Triggers = triggers;            
@@ -242,15 +245,15 @@ namespace Gambler.Bot.ViewModels.Common
 
         public bool ShowVValue
         {
-            get { return SelectedTrigger?.ValueType == CompareAgainst.Value; }
+            get { return SelectedTrigger?.ValueType == CompareAgainst.Value && ShowAmount; }
         }
         public bool ShowVPercentage
         {
-            get { return SelectedTrigger?.ValueType == CompareAgainst.Percentage; }
+            get { return SelectedTrigger?.ValueType == CompareAgainst.Percentage && ShowAmount; }
         }
         public bool ShowVPrperty
         {
-            get { return SelectedTrigger?.ValueType == CompareAgainst.Property; }
+            get { return SelectedTrigger?.ValueType == CompareAgainst.Property && ShowAmount; }
         }
 
         public bool ShowAmount

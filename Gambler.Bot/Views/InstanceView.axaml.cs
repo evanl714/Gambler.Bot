@@ -1,6 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using Avalonia.ReactiveUI;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
 using Gambler.Bot.ViewModels;
 using Gambler.Bot.ViewModels.AppSettings;
@@ -11,16 +13,23 @@ using ReactiveUI;
 using System;
 using System.Reactive;
 using System.Threading.Tasks;
+using System.Reactive.Linq;
+using Avalonia.Platform;
+using Avalonia.Platform.Storage;
+using Gambler.Bot.Classes;
 
 namespace Gambler.Bot.Views;
 
 public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
 {
     private Window parentWindow;
+    private INotificationManager notificationManager;
+
     public InstanceView()
     {
         InitializeComponent();
         Loaded += InstanceView_Loaded;
+        
         if (!Design.IsDesignMode)
         {
             this.WhenActivated(action =>
@@ -32,14 +41,55 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
                 ViewModel!.ExitInteraction.RegisterHandler(Close);
                 ViewModel!.ShowDialog.RegisterHandler(DoShowDialogAsync);
                 ViewModel!.ShowAbout.RegisterHandler(ShowAbout);
+                ViewModel!.ShowNotification.RegisterHandler(ShowNotification);
+                ViewModel!.ShowUserInput.RegisterHandler(ShowUserInput);
+                ViewModel.SaveFileInteraction.RegisterHandler(SaveFile);
+                ViewModel.OpenFileInteraction.RegisterHandler(OpenFile);
+
             });
         }
+
         this.AttachedToVisualTree += OnAttachedToVisualTree;
         this.DetachedFromVisualTree += OnDetachedFromVisualTree;
 
     }
 
-    private void ShowAbout(InteractionContext<AboutViewModel, Unit?> context)
+    private async Task ShowUserInput(IInteractionContext<UserInputViewModel, Unit?> context)
+    {
+        var ParentWindow = this.FindAncestorOfType<Window>();
+        ReactiveWindow<UserInputViewModel> window = new();
+        window.DataContext = context.Input;
+        var dialog = new UserInputView();
+        window.Content = dialog;
+        window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+        window.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
+        window.ExtendClientAreaToDecorationsHint = true;
+        window.Title = context.Input.Args.Prompt;
+        dialog.DataContext = context.Input;
+        window.SizeToContent = SizeToContent.WidthAndHeight;
+        window.Title = $"User input";
+        await window.ShowDialog(this.parentWindow);
+    }
+
+    private void ShowNotification(IInteractionContext<INotification, Unit?> context)
+    {
+        if (!Dispatcher.UIThread.CheckAccess())
+        {
+            Dispatcher.UIThread.InvokeAsync(() => ShowNotification(context));
+            return;
+        }
+
+        try
+        {
+            notificationManager.Show(context.Input);
+        }
+        catch (Exception e)
+        {
+
+        }
+    }
+
+    private void ShowAbout(IInteractionContext<AboutViewModel, Unit?> context)
     {
         var ParentWindow = this.FindAncestorOfType<Window>();
         ReactiveWindow<AboutViewModel> window = new();
@@ -53,12 +103,12 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
         window.Show();
     }
 
-    private void Close(InteractionContext<Unit?, Unit?> context)
+    private void Close(IInteractionContext<Unit?, Unit?> context)
     {
         this.parentWindow.Close();
     }
 
-    private void ShowBetHistory(InteractionContext<BetHistoryViewModel, Unit?> context)
+    private void ShowBetHistory(IInteractionContext<BetHistoryViewModel, Unit?> context)
     {
         var ParentWindow = this.FindAncestorOfType<Window>();
         ReactiveWindow<BetHistoryViewModel> window = new();
@@ -77,17 +127,17 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
         ViewModel.Loaded();
     }
 
-    private async Task DoShowDialogAsync(InteractionContext<LoginViewModel,
+    private async Task DoShowDialogAsync(IInteractionContext<LoginViewModel,
                                         LoginViewModel?> interaction)
     {
         var dialog = new LoginView();
         dialog.DataContext = interaction.Input;
         var ParentWindow = this.FindAncestorOfType<Window>();
-        var result = await dialog.ShowDialog<LoginViewModel?>(ParentWindow);
-        interaction.SetOutput(result);
+        //var result = await dialog.ShowDialog<LoginViewModel?>(ParentWindow);
+        //interaction.SetOutput(result);
     }
 
-    private async Task ShowRollVerifier(InteractionContext<RollVerifierViewModel,
+    private async Task ShowRollVerifier(IInteractionContext<RollVerifierViewModel,
                                         Unit?> interaction)
     {
         var ParentWindow = this.FindAncestorOfType<Window>();
@@ -101,7 +151,7 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
         window.Title = $"Roll Verifier - {interaction.Input.Site?.SiteName}";
         window.Show();
     }
-    private async Task ShowSettings(InteractionContext<GlobalSettingsViewModel,
+    private async Task ShowSettings(IInteractionContext<GlobalSettingsViewModel,
                                         Unit?> interaction)
     {
         var ParentWindow = this.FindAncestorOfType<Window>();
@@ -116,7 +166,7 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
         window.Show();
     }
 
-    private async Task DoShowSimulation(InteractionContext<SimulationViewModel,
+    private async Task DoShowSimulation(IInteractionContext<SimulationViewModel,
                                         SimulationViewModel?> interaction)
     {
         
@@ -129,12 +179,13 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
         dialog.DataContext = interaction.Input;
         window.Width = 800;
         window.Height = 450;
-        window.Title=$"Simulation - {interaction.Input.CurrentSite?.SiteName} - {interaction.Input.Strategy?.StrategyName}";
+        window.Title=$"Simulation - {interaction.Input.Bot?.SiteName} - {interaction.Input.Bot.Strategy?.StrategyName}";
         window.Show();
     }
     private void OnAttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e)
     {
         parentWindow = this.FindAncestorOfType<Window>();
+        this.notificationManager = new WindowNotificationManager(TopLevel.GetTopLevel(this));
         if (parentWindow != null)
         {
             parentWindow.Closing += OnWindowClosing;
@@ -178,4 +229,27 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
            
 	
     }
+
+    private void Expander_Expanding(object? sender, Avalonia.Interactivity.CancelRoutedEventArgs e)
+    {
+        
+    }
+
+    private void Expander_Collapsing_1(object? sender, Avalonia.Interactivity.CancelRoutedEventArgs e)
+    {
+        if (e.Source == sender)
+        {
+            e.Cancel = true;
+        }
+    }
+    async Task SaveFile(IInteractionContext<FilePickerSaveOptions, string?> interaction)
+    {
+        await IOHelper.SaveFile(interaction, TopLevel.GetTopLevel(this));
+    }
+
+    async Task OpenFile(IInteractionContext<FilePickerOpenOptions, string?> interaction)
+    {
+        await IOHelper.OpenFile(interaction, TopLevel.GetTopLevel(this));
+    }
+
 }

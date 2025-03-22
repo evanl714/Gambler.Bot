@@ -7,14 +7,24 @@
              x:DataType="vm:InstanceViewModel"
              xmlns:vm="using:Gambler.Bot.ViewModels"
              xmlns:local="using:Gambler.Bot.Views"
-             xmlns:common="using:Gambler.Bot.Views.Common" xmlns:dice="using:Gambler.Bot.Views.Games.Dice"
+             xmlns:common="using:Gambler.Bot.Views.Common"
+             xmlns:dice="using:Gambler.Bot.Views.Games.Dice"
+             xmlns:twist="using:Gambler.Bot.Views.Games.Twist"
+             xmlns:limbo="using:Gambler.Bot.Views.Games.Limbo"
              xmlns:diceVM="using:Gambler.Bot.ViewModels.Games.Dice"
+             xmlns:twistVM="using:Gambler.Bot.ViewModels.Games.Twist"
+             xmlns:limboVM="using:Gambler.Bot.ViewModels.Games.Limbo"
              xmlns:stratVM="using:Gambler.Bot.ViewModels.Strategies"
              xmlns:strat="using:Gambler.Bot.Views.Games.Strategies"
              xmlns:system="using:System"
              xmlns:mart="using:Gambler.Bot.Views.Games.Strategies.Martingale"
-             xmlns:dalembert="using:Gambler.Bot.Views.Games.Strategies.DAlembert" xmlns:fibonacci="using:Gambler.Bot.Views.Games.Strategies.Fibonacci" xmlns:labouchere="using:Gambler.Bot.Views.Games.Strategies.Labouchere" xmlns:PresetList="using:Gambler.Bot.AutoBet.Strategies" xmlns:presetlist="using:Gambler.Bot.Views.Games.Strategies.PresetList"         Tag="{Binding}"
+             xmlns:dalembert="using:Gambler.Bot.Views.Games.Strategies.DAlembert"
+             xmlns:fibonacci="using:Gambler.Bot.Views.Games.Strategies.Fibonacci"
+             xmlns:labouchere="using:Gambler.Bot.Views.Games.Strategies.Labouchere"
+             xmlns:presetlist="using:Gambler.Bot.Views.Games.Strategies.PresetList"
+             Tag="{Binding}"
              xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+             xmlns:i="https://github.com/projektanker/icons.avalonia"
              >
 
     <Grid>
@@ -22,8 +32,8 @@
         <DockPanel >
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.File}">
-                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Save}" IsEnabled="{Binding ShowBot}"/>
-                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Load}" IsEnabled="{Binding ShowBot}"/>
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Save}" Command="{Binding SaveCommand}" IsEnabled="{Binding ShowBot}"/>
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Load}" Command="{Binding OpenCommand}" IsEnabled="{Binding ShowBot}"/>
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Exit}" Command="{Binding Exit}"/>
                 </MenuItem>
                 <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.View}">
@@ -50,12 +60,12 @@
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Settings}" Command="{Binding OpenSettingsCommand}"/>
 
                 </MenuItem>
-                <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Site}">
+                <MenuItem Header="{Binding SiteName}">
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.LogOut}" Command="{Binding LogOutCommand}" IsVisible="{Binding LoggedIn}"  IsEnabled="{Binding ShowBot}"/>
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.LogIn}" Command="{Binding LogOutCommand}" IsVisible="{Binding NotLoggedIn}"  IsEnabled="{Binding ShowBot}"/>
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.ChangeSite}"  Command="{Binding ChangeSiteCommand}"  IsEnabled="{Binding ShowBot}"/>
                 </MenuItem>
-                <ComboBox ItemsSource="{Binding Currencies}" SelectedIndex="{Binding CurrentCurrency}"  IsEnabled="{Binding ShowBot}" />
+                <ComboBox ItemsSource="{Binding Currencies}" SelectedItem="{Binding CurrentCurrency}"  IsEnabled="{Binding ShowBot}" />
                 <ComboBox ItemsSource="{Binding Games}" SelectedIndex="{Binding CurrentGame}"  IsEnabled="{Binding ShowBot}" />
                 <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Help}">
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Language}" ItemsSource="{Binding Languages}">
@@ -69,12 +79,12 @@
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.ResetToDefault}" Command="{Binding ResetCommand}"/>
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.SourceCode}">
                         <MenuItem Header="Gambler.Bot" Command="{Binding OpenLink}" CommandParameter="https://github.com/Seuntjie900/Gambler.Bot"/>
-                        <MenuItem Header="Gambler.Bot.AutoBet" Command="{Binding OpenLink}" CommandParameter="https://github.com/Seuntjie900/Gambler.Bot.AutoBet"/>
+                        <MenuItem Header="Gambler.Bot.Strategies" Command="{Binding OpenLink}" CommandParameter="https://github.com/Seuntjie900/Gambler.Bot.Strategies"/>
                         <MenuItem Header="Gambler.Bot.Core"  Command="{Binding OpenLink}" CommandParameter="https://github.com/Seuntjie900/Gambler.Bot.Core"/>
                     </MenuItem>
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Tutorials}">
                         <MenuItem Header="YouTube"  Command="{Binding OpenLink}" CommandParameter="https://youtube.com/@GamblerdotBot"/>
-                        <MenuItem Header="Written Tutorials"  Command="{Binding OpenLink}" CommandParameter="https://gambler.bot/tutorials"/>
+                        <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.WrittenTutorials}"  Command="{Binding OpenLink}" CommandParameter="https://gambler.bot/tutorials"/>
                     </MenuItem>
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.FAQ}" Command="{Binding OpenLink}" CommandParameter="https://gambler.bot/FAQ"/>
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Contact}"  Command="{Binding OpenLink}" CommandParameter="https://gambler.bot/Contact"/>
@@ -82,7 +92,7 @@
 
                 </MenuItem>
             </Menu>
-            <Border  DockPanel.Dock="Bottom" Height="30" VerticalAlignment="Bottom" BorderThickness="1" BorderBrush="{DynamicResource SystemChromeGrayColor}" Padding="3">
+            <Border  DockPanel.Dock="Bottom" Height="30" VerticalAlignment="Bottom" BorderThickness="1" BorderBrush="{actipro:ThemeResource Container3BorderBrush}" Padding="3">
                 <Grid VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3*" />
@@ -90,15 +100,15 @@
                         <ColumnDefinition  Width="auto"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" >
-                        <Image Source="{SvgImage /Assets/Images/bxs-user-check.svg}" IsVisible="{Binding LoggedIn}"/>
-                        <Image Source="{SvgImage /Assets/Images/bxs-user-x.svg}" IsVisible="{Binding NotLoggedIn}"/>
-                        <Image Source="{SvgImage /Assets/Images/bx-run.svg}" IsVisible="{Binding Running}"/>
-                        <Image Source="{SvgImage /Assets/Images/bx-stop.svg}" IsVisible="{Binding Stopped}"/>
-                        <TextBlock Text="Status: " VerticalAlignment="Bottom"/>
-                        <TextBlock Text="{Binding StatusMessage}"/>
+                        <i:Icon Classes="btnIcon" Value="mdi-link" IsVisible="{Binding LoggedIn}" />
+                        <i:Icon Classes="btnIcon" Value="mdi-link-off"  IsVisible="{Binding NotLoggedIn}"/>
+                        <i:Icon Classes="btnIcon" Value="mdi-run"  IsVisible="{Binding Running}"/>
+                        <i:Icon Classes="btnIcon" Value="mdi-stop"  IsVisible="{Binding Stopped}"/>
+                        <TextBlock Text="{DynamicResource Localization.InstanceView.Status}" VerticalAlignment="Bottom"/>
+                        <TextBlock Text="{Binding StatusMessage}" VerticalAlignment="Bottom"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" >
-                        <TextBlock Text="Last Action: "/>
+                        <TextBlock Text="{DynamicResource Localization.InstanceView.LastAction}"/>
                         <TextBlock Text="{Binding LastAction}"/>
                     </StackPanel>
                     <actipro:ToggleThemeButton Grid.Column="2" Command="{Binding ThemeToggled}" />
@@ -120,100 +130,147 @@
                         <RowDefinition Height="175" MinHeight="175" MaxHeight="175" ></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <GridSplitter Margin="3" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource SystemChromeGrayColor}" ResizeDirection="Columns"/>
+                    <GridSplitter Margin="3" Grid.Column="1" Grid.RowSpan="2" Background="{actipro:ThemeResource Container3BorderBrush}" ResizeDirection="Columns"/>
 
                     <StackPanel IsVisible="{Binding ShowStats}" Grid.Column="0" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Stretch">
+                        <common:LoginView DataContext="{Binding LoginVM}" IsVisible="{Binding $parent[StackPanel].((vm:InstanceViewModel)DataContext).NotLoggedIn}"/>
                         <common:SiteStatsView VerticalAlignment="Top" HorizontalAlignment="Stretch" MinWidth="300" Grid.Row="0" DataContext="{Binding SiteStatsData}"/>
                         <common:SessionStatsView  MinWidth="600" Grid.Row="2" DataContext="{Binding SessionStatsData}" VerticalAlignment="Top" HorizontalAlignment="Stretch" />
                     </StackPanel>
                     <Grid Grid.Column="0" Grid.Row="1">
                         <Grid.RowDefinitions>
-                            <RowDefinition />
+                            <RowDefinition Height="*" />
                             <RowDefinition Height="7"/>
-                            <RowDefinition/>
+                            <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <Border IsVisible="{Binding ShowChart}" >
-                            <common:ProfitChartView Grid.Row="0" DataContext="{Binding ChartData}"/>
+                        <Border IsVisible="{Binding ShowChart}" Grid.Row="0" MinHeight="250"  >
+                            <common:ProfitChartView DataContext="{Binding ChartData}"/>
                         </Border>
-                        <GridSplitter Margin="2" Grid.Row="1" Background="{DynamicResource SystemChromeGrayColor}" ResizeDirection="Rows"/>
-                        <ContentControl Grid.Row="2" Content="{Binding LiveBets}"  IsVisible="{Binding ShowLiveBets}">
+                        <GridSplitter Margin="2" Grid.Row="1" Background="{actipro:ThemeResource Container3BorderBrush}" ResizeDirection="Rows"/>
+                        <ContentControl Grid.Row="2" Content="{Binding LiveBets}" MinHeight="250"  IsVisible="{Binding ShowLiveBets}">
                             <ContentControl.DataTemplates>
                                 <DataTemplate DataType="diceVM:DiceLiveBetViewModel">
                                     <dice:DiceLiveBetView/>
                                 </DataTemplate>
-
+                                <DataTemplate DataType="twistVM:TwistLiveBetViewModel">
+                                    <dice:DiceLiveBetView/>
+                                </DataTemplate>
+                                <DataTemplate DataType="limboVM:LimboLiveBetViewModel">
+                                    <limbo:LimboLiveBetView/>
+                                </DataTemplate>
                             </ContentControl.DataTemplates>
                         </ContentControl>
 
                     </Grid>
                     <DockPanel Grid.Column="2" Grid.RowSpan="3" >
                         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Button Margin="5" Command="{Binding StartCommand}" IsEnabled="{Binding CanStart}">Start</Button>
-                            <Button Margin="5"  Command="{Binding ResumeCommand}" IsEnabled="{Binding CanResume}">Resume</Button>
-                            <Button Margin="5" Command="{Binding StopCommand}" >Stop</Button>
-                            <Button Margin="5" Command="{Binding StopOnWinCommand}" IsEnabled="{Binding Running}">Stop On Win</Button>
+                            <Button Margin="5" Command="{Binding StartCommand}" IsEnabled="{Binding CanStart}">
+                                <StackPanel Orientation="Horizontal">
+                                    <i:Icon Classes="btnIcon" Value="mdi-play" IsVisible="{Binding CanStart}" />
+                                    <actipro:RingSpinner Width="16" Height="16" Classes="accent"
+                                                         Background="{actipro:ThemeResource Container5BackgroundBrush}"
+                                                         LineThickness="3" LineCap="Flat" IsSpinning="True" IsVisible="{Binding Running}" />
+                                    <TextBlock Text="Start"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Margin="5" i:Attached.Icon="mdi-replay" Command="{Binding ResumeCommand}" IsEnabled="{Binding CanResume}">
+                                <StackPanel Orientation="Horizontal">
+                                    <i:Icon Classes="btnIcon" Value="mdi-replay" />
+                                    <TextBlock Text="Resume"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Margin="5" i:Attached.Icon="mdi-stop" Command="{Binding StopCommand}" >
+                                <StackPanel Orientation="Horizontal">
+                                    <i:Icon Classes="btnIcon" Value="mdi-stop" />
+                                    <TextBlock Text="Stop"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Margin="5" i:Attached.Icon="mdi-stop-circle-outline" Command="{Binding StopOnWinCommand}" IsEnabled="{Binding Running}">
+                                <StackPanel Orientation="Horizontal">
+                                    <i:Icon Classes="btnIcon" Value="mdi-stop-circle-outline" />
+                                    <TextBlock Text="Stop on win"/>
+                                </StackPanel>
+                            </Button>
                         </StackPanel>
                         <TabControl>
-                            <TabItem Header="Strategy">
+                            <TabItem Header="{DynamicResource Localization.Common.Strategy}">
                                 <DockPanel>
-                                    <ComboBox DockPanel.Dock="Top" ItemsSource="{Binding BotInstance.Strategies.Keys}" SelectedItem="{Binding SelectedStrategy}" IsEnabled="{Binding Stopped}" >
+                                    <Expander Margin="2"  IsExpanded="True" Expanding="Expander_Expanding" Collapsing="Expander_Collapsing_1" Header="{Binding}"  >
+                                        <Expander.HeaderTemplate>
+                                            <DataTemplate x:DataType="vm:InstanceViewModel">
+                                                <Grid>
+                                                    <ComboBox DockPanel.Dock="Top" ItemsSource="{Binding Strategies}" SelectedItem="{Binding SelectedStrategy}" IsEnabled="{Binding Stopped}" >
 
-                                    </ComboBox>
-                                    <ContentControl Content="{Binding StrategyVM}" VerticalAlignment="Stretch">
-                                        <ContentControl.DataTemplates>
-                                            <DataTemplate DataType="stratVM:MartingaleViewModel">
-                                                <mart:MartingaleView/>
+                                                    </ComboBox>
+                                                </Grid>
                                             </DataTemplate>
-                                            <DataTemplate DataType="stratVM:DAlembertViewModel">
-                                                <dalembert:DAlembertView/>
-                                            </DataTemplate>
-                                            <DataTemplate DataType="stratVM:FibonacciViewModel">
-                                                <fibonacci:FibonacciView/>
-                                            </DataTemplate>
-                                            <DataTemplate DataType="stratVM:LabouchereViewModel">
-                                                <labouchere:LabouchereView/>
-                                            </DataTemplate>
-                                            <DataTemplate DataType="stratVM:PresetListViewModel">
-                                                <presetlist:PresetListView/>
-                                            </DataTemplate>
-                                            <DataTemplate DataType="stratVM:ProgrammerModeCSViewModel">
-                                                <strat:ProgrammerModeCSView/>
-                                            </DataTemplate>
-                                            <DataTemplate DataType="stratVM:ProgrammerModeLUAViewModel">
-                                                <strat:ProgrammerModeLuaView/>
-                                            </DataTemplate>
-                                            <DataTemplate DataType="stratVM:ProgrammerModeJSViewModel">
-                                                <strat:ProgrammerModeJSView/>
-                                            </DataTemplate>
-                                            <DataTemplate DataType="stratVM:ProgrammerModePYViewModel">
-                                                <strat:ProgrammerModePyView/>
-                                            </DataTemplate>
-                                        </ContentControl.DataTemplates>
-                                    </ContentControl>
+                                        </Expander.HeaderTemplate>
+                                        <ContentControl Content="{Binding StrategyVM}" VerticalAlignment="Stretch">
+                                            <ContentControl.DataTemplates>
+                                                <DataTemplate DataType="stratVM:DAlembertViewModel">
+                                                    <dalembert:DAlembertView/>
+                                                </DataTemplate>
+                                                <DataTemplate DataType="stratVM:MartingaleViewModel">
+                                                    <mart:MartingaleView/>
+                                                </DataTemplate>
+                                                <DataTemplate DataType="stratVM:FibonacciViewModel">
+                                                    <fibonacci:FibonacciView/>
+                                                </DataTemplate>
+                                                <DataTemplate DataType="stratVM:LabouchereViewModel">
+                                                    <labouchere:LabouchereView/>
+                                                </DataTemplate>
+                                                <DataTemplate DataType="stratVM:PresetListViewModel">
+                                                    <presetlist:PresetListView/>
+                                                </DataTemplate>
+                                                <DataTemplate DataType="stratVM:ProgrammerModeCSViewModel">
+                                                    <strat:ProgrammerModeCSView/>
+                                                </DataTemplate>
+                                                <DataTemplate DataType="stratVM:ProgrammerModeLUAViewModel">
+                                                    <strat:ProgrammerModeLuaView/>
+                                                </DataTemplate>
+                                                <DataTemplate DataType="stratVM:ProgrammerModeJSViewModel">
+                                                    <strat:ProgrammerModeJSView/>
+                                                </DataTemplate>
+                                                <DataTemplate DataType="stratVM:ProgrammerModePYViewModel">
+                                                    <strat:ProgrammerModePyView/>
+                                                </DataTemplate>
+                                            </ContentControl.DataTemplates>
+                                        </ContentControl>
+                                    </Expander>
                                 </DockPanel>
                             </TabItem>
-                            <TabItem Header="Reset Settings">
+                            <TabItem Header="{DynamicResource Localization.Common.ResetSettings}">
                                 <common:ResetSettingsView DataContext="{Binding ResetSettingsVM}"/>
                             </TabItem>
-                            <TabItem Header="Advanced Settings">
+                            <TabItem Header="{DynamicResource Localization.Common.AdvancedSettings}">
                                 <common:AdvancedView DataContext="{Binding AdvancedSettingsVM}"/>
                             </TabItem>
-                            <TabItem Header="Custom Triggers">
+                            <TabItem Header="{DynamicResource Localization.Common.CustomTriggers}">
                                 <common:TriggersView DataContext="{Binding TriggersVM}"/>
                             </TabItem>
 
-                            <TabItem Header="Manual">
-                                <ContentControl Content="{Binding PlaceBetVM}" VerticalAlignment="Top">
-                                    <ContentControl.DataTemplates>
-                                        <DataTemplate DataType="diceVM:DicePlaceBetViewModel">
-                                            <dice:DicePlaceBetView/>
-                                        </DataTemplate>
+                            <TabItem Header="{DynamicResource Localization.Common.Manual}">
+                                <Grid RowDefinitions="auto,auto">
 
-                                    </ContentControl.DataTemplates>
-                                </ContentControl>
+
+                                    <ContentControl Grid.Row="0" Content="{Binding PlaceBetVM}" VerticalAlignment="Top">
+                                        <ContentControl.DataTemplates>
+                                            <DataTemplate DataType="diceVM:DicePlaceBetViewModel">
+                                                <dice:DicePlaceBetView/>
+                                            </DataTemplate>
+                                            <DataTemplate DataType="limboVM:LimboPlaceBetViewModel">
+                                                <dice:DicePlaceBetView/>
+                                            </DataTemplate>
+                                            <DataTemplate DataType="twistVM:TwistPlaceBetViewModel">
+                                                <dice:DicePlaceBetView/>
+                                            </DataTemplate>
+                                        </ContentControl.DataTemplates>
+                                    </ContentControl>
+                                    <Button Grid.Row="1" Content="Place Bet" HorizontalAlignment="Center" Margin="5" Padding="15" FontSize="18" Command="{Binding ManualBetCommand}"/>
+                                </Grid>
                             </TabItem>
-                            <TabItem Header="Console" IsEnabled="False">
-                                <TextBlock>coming soon</TextBlock>
+                            <TabItem Header="{DynamicResource Localization.Common.Console}">
+                                <common:ConsoleView DataContext="{Binding ConsoleVM}"/>
                             </TabItem>
                         </TabControl>
 
