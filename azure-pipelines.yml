@@ -41,9 +41,9 @@ stages:
     - checkout: Self
 
     # Remove the WASM project from the solution to exclude it from the build.
-    - script: |
-        dotnet sln $(solution) remove Gambler.Bot/Platforms/Gambler.Bot.Browser/Gambler.Bot.Browser.csproj
-      displayName: 'Remove WASM project from solution'
+    #- script: |
+    #    dotnet sln $(solution) remove Gambler.Bot/Platforms/Gambler.Bot.Browser/Gambler.Bot.Browser.csproj
+    #  displayName: 'Remove WASM project from solution'
 
     - task: PowerShell@2      
       inputs:
@@ -67,9 +67,9 @@ stages:
     - task: NuGetToolInstaller@1
 
     # New step: Install wasm-tools for .NET 8 (if needed for other projects, ignore if not)
-    #- script: |
-    #    dotnet workload install wasm-tools --skip-manifest-update
-    #  displayName: 'Install wasm-tools for .NET 8'
+    - script: |
+        dotnet workload install wasm-tools --skip-manifest-update
+      displayName: 'Install wasm-tools for .NET 8'
 
     - task: NuGetCommand@2
       inputs:
