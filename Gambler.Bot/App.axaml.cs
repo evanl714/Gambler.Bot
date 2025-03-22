@@ -29,7 +29,7 @@ namespace Gambler.Bot
         }
         internal static async Task<bool> HasUpdate()
         {
-            var mgr = new UpdateManager("https://the.place/you-host/updates");
+            var mgr = new UpdateManager("https://github.com/Seuntjie900/Gambler.Bot/releases/latest/download/updates.json");
 
             // check for new version
             var newVersion = await mgr.CheckForUpdatesAsync();
@@ -37,7 +37,7 @@ namespace Gambler.Bot
         }
         internal static async Task UpdateMyApp()
         {
-            var mgr = new UpdateManager("https://the.place/you-host/updates");
+            var mgr = new UpdateManager("https://github.com/Seuntjie900/Gambler.Bot/releases/latest/download/updates.json");
 
             // check for new version
             var newVersion = await mgr.CheckForUpdatesAsync();
