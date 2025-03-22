@@ -37,7 +37,7 @@ stages:
           publishRuntime: osx-x64
     steps:
     - checkout: Gambler.Bot.Core
-    - checkout: Gambler.Bot.AutoBet
+    - checkout: Gambler.Bot.Strategies
     - checkout: Self
 
     - task: PowerShell@2
