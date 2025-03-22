@@ -169,6 +169,7 @@ namespace Gambler.Bot.Classes
             settings.RetryDelay = 30;
             settings.EnsureErrorSettings();
             
+            
             return settings;
         }
     }

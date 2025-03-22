@@ -27,6 +27,7 @@ namespace Gambler.Bot.Core.Storage
         public DbSet<CrashBet> CrashBets { get; set; }
         public DbSet<PlinkoBet> PlinkoBets { get; set; }
         public DbSet<RouletteBet> RouletteBets { get; set; }
+        public DbSet<TwistBet> TwistBets { get; set; }
 
 
         protected readonly ILogger _Logger;

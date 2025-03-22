@@ -8,6 +8,7 @@
              xmlns:vm="using:Gambler.Bot.ViewModels"
              x:DataType="vm:MainViewModel"
              xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+
              >
 
     <Grid>

@@ -25,7 +25,7 @@
 
 ### General
 - [x] *notifications (only in app notifications that kind of go over the stop button, but sounds working. need to add an option to move audio sounds again.)
-- [ ] *Prettify UI a bit with icons and loaders where possible
+- [x] *Prettify UI a bit with icons and loaders where possible
 - [ ] *Auto updates	
 - [ ] Improve logging - adding debug and info logging where needed, ensure exceptions are logged and log warnings where relevant. Include logging level option either in config or settings
 - [x] *triggers for notifications (This seems to work but still having the weird issue on the settings screen.)
@@ -42,6 +42,7 @@
 - [ ] verifiers for other games
 - [x] Chart for simulator
 - [ ] Enable chart animation for normal bets but disable for simulation
+- [ ] Bet history for other kinds of bets
 
 ### Sites
 - [ ] *wolfbet
@@ -89,7 +90,7 @@
 - [x] *SiteDetails and SiteStats class are not defined before until we do a first bet
 - [x] *Add a new boolean variable that indicates if script is running in simulator
 - [x] *Balance variable is not updated in programmer mode
-- [ ] *Sqlite update tables needs to be implemented (I have the EF migrations but not quite sure if that's going to work.... meh)
+- [x] *Sqlite update tables needs to be implemented (I have the EF migrations but not quite sure if that's going to work.... meh)
 - [x] *Script conversion tool /legacy script support (untested but there for lua)
 - [x] *bot speed
 - [ ] ???Specify system requirements in the readme file???
