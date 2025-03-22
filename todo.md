@@ -27,7 +27,7 @@
 - [x] *notifications (only in app notifications that kind of go over the stop button, but sounds working. need to add an option to move audio sounds again.)
 - [ ] *Prettify UI a bit with icons and loaders where possible
 - [ ] *Auto updates	
-- [ ] *Improve logging - adding debug and info logging where needed, ensure exceptions are logged and log warnings where relevant. Include logging level option either in config or settings
+- [ ] Improve logging - adding debug and info logging where needed, ensure exceptions are logged and log warnings where relevant. Include logging level option either in config or settings
 - [x] *triggers for notifications (This seems to work but still having the weird issue on the settings screen.)
 - [ ] *improve programmer mode documentation
 - [x] *manual betting extra buttons (x2, 1/2, max, min, etc)
@@ -75,7 +75,7 @@
 - [x] *Selected theme doesn't show in settings
 - [x] *Some sites are not remembered but others are
 - [x] *Disconnecting/logging out does not
-- [ ] *browser bypass sometimes only works on second/third attempt
+- [x] *browser bypass sometimes only works on second/third attempt
 - [x] *Login screen values are not cleared. Or rather they are cleared but UI not updating? or something.
 - [x] *Bet storage!
 - [x] *Manual bets not added to chart/history/storage probably

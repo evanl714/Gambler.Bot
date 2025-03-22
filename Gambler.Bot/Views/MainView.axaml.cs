@@ -29,6 +29,8 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
     static MainView _instance;
     bool subscribed = false;
     string cookievalue = "";
+    static DateTime LastRequest = DateTime.Now;
+    Timer timer;
     public MainView()
     {
         InitializeComponent();
@@ -40,8 +42,22 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
         //PART_WebView.
         this.AttachedToVisualTree += OnAttachedToVisualTree;
         this.DetachedFromVisualTree += OnDetachedFromVisualTree;
+        timer = new Timer(cookietmrCallback, null, 1000, 1000);
         
     }
+
+    private void cookietmrCallback(object? state)
+    {
+        if (args != null)
+        {
+            if ((DateTime.Now - LastRequest).TotalSeconds >= 2)
+            {
+                LastRequest = DateTime.Now;
+                CheckCookies();
+            }
+        }
+    }
+
     Dictionary<string,Cookie> cookies;
     private void WvBypass_WebViewCreated(object? sender, WebViewCore.Events.WebViewCreatedEventArgs e)
     {
@@ -87,15 +103,18 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
         if (args==null)
             return;
         Type argsType = e.GetType();
-        try
-        {
-            string log = JsonSerializer.Serialize(e);
-            MainViewModel.log.LogDebug(log);
-        }
-        catch (Exception ex)
-        {
+        //DO NOT UNCOMMENT THIS
+        //THIS HAS A HIGH POSSIBILITY OF LEAKING YOUR TOKENS
+        //try
+        //{
+        //    string log = JsonSerializer.Serialize(e);
+        //    MainViewModel.log.LogDebug(log);
+        //}
+        //catch (Exception ex)
+        //{
 
-        }
+        //}
+        LastRequest = DateTime.Now;
         if (argsType.Name== "CoreWebView2WebResourceResponseReceivedEventArgs")
         {
             
@@ -116,21 +135,22 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
                     string[] curCookie = x.Split("=");
                     if (curCookie.Length == 2)
                     {
-                        System.Net.Cookie cookie = new System.Net.Cookie(curCookie[0], curCookie[1], "/", "." + new Uri(requesturi).Host);
-                        cookie.HttpOnly = true;
-                        cookie.Secure = true;
-
-                        cookies[curCookie[0]] = (cookie);
-                        if (curCookie[0].ToLower() == args.RequiredCookie.ToLower())
+                        try
                         {
-                            found = true;
+                            System.Net.Cookie cookie = new System.Net.Cookie(curCookie[0], curCookie[1], "/", "." + new Uri(requesturi).Host);
+                            cookie.HttpOnly = true;
+                            cookie.Secure = true;
+                            cookies[curCookie[0]] = (cookie);                           
+                        }
+                        catch (Exception ex)
+                        {
+
                         }
                     }
                 }
                 if (requestCookies.ToLower().Contains(args.RequiredCookie.ToLower()))
                     cookievalue = requestCookies;
-                if (found && status==200 && (DateTime.Now - startDate).TotalSeconds>=5 )
-                    CheckCookies();
+                
             }
         }
         if (argsType.Name == "CoreWebView2WebResourceRequestedEventArgs")
@@ -223,9 +243,13 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
     }
 
     static BrowserConfig _conf = null;
+    bool checking = false;
     async Task CheckCookies()
     {
-        if (args == null)
+        if (checking)
+            return;
+        checking = true;
+        if (args == null || _conf != null)
             return;
         var bc = new BrowserConfig();
         CookieContainer cs = new CookieContainer();
@@ -250,21 +274,46 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
                 object CookieMan = CoreWebView2.GetType().GetProperty("CookieManager").GetValue(CoreWebView2);
                 var method = CookieMan.GetType().GetMethod("GetCookiesAsync");//.Invoke(CookieMan, null);
                 var cookies = await method.InvokeAsync(CookieMan, new object[] { uri.IdnHost });
-                var cookies2 = await method.InvokeAsync(CookieMan, new object[] { uri.Host.Replace("/www","/.www") });
+                var cookies2 = await method.InvokeAsync(CookieMan, new object[] { uri.Host.Replace("/www", "/.www") });
 
-                foreach (object c in cookies as IList)
-                {   
-                    System.Net.Cookie svalue = (System.Net.Cookie)c.GetType().GetMethod("ToSystemNetCookie").Invoke(c, null);
-                    this.cookies[svalue.Name] = svalue;
-                   
+                foreach (object c in (cookies as IList))
+                {
+                    try
+                    {
+                        System.Net.Cookie svalue = (System.Net.Cookie)c.GetType().GetMethod("ToSystemNetCookie").Invoke(c, null);
+                        this.cookies[svalue.Name] = svalue;
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                }
+                foreach (object c in (cookies2 as IList))
+                {
+                    try
+                    {
+                        System.Net.Cookie svalue = (System.Net.Cookie)c.GetType().GetMethod("ToSystemNetCookie").Invoke(c, null);
+                        this.cookies[svalue.Name] = svalue;
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
                 }
                 foreach (var x in this.cookies.Keys)
                 {
-                    if (x== args.RequiredCookie)
+                    if (x == args.RequiredCookie)
                     {
-                        found = true;                        
+                        found = true;
                     }
-                    cs.Add(this.cookies[x]);
+                    try
+                    {
+                        cs.Add(this.cookies[x]);
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
                 }
             }
             bc.UserAgent = agent;
@@ -278,10 +327,8 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
         }
         finally
         {
-            wvBypass.IsVisible = false;
+            checking = false;
         }
-        if (found || cts.IsCancellationRequested)
-            _conf = new BrowserConfig { Cookies = cs, UserAgent = agent };
     }
 
     static CancellationTokenSource cts;
@@ -291,17 +338,35 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
     {
         Dispatcher.UIThread.InvokeAsync(async () =>
         {
-            cookies = new Dictionary<string, Cookie>();
-            wvBypass.ZIndex = -1;
-            wvBypass.IsVisible = true;
-            wvBypass.Url = new Uri(e.URL);
-            await Task.Delay(15000, cts.Token);
-            if (_conf == null)
+            try
             {
-                cts.Cancel();
-                await CheckCookies();
+                cookies = new Dictionary<string, Cookie>();
+                wvBypass.ZIndex = -1;
+                lblDisclaimer.IsVisible = true;
+                lblDisclaimer.ZIndex =- 2;
+                wvBypass.IsVisible = true;
+                wvBypass.Url = new Uri(e.URL);
+                try
+                {
+                    await Task.Delay(15000, cts.Token);
+                }
+                catch (Exception ex)
+                {
+
+                }
+                if (_conf == null)
+                {
+                    cts.Cancel();
+                    await CheckCookies();
+                }
+                wvBypass.Url = new Uri("about:blank");
+                wvBypass.IsVisible = false;
+                lblDisclaimer.IsVisible = false;
             }
-                
+            catch (Exception ex)
+            {
+
+            }
         });
     }
     static DateTime startDate = default;
@@ -312,7 +377,7 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
         args = e;
         startDate = DateTime.Now;
         _instance.internalGetBypass(e);
-        
+        LastRequest = DateTime.Now;
         while (_conf == null) { Thread.Sleep(100); }
         args = null;
         cts.Cancel();

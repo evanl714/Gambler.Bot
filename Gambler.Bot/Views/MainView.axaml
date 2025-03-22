@@ -12,11 +12,21 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <WebView x:Name="wvBypass" Grid.Row="0" IsVisible="false" />
 
-        <ContentControl Content="{Binding Instance}">
+        <TextBlock Grid.Row="0" x:Name="lblDisclaimer"
+                   Background="{actipro:ThemeResource Container2BackgroundBrush}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Top"
+                   FontSize="24"
+                   Text="Please wait while we try to establish a connection to the site."
+                   IsVisible="False"/>
+
+        <WebView Grid.Row="1" x:Name="wvBypass"  IsVisible="false" />
+
+        <ContentControl Grid.Row="0" Grid.RowSpan="2" Content="{Binding Instance}">
             <ContentControl.DataTemplates>
                 <DataTemplate DataType="vm:InstanceViewModel">
                     <views:InstanceView/>
