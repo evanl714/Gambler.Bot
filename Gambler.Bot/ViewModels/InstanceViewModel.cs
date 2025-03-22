@@ -479,6 +479,9 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             botIns.StopStrategy("Logging Out");
             botIns.Disconnect();
             ShowSites = true;
+            
+            this.RaisePropertyChanged(nameof(LoggedIn));
+            this.RaisePropertyChanged(nameof(NotLoggedIn));
         }
 
         public async Task Exit() { await ExitInteraction.Handle(null); }

@@ -70,11 +70,11 @@
 
 ### Known issues
 - [ ] *resume does not
-- [ ] **Selected theme doesn't show in settings
+- [x] *Selected theme doesn't show in settings
 - [x] *Some sites are not remembered but others are
-- [ ] *Disconnecting/logging out does not
+- [x] *Disconnecting/logging out does not
 - [ ] *browser bypass sometimes only works on second/third attempt
-- [ ] *Login screen values are not cleared. Or rather they are cleared but UI not updating? or something.
+- [x] *Login screen values are not cleared. Or rather they are cleared but UI not updating? or something.
 - [x] *Bet storage!
 - [x] *Manual bets not added to chart/history/storage probably
 - [x] *Advanced settings dropdowns not working

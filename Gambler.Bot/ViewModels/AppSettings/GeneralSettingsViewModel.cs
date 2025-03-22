@@ -23,7 +23,7 @@ namespace Gambler.Bot.ViewModels.AppSettings
         private readonly ColorPalette _colorPalette;
         private PersonalSettings settings;
 
-        private IEnumerable<ColorRampViewModel>? _ramps;
+        private List<ColorRampViewModel>? _ramps;
         
 
         public PersonalSettings Settings
@@ -75,9 +75,9 @@ namespace Gambler.Bot.ViewModels.AppSettings
         }
         private void UpdateRamps()
         {
-            Ramps = _colorPalette.Ramps.Select(colorRamp => new ColorRampViewModel(colorRamp, 5));
+            Ramps = _colorPalette.Ramps.Select(colorRamp => new ColorRampViewModel(colorRamp, 5)).ToList();
         }
-        public IEnumerable<ColorRampViewModel>? Ramps
+        public List<ColorRampViewModel>? Ramps
         {
             get => _ramps;
             set => SetProperty(ref _ramps, value);

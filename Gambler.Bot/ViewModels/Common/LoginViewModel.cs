@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Security.Policy;
@@ -54,7 +55,7 @@ namespace Gambler.Bot.ViewModels.Common
             {
                 foreach(var x in LoginParams)
                 {
-                    if (x.Param.ClearAfterLogin || x.Param.ClearAfterEnter)
+                    if (x.Param.ClearAfterEnter)
                     {
                         x.Value = null;
                     }
@@ -65,7 +66,14 @@ namespace Gambler.Bot.ViewModels.Common
                 
             }
             else
-            {
+            {                
+                foreach (var x in LoginParams)
+                {
+                    if (x.Param.ClearAfterLogin)
+                    {
+                        x.Value = null;
+                    }
+                }
                 LoginParams.Clear();
                 CanLogIn = true;
                 ShowError = false;
@@ -76,9 +84,9 @@ namespace Gambler.Bot.ViewModels.Common
 
         }
 
-        private List<LoginParamValue> _loginParams;
+        private ObservableCollection<LoginParamValue> _loginParams;
 
-        public List<LoginParamValue> LoginParams
+        public ObservableCollection<LoginParamValue> LoginParams
         {
             get { return _loginParams; }
             set { _loginParams = value; this.RaisePropertyChanged(); }
@@ -116,12 +124,12 @@ namespace Gambler.Bot.ViewModels.Common
         public LoginViewModel(AutoBet site, ILogger logger): this(logger)
         {
             Site = site;
-            LoginParams = site.GetLoginParams();
+            LoginParams = new ObservableCollection<LoginParamValue>(site.GetLoginParams());
         }
 
         public void RefreshParams()
         {
-            LoginParams = Site.GetLoginParams();
+            LoginParams = new ObservableCollection<LoginParamValue>(Site.GetLoginParams());
         }
 
         public ICommand LoginCommand { get; }
