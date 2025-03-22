@@ -2,6 +2,7 @@
 using ActiproSoftware.UI.Avalonia.Themes;
 using Avalonia.Controls.Notifications;
 using Avalonia.Markup.Xaml.Styling;
+using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using Gambler.Bot.Classes;
 using Gambler.Bot.Classes.BetsPanel;
@@ -19,6 +20,8 @@ using Gambler.Bot.ViewModels.Games.Limbo;
 using Gambler.Bot.ViewModels.Strategies;
 using Gambler.Bot.Views;
 using LibVLCSharp.Shared;
+using Microsoft.CodeAnalysis;
+using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -112,6 +115,8 @@ namespace Gambler.Bot.ViewModels
             ShowBetHistory = new Interaction<BetHistoryViewModel, Unit?>();
             ShowNotification = new Interaction<INotification, Unit?>();
             ShowUserInput = new Interaction<UserInputViewModel, Unit?>();
+            saveFile = new Interaction<FilePickerSaveOptions, string>();
+            openFile = new Interaction<FilePickerOpenOptions, string>();
             tmp.Strategy = new Martingale(_logger);
             PlaceBetVM = new DicePlaceBetViewModel(_logger);
             LoginVM = new LoginViewModel(_logger) { Site = tmp, LoginFinished = LoginFinished };
@@ -526,12 +531,50 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             this.RaisePropertyChanged(nameof(NotLoggedIn));
         }
 
-        void Open() { throw new NotImplementedException(); }
+        async Task Open() 
+        {
+            var result = await OpenFileInteraction.Handle(new FilePickerOpenOptions
+            {
+                FileTypeFilter = new List<FilePickerFileType> { new FilePickerFileType("json") { Patterns = new List<string>() { $"*.json" } } },
+                Title = "Save Script",
+            });
+
+            if (File.Exists(result))
+            {
+                try
+                {
+                    botIns.LoadBetSettings(result);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.ToString());
+                    var msgResult = await MessageBox.Show(
+    "Could not load the seetings. It's likely not a valid settings file.",
+    "Could not import.",
+    MessageBoxButtons.OK);
+
+                }
+            }
+        }
 
         private void PlaceBetVM_PlaceBet(object? sender, PlaceBetEventArgs e) { botIns.PlaceBet(e.NewBet); }
         void Resume() { botIns.Resume(); }
 
-        void Save() { throw new NotImplementedException(); }
+        async Task Save()
+        {
+            var result = await SaveFileInteraction.Handle(new FilePickerSaveOptions
+            {
+                DefaultExtension = ".json",
+                ShowOverwritePrompt = true,
+                FileTypeChoices = new List<FilePickerFileType> { new FilePickerFileType("Bet Settings") { Patterns = new List<string>() { $"*.json" } } },
+                Title = "Save Script",
+                SuggestedFileName = $"NewScript.json"
+
+            });
+            if (result == null)
+                return;
+            botIns.SaveBetSettings(result);
+        }
 
         void ManualBet()
         {
@@ -1093,6 +1136,11 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
         public Interaction<INotification, Unit?> ShowNotification { get; internal set; }
 
         public Interaction<UserInputViewModel, Unit?> ShowUserInput { get; internal set; }
+        private readonly Interaction<FilePickerSaveOptions, string> saveFile;
+        public Interaction<FilePickerSaveOptions, string> SaveFileInteraction => saveFile;
+
+        private readonly Interaction<FilePickerOpenOptions, string> openFile;
+        public Interaction<FilePickerOpenOptions, string> OpenFileInteraction => openFile;
 
         public void ThemeToggled()
         {
@@ -1138,6 +1186,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
         }
 
         public async Task AboutClicked() { await ShowAbout.Handle(new AboutViewModel(_logger)); }
+
     }
 }
 

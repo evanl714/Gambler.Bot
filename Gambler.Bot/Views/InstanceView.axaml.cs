@@ -15,6 +15,8 @@ using System.Reactive;
 using System.Threading.Tasks;
 using System.Reactive.Linq;
 using Avalonia.Platform;
+using Avalonia.Platform.Storage;
+using Gambler.Bot.Classes;
 
 namespace Gambler.Bot.Views;
 
@@ -41,6 +43,8 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
                 ViewModel!.ShowAbout.RegisterHandler(ShowAbout);
                 ViewModel!.ShowNotification.RegisterHandler(ShowNotification);
                 ViewModel!.ShowUserInput.RegisterHandler(ShowUserInput);
+                ViewModel.SaveFileInteraction.RegisterHandler(SaveFile);
+                ViewModel.OpenFileInteraction.RegisterHandler(OpenFile);
 
             });
         }
@@ -238,4 +242,14 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
             e.Cancel = true;
         }
     }
+    async Task SaveFile(IInteractionContext<FilePickerSaveOptions, string?> interaction)
+    {
+        await IOHelper.SaveFile(interaction, TopLevel.GetTopLevel(this));
+    }
+
+    async Task OpenFile(IInteractionContext<FilePickerOpenOptions, string?> interaction)
+    {
+        await IOHelper.OpenFile(interaction, TopLevel.GetTopLevel(this));
+    }
+
 }

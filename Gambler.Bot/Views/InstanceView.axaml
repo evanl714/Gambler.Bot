@@ -30,8 +30,8 @@
         <DockPanel >
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.File}">
-                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Save}" IsEnabled="{Binding ShowBot}"/>
-                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Load}" IsEnabled="{Binding ShowBot}"/>
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Save}" Command="{Binding SaveCommand}" IsEnabled="{Binding ShowBot}"/>
+                    <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Load}" Command="{Binding OpenCommand}" IsEnabled="{Binding ShowBot}"/>
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Exit}" Command="{Binding Exit}"/>
                 </MenuItem>
                 <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.View}">

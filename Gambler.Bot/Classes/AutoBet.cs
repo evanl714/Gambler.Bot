@@ -1176,21 +1176,41 @@ namespace Gambler.Bot.Classes
 
         public ExportBetSettings LoadBetSettings(string FileLocation, bool ApplySettings = true)
         {
-
             List<Trigger> trig = JsonSerializer.Deserialize<List<Trigger>>(@"[{""Action"":4,""Enabled"":true,""TriggerProperty"":""Wins"",""TargetType"":1,""Target"":""Wins"",""Comparison"":3,""Percentage"":50,""ValueType"":0,""ValueProperty"":null,""ValueValue"":0,""Destination"":null}]");
             string Settings = "";
-            using (StreamReader sr = new StreamReader(FileLocation))
+            try
             {
-                Settings = sr.ReadToEnd();
+                using (StreamReader sr = new StreamReader(FileLocation))
+                {
+                    Settings = sr.ReadToEnd();
+                }
+                var tmp = JsonSerializer.Deserialize<ExportBetSettings>(Settings);
+
+                if (string.IsNullOrWhiteSpace(tmp.Strategy))
+                {
+                    throw new Exception("Invalid settings file");
+                }
+
+                this.StoredBetSettings = JsonSerializer.Deserialize<ExportBetSettings>(Settings);
+                if (StoredBetSettings?.BetSettings != null && ApplySettings)
+                    this.BetSettings = StoredBetSettings.BetSettings;
+                else
+                    this.BetSettings = new InternalBetSettings();
+                var tmpStrat = StoredBetSettings?.GetStrat();
+                if (tmpStrat==null)
+                {
+                    throw new Exception("Invalid settings file");
+                }
+                this.Strategy = tmpStrat;
+                this.Strategy.SetLogger(_Logger);
+                return StoredBetSettings;
+                
             }
-            this.StoredBetSettings = JsonSerializer.Deserialize<ExportBetSettings>(Settings);
-            if (StoredBetSettings.BetSettings!=null && ApplySettings)
-                this.BetSettings = StoredBetSettings.BetSettings;
-            else
-                this.BetSettings = new InternalBetSettings();
-            this.Strategy = StoredBetSettings.GetStrat();
-            this.Strategy.SetLogger(_Logger);
-            return StoredBetSettings;
+            catch (Exception ex)
+            {
+                _Logger?.LogError(ex.ToString());
+                throw;
+            }
         }
         public void RaisePropertyChanged([CallerMemberName] string propertyName = null)
         {
