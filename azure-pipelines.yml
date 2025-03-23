@@ -48,6 +48,7 @@ stages:
         csprojPath=$(find $(Build.SourcesDirectory) -name "Gambler.Bot.Desktop.csproj" | head -n 1)
         xmlstarlet ed -L -s "/Project" -t elem -n "PropertyGroup" -v "" \
                       -s "/Project/PropertyGroup" -t elem -n "Version" -v "$(Build.BuildNumber)" \
+                      -s "/Project/PropertyGroup" -t elem -n "EnableWindowsTargeting" -v "$(enableWindowsTargeting)" \
                       $csprojPath
       displayName: 'Update Version in csproj'
 
