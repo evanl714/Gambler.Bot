@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <!--If you are willing to use Windows/MacOS native APIs you will need to create 3 projects.
@@ -7,17 +7,14 @@
     <Nullable>enable</Nullable>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
   </PropertyGroup>
-
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <UserSecretsId>ef5be181-7c33-4a6b-8d07-0b8cd94b8d6c</UserSecretsId>
     <ApplicationIcon>app.ico</ApplicationIcon>
   </PropertyGroup>
-
   <ItemGroup>
     <Content Include="app.ico" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Avalonia.Desktop" Version="11.2.5" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
@@ -25,8 +22,11 @@
     <PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.21" />
     <PackageReference Include="WebView.Avalonia.Desktop" Version="11.0.0.1" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\Gambler.Bot\Gambler.Bot.csproj" />
   </ItemGroup>
+  <PropertyGroup>
+    <Version>
+    </Version>
+  </PropertyGroup>
 </Project>

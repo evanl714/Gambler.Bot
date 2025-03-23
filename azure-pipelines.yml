@@ -15,7 +15,7 @@ trigger:
 name: 1.0.$(Build.BuildId)
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'macOS-latest'
 
 variables:
   solution: '**/Gambler.Bot.sln'
@@ -82,6 +82,7 @@ stages:
     #    platform: '$(buildPlatform)'
     #    configuration: '$(buildConfiguration)'
     #    msbuildArgs: '/p:SelfContained=true'
+    #    msbuildArgs: '/p:SelfContained=true'
 
     - script: |
         dotnet publish Gambler.Bot/Platforms/Gambler.Bot.Desktop/Gambler.Bot.Desktop.csproj -c $(buildConfiguration) -r $(publishRuntime) --self-contained=$(selfContained) -o "$(Build.ArtifactStagingDirectory)\Artifacts\$(publishRuntime)"
@@ -121,26 +122,25 @@ stages:
         artifactName: 'BuildArtifacts-osx-x64'
         downloadPath: '$(Pipeline.Workspace)/Assets/osx-x86'
       displayName: 'Download macOS artifacts'
+      
 
     - task: PowerShell@2
-      name: CreateRelease
+      name: CreateVelopackRelease
       inputs:
         targetType: 'inline'
         script: |
-          $tag = "$(Build.BuildId)"
-          $releaseName = "Release $tag"
-          $description = "Aggregated release for Windows, Linux and macOS."
-          
-          # Create or update the GitHub release using Velopack CLI.
-          velopack create-release --repo Seuntjie900/Gambler.Bot --tag $tag --name "$releaseName" --description "$description" --token "$(GitHubToken)"
-          
-          # For each runtime, compress its assets and attach as release asset.
-          Get-ChildItem -Path "$(Pipeline.Workspace)\Assets" -Directory | ForEach-Object {
-              $assetPath = $_.FullName
-              $zipPath = "$assetPath.zip"
-              if (Test-Path $zipPath) { Remove-Item $zipPath }
-              Compress-Archive -Path "$assetPath\*" -DestinationPath $zipPath
-              Write-Output "Attaching $zipPath to release $tag..."
-              velopack attach-asset --repo Seuntjie900/Gambler.Bot --tag $tag --file $zipPath --token "$(GitHubToken)"
-          }
-      displayName: 'Create GitHub Release with All Artifacts'
+          # Install the vpk tool globally
+          dotnet tool install -g vpk
+          # Download GitHub release data using the repository name from the pipeline variable
+          vpk download github --repoUrl https://github.com/$(Build.Repository.Name)
+          # Pack the release using a unique identifier and the version from a previous step (set as $(version))
+          vpk [win] --channel win-x64 pack -u Gambler.Bot_win64 --packDir $(Pipeline.Workspace)/Assets/win-x64 --mainExe Gambler.Bot.Desktop.Exe -v $(version) -p publish --outputDir .\Releases\win64
+          vpk [linux] --channel linux-x64 pack -u Gambler.Bot_linux64 --packDir $(Pipeline.Workspace)/Assets/linux-x64 --mainExe Gambler.Bot.Desktop.Exe -v $(version) -p publish --outputDir .\Releases\linux64
+          vpk [osx]--channel osx-x64 pack -u Gambler.Bot_osx64 --packDir $(Pipeline.Workspace)/Assets/osx-x64 --mainExe Gambler.Bot.Desktop.Exe -v $(version) -p publish --outputDir .\Releases\osx64
+          # Upload the release to GitHub with the specified release name and tag
+          vpk upload github --repoUrl https://github.com/$(Build.Repository.Name) --merge --releaseName "Gambler.Bot $(version)" --tag v$(version) -o .\Releases\win64 -c win-x64 
+          vpk upload github --repoUrl https://github.com/$(Build.Repository.Name) --merge --releaseName "Gambler.Bot $(version)" --tag v$(version) -o .\Releases\linux64 -c linux-x64 
+          vpk upload github --repoUrl https://github.com/$(Build.Repository.Name) --merge --releaseName "Gambler.Bot $(version)" --tag v$(version) -o .\Releases\osx64 -c osx-x64 
+
+
+
