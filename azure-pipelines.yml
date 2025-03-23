@@ -42,6 +42,8 @@ stages:
     - checkout: Self
 
     - script: |
+        # Install xmlstarlet
+        brew install xmlstarlet
         # Update the version in the desktop project's csproj file.
         csprojPath=$(find $(Build.SourcesDirectory) -name "Gambler.Bot.Desktop.csproj" | head -n 1)
         xmlstarlet ed -L -s "/Project" -t elem -n "PropertyGroup" -v "" \
