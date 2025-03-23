@@ -15,7 +15,7 @@ trigger:
 name: 1.0.$(Build.BuildId)
 
 pool:
-  vmImage: 'macOS-latest'
+  vmImage: 'windows-latest'
 
 variables:
   solution: '**/Gambler.Bot.sln'
@@ -34,8 +34,8 @@ stages:
           publishRuntime: win-x64
         Linux:
           publishRuntime: linux-x64
-        macOS:
-          publishRuntime: osx-x64
+        # macOS:
+        #   publishRuntime: osx-x64
     steps:
     - checkout: Gambler.Bot.Core
     - checkout: Gambler.Bot.Strategies
@@ -43,7 +43,7 @@ stages:
 
     - script: |
         # Install xmlstarlet
-        brew install xmlstarlet
+        #brew install xmlstarlet
         # Update the version in the desktop project's csproj file.
         csprojPath=$(find $(Build.SourcesDirectory) -name "Gambler.Bot.Desktop.csproj" | head -n 1)
         xmlstarlet ed -L -s "/Project" -t elem -n "PropertyGroup" -v "" \
@@ -93,13 +93,13 @@ stages:
         downloadPath: '$(Pipeline.Workspace)/Assets/linux-x64'
       displayName: 'Download Linux artifacts'
 
-    - task: DownloadBuildArtifacts@0
-      inputs:
-        buildType: 'current'
-        downloadType: 'specific'
-        artifactName: 'BuildArtifacts-osx-x64'
-        downloadPath: '$(Pipeline.Workspace)/Assets/osx-x64'
-      displayName: 'Download macOS artifacts'
+    # - task: DownloadBuildArtifacts@0
+    #   inputs:
+    #     buildType: 'current'
+    #     downloadType: 'specific'
+    #     artifactName: 'BuildArtifacts-osx-x64'
+    #     downloadPath: '$(Pipeline.Workspace)/Assets/osx-x64'
+    #   displayName: 'Download macOS artifacts'
 
     - script: |
         # Unzip all downloaded artifacts
@@ -115,7 +115,7 @@ stages:
         # Pack the release using a unique identifier and the version from a previous step (set as $(version))
         vpk pack -u Gambler.Bot_win64 -v $(version) -p $(Pipeline.Workspace)/Assets/win-x64
         vpk pack -u Gambler.Bot_linux64 -v $(version) -p $(Pipeline.Workspace)/Assets/linux-x64
-        vpk pack -u Gambler.Bot_osx64 -v $(version) -p $(Pipeline.Workspace)/Assets/osx-x64
+        # vpk pack -u Gambler.Bot_osx64 -v $(version) -p $(Pipeline.Workspace)/Assets/osx-x64
         # Upload the release to GitHub with the specified release name and tag
         vpk upload github --repoUrl https://github.com/$(Build.Repository.Name) --publish --releaseName "Gambler.Bot $(version)" --tag v$(version)
       displayName: 'Create Velopack Release'
