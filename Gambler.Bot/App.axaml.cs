@@ -13,6 +13,7 @@ using Projektanker.Icons.Avalonia.MaterialDesign;
 using Projektanker.Icons.Avalonia;
 using Velopack;
 using System.Threading.Tasks;
+using Serilog;
 
 namespace Gambler.Bot
 {
@@ -25,11 +26,11 @@ namespace Gambler.Bot
             AvaloniaXamlLoader.Load(this);
             // Workaround for default ToggleThemeButton theme in Actipro Avalonia v24.1.0
             _ = ActiproSoftware.Properties.Shared.AssemblyInfo.Instance;
-            VelopackApp.Build().Run();
+            
         }
         internal static async Task<bool> HasUpdate()
         {
-            var mgr = new UpdateManager("https://github.com/Seuntjie900/Gambler.Bot/releases/latest/download/updates.json");
+            var mgr = new UpdateManager("https://github.com/Seuntjie900/Gambler.Bot");
 
             // check for new version
             var newVersion = await mgr.CheckForUpdatesAsync();
@@ -37,7 +38,7 @@ namespace Gambler.Bot
         }
         internal static async Task UpdateMyApp()
         {
-            var mgr = new UpdateManager("https://github.com/Seuntjie900/Gambler.Bot/releases/latest/download/updates.json");
+            var mgr = new UpdateManager("https://github.com/Seuntjie900/Gambler.Bot");
 
             // check for new version
             var newVersion = await mgr.CheckForUpdatesAsync();
@@ -73,10 +74,14 @@ namespace Gambler.Bot
 
         private void ConfigureServices(IServiceCollection services)
         {
+            var serilogLogger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .MinimumLevel.Information()
+    .WriteTo.File("gamblerbotlog.log") // Serilog.Sinks.Debug
+    .CreateLogger();
+            Log.Logger = serilogLogger;
             IconProvider.Current.Register<MaterialDesignIconProvider>();
-            services.AddLogging(configure => configure.AddConsole().SetMinimumLevel(LogLevel.Debug).AddDebug());
-
-
+            services.AddLogging(configure => configure.AddSerilog().AddConsole().SetMinimumLevel(LogLevel.Information).AddDebug());
             services.AddTransient<MainWindowViewModel>();
             services.AddTransient<MainViewModel>();
             services.AddTransient<SelectSiteViewModel>();
