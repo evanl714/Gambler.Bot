@@ -19,9 +19,23 @@ class Program
     [STAThread]
     public static void Main(string[] args)
     {
-        BuildAvaloniaApp()
-        .StartWithClassicDesktopLifetime(args);
-        VelopackApp.Build().Run();
+        try
+        {
+            // It's important to Run() the VelopackApp as early as possible in app startup.
+            VelopackApp.Build()
+                .Run();
+
+            // Now it's time to run Avalonia
+            BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+
+        }
+        catch (Exception ex)
+        {
+            string message = "Unhandled exception: " + ex.ToString();
+            Console.WriteLine(message);
+            throw;
+        }
+
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.
