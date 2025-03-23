@@ -109,11 +109,7 @@ stages:
     #     artifactName: 'BuildArtifacts-osx-x64'
     #     downloadPath: '$(Pipeline.Workspace)/Assets/osx-x64'
     #   displayName: 'Download macOS artifacts'
-
-    - script: |
-        # Unzip all downloaded artifacts
-        find $(Pipeline.Workspace)/Assets -name "*.zip" -exec sh -c 'unzip -o "{}" -d "$(dirname "{}")"' \;
-      displayName: 'Unzip Downloaded Artifacts'
+       
 
     - task: PowerShell@2
       name: CreateVelopackRelease
