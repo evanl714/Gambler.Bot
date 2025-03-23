@@ -22,6 +22,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   selfContained: 'true'
+  version: '$(Build.BuildId)'
 
 stages:
 - stage: Build
@@ -40,57 +41,31 @@ stages:
     - checkout: Gambler.Bot.Strategies
     - checkout: Self
 
-    # Remove the WASM project from the solution to exclude it from the build.
-    #- script: |
-    #    dotnet sln $(solution) remove Gambler.Bot/Platforms/Gambler.Bot.Browser/Gambler.Bot.Browser.csproj
-    #  displayName: 'Remove WASM project from solution'
+    - script: |
+        # Update the version in the desktop project's csproj file.
+        csprojPath=$(find $(Build.SourcesDirectory) -name "Gambler.Bot.Desktop.csproj" | head -n 1)
+        xmlstarlet ed -L -s "/Project" -t elem -n "PropertyGroup" -v "" \
+                      -s "/Project/PropertyGroup" -t elem -n "Version" -v "$(Build.BuildNumber)" \
+                      $csprojPath
+      displayName: 'Update Version in csproj'
 
-    - task: PowerShell@2      
+    - task: UseDotNet@2
       inputs:
-        targetType: 'inline'
-        script: |
-          # Update the version in the desktop project's csproj file.
-          $csprojPath = Get-ChildItem -Path "$(Build.SourcesDirectory)" -Filter "Gambler.Bot.Desktop.csproj" -Recurse | Select-Object -First 1 -ExpandProperty FullName
-          [xml]$csproj = Get-Content -Path $csprojPath
-          $versionNode = $csproj.SelectNodes("//Project/PropertyGroup/Version") | Select-Object -First 1
-          if ($versionNode -eq $null) {
-            $propertyGroup = $csproj.CreateElement("PropertyGroup")
-            $versionNode = $csproj.CreateElement("Version")
-            $versionNode.InnerText = "$(Build.BuildNumber)"
-            $propertyGroup.AppendChild($versionNode)
-            $csproj.DocumentElement.AppendChild($propertyGroup)
-          } else {
-            $versionNode.InnerText = "$(Build.BuildNumber)"
-          }
-          $csproj.Save($csprojPath)
-
-    - task: NuGetToolInstaller@1
-
-    # New step: Install wasm-tools for .NET 8 (if needed for other projects, ignore if not)
-    #- script: |
-    #    dotnet workload install wasm-tools --skip-manifest-update
-    #  displayName: 'Install wasm-tools for .NET 8'
-
-    - task: NuGetCommand@2
-      inputs:
-        restoreSolution: '$(solution)'
-        
-
-    #- task: VSBuild@1
-    #  inputs:
-    #    solution: '$(solution)'
-    #    platform: '$(buildPlatform)'
-    #    configuration: '$(buildConfiguration)'
-    #    msbuildArgs: '/p:SelfContained=true'
-    #    msbuildArgs: '/p:SelfContained=true'
+        packageType: 'sdk'
+        version: '8.x.x'
+        installationPath: $(Agent.ToolsDirectory)/dotnet
 
     - script: |
-        dotnet publish Gambler.Bot/Platforms/Gambler.Bot.Desktop/Gambler.Bot.Desktop.csproj -c $(buildConfiguration) -r $(publishRuntime) --self-contained=$(selfContained) -o "$(Build.ArtifactStagingDirectory)\Artifacts\$(publishRuntime)"
+        dotnet restore $(solution)
+      displayName: 'Restore NuGet Packages'
+
+    - script: |
+        dotnet publish Gambler.Bot/Platforms/Gambler.Bot.Desktop/Gambler.Bot.Desktop.csproj -c $(buildConfiguration) -r $(publishRuntime) --self-contained=$(selfContained) -o "$(Build.ArtifactStagingDirectory)/Artifacts/$(publishRuntime)"
       displayName: 'Publish for $(publishRuntime)'
 
     - task: PublishBuildArtifacts@1
       inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)\Artifacts'
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/Artifacts'
         ArtifactName: 'BuildArtifacts-$(publishRuntime)'
         publishLocation: 'container'
 
@@ -120,27 +95,25 @@ stages:
         buildType: 'current'
         downloadType: 'specific'
         artifactName: 'BuildArtifacts-osx-x64'
-        downloadPath: '$(Pipeline.Workspace)/Assets/osx-x86'
+        downloadPath: '$(Pipeline.Workspace)/Assets/osx-x64'
       displayName: 'Download macOS artifacts'
-      
 
-    - task: PowerShell@2
-      name: CreateVelopackRelease
-      inputs:
-        targetType: 'inline'
-        script: |
-          # Install the vpk tool globally
-          dotnet tool install -g vpk
-          # Download GitHub release data using the repository name from the pipeline variable
-          vpk download github --repoUrl https://github.com/$(Build.Repository.Name)
-          # Pack the release using a unique identifier and the version from a previous step (set as $(version))
-          vpk [win] --channel win-x64 pack -u Gambler.Bot_win64 --packDir $(Pipeline.Workspace)/Assets/win-x64 --mainExe Gambler.Bot.Desktop.Exe -v $(version) -p publish --outputDir .\Releases\win64
-          vpk [linux] --channel linux-x64 pack -u Gambler.Bot_linux64 --packDir $(Pipeline.Workspace)/Assets/linux-x64 --mainExe Gambler.Bot.Desktop.Exe -v $(version) -p publish --outputDir .\Releases\linux64
-          vpk [osx]--channel osx-x64 pack -u Gambler.Bot_osx64 --packDir $(Pipeline.Workspace)/Assets/osx-x64 --mainExe Gambler.Bot.Desktop.Exe -v $(version) -p publish --outputDir .\Releases\osx64
-          # Upload the release to GitHub with the specified release name and tag
-          vpk upload github --repoUrl https://github.com/$(Build.Repository.Name) --merge --releaseName "Gambler.Bot $(version)" --tag v$(version) -o .\Releases\win64 -c win-x64 
-          vpk upload github --repoUrl https://github.com/$(Build.Repository.Name) --merge --releaseName "Gambler.Bot $(version)" --tag v$(version) -o .\Releases\linux64 -c linux-x64 
-          vpk upload github --repoUrl https://github.com/$(Build.Repository.Name) --merge --releaseName "Gambler.Bot $(version)" --tag v$(version) -o .\Releases\osx64 -c osx-x64 
+    - script: |
+        # Unzip all downloaded artifacts
+        find $(Pipeline.Workspace)/Assets -name "*.zip" -exec sh -c 'unzip -o "{}" -d "$(dirname "{}")"' \;
+      displayName: 'Unzip Downloaded Artifacts'
 
-
+    - script: |
+        # Install the vpk tool globally
+        dotnet tool install -g vpk
+        export PATH="$PATH:~/.dotnet/tools"
+        # Download GitHub release data using the repository name from the pipeline variable
+        vpk download github --repoUrl https://github.com/$(Build.Repository.Name)
+        # Pack the release using a unique identifier and the version from a previous step (set as $(version))
+        vpk pack -u Gambler.Bot_win64 -v $(version) -p $(Pipeline.Workspace)/Assets/win-x64
+        vpk pack -u Gambler.Bot_linux64 -v $(version) -p $(Pipeline.Workspace)/Assets/linux-x64
+        vpk pack -u Gambler.Bot_osx64 -v $(version) -p $(Pipeline.Workspace)/Assets/osx-x64
+        # Upload the release to GitHub with the specified release name and tag
+        vpk upload github --repoUrl https://github.com/$(Build.Repository.Name) --publish --releaseName "Gambler.Bot $(version)" --tag v$(version)
+      displayName: 'Create Velopack Release'
 
