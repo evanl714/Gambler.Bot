@@ -123,11 +123,11 @@ stages:
             vpk download github --repoUrl https://github.com/$(Build.Repository.Name) --token $(GitHubToken) -c linux-x64
             # Pack the release using a unique identifier and the version from a previous step (set as $(version))
             # vpk pack -u Gambler.Bot_win64 -v $(version) -p $(Pipeline.Workspace)/Assets/win-x64
-            vpk [win] pack -c win-x64 -e Gambler.Bot.Desktop.Exe -u Gambler.Bot -v $(version) --outputDir .\Releases --packDir $(Pipeline.Workspace)/Assets/win-x64
-            vpk [win] pack -c linux-x64 -e Gambler.Bot.Desktop.Exe -u Gambler.Bot -v $(version) --outputDir .\Releases --packDir $(Pipeline.Workspace)/Assets/linux-x64
+            vpk [win] pack -c win-x64 -e Gambler.Bot.Desktop.Exe -u Gambler.Bot -v 5.0.$(version) --outputDir .\Releases --packDir $(Pipeline.Workspace)/Assets/win-x64
+            vpk [win] pack -c linux-x64 -e Gambler.Bot.Desktop.Exe -u Gambler.Bot -v 5.0.$(version) --outputDir .\Releases --packDir $(Pipeline.Workspace)/Assets/linux-x64
             # vpk pack -u Gambler.Bot_osx64 -v $(version) -p $(Pipeline.Workspace)/Assets/osx-x64
             # Upload the release to GitHub with the specified release name and tag
-            vpk upload github --repoUrl https://github.com/$(Build.Repository.Name) --merge --releaseName "Gambler.Bot $(version)" --tag v$(version) -o .\Releases -c win-x64 --token $(GitHubToken) 
-            vpk upload github --repoUrl https://github.com/$(Build.Repository.Name) --merge --releaseName "Gambler.Bot $(version)" --tag v$(version) -o .\Releases -c linux-x64 --token $(GitHubToken) 
+            vpk upload github --repoUrl https://github.com/$(Build.Repository.Name) --merge --releaseName "Gambler.Bot 5.0.$(version)" --tag 5.0.v$(version) -o .\Releases -c win-x64 --token $(GitHubToken) 
+            vpk upload github --repoUrl https://github.com/$(Build.Repository.Name) --merge --releaseName "Gambler.Bot 5.0.$(version)" --tag 5.0.v$(version) -o .\Releases -c linux-x64 --token $(GitHubToken) 
       
 
