@@ -14,6 +14,7 @@ using Projektanker.Icons.Avalonia;
 using Velopack;
 using System.Threading.Tasks;
 using Serilog;
+using Velopack.Sources;
 
 namespace Gambler.Bot
 {
@@ -30,7 +31,7 @@ namespace Gambler.Bot
         }
         internal static async Task<bool> HasUpdate()
         {
-            var mgr = new UpdateManager("https://github.com/Seuntjie900/Gambler.Bot");
+            var mgr = new UpdateManager(new GithubSource("https://github.com/Seuntjie900/Gambler.Bot", null, false));
 
             // check for new version
             var newVersion = await mgr.CheckForUpdatesAsync();
@@ -38,7 +39,7 @@ namespace Gambler.Bot
         }
         internal static async Task UpdateMyApp()
         {
-            var mgr = new UpdateManager("https://github.com/Seuntjie900/Gambler.Bot");
+            var mgr = new UpdateManager(new GithubSource("https://github.com/Seuntjie900/Gambler.Bot", null, false));
 
             // check for new version
             var newVersion = await mgr.CheckForUpdatesAsync();
