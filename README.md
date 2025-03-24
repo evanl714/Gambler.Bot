@@ -8,14 +8,19 @@ Note:This bot is still in beta.<br/>
 Betting for for a variety of online casinos, supporting a variety of games and strategies.<br/>
 <br/>
 Freaturs include customizable betting strategies, including martingale, labouchere, d'alembert, fibonacci, and preset list of bets.<br/>
-Several programmer modes, including LUA, JS, Pythong and C#.<br/>
+Variety of games - Dice, Limbo, Twist currently supported. HiLo, Crash, Plinko and Roulette planned<br/>
+Several programmer modes, including LUA, JS, Pythong and C# with additional features (error handling, resetting, more info).<br/>
 Advanced reset and stop conditions.<br/>
 Automatic withdrawal, tipping, investing or banking/vaulting<br/>
 profit chart and bet history<br/>
 extremely fast simulator<br/>
 bet verifier<br/>
 Light and dark mode<br/>
-variety of colour schemes
+variety of colour schemes<br/>
+bet storage options including sqlite (default), sqlserver, mysql, postgres and mongodb (coming soon)<br/>
+dynamic triggers for notifications<br/>
+dynamic action triggers for stopping, resetting, withdrawing etc<br/>
+Error settings - define how the bot should behave upon certain errors<br/>
 <br/>
 <br/>
 Gambling is gambling no matter what you do or how good your strategy is. The house always wins if you keep playing. Winners know when to stop.<br/>
