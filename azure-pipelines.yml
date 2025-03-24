@@ -61,12 +61,15 @@ stages:
           $csproj.Save($csprojPath)
 
     - task: PowerShell@2   
+      env:
+        ActiproLicensee: $(ActiproLicensee)
+        ActiproLicenseKey: $(ActiproLicenseKey)
       inputs:
         targetType: 'inline'
         script: |
           # inject the actipro license keys.
-          (Get-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs).Replace('config.GetValue<string>("ActiproLicense:Licensee")', "\"${env:ACTIPROLICENSEE}\"") | Set-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs
-          (Get-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs).Replace('config.GetValue<string>("ActiproLicense:LisenceKey")', "\"${env:ACTIPROLICENSEKEY}\"") | Set-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs
+          (Get-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs).Replace('config.GetValue<string>("ActiproLicense:Licensee")', "\"${env:ActiproLicensee}\"") | Set-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs
+          (Get-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs).Replace('config.GetValue<string>("ActiproLicense:LisenceKey")', "\"${env:ActiproLicenseKey}\"") | Set-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs
 
     - task: NuGetToolInstaller@1
     # New step: Install wasm-tools for .NET 8 (if needed for other projects, ignore if not)
