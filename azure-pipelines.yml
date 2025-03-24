@@ -81,26 +81,26 @@ stages:
         ArtifactName: 'BuildArtifacts-$(publishRuntime)'
         publishLocation: 'container'
 
-- stage: Release
-  dependsOn: Build
-  jobs:
-  - job: ReleaseJob
-    steps:
-    - task: DownloadBuildArtifacts@0
-      inputs:
-        buildType: 'current'
-        downloadType: 'specific'
-        artifactName: 'BuildArtifacts-win-x64'
-        downloadPath: '$(Pipeline.Workspace)/Assets/win-x64'
-      displayName: 'Download Windows artifacts'
+# - stage: Release
+#   dependsOn: Build
+#   jobs:
+#   - job: ReleaseJob
+#     steps:
+#     - task: DownloadBuildArtifacts@0
+#       inputs:
+#         buildType: 'current'
+#         downloadType: 'specific'
+#         artifactName: 'BuildArtifacts-win-x64'
+#         downloadPath: '$(Pipeline.Workspace)/Assets/win-x64'
+#       displayName: 'Download Windows artifacts'
 
-    - task: DownloadBuildArtifacts@0
-      inputs:
-        buildType: 'current'
-        downloadType: 'specific'
-        artifactName: 'BuildArtifacts-linux-x64'
-        downloadPath: '$(Pipeline.Workspace)/Assets/linux-x64'
-      displayName: 'Download Linux artifacts'
+#     - task: DownloadBuildArtifacts@0
+#       inputs:
+#         buildType: 'current'
+#         downloadType: 'specific'
+#         artifactName: 'BuildArtifacts-linux-x64'
+#         downloadPath: '$(Pipeline.Workspace)/Assets/linux-x64'
+#       displayName: 'Download Linux artifacts'
 
     # - task: DownloadBuildArtifacts@0
     #   inputs:
