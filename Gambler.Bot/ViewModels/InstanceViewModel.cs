@@ -138,7 +138,7 @@ namespace Gambler.Bot.ViewModels
             tmp.GetStrats();
             BotInstance = tmp;
             botIns.CurrentGame = Bot.Common.Games.Games.Dice;
-            _logger.LogDebug("Instance viewmodel creating");
+            _logger.LogDebug("Instance viewmodel created");
         }
 
         private void CreateMediaPlayers()

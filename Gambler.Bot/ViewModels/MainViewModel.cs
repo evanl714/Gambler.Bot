@@ -69,7 +69,7 @@ namespace Gambler.Bot.ViewModels
                 else if (UISettings.Settings.UpdateMode == "Prompt")
                 {
                     _logger.LogDebug("Check if there are updates");
-                    if (App.HasUpdate().Result)
+                    if (await App.HasUpdate())
                     {
                         _logger.LogDebug("Updates found");
                         var result = await MessageBox.Show("There is an update available. Would you like to update now?", "Update Available", MessageBoxButtons.YesNo, MessageBoxImage.Information);
