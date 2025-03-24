@@ -45,7 +45,7 @@
 - [ ] Bet history for other kinds of bets
 
 ### Sites
-- [ ] *wolfbet
+- [x] *wolfbet
 - [ ] **BCH.game
 
 ### Help windows:
