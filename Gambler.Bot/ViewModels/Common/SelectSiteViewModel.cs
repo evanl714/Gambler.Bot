@@ -3,6 +3,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Svg;
 using Gambler.Bot.Core.Helpers;
+using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using Svg.Skia;
 using System;
@@ -28,6 +29,7 @@ namespace Gambler.Bot.ViewModels.Common
 
         public SelectSiteViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
         {
+            logger.LogDebug("SelectSite Creating");
             Classes.AutoBet botIns = new Classes.AutoBet(_logger);
             botIns.CompileSites();
             botIns.GetStrats();
@@ -35,7 +37,7 @@ namespace Gambler.Bot.ViewModels.Common
             SimulateCommand = ReactiveCommand.Create<object>(Simulate);
             ViewSiteCommand = ReactiveCommand.Create<object>(ViewSite);
             Sites = new ObservableCollection<AvaSitesList>(Classes.AutoBet.Sites.Select(x=>new AvaSitesList(x) ));
-            
+            logger.LogDebug("SelectSite Created");
         }
 
 

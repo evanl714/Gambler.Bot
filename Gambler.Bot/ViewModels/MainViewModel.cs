@@ -18,11 +18,16 @@ namespace Gambler.Bot.ViewModels
         internal static ILogger log = null;
         public MainViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
         {
+            _logger.LogDebug("MainViewModel created");
+           
             log = logger;
             uiSettingsFile = string.Empty;
-            UISettings.Portable = File.Exists("portable"); ;
+            UISettings.Portable = File.Exists("portable"); //this needs to integrate with velopacks portable thing
             if (UISettings.Portable)
+            {
+                logger.LogDebug("Portable");
                 uiSettingsFile = "";
+            }
             else
             {
                 uiSettingsFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gambler.Bot");
@@ -31,6 +36,7 @@ namespace Gambler.Bot.ViewModels
             uiSettingsFile = Path.Combine(uiSettingsFile, "UISettings.json");
             if (File.Exists(uiSettingsFile))
             {
+                logger.LogDebug("Loading UI settings");
                 UISettings.Settings = JsonSerializer.Deserialize<UISettings>(File.ReadAllText(uiSettingsFile));
                 //change the theme somehow?
                 if (UISettings.Settings.DarkMode != null)
@@ -43,7 +49,7 @@ namespace Gambler.Bot.ViewModels
                     {
                         return;
                     }
-                   
+                    logger.LogDebug("Applying theme");
                     theme.Definition.AccentColorRampName = UISettings.Settings.ThemeName;
                     theme.RefreshResources();
                 }
@@ -53,6 +59,7 @@ namespace Gambler.Bot.ViewModels
 
         public async Task Loaded()
         {
+            _logger.LogDebug("Check for updates");
             try
             {
                 if (UISettings.Settings.UpdateMode == "Auto")
@@ -61,19 +68,25 @@ namespace Gambler.Bot.ViewModels
                 }
                 else if (UISettings.Settings.UpdateMode == "Prompt")
                 {
+                    _logger.LogDebug("Check if there are updates");
                     if (App.HasUpdate().Result)
                     {
+                        _logger.LogDebug("Updates found");
                         var result = await MessageBox.Show("There is an update available. Would you like to update now?", "Update Available", MessageBoxButtons.YesNo, MessageBoxImage.Information);
                         if (result == MessageBoxResult.Yes)
                         {
                             await App.UpdateMyApp();
                         }
                     }
+                    else
+                    {
+                        _logger.LogDebug("no updates");
+                    }
                 }
             }
             catch (Exception ex)
             {
-                log.LogError(ex, "Error checking for updates");
+                _logger.LogError(ex, "Error checking for updates");
             }
         }
 

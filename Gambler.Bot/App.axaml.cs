@@ -74,14 +74,9 @@ namespace Gambler.Bot
 
         private void ConfigureServices(IServiceCollection services)
         {
-            var serilogLogger = new LoggerConfiguration()
-    .Enrich.FromLogContext()
-    .MinimumLevel.Information()
-    .WriteTo.File("gamblerbotlog.log") // Serilog.Sinks.Debug
-    .CreateLogger();
-            Log.Logger = serilogLogger;
+           
             IconProvider.Current.Register<MaterialDesignIconProvider>();
-            services.AddLogging(configure => configure.AddSerilog().AddConsole().SetMinimumLevel(LogLevel.Information).AddDebug());
+            services.AddLogging(configure => configure.AddSerilog().AddConsole().SetMinimumLevel(LogLevel.Debug).AddDebug());
             services.AddTransient<MainWindowViewModel>();
             services.AddTransient<MainViewModel>();
             services.AddTransient<SelectSiteViewModel>();

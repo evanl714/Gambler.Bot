@@ -1,4 +1,5 @@
-﻿using ReactiveUI;
+﻿using Microsoft.Extensions.Logging;
+using ReactiveUI;
 using System.Collections.Generic;
 
 namespace Gambler.Bot.ViewModels
@@ -17,7 +18,9 @@ namespace Gambler.Bot.ViewModels
 
         public MainWindowViewModel(Microsoft.Extensions.Logging.ILogger<MainWindowViewModel> logger) : base(logger)
         {
+            logger.LogDebug("Mainwindow created");
             MainVM = new MainViewModel(logger);
+            
         }
     }
 }

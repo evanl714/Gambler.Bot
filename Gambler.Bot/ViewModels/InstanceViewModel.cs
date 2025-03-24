@@ -73,13 +73,12 @@ namespace Gambler.Bot.ViewModels
         
         public InstanceViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
         {
+            _logger.LogDebug("Instance viewmodel creating");
             GetLanguages();
-            _chime = new MediaPlayer(
-                new Media(_libvlc, new Uri(Path.Combine(Environment.CurrentDirectory, @"Assets/Sounds/chime.wav"))));
-            _alarm = new MediaPlayer(
-                new Media(_libvlc, new Uri(Path.Combine(Environment.CurrentDirectory, @"Assets/Sounds/alarm.wav"))));
+            CreateMediaPlayers();
             tmrStats.Interval = TimeSpan.FromSeconds(1);
             tmrStats.Tick += TmrStats_Tick;
+
             AdvancedSettingsVM = new AdvancedViewModel(_logger);
             ConsoleVM = new ConsoleViewModel(_logger);
             ResetSettingsVM = new ResetSettingsViewModel(_logger);
@@ -139,6 +138,16 @@ namespace Gambler.Bot.ViewModels
             tmp.GetStrats();
             BotInstance = tmp;
             botIns.CurrentGame = Bot.Common.Games.Games.Dice;
+            _logger.LogDebug("Instance viewmodel creating");
+        }
+
+        private void CreateMediaPlayers()
+        {
+            _logger.LogDebug("Creating media players");
+            _chime = new MediaPlayer(
+                new Media(_libvlc, new Uri(Path.Combine(Environment.CurrentDirectory, @"Assets/Sounds/chime.wav"))));
+            _alarm = new MediaPlayer(
+                new Media(_libvlc, new Uri(Path.Combine(Environment.CurrentDirectory, @"Assets/Sounds/alarm.wav"))));
         }
 
         private void LoginVM_ChangeSite(object? sender, EventArgs e)
@@ -150,6 +159,7 @@ namespace Gambler.Bot.ViewModels
 
         void GetLanguages()
         {
+            _logger.LogDebug("Getting languages");
             Languages = new List<string>();
             Languages.Add("en-US");
             Languages.Add("af-ZA");

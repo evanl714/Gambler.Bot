@@ -96,11 +96,13 @@ namespace Gambler.Bot.Classes
         public AutoBet(ILogger logger)
         {
             _Logger = logger;
+            _Logger.LogDebug("AutoBet instance creating");
             VersionStr = string.Format("{0}.{1}.{2}", Environment.Version.Major, Environment.Version.MajorRevision, Environment.Version.Build);
             Stats = new SessionStats();
             Running = false;
             BetTimer.Elapsed += BetTimer_Elapsed;
             CurrentGame = Games.Dice;
+            _Logger.LogDebug("AutoBet instance created");
         }
 
         
@@ -108,6 +110,7 @@ namespace Gambler.Bot.Classes
         public static List<SitesList> Sites = new List<SitesList>();
         public SitesList[] CompileSites()
         {
+            
             if (Sites?.Count == 0)
             {
                 _Logger?.LogInformation("Compiling Sites");
