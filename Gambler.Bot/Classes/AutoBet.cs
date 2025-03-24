@@ -1087,6 +1087,8 @@ namespace Gambler.Bot.Classes
 
         public void SavePersonalSettings(string FileLocation)
         {
+            if (!Directory.Exists(Path.GetDirectoryName(FileLocation)))
+                Directory.CreateDirectory(Path.GetDirectoryName(FileLocation));
             string Settings = JsonSerializer.Serialize(PersonalSettings);
             using (StreamWriter sw = new StreamWriter(FileLocation, false))
             {

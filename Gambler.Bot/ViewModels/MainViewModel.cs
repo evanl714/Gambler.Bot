@@ -94,7 +94,9 @@ namespace Gambler.Bot.ViewModels
         {
             if (!UISettings.Resetting)
             {
-                
+                if (!Directory.Exists(Path.GetDirectoryName(uiSettingsFile)))
+                    Directory.CreateDirectory(Path.GetDirectoryName(uiSettingsFile));
+
                 File.WriteAllText(uiSettingsFile, JsonSerializer.Serialize(UISettings.Settings));
             }
         }
