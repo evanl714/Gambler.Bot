@@ -153,24 +153,13 @@ stages:
       displayName: 'List directory contents'
 
     - script: |
-        $csprojPath = Get-ChildItem -Path "$(Build.SourcesDirectory)" -Filter "Gambler.Bot.Desktop.csproj" -Recurse | Select-Object -First 1 -ExpandProperty FullName
-        [xml]$csproj = Get-Content -Path $csprojPath
-        $versionNode = $csproj.SelectNodes("//Project/PropertyGroup/Version") | Select-Object -First 1
-        if ($versionNode -eq $null) {
-          $propertyGroup = $csproj.CreateElement("PropertyGroup")
-          $versionNode = $csproj.CreateElement("Version")
-          $versionNode.InnerText = "$(Build.BuildNumber)"
-          $propertyGroup.AppendChild($versionNode)
-          $csproj.DocumentElement.AppendChild($propertyGroup)
-        } else {
-          $versionNode.InnerText = "$(Build.BuildNumber)"
-        }
-        $csproj.Save($csprojPath)
+        csprojPath=$(find $(Build.SourcesDirectory) -name "Gambler.Bot.Desktop.csproj" | head -n 1)
+        xmlstarlet ed -L -u "//Project/PropertyGroup/Version" -v "$(Build.BuildNumber)" $csprojPath || xmlstarlet ed -L -s "//Project" -t elem -n "PropertyGroup" -v "" -s "//Project/PropertyGroup[last()]" -t elem -n "Version" -v "$(Build.BuildNumber)" $csprojPath
       displayName: 'Update version in csproj'
 
     - script: |
-        (Get-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs).Replace('config.GetValue<string>("ActiproLicense:Licensee")', '"'+${env:ActiproLicensee}+'"') | Set-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs
-        (Get-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs).Replace('config.GetValue<string>("ActiproLicense:LisenceKey")', '"'+${env:ActiproLicenseKey}+'"') | Set-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs
+        sed -i '' 's/config.GetValue<string>("ActiproLicense:Licensee")/"'${ActiproLicensee}'"/' Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs
+        sed -i '' 's/config.GetValue<string>("ActiproLicense:LisenceKey")/"'${ActiproLicenseKey}'"/' Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs
       displayName: 'Inject Actipro license keys'
 
     - task: NuGetToolInstaller@1
