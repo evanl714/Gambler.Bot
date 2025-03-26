@@ -147,7 +147,7 @@ namespace Gambler.Bot.ViewModels.Strategies
             if (result!=null)
             {
                 string FileName = result;
-                Stream x = typeof(BaseStrategy).Assembly.GetManifestResourceStream($"AutoBet.Bot.Samples.{TemplateName}");
+                Stream x = typeof(BaseStrategy).Assembly.GetManifestResourceStream($"Gambler.Bot.Strategies.Samples.{TemplateName}");
                 string[] items = typeof(BaseStrategy).Assembly.GetManifestResourceNames();
                 byte[] buffer = new byte[x.Length];
                 x.Read(buffer, 0, (int)x.Length);
