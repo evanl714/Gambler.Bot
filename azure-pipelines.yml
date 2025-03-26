@@ -15,7 +15,7 @@ trigger:
 name: 1.0.$(Build.BuildId)
 
 variables:
-  solution: '**/Gambler.Bot.sln'
+  solution: 'Gambler.Bot/Gambler.Bot.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   selfContained: 'true'
@@ -62,9 +62,9 @@ stages:
 
     - task: NuGetToolInstaller@1
 
-    - script: |
-        dotnet restore $(solution) --verbosity detailed
-      displayName: 'Restore NuGet packages'
+    - task: NuGetCommand@2
+      inputs:
+        restoreSolution: '$(solution)'
 
     - script: |
         dotnet publish Gambler.Bot/Platforms/Gambler.Bot.Desktop/Gambler.Bot.Desktop.csproj -c $(buildConfiguration) -r win-x64 --self-contained=$(selfContained) -o "$(Build.ArtifactStagingDirectory)/Artifacts/win-x64"
@@ -116,9 +116,9 @@ stages:
 
     - task: NuGetToolInstaller@1
 
-    - script: |
-        dotnet restore $(solution) --verbosity detailed
-      displayName: 'Restore NuGet packages'
+    - task: NuGetCommand@2
+      inputs:
+        restoreSolution: '$(solution)'
 
     - script: |
         dotnet publish Gambler.Bot/Platforms/Gambler.Bot.Desktop/Gambler.Bot.Desktop.csproj -c $(buildConfiguration) -r linux-x64 --self-contained=$(selfContained) -o "$(Build.ArtifactStagingDirectory)/Artifacts/linux-x64"
@@ -163,9 +163,9 @@ stages:
 
     - task: NuGetToolInstaller@1
 
-    - script: |
-        dotnet restore $(solution) --verbosity detailed
-      displayName: 'Restore NuGet packages'
+    - task: NuGetCommand@2
+      inputs:
+        restoreSolution: '$(solution)'
 
     - script: |
         dotnet publish Gambler.Bot/Platforms/Gambler.Bot.Desktop/Gambler.Bot.Desktop.csproj -c $(buildConfiguration) -r osx-x64 --self-contained=$(selfContained) -o "$(Build.ArtifactStagingDirectory)/Artifacts/osx-x64"
