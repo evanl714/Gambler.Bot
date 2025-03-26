@@ -122,7 +122,9 @@ stages:
     - task: NuGetToolInstaller@1
 
     - script: |
+
         dotnet restore $(solution) --verbosity detailed /p:EnableWindowsTargeting=true
+
       displayName: 'Restore NuGet packages'
 
     - script: |
