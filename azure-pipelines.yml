@@ -1,10 +1,10 @@
 resources:
   repositories:
-  - repository: Gambler.Bot.Core
+  - repository: Gambler.Bot.Core # The name used to reference this repository in the checkout step
     type: github
     endpoint: Seuntjie900
     name: Seuntjie900/Gambler.Bot.Core
-  - repository: Gambler.Bot.Strategies
+  - repository: Gambler.Bot.Strategies # The name used to reference this repository in the checkout step
     type: github
     endpoint: Seuntjie900
     name: Seuntjie900/Gambler.Bot.Strategies
@@ -62,9 +62,9 @@ stages:
 
     - task: NuGetToolInstaller@1
 
-    - task: NuGetCommand@2
-      inputs:
-        restoreSolution: '$(solution)'
+    - script: |
+        dotnet restore $(solution) --verbosity detailed
+      displayName: 'Restore NuGet packages'
 
     - script: |
         dotnet publish Gambler.Bot/Platforms/Gambler.Bot.Desktop/Gambler.Bot.Desktop.csproj -c $(buildConfiguration) -r win-x64 --self-contained=$(selfContained) -o "$(Build.ArtifactStagingDirectory)/Artifacts/win-x64"
@@ -116,9 +116,9 @@ stages:
 
     - task: NuGetToolInstaller@1
 
-    - task: NuGetCommand@2
-      inputs:
-        restoreSolution: '$(solution)'
+    - script: |
+        dotnet restore $(solution) --verbosity detailed
+      displayName: 'Restore NuGet packages'
 
     - script: |
         dotnet publish Gambler.Bot/Platforms/Gambler.Bot.Desktop/Gambler.Bot.Desktop.csproj -c $(buildConfiguration) -r linux-x64 --self-contained=$(selfContained) -o "$(Build.ArtifactStagingDirectory)/Artifacts/linux-x64"
@@ -128,4 +128,51 @@ stages:
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)/Artifacts/linux-x64'
         ArtifactName: 'BuildArtifacts-linux-x64'
+        publishLocation: 'container'
+
+- stage: BuildMac
+  jobs:
+  - job: BuildMacJob
+    pool:
+      vmImage: 'macos-latest'
+    steps:
+    - checkout: Gambler.Bot.Core
+    - checkout: Gambler.Bot.Strategies
+    - checkout: Self
+
+    - script: |
+        $csprojPath = Get-ChildItem -Path "$(Build.SourcesDirectory)" -Filter "Gambler.Bot.Desktop.csproj" -Recurse | Select-Object -First 1 -ExpandProperty FullName
+        [xml]$csproj = Get-Content -Path $csprojPath
+        $versionNode = $csproj.SelectNodes("//Project/PropertyGroup/Version") | Select-Object -First 1
+        if ($versionNode -eq $null) {
+          $propertyGroup = $csproj.CreateElement("PropertyGroup")
+          $versionNode = $csproj.CreateElement("Version")
+          $versionNode.InnerText = "$(Build.BuildNumber)"
+          $propertyGroup.AppendChild($versionNode)
+          $csproj.DocumentElement.AppendChild($propertyGroup)
+        } else {
+          $versionNode.InnerText = "$(Build.BuildNumber)"
+        }
+        $csproj.Save($csprojPath)
+      displayName: 'Update version in csproj'
+
+    - script: |
+        (Get-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs).Replace('config.GetValue<string>("ActiproLicense:Licensee")', '"'+${env:ActiproLicensee}+'"') | Set-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs
+        (Get-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs).Replace('config.GetValue<string>("ActiproLicense:LisenceKey")', '"'+${env:ActiproLicenseKey}+'"') | Set-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs
+      displayName: 'Inject Actipro license keys'
+
+    - task: NuGetToolInstaller@1
+
+    - script: |
+        dotnet restore $(solution) --verbosity detailed
+      displayName: 'Restore NuGet packages'
+
+    - script: |
+        dotnet publish Gambler.Bot/Platforms/Gambler.Bot.Desktop/Gambler.Bot.Desktop.csproj -c $(buildConfiguration) -r osx-x64 --self-contained=$(selfContained) -o "$(Build.ArtifactStagingDirectory)/Artifacts/osx-x64"
+      displayName: 'Publish for osx-x64'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/Artifacts/osx-x64'
+        ArtifactName: 'BuildArtifacts-osx-x64'
         publishLocation: 'container'
