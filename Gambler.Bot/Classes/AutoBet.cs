@@ -502,13 +502,13 @@ namespace Gambler.Bot.Classes
             OnSiteAction?.Invoke(sender, e);
         }
 
-        public async Task<bool> Login(LoginParamValue[] LoginParams)
+        public async Task<bool> Login(string url, LoginParamValue[] LoginParams)
         {
             if (CurrentSite==null)
             {
                 throw new Exception("Cannot login without a site. Assign a value to CurrentSite, then log in.");
             }
-            LoggedIn = await CurrentSite.LogIn(LoginParams);
+            LoggedIn = await CurrentSite.LogIn(url,LoginParams);
             return LoggedIn;
         }
 
@@ -529,16 +529,18 @@ namespace Gambler.Bot.Classes
                     strategy.NeedBalance -= Strategy_NeedBalance;
                     strategy.Stop -= Strategy_Stop;
                     strategy.OnNeedStats -= Strategy_OnNeedStats;
-                    if (strategy is IProgrammerMode)
+                    if (strategy is IProgrammerMode progs)
                     {
-                        (Strategy as IProgrammerMode).OnInvest -= Autobet_OnInvest;
-                        (Strategy as IProgrammerMode).OnResetSeed -= Autobet_OnResetSeed;
-                        (Strategy as IProgrammerMode).OnResetStats -= Autobet_OnResetStats;
-                        (Strategy as IProgrammerMode).OnTip -= Autobet_OnTip;
-                        (Strategy as IProgrammerMode).OnWithdraw -= Autobet_OnWithdraw;
-                        (Strategy as IProgrammerMode).OnScriptError -= Autobet_OnScriptError;
-                        (Strategy as IProgrammerMode).OnSetCurrency -= Autobet_OnSetCurrency;
-                        (Strategy as IProgrammerMode).OnBank -= Prog_OnBank;
+                        progs.OnInvest -= Autobet_OnInvest;
+                        progs.OnResetSeed -= Autobet_OnResetSeed;
+                        progs.OnResetStats -= Autobet_OnResetStats;
+                        progs.OnTip -= Autobet_OnTip;
+                        progs.OnWithdraw -= Autobet_OnWithdraw;
+                        progs.OnScriptError -= Autobet_OnScriptError;
+                        progs.OnSetCurrency -= Autobet_OnSetCurrency;
+                        progs.OnBank -= Prog_OnBank;
+                        progs.OnResetProfit -= Prog_OnResetProfit;
+                        progs.OnResetPartialProfit -= Prog_OnResetPartialProfit;
                     }
                 }
                 strategy = value;
@@ -559,6 +561,9 @@ namespace Gambler.Bot.Classes
                         prog.OnInvest += Autobet_OnInvest;
                         prog.OnResetSeed += Autobet_OnResetSeed;
                         prog.OnResetStats += Autobet_OnResetStats;
+                        prog.OnResetProfit += Prog_OnResetProfit;
+                        prog.OnResetPartialProfit += Prog_OnResetPartialProfit;
+
                         prog.OnTip += Autobet_OnTip;
                         prog.OnWithdraw += Autobet_OnWithdraw;
                         prog.OnScriptError += Autobet_OnScriptError;
@@ -572,7 +577,22 @@ namespace Gambler.Bot.Classes
             }
         }
 
-        
+        private void Prog_OnResetPartialProfit(object? sender, EventArgs e)
+        {
+            
+            Stats.PartialProfit = 0;
+            
+        }
+
+        private void Prog_OnResetProfit(object? sender, EventArgs e)
+        {
+            Stats.Profit = 0;
+            Stats.PartialProfit = 0;
+            Stats.ProfitSinceLastReset = 0;
+            Stats.StreakProfitSinceLastReset = 0;
+            Stats.StreakLossSinceLastReset = 0;
+            this.RaisePropertyChanged(nameof(Stats));
+        }
 
         public string SiteName { get => CurrentSite?.SiteName; }
         public SiteStats SiteStats { get => CurrentSite?.Stats; }
@@ -626,6 +646,7 @@ namespace Gambler.Bot.Classes
         {
             ResetStats();
         }
+        
 
         private void Autobet_OnResetSeed(object sender, EventArgs e)
         {
@@ -684,11 +705,12 @@ namespace Gambler.Bot.Classes
                 if (Strategy is IProgrammerMode prog)
                 {
                     prog.SetSimulation(false);
-                    prog.LoadScript();
+                    
                     prog.UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
                     prog.UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
                     prog.UpdateSite(CurrentSite.SiteDetails);
-                    
+                    prog.LoadScript();
+
                 }
                 Running = true;
                 if (Stats == null)

@@ -26,6 +26,20 @@ namespace Gambler.Bot.ViewModels.Common
         {
             get { return $"Log in: {Site.SiteName}"; }            
         }
+        private List<string> mirrors;
+
+        public List<string> Mirrors
+        {
+            get { return mirrors; }
+            set { mirrors = value; this.RaisePropertyChanged(); }
+        }
+        private int selectedMirror;
+
+        public int SelectedMirror
+        {
+            get { return selectedMirror; }
+            set { selectedMirror = value; this.RaisePropertyChanged(); }
+        }
 
 
         private AutoBet _site;
@@ -39,6 +53,7 @@ namespace Gambler.Bot.ViewModels.Common
                     _site.OnSiteLoginFinished -= _site_LoginFinished;
                 }
                 _site = value; 
+                
                 this.RaisePropertyChanged();
                 this.RaisePropertyChanged(nameof(Title));
                 if (_site != null)
@@ -125,22 +140,25 @@ namespace Gambler.Bot.ViewModels.Common
         {
             Site = site;
             LoginParams = new ObservableCollection<LoginParamValue>(site.GetLoginParams());
+            SelectedMirror = 0;
         }
 
         public void RefreshParams()
         {
             LoginParams = new ObservableCollection<LoginParamValue>(Site.GetLoginParams());
+            Mirrors = Site.GetCurrentSite()?.Mirrors;
+            SelectedMirror = 0;
         }
 
         public ICommand LoginCommand { get; }
 
         async Task LogIn()
         {
-            if (Site!=null)
+            if (Site != null)
             {
                 CanLogIn = false;
                 ShowError = false;
-                await Site.Login(LoginParams.ToArray());
+                await Site.Login(Mirrors[SelectedMirror], LoginParams.ToArray());
             }
         }
         public ICommand SkipCommand { get; }
