@@ -28,6 +28,15 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
+        <Grid  Margin="10,5,5,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="Mirror"> </TextBlock>
+            <ComboBox ItemsSource="{Binding Mirrors}" SelectedIndex="{Binding SelectedMirror}" Grid.Column="1" ></ComboBox>
+        </Grid>
+
         <TextBlock HorizontalAlignment="Center" IsVisible="{Binding LoggingIn}" Text="{DynamicResource Localization.Common.LoggingIn}"/>
 
         <TextBlock HorizontalAlignment="Center"  IsVisible="{Binding ShowError}" Foreground="Red" Text="{DynamicResource Localization.Common.LoginFailed}"/>
