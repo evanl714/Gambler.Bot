@@ -71,7 +71,7 @@ Legacy features that will break the script if called:
 - getvalue
 - loadstrategy
 
-The gethistory methos will be added in time, but the other methods will be adde, if possible, as needed and requested by the community.
+The gethistory methods will be added in time, but the other methods will be added, if possible, as needed and requested by the community.
 
 # Class Definitions
 
