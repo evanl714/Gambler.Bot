@@ -14,9 +14,6 @@ trigger:
 
 name: 1.0.$(Build.BuildId)
 
-pool:
-  vmImage: 'windows-latest'
-
 variables:
   solution: '**/Gambler.Bot.sln'
   buildPlatform: 'Any CPU'
@@ -25,17 +22,11 @@ variables:
   version: '$(Build.BuildId)'
 
 stages:
-- stage: Build
+- stage: BuildWindows
   jobs:
-  - job: BuildJob
-    strategy:
-      matrix:
-        Windows:
-          publishRuntime: win-x64
-        Linux:
-          publishRuntime: linux-x64
-        # macOS:
-        #   publishRuntime: osx-x64
+  - job: BuildWindowsJob
+    pool:
+      vmImage: 'windows-latest'
     steps:
     - checkout: Gambler.Bot.Core
     - checkout: Gambler.Bot.Strategies
@@ -45,7 +36,6 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          # Update the version in the desktop project's csproj file.
           $csprojPath = Get-ChildItem -Path "$(Build.SourcesDirectory)" -Filter "Gambler.Bot.Desktop.csproj" -Recurse | Select-Object -First 1 -ExpandProperty FullName
           [xml]$csproj = Get-Content -Path $csprojPath
           $versionNode = $csproj.SelectNodes("//Project/PropertyGroup/Version") | Select-Object -First 1
@@ -67,78 +57,122 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          # inject the actipro license keys.
           (Get-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs).Replace('config.GetValue<string>("ActiproLicense:Licensee")', '"'+${env:ActiproLicensee}+'"') | Set-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs
           (Get-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs).Replace('config.GetValue<string>("ActiproLicense:LisenceKey")', '"'+${env:ActiproLicenseKey}+'"') | Set-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs
 
     - task: NuGetToolInstaller@1
-    # New step: Install wasm-tools for .NET 8 (if needed for other projects, ignore if not)
-    #- script: |
-    #    dotnet workload install wasm-tools --skip-manifest-update
-    #  displayName: 'Install wasm-tools for .NET 8'    
-
-
-    - task: NuGetCommand@2
-      inputs:
-        restoreSolution: '$(solution)'
 
     - script: |
-        dotnet publish Gambler.Bot/Platforms/Gambler.Bot.Desktop/Gambler.Bot.Desktop.csproj -c $(buildConfiguration) -r $(publishRuntime) --self-contained=$(selfContained) -o "$(Build.ArtifactStagingDirectory)/Artifacts/$(publishRuntime)"
-      displayName: 'Publish for $(publishRuntime)'
+        dotnet restore $(solution) --verbosity detailed
+      displayName: 'Restore NuGet packages'
+
+    - script: |
+        dotnet publish Gambler.Bot/Platforms/Gambler.Bot.Desktop/Gambler.Bot.Desktop.csproj -c $(buildConfiguration) -r win-x64 --self-contained=$(selfContained) -o "$(Build.ArtifactStagingDirectory)/Artifacts/win-x64"
+      displayName: 'Publish for win-x64'
 
     - task: PublishBuildArtifacts@1
       inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)/Artifacts'
-        ArtifactName: 'BuildArtifacts-$(publishRuntime)'
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/Artifacts/win-x64'
+        ArtifactName: 'BuildArtifacts-win-x64'
         publishLocation: 'container'
 
-# - stage: Release
-#   dependsOn: Build
-#   jobs:
-#   - job: ReleaseJob
-#     steps:
-#     - task: DownloadBuildArtifacts@0
-#       inputs:
-#         buildType: 'current'
-#         downloadType: 'specific'
-#         artifactName: 'BuildArtifacts-win-x64'
-#         downloadPath: '$(Pipeline.Workspace)/Assets/win-x64'
-#       displayName: 'Download Windows artifacts'
+- stage: BuildLinux
+  jobs:
+  - job: BuildLinuxJob
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - checkout: Gambler.Bot.Core
+    - checkout: Gambler.Bot.Strategies
+    - checkout: Self
 
-#     - task: DownloadBuildArtifacts@0
-#       inputs:
-#         buildType: 'current'
-#         downloadType: 'specific'
-#         artifactName: 'BuildArtifacts-linux-x64'
-#         downloadPath: '$(Pipeline.Workspace)/Assets/linux-x64'
-#       displayName: 'Download Linux artifacts'
+    - task: PowerShell@2   
+      inputs:
+        targetType: 'inline'
+        script: |
+          $csprojPath = Get-ChildItem -Path "$(Build.SourcesDirectory)" -Filter "Gambler.Bot.Desktop.csproj" -Recurse | Select-Object -First 1 -ExpandProperty FullName
+          [xml]$csproj = Get-Content -Path $csprojPath
+          $versionNode = $csproj.SelectNodes("//Project/PropertyGroup/Version") | Select-Object -First 1
+          if ($versionNode -eq $null) {
+            $propertyGroup = $csproj.CreateElement("PropertyGroup")
+            $versionNode = $csproj.CreateElement("Version")
+            $versionNode.InnerText = "$(Build.BuildNumber)"
+            $propertyGroup.AppendChild($versionNode)
+            $csproj.DocumentElement.AppendChild($propertyGroup)
+          } else {
+            $versionNode.InnerText = "$(Build.BuildNumber)"
+          }
+          $csproj.Save($csprojPath)
 
-    # - task: DownloadBuildArtifacts@0
-    #   inputs:
-    #     buildType: 'current'
-    #     downloadType: 'specific'
-    #     artifactName: 'BuildArtifacts-osx-x64'
-    #     downloadPath: '$(Pipeline.Workspace)/Assets/osx-x64'
-    #   displayName: 'Download macOS artifacts'
-       
+    - task: PowerShell@2   
+      env:
+        ActiproLicensee: $(ActiproLicensee)
+        ActiproLicenseKey: $(ActiproLicenseKey)
+      inputs:
+        targetType: 'inline'
+        script: |
+          (Get-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs).Replace('config.GetValue<string>("ActiproLicense:Licensee")', '"'+${env:ActiproLicensee}+'"') | Set-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs
+          (Get-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs).Replace('config.GetValue<string>("ActiproLicense:LisenceKey")', '"'+${env:ActiproLicenseKey}+'"') | Set-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs
 
-    # - task: PowerShell@2
-    #   name: CreateVelopackRelease
-    #   inputs:
-    #     targetType: 'inline'
-    #     script: |
-    #         # Install the vpk tool globally
-    #         dotnet tool install -g vpk
-    #         # Download GitHub release data using the repository name from the pipeline variable
-    #         vpk download github --repoUrl https://github.com/$(Build.Repository.Name) --token $(GitHubToken) -c win-x64
-    #         vpk download github --repoUrl https://github.com/$(Build.Repository.Name) --token $(GitHubToken) -c linux-x64
-    #         # Pack the release using a unique identifier and the version from a previous step (set as $(version))
-    #         # vpk pack -u Gambler.Bot_win64 -v $(version) -p $(Pipeline.Workspace)/Assets/win-x64
-    #         vpk [win] pack -c win-x64 -e Gambler.Bot.Desktop.Exe -u Gambler.Bot -v 5.0.$(version) --outputDir .\Releases --packDir $(Pipeline.Workspace)/Assets/win-x64/BuildArtifacts-win-x64/win-x64
-    #         vpk [linux] pack -c linux-x64 -e Gambler.Bot.Desktop -u Gambler.Bot -v 5.0.$(version) --outputDir .\Releases --packDir $(Pipeline.Workspace)/Assets/linux-x64/BuildArtifacts-linux-x64/linux-x64
-    #         # vpk pack -u Gambler.Bot_osx64 -v $(version) -p $(Pipeline.Workspace)/Assets/osx-x64
-    #         # Upload the release to GitHub with the specified release name and tag
-    #         vpk upload github --repoUrl https://github.com/$(Build.Repository.Name) --merge --releaseName "Gambler.Bot 5.0.$(version)" --tag 5.0.v$(version) -o .\Releases -c win-x64 --token $(GitHubToken) 
-    #         vpk upload github --repoUrl https://github.com/$(Build.Repository.Name) --merge --releaseName "Gambler.Bot 5.0.$(version)" --tag 5.0.v$(version) -o .\Releases -c linux-x64 --token $(GitHubToken) 
-      
+    - task: NuGetToolInstaller@1
 
+    - script: |
+        dotnet restore $(solution) --verbosity detailed
+      displayName: 'Restore NuGet packages'
+
+    - script: |
+        dotnet publish Gambler.Bot/Platforms/Gambler.Bot.Desktop/Gambler.Bot.Desktop.csproj -c $(buildConfiguration) -r linux-x64 --self-contained=$(selfContained) -o "$(Build.ArtifactStagingDirectory)/Artifacts/linux-x64"
+      displayName: 'Publish for linux-x64'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/Artifacts/linux-x64'
+        ArtifactName: 'BuildArtifacts-linux-x64'
+        publishLocation: 'container'
+
+- stage: BuildMac
+  jobs:
+  - job: BuildMacJob
+    pool:
+      vmImage: 'macos-latest'
+    steps:
+    - checkout: Gambler.Bot.Core
+    - checkout: Gambler.Bot.Strategies
+    - checkout: Self
+
+    - script: |
+        $csprojPath = Get-ChildItem -Path "$(Build.SourcesDirectory)" -Filter "Gambler.Bot.Desktop.csproj" -Recurse | Select-Object -First 1 -ExpandProperty FullName
+        [xml]$csproj = Get-Content -Path $csprojPath
+        $versionNode = $csproj.SelectNodes("//Project/PropertyGroup/Version") | Select-Object -First 1
+        if ($versionNode -eq $null) {
+          $propertyGroup = $csproj.CreateElement("PropertyGroup")
+          $versionNode = $csproj.CreateElement("Version")
+          $versionNode.InnerText = "$(Build.BuildNumber)"
+          $propertyGroup.AppendChild($versionNode)
+          $csproj.DocumentElement.AppendChild($propertyGroup)
+        } else {
+          $versionNode.InnerText = "$(Build.BuildNumber)"
+        }
+        $csproj.Save($csprojPath)
+      displayName: 'Update version in csproj'
+
+    - script: |
+        (Get-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs).Replace('config.GetValue<string>("ActiproLicense:Licensee")', '"'+${env:ActiproLicensee}+'"') | Set-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs
+        (Get-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs).Replace('config.GetValue<string>("ActiproLicense:LisenceKey")', '"'+${env:ActiproLicenseKey}+'"') | Set-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs
+      displayName: 'Inject Actipro license keys'
+
+    - task: NuGetToolInstaller@1
+
+    - script: |
+        dotnet restore $(solution) --verbosity detailed
+      displayName: 'Restore NuGet packages'
+
+    - script: |
+        dotnet publish Gambler.Bot/Platforms/Gambler.Bot.Desktop/Gambler.Bot.Desktop.csproj -c $(buildConfiguration) -r osx-x64 --self-contained=$(selfContained) -o "$(Build.ArtifactStagingDirectory)/Artifacts/osx-x64"
+      displayName: 'Publish for osx-x64'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/Artifacts/osx-x64'
+        ArtifactName: 'BuildArtifacts-osx-x64'
+        publishLocation: 'container'
