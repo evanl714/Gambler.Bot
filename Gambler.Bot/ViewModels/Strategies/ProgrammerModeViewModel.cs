@@ -91,13 +91,20 @@ namespace Gambler.Bot.ViewModels.Strategies
                 Dispatcher.UIThread.Invoke(LoadDocument);
                 return;
             }
-            if (Strat?.FileName != null)
+            if (Strat != null)
             {
-                string path = Strat?.FileName;
+                string path = Strat.FileName;
                 
                 try
                 {
-                    Content= File.ReadAllText(path);                    
+                    if (string.IsNullOrWhiteSpace(path))
+                    {
+                        path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gambler.Bot", $"default.{FileExtension}");
+                        if (!File.Exists(path))
+                            CreateNewScript(path);
+                    }
+                    Content = File.ReadAllText(path);
+                    Strat.FileName = path;
                 }
                 catch (Exception e)
                 {
@@ -147,22 +154,28 @@ namespace Gambler.Bot.ViewModels.Strategies
             if (result!=null)
             {
                 string FileName = result;
-                Stream x = typeof(BaseStrategy).Assembly.GetManifestResourceStream($"Gambler.Bot.Strategies.Samples.{TemplateName}");
-                string[] items = typeof(BaseStrategy).Assembly.GetManifestResourceNames();
-                byte[] buffer = new byte[x.Length];
-                x.Read(buffer, 0, (int)x.Length);
-                try
-                {
-                    File.WriteAllBytes(FileName, buffer);
-                }
-                catch (Exception e)
-                {
-                    _logger?.LogError(e.ToString());
-                }
-                Strat.FileName = FileName;
+                CreateNewScript(FileName);
                 LoadDocument();
                 CreateWatcher();
             }
+        }
+
+        void CreateNewScript(string FileName)
+        {
+            Stream x = typeof(BaseStrategy).Assembly.GetManifestResourceStream($"Gambler.Bot.Strategies.Samples.{TemplateName}");
+            string[] items = typeof(BaseStrategy).Assembly.GetManifestResourceNames();
+            byte[] buffer = new byte[x.Length];
+            x.Read(buffer, 0, (int)x.Length);
+            try
+            {
+                File.WriteAllBytes(FileName, buffer);
+            }
+            catch (Exception e)
+            {
+                _logger?.LogError(e.ToString());
+            }
+            Strat.FileName = FileName;
+            
         }
 
         public ICommand OpenCommand { get; set; }
