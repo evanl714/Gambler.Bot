@@ -8,6 +8,7 @@ using Gambler.Bot.Classes;
 using Gambler.Bot.Classes.BetsPanel;
 using Gambler.Bot.Classes.Strategies;
 using Gambler.Bot.Common.Events;
+using Gambler.Bot.Common.Games;
 using Gambler.Bot.Common.Games.Dice;
 using Gambler.Bot.Common.Games.Limbo;
 using Gambler.Bot.Core.Events;
@@ -17,6 +18,7 @@ using Gambler.Bot.Strategies.Strategies;
 using Gambler.Bot.Strategies.Strategies.Abstractions;
 using Gambler.Bot.ViewModels.AppSettings;
 using Gambler.Bot.ViewModels.Common;
+using Gambler.Bot.ViewModels.Games;
 using Gambler.Bot.ViewModels.Games.Dice;
 using Gambler.Bot.ViewModels.Games.Limbo;
 using Gambler.Bot.ViewModels.Games.Twist;
@@ -70,7 +72,7 @@ namespace Gambler.Bot.ViewModels
         private LibVLC _libvlc = new LibVLC();
         private MediaPlayer _chime;
         private MediaPlayer _alarm;
-        
+
         public InstanceViewModel(Microsoft.Extensions.Logging.ILogger logger) : base(logger)
         {
             _logger.LogDebug("Instance viewmodel creating");
@@ -139,6 +141,7 @@ namespace Gambler.Bot.ViewModels
             BotInstance = tmp;
             botIns.CurrentGame = Bot.Common.Games.Games.Dice;
             _logger.LogDebug("Instance viewmodel created");
+            genLiveBetView = new GenericLiveBetViewModel(_logger);
         }
 
         private void CreateMediaPlayers()
@@ -173,7 +176,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                 .OfType<ResourceInclude>()
                 .FirstOrDefault(x => x.Source?.OriginalString?.Contains("/Lang/") ?? false);
 
-            if(translations != null)
+            if (translations != null)
                 App.Current.Resources.MergedDictionaries.Remove(translations);
 
 
@@ -187,59 +190,103 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         private void TmrStats_Tick(object? sender, EventArgs e)
         {
-            if(botIns.Running)
+            if (botIns.Running)
             {
                 SessionStatsData.StatsUpdated(botIns.Stats);
                 SiteStatsData.StatsUpdated(botIns.SiteStats);
             }
         }
 
-        private void BotIns_OnGameChanged(object? sender, EventArgs e)
+        private void SetGameVM(Bot.Common.Games.Games? game)
         {
-            if(PlaceBetVM != null)
-                PlaceBetVM.PlaceBet -= PlaceBetVM_PlaceBet;
+            iLiveBet tmpLive = null;
+            if (game == null )
+                LiveBets = genLiveBetView;
 
-            switch(botIns.CurrentGame)
+            if (LivebetVMs.ContainsKey(game?? Bot.Common.Games.Games.Dice))
+                tmpLive = LivebetVMs[botIns.CurrentGame];
+
+            if (tmpLive == null)
             {
-                case Bot.Common.Games.Games.Crash:
+                switch (game)
+                {
+                    case Bot.Common.Games.Games.Crash:
                     case Bot.Common.Games.Games.Roulette:
                     case Bot.Common.Games.Games.Plinko:
+                        break;
+                    case
+                        Bot.Common.Games.Games.Dice:
+                        {
+                            LivebetVMs[game??default] = new DiceLiveBetViewModel(_logger);
+                            tmpLive = LivebetVMs[game ?? default];
+                            break;
+                        }
+                    case
+                    Bot.Common.Games.Games.Twist:
+                        {
+                            LivebetVMs[game ?? default] = new DiceLiveBetViewModel(_logger);
+                            tmpLive = LivebetVMs[game ?? default];
+
+                            break;
+                        }
+                    case
+                        Bot.Common.Games.Games.Limbo:
+                        LivebetVMs[game ?? default] = new LimboLiveBetViewModel(_logger);
+                        tmpLive = LivebetVMs[game ?? default];
+
+                        break;
+
+                }
+            }
+            if (SelectedView != null)
+                LiveBets = tmpLive;
+            else if (LiveBets == null)
+                LiveBets = genLiveBetView;
+        }
+
+        private void BotIns_OnGameChanged(object? sender, EventArgs e)
+        {
+            if (PlaceBetVM != null)
+                PlaceBetVM.PlaceBet -= PlaceBetVM_PlaceBet;
+            
+            switch (botIns.CurrentGame)
+            {
+                case Bot.Common.Games.Games.Crash:
+                case Bot.Common.Games.Games.Roulette:
+                case Bot.Common.Games.Games.Plinko:
                     break;
                 case
                     Bot.Common.Games.Games.Dice:
-                    
-                        {
-                            PlaceBetVM = new DicePlaceBetViewModel(_logger) ;
-                            LiveBets = new DiceLiveBetViewModel(_logger);
-                            break;
-                        }
+
+                    {
+                        PlaceBetVM = new DicePlaceBetViewModel(_logger);                        
+                        break;
+                    }
                 case
                 Bot.Common.Games.Games.Twist:
 
                     {
-                        PlaceBetVM = new TwistPlaceBetViewModel(_logger) ;
-                        LiveBets = new DiceLiveBetViewModel(_logger);
+                        PlaceBetVM = new TwistPlaceBetViewModel(_logger);                       
                         break;
                     }
                 case
                     Bot.Common.Games.Games.Limbo:
-                    PlaceBetVM = new LimboPlaceBetViewModel(_logger) { ShowHighLow = false };                    
-                    LiveBets = new LimboLiveBetViewModel(_logger);
                     break;
             }
+            SetGameVM(botIns.CurrentGame);
             if (PlaceBetVM != null)
             {
                 PlaceBetVM.PlaceBet += PlaceBetVM_PlaceBet;
                 PlaceBetVM.GameSettings = botIns?.GetCurrentSite()?.GetGameSettings(botIns.CurrentGame);
             }
-            if (StrategyVM!=null)
+            if (StrategyVM != null)
                 StrategyVM.GameChanged(botIns.CurrentGame, botIns?.GetCurrentSite()?.GetGameSettings(botIns.CurrentGame));
             setTitle();
         }
 
         private void BotIns_OnNotification(object? sender, NotificationEventArgs e)
         {
-            switch(e.NotificationTrigger.Action)
+            switch (e.NotificationTrigger.Action)
             {
                 case TriggerAction.Alarm:
                     PlaySound(_alarm);
@@ -276,7 +323,9 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                 SiteStatsData.StatsUpdated(botIns.SiteStats);
                 SessionStatsData.StatsUpdated(botIns.Stats);
                 ChartData.AddPoint(e.NewBet.Profit, e.NewBet.IsWin);
-                LiveBets.AddBet(e.NewBet);
+                genLiveBetView.AddBet(e.NewBet);
+                if (LivebetVMs.ContainsKey(_selectedView ?? Bot.Common.Games.Games.Dice))
+                    LivebetVMs[_selectedView ?? Bot.Common.Games.Games.Dice].AddBet(e.NewBet);
             }
         }
 
@@ -293,7 +342,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         void PlaySound(MediaPlayer sound)
         {
-            if(!Dispatcher.UIThread.CheckAccess())
+            if (!Dispatcher.UIThread.CheckAccess())
             {
                 Dispatcher.UIThread
                     .Invoke(
@@ -306,7 +355,8 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             {
                 sound.Stop();
                 sound.Play();
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
             }
         }
@@ -351,7 +401,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             TriggersVM.SetTriggers(botIns.BetSettings?.Triggers);
             IStrategy tmpStrat = null;
             //this needs to set the istrategy property to the appropriate viewmodel
-            switch(BotInstance.Strategy?.StrategyName)
+            switch (BotInstance.Strategy?.StrategyName)
             {
                 case "Martingale":
                     tmpStrat = new MartingaleViewModel(_logger);
@@ -385,12 +435,12 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                     break;
                     ;
             }
-            if(tmpStrat != null)
+            if (tmpStrat != null)
             {
                 tmpStrat.SetStrategy(BotInstance.Strategy);
                 tmpStrat.GameChanged(BotInstance.CurrentGame, botIns?.GetCurrentSite()?.GetGameSettings(BotInstance.CurrentGame));
             }
-            if(BotInstance.Strategy is IProgrammerMode prog)
+            if (BotInstance.Strategy is IProgrammerMode prog)
             {
                 ConsoleVM.Strategy = prog;
                 prog.OnAlarm -= Prog_OnAlarm;
@@ -409,7 +459,8 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                 prog.OnRunSim += Prog_OnRunSim;
                 prog.OnScriptError -= Prog_OnScriptError;
                 prog.OnScriptError += Prog_OnScriptError;
-            } else
+            }
+            else
             {
                 ConsoleVM.Strategy = null;
             }
@@ -423,10 +474,11 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         private void Prog_OnRunSim(object? sender, RunSimEventArgs e)
         {
-            if(simControl?.Running ?? false)
+            if (simControl?.Running ?? false)
             {
                 ConsoleVM.AddLine("Cannot start simulation, already running");
-            } else
+            }
+            else
             {
                 simControl = simControl ?? new SimulationViewModel(_logger);
                 simControl.Bot = BotInstance;
@@ -440,7 +492,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         private void Prog_OnReadAdv(object? sender, ReadEventArgs e)
         {
-            using(var source = new CancellationTokenSource())
+            using (var source = new CancellationTokenSource())
             {
                 Read(e).ContinueWith(t => source.Cancel(), TaskScheduler.FromCurrentSynchronizationContext());
                 Dispatcher.UIThread.MainLoop(source.Token);
@@ -451,16 +503,17 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         private void Prog_OnRead(object? sender, ReadEventArgs e)
         {
-            if(e.DataType == 0)
+            if (e.DataType == 0)
             {
                 e.btncanceltext = "No";
                 e.btnoktext = "Yes";
-            } else
+            }
+            else
             {
                 e.btncanceltext = "Cancel";
                 e.btnoktext = "Ok";
             }
-            using(var source = new CancellationTokenSource())
+            using (var source = new CancellationTokenSource())
             {
                 Read(e).ContinueWith(t => source.Cancel(), TaskScheduler.FromCurrentSynchronizationContext());
                 Dispatcher.UIThread.MainLoop(source.Token);
@@ -479,22 +532,22 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         private void Prog_OnExportSim(object? sender, ExportSimEventArgs e)
         {
-            if(simControl == null)
+            if (simControl == null)
             {
                 ConsoleVM.AddLine("No simulation to export");
                 return;
             }
-            if(simControl.Running)
+            if (simControl.Running)
             {
                 ConsoleVM.AddLine("Cannot export simulation, it is still running");
                 return;
             }
-            if(simControl.CurrentSimulation == null)
+            if (simControl.CurrentSimulation == null)
             {
                 ConsoleVM.AddLine("No simulation to export");
                 return;
             }
-            if(!simControl.Log)
+            if (!simControl.Log)
             {
                 ConsoleVM.AddLine("Cannot export simulation, log was not enabled");
                 return;
@@ -511,7 +564,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             botIns.StopStrategy("Logging Out");
             botIns.Disconnect();
             ShowSites = true;
-            
+
             this.RaisePropertyChanged(nameof(LoggedIn));
             this.RaisePropertyChanged(nameof(NotLoggedIn));
         }
@@ -521,7 +574,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
         void LoadInstanceSettings(string FileLocation)
         {
             string Settings = string.Empty;
-            using(StreamReader sr = new StreamReader(FileLocation))
+            using (StreamReader sr = new StreamReader(FileLocation))
             {
                 Settings = sr.ReadToEnd();
             }
@@ -529,21 +582,22 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             //botIns.ga
 
             var tmpsite = Classes.AutoBet.Sites.FirstOrDefault(m => m.Name == tmp.Site);
-            if(tmpsite != null)
+            if (tmpsite != null)
             {
                 ShowSites = false;
                 SiteChanged(tmpsite, tmp.Currency, tmp.Game);
-            } else
+            }
+            else
             {
                 ShowSites = true;
             }
-            if(tmp.Game != null)
+            if (tmp.Game != null)
                 botIns.CurrentGame = Enum.Parse<Bot.Common.Games.Games>(tmp.Game);
         }
 
         private void LoginFinished(bool ChangeScreens)
         {
-            if(ChangeScreens)
+            if (ChangeScreens)
             {
                 ShowSites = false;
             }
@@ -558,7 +612,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             this.RaisePropertyChanged(nameof(NotLoggedIn));
         }
 
-        async Task Open() 
+        async Task Open()
         {
             var result = await OpenFileInteraction.Handle(new FilePickerOpenOptions
             {
@@ -625,11 +679,11 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         private void SelectSite_SelectedSiteChanged(object? sender, Gambler.Bot.Core.Helpers.SitesList e)
         {
-            if(sender is SelectSiteViewModel selectSiteViewModel)
+            if (sender is SelectSiteViewModel selectSiteViewModel)
             {
                 SiteChanged(e, e.SelectedCurrency?.Name, e.SelectedGame?.Name, !selectSiteViewModel.BypassLogIn);
             }
-            if(SiteStatsData != null)
+            if (SiteStatsData != null)
                 SiteStatsData.SiteName = botIns?.SiteName;
         }
 
@@ -656,7 +710,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         void SetStrategy(string name)
         {
-            if(botIns.Strategy.StrategyName != name && !string.IsNullOrWhiteSpace(BetSettingsFile))
+            if (botIns.Strategy.StrategyName != name && !string.IsNullOrWhiteSpace(BetSettingsFile))
             {
                 StrategyVM?.Saving();
 
@@ -666,21 +720,21 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                     .GetProperties()
                     .Where(m => typeof(BaseStrategy).IsAssignableFrom(m.PropertyType));
                 BaseStrategy newStrat = null;
-                foreach(PropertyInfo x in Props)
+                foreach (PropertyInfo x in Props)
                 {
                     BaseStrategy strat = (BaseStrategy)x.GetValue(Settings);
-                    if(strat != null)
+                    if (strat != null)
                     {
                         PropertyInfo StratNameProp = strat.GetType().GetProperty("StrategyName");
                         string nm = (string)StratNameProp.GetValue(strat);
-                        if(nm == name)
+                        if (nm == name)
                         {
                             newStrat = strat;
                             break;
                         }
                     }
                 }
-                if(newStrat == null)
+                if (newStrat == null)
                 {
                     newStrat = Activator.CreateInstance(botIns.Strategies[name]) as BaseStrategy;
                 }
@@ -711,13 +765,14 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         async Task Simulate()
         {
-            if(!(simControl?.Running ?? false))
+            if (!(simControl?.Running ?? false))
             {
                 simControl = new SimulationViewModel(_logger);
                 simControl.Bot = botIns;
                 simControl.CanStart += SimControl_CanStart;
                 await ShowSimulation.Handle(simControl);
-            } else
+            }
+            else
             {
                 await MessageBox.Show(
                     "There is already a simulation running. Please wait for it to finish or close the simulation window.",
@@ -747,10 +802,10 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
         void SiteChanged(SitesList SiteName, string currency, string game, bool showLogin = true)
         {
             botIns.SetSite(SiteName);
-            if(currency != null && Array.IndexOf(botIns.Currencies, currency) >= 0)
+            if (currency != null && Array.IndexOf(botIns.Currencies, currency) >= 0)
                 botIns.CurrentCurrency = currency;
             object curGame = Bot.Common.Games.Games.Dice;
-            if(game != null &&
+            if (game != null &&
                 Enum.TryParse(typeof(Bot.Common.Games.Games), game, out curGame) &&
                 Array.IndexOf(botIns.SiteGames, (Bot.Common.Games.Games)curGame) >= 0)
                 botIns.CurrentGame = (Bot.Common.Games.Games)curGame;
@@ -768,12 +823,12 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             /*if (showLogin)
                //.Wait();
             else*/
-                ShowSites = false;
+            ShowSites = false;
         }
 
         void Start()
         {
-            if(!botIns.Running)
+            if (!botIns.Running)
             {
                 StrategyVM?.Saving();
                 botIns.SaveBetSettings(BetSettingsFile);
@@ -788,7 +843,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         private void Tmp_OnSiteError(object sender, Bot.Common.Events.ErrorEventArgs e)
         {
-            if(!Dispatcher.UIThread.CheckAccess())
+            if (!Dispatcher.UIThread.CheckAccess())
                 Dispatcher.UIThread
                     .Invoke(
                         () =>
@@ -804,7 +859,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         private void Tmp_OnSiteNotify(object sender, GenericEventArgs e)
         {
-            if(!Dispatcher.UIThread.CheckAccess())
+            if (!Dispatcher.UIThread.CheckAccess())
                 Dispatcher.UIThread
                     .Invoke(
                         () =>
@@ -821,7 +876,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
         public void LoadSettings(string Name)
         {
             string path = string.Empty;
-            if(UISettings.Portable)
+            if (UISettings.Portable)
                 path = "";
             else
             {
@@ -832,14 +887,15 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             BetSettingsFile = Path.Combine(path, Name + ".betset");
 
             InstanceSettingsFile = Path.Combine(path, Name + ".siteset");
-            if(File.Exists(InstanceSettingsFile))
+            if (File.Exists(InstanceSettingsFile))
             {
                 LoadInstanceSettings(InstanceSettingsFile);
-            } else
+            }
+            else
             {
                 ShowSites = true;
             }
-            if(!File.Exists(BetSettingsFile))
+            if (!File.Exists(BetSettingsFile))
             {
                 //botIns.BetSettings = new Gambler.Bot.Strategies.AutoBet.BetSettings();
                 botIns.BetSettings = new InternalBetSettings();
@@ -851,14 +907,14 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
 
             //if password is available, log in.
-                                                                            //do all of this async to the gui somewhow?
-                                                                            }
+            //do all of this async to the gui somewhow?
+        }
 
         public void OnClosing()
         {
             botIns.StopStrategy("Application Closing");
             botIns.Disconnect();
-            if(!UISettings.Resetting)
+            if (!UISettings.Resetting)
             {
                 botIns.SaveBetSettings(Path.Combine(BetSettingsFile));
                 botIns.SavePersonalSettings(PersonalSettingsFile);
@@ -870,19 +926,19 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
         {
             //botIns.GetStrats();
             this.RaisePropertyChanged(nameof(Strategies));
-            if(UISettings.Portable)
+            if (UISettings.Portable)
             {
                 PersonalSettingsFile = "PersonalSettings.json";
             }
- //Check if global settings for this account exists
- else
+            //Check if global settings for this account exists
+            else
             {
                 PersonalSettingsFile = Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                     "Gambler.Bot",
                     "PersonalSettings.json");
             }
-            if(!File.Exists(PersonalSettingsFile))
+            if (!File.Exists(PersonalSettingsFile))
             {
                 botIns.PersonalSettings = PersonalSettings.Default();
                 botIns.SavePersonalSettings(PersonalSettingsFile);
@@ -945,13 +1001,13 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
         {
             get
             {
-                if(BotInstance?.SiteGames == null)
+                if (BotInstance?.SiteGames == null)
                     return -1;
-                return  Array.IndexOf(BotInstance?.SiteGames, BotInstance?.CurrentGame);
+                return Array.IndexOf(BotInstance?.SiteGames, BotInstance?.CurrentGame);
             }
             set
             {
-                if(BotInstance?.SiteGames != null)
+                if (BotInstance?.SiteGames != null)
                     BotInstance.CurrentGame = BotInstance?.SiteGames[(value >= 0 ? value : 0) ?? 0] ??
                         Bot.Common.Games.Games.Dice;
             }
@@ -972,6 +1028,18 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             {
                 lastAction = value;
                 this.RaisePropertyChanged();
+            }
+        }
+        GenericLiveBetViewModel genLiveBetView;
+        Dictionary<Bot.Common.Games.Games, iLiveBet> LivebetVMs = new Dictionary<Bot.Common.Games.Games, iLiveBet>();
+        Bot.Common.Games.Games? _selectedView;
+        public Bot.Common.Games.Games? SelectedView
+        {
+            get => _selectedView; set
+            {
+                _selectedView = value;
+                this.RaisePropertyChanged();
+                SetGameVM(value);
             }
         }
 
@@ -1197,13 +1265,13 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                                                                                                 It will not delete or clear your bet history and it will not delete any programmer mode scripts from your computer.",
                 "Reset Gambler.Bot to default",
                 MessageBoxButtons.YesNo);
-            if(result == MessageBoxResult.Yes)
+            if (result == MessageBoxResult.Yes)
             {
-                if(File.Exists(BetSettingsFile))
+                if (File.Exists(BetSettingsFile))
                     File.Delete(PersonalSettingsFile);
-                if(File.Exists(BetSettingsFile))
+                if (File.Exists(BetSettingsFile))
                     File.Delete(BetSettingsFile);
-                if(File.Exists(InstanceSettingsFile))
+                if (File.Exists(InstanceSettingsFile))
                     File.Delete(InstanceSettingsFile);
                 MainViewModel.ClearUiSettings();
                 UISettings.Resetting = true;

@@ -252,4 +252,8 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
         await IOHelper.OpenFile(interaction, TopLevel.GetTopLevel(this));
     }
 
+    private void Button_Click_1(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        cmbGrid.Clear();
+    }
 }

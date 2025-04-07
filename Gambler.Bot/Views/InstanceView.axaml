@@ -8,9 +8,11 @@
              xmlns:vm="using:Gambler.Bot.ViewModels"
              xmlns:local="using:Gambler.Bot.Views"
              xmlns:common="using:Gambler.Bot.Views.Common"
+             xmlns:games="using:Gambler.Bot.Views.Games"
              xmlns:dice="using:Gambler.Bot.Views.Games.Dice"
              xmlns:twist="using:Gambler.Bot.Views.Games.Twist"
              xmlns:limbo="using:Gambler.Bot.Views.Games.Limbo"
+             xmlns:gamesVM="using:Gambler.Bot.ViewModels.Games"
              xmlns:diceVM="using:Gambler.Bot.ViewModels.Games.Dice"
              xmlns:twistVM="using:Gambler.Bot.ViewModels.Games.Twist"
              xmlns:limboVM="using:Gambler.Bot.ViewModels.Games.Limbo"
@@ -147,8 +149,18 @@
                             <common:ProfitChartView DataContext="{Binding ChartData}"/>
                         </Border>
                         <GridSplitter Margin="2" Grid.Row="1" Background="{actipro:ThemeResource Container3BorderBrush}" ResizeDirection="Rows"/>
-                        <ContentControl Grid.Row="2" Content="{Binding LiveBets}" MinHeight="250"  IsVisible="{Binding ShowLiveBets}">
+                      <StackPanel Orientation="Vertical" Grid.Row="2">
+                        <StackPanel Orientation="Horizontal">
+                          <ComboBox x:Name="cmbGrid" ItemsSource="{Binding Games}" SelectedItem="{Binding SelectedView}"  IsEnabled="{Binding ShowBot}" MaxWidth="150" MinWidth="100" HorizontalAlignment="Left" />
+                          <Button Click="Button_Click_1" >
+                              <i:Icon Value="mdi-close" />
+                          </Button>
+                        </StackPanel>
+                        <ContentControl Content="{Binding LiveBets}" MinHeight="250"  IsVisible="{Binding ShowLiveBets}">
                             <ContentControl.DataTemplates>
+                              <DataTemplate DataType="gamesVM:GenericLiveBetViewModel">
+                                <games:GenericLiveBetView/>
+                              </DataTemplate>
                                 <DataTemplate DataType="diceVM:DiceLiveBetViewModel">
                                     <dice:DiceLiveBetView/>
                                 </DataTemplate>
@@ -160,7 +172,7 @@
                                 </DataTemplate>
                             </ContentControl.DataTemplates>
                         </ContentControl>
-
+                      </StackPanel>
                     </Grid>
                     <DockPanel Grid.Column="2" Grid.RowSpan="3" >
                         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
