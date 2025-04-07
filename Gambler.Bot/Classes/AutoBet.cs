@@ -469,6 +469,8 @@ namespace Gambler.Bot.Classes
             }
             if (NextBext ==null)
                 NextBext = Strategy.CalculateNextBet(MostRecentBet, win);
+            if (NextBext.Game != CurrentGame)
+                CurrentGame = NextBext.Game;
             if (Running)
             {
                 decimal secondsPerBet = 0;
