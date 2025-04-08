@@ -1,0 +1,36 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Gambler.Bot.Views.Games.GenericLiveBetView"
+             xmlns:vm="using:Gambler.Bot.ViewModels.Games"
+             xmlns:common="using:Gambler.Bot.ViewModels"
+             xmlns:commonViews="using:Gambler.Bot.Views"
+             x:DataType="vm:GenericLiveBetViewModel"
+             xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+             xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+             xmlns:converters="using:Gambler.Bot.Converters"
+             xmlns:games="using:Bot.Common.Games"
+             >
+  <UserControl.Resources>
+    <converters:BoolToColourConverter x:Key="RowConverter" />
+  </UserControl.Resources>
+  <UserControl.Styles>
+    <Style Selector="DataGridRow">
+      <Setter Property="Background" Value="{Binding  Converter={StaticResource RowConverter}}" />
+    </Style>
+  </UserControl.Styles>
+  <DataGrid ItemsSource="{Binding Bets}" IsReadOnly="True"  >
+    <DataGrid.Columns>
+      <DataGridTextColumn Binding="{Binding BetID}" Header="{DynamicResource Localization.Game.BetId}"/>
+      <DataGridTextColumn Binding="{Binding DateValue}" Header="{DynamicResource Localization.Game.Time}"/>
+      <DataGridTextColumn Binding="{Binding TotalAmount}" Header="{DynamicResource Localization.Game.Amount}"/>
+      <DataGridTextColumn Binding="{Binding Currency}" Header="{DynamicResource Localization.Game.Currency}"/>
+      <DataGridTextColumn Binding="{Binding Profit}" Header="{DynamicResource Localization.Common.Profit}"/>
+      <DataGridTextColumn Binding="{Binding Game}" Header="{DynamicResource Localization.Common.RollVerify.Game}"/>
+    </DataGrid.Columns>
+
+
+  </DataGrid>
+</UserControl>

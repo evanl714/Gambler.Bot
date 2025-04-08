@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,7 +27,7 @@ namespace Gambler.Bot.ViewModels.AppSettings
             if (Portable)
                 FileName = "Gambler.Bot.db";
             else
-                FileName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gambler.Bot\\Gambler.Bot.db";
+                FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) , "Gambler.Bot","Gambler.Bot.db");
         }
 
         public string ConnectionString()

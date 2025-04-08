@@ -265,7 +265,7 @@ namespace Gambler.Bot.Classes
                 }
                 if (Strategy is IProgrammerMode prog)
                 {
-                    prog.UpdateSite(baseSite.SiteDetails);//CopyHelper.CreateCopy<SiteDetails>(baseSite.SiteDetails));
+                    prog.UpdateSite(baseSite.SiteDetails, baseSite.CurrentCurrency);//CopyHelper.CreateCopy<SiteDetails>(baseSite.SiteDetails));
                 }
             }
         }
@@ -459,7 +459,7 @@ namespace Gambler.Bot.Classes
             {
                 (Strategy as IProgrammerMode).UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
                 (Strategy as IProgrammerMode).UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
-                (Strategy as IProgrammerMode).UpdateSite((CurrentSite.SiteDetails));
+                (Strategy as IProgrammerMode).UpdateSite((CurrentSite.SiteDetails), baseSite.CurrentCurrency);
             }
             bool win = MostRecentBet.IsWin;
             if (StopOnWin && win)
@@ -469,6 +469,8 @@ namespace Gambler.Bot.Classes
             }
             if (NextBext ==null)
                 NextBext = Strategy.CalculateNextBet(MostRecentBet, win);
+            if (NextBext.Game != CurrentGame)
+                CurrentGame = NextBext.Game;
             if (Running)
             {
                 decimal secondsPerBet = 0;
@@ -554,7 +556,7 @@ namespace Gambler.Bot.Classes
                         prog.CreateRuntime();
                         if (CurrentSite != null)
                         {
-                            prog.UpdateSite(CurrentSite.SiteDetails);
+                            prog.UpdateSite(CurrentSite.SiteDetails, baseSite.CurrentCurrency);
                             prog.UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
                             prog.UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
                         }
@@ -604,6 +606,7 @@ namespace Gambler.Bot.Classes
             { 
                 if (CurrentSite != null)
                     CurrentSite.CurrentCurrency = value;
+                this.RaisePropertyChanged(nameof(CurrentCurrency));
             } 
         }
 
@@ -615,7 +618,8 @@ namespace Gambler.Bot.Classes
             {
                 if (Array.IndexOf(this.CurrentSite.Currencies, e.Message) > 0)//should I do this check?
                 {
-                    this.CurrentSite.CurrentCurrency = e.Message;
+                    CurrentCurrency = e.Message;
+                    
                 }
             }
         }
@@ -708,7 +712,7 @@ namespace Gambler.Bot.Classes
                     
                     prog.UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
                     prog.UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
-                    prog.UpdateSite(CurrentSite.SiteDetails);
+                    prog.UpdateSite(CurrentSite.SiteDetails, baseSite.CurrentCurrency);
                     prog.LoadScript();
 
                 }
@@ -766,7 +770,7 @@ namespace Gambler.Bot.Classes
                         {
                             prog.UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
                             prog.UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
-                            prog.UpdateSite((CurrentSite.SiteDetails));
+                            prog.UpdateSite((CurrentSite.SiteDetails), baseSite.CurrentCurrency);
                         }
                         
 
@@ -889,7 +893,7 @@ namespace Gambler.Bot.Classes
                     (Strategy as IProgrammerMode).LoadScript();
                     (Strategy as IProgrammerMode).UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
                     (Strategy as IProgrammerMode).UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
-                    (Strategy as IProgrammerMode).UpdateSite((CurrentSite.SiteDetails));
+                    (Strategy as IProgrammerMode).UpdateSite((CurrentSite.SiteDetails), baseSite.CurrentCurrency);
                 }
                 Running = true;
                 Stats.StartTime = DateTime.Now;

@@ -53,7 +53,7 @@
     <system:String x:Key="Localization.Common.Profit">Profit</system:String>
     <system:String x:Key="Localization.Common.Loss">Loss</system:String>
     <system:String x:Key="Localization.Common.Canel">Cancel</system:String>
-
+  <system:String x:Key="Localization.Common.Currency">Currency</system:String>
     <system:String x:Key="Localization.Common.Browse">Browse</system:String>
     <system:String x:Key="Localization.Common.First">First</system:String>
     <system:String x:Key="Localization.Common.Previous">Previous</system:String>
@@ -106,6 +106,7 @@
         <system:String x:Key="Localization.Common.SelectSite.ViewSite">View site</system:String>
 
         <system:String x:Key="Localization.Common.SessionStats.TimeRunning">Time running</system:String>
+  <system:String x:Key="Localization.Common.SessionStats.BettingSpeed">Bets/s</system:String>
         <system:String x:Key="Localization.Common.SessionStats.Wagered">Wagered</system:String>
         <system:String x:Key="Localization.Common.SessionStats.CurrentStreak">Current streak</system:String>
         <system:String x:Key="Localization.Common.SessionStats.BestStreak">Best streak</system:String>
