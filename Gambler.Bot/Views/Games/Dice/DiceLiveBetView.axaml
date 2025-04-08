@@ -27,6 +27,7 @@
             <DataGridTextColumn Binding="{Binding BetID}" Header="{DynamicResource Localization.Game.BetId}"/>
             <DataGridTextColumn Binding="{Binding DateValue}" Header="{DynamicResource Localization.Game.Time}"/>
             <DataGridTextColumn Binding="{Binding TotalAmount}" Header="{DynamicResource Localization.Game.Amount}"/>
+          <DataGridTextColumn Binding="{Binding Currency}" Header="{DynamicResource Localization.Game.Currency}"/>
             <DataGridCheckBoxColumn Binding="{Binding High}" Header="{DynamicResource Localization.Games.Dice.High}"/>
             <DataGridTextColumn Binding="{Binding Chance}" Header="{DynamicResource Localization.Games.Dice.Chance}"/>
             <DataGridTemplateColumn Header="{DynamicResource Localization.Games.Dice.Roll}"  >

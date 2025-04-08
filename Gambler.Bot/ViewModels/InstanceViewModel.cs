@@ -137,11 +137,17 @@ namespace Gambler.Bot.ViewModels
             tmp.OnBypassRequired += Tmp_OnBypassRequired;
             tmp.OnSiteNotify += Tmp_OnSiteNotify;
             tmp.OnSiteError += Tmp_OnSiteError;
+            tmp.PropertyChanged += Tmp_PropertyChanged;
             tmp.GetStrats();
             BotInstance = tmp;
             botIns.CurrentGame = Bot.Common.Games.Games.Dice;
             _logger.LogDebug("Instance viewmodel created");
             genLiveBetView = new GenericLiveBetViewModel(_logger);
+        }
+
+        private void Tmp_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            this.RaisePropertyChanged(e.PropertyName);
         }
 
         private void CreateMediaPlayers()
@@ -238,8 +244,11 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
                 }
             }
-            if (SelectedView != null)
+            if (SelectedView != null && SelectedView!= game)
+            {
+                SelectedView = game;
                 LiveBets = tmpLive;
+            }
             else if (LiveBets == null)
                 LiveBets = genLiveBetView;
         }
@@ -282,6 +291,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             if (StrategyVM != null)
                 StrategyVM.GameChanged(botIns.CurrentGame, botIns?.GetCurrentSite()?.GetGameSettings(botIns.CurrentGame));
             setTitle();
+            this.RaisePropertyChanged(nameof(CurrentGame));
         }
 
         private void BotIns_OnNotification(object? sender, NotificationEventArgs e)
@@ -324,8 +334,9 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                 SessionStatsData.StatsUpdated(botIns.Stats);
                 ChartData.AddPoint(e.NewBet.Profit, e.NewBet.IsWin);
                 genLiveBetView.AddBet(e.NewBet);
-                if (LivebetVMs.ContainsKey(_selectedView ?? Bot.Common.Games.Games.Dice))
-                    LivebetVMs[_selectedView ?? Bot.Common.Games.Games.Dice].AddBet(e.NewBet);
+                
+                if (LivebetVMs.ContainsKey(e.NewBet.Game))
+                    LivebetVMs[e.NewBet.Game].AddBet(e.NewBet);
             }
         }
 
