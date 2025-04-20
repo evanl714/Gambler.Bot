@@ -64,7 +64,7 @@ stages:
       inputs:
         command: 'restore'
         projects: '$(solution)'
-        restoreArguments: '--verbosity detailed'
+        restoreArguments: 'detailed'
         feedsToUse: 'config'
         nugetConfigPath: 'Gambler.Bot/nuget.config'
         externalFeedCredentials: 'avalonia-accelerate'
@@ -126,7 +126,7 @@ stages:
       inputs:        
         command: 'restore'
         projects: '$(solution)'
-        restoreArguments: '--verbosity detailed /p:EnableWindowsTargeting=true'
+        restoreArguments: 'p:EnableWindowsTargeting=true'
         feedsToUse: 'config'
         nugetConfigPath: 'Gambler.Bot/nuget.config'
         externalFeedCredentials: 'avalonia-accelerate'
@@ -174,7 +174,7 @@ stages:
       inputs:
         command: 'restore'
         projects: '$(solution)'
-        restoreArguments: '--verbosity detailed /p:EnableWindowsTargeting=true'
+        restoreArguments: 'EnableWindowsTargeting=true'
         feedsToUse: 'config'
         nugetConfigPath: 'Gambler.Bot/nuget.config'
         externalFeedCredentials: 'avalonia-accelerate'
