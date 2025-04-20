@@ -139,7 +139,10 @@ namespace Gambler.Bot.ViewModels.Strategies
                     Strategy.MinBet = (decimal)value;
                     break;
                 case "Chance":
-                    Strategy.Chance = (decimal)value;
+                    Strategy.BaseChance = (decimal)value;
+                    break;
+                case "HighChecked":
+                    Strategy.starthigh = (bool)value;
                     break;
             }
         }
@@ -160,7 +163,9 @@ namespace Gambler.Bot.ViewModels.Strategies
             if (PlaceBetVM is DicePlaceBetViewModel dice)
             {
                 dice.Amount = Strategy.MinBet;
-                dice.Chance = Strategy.Chance;
+                dice.HighChecked = Strategy.starthigh;
+                dice.Chance = Strategy.BaseChance;
+
                 //dice.ShowAmount = false;
             }
         }
@@ -170,8 +175,8 @@ namespace Gambler.Bot.ViewModels.Strategies
             if (PlaceBetVM is DicePlaceBetViewModel dice)
             {
                 Strategy.MinBet = dice.Amount;
-                
-                Strategy.Chance = dice.Chance;
+                Strategy.starthigh = dice.HighChecked;
+                Strategy.BaseChance = dice.Chance;
                 
             }
         }

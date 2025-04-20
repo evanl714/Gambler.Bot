@@ -86,7 +86,7 @@ delegate void dAddPoint(decimal profit);
                 LineSmoothness = 0,
             };
             
-            series.PointMeasured += Series_PointMeasured;
+            series.PointMeasured += Series_PointMeasured;            
             series.PointCreated += Series_PointCreated;
             
             ;

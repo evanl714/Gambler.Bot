@@ -3,7 +3,6 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Gambler.Bot.ViewModels;
 using Gambler.Bot.Views;
-using AvaloniaWebView;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using Microsoft.Extensions.Logging;

@@ -96,6 +96,6 @@
 
         </sg:SpacedGrid>
         <common:SessionStatsView Grid.Row="1" DataContext="{Binding Stats}"  />
-        <common:ProfitChartView MinHeight="300" Grid.Row="2" DataContext="{Binding Chart}" IsVisible="{Binding Enabled}" />
+        <common:ProfitChartView ShowAnimations="false" MinHeight="300" Grid.Row="2" DataContext="{Binding Chart}" IsVisible="{Binding Enabled}" />
     </Grid>
 </UserControl>
