@@ -64,7 +64,6 @@ stages:
       inputs:
         command: 'restore'
         projects: '$(solution)'
-        restoreArguments: 'detailed'
         feedsToUse: 'config'
         nugetConfigPath: 'Gambler.Bot/nuget.config'
         externalFeedCredentials: 'avalonia-accelerate'
