@@ -10,7 +10,7 @@
 - [x] *Bank, (still needs to be added and tested for Bitsler, WinDice, WolfBet, DuckDice but waiting for feedback from sites.)
 - [ ] *Finish crash for ethercrash
 - [ ] Add extra games - _Twist_, _Boom_, keno, plinko, roulette, hilo
-- [ ] Bet settings need to get the game settings to accomodate edge etc
+- [x] Bet settings need to get the game settings to accomodate edge etc
 
 	
 ### Tabs
@@ -26,7 +26,7 @@
 ### General
 - [x] *notifications (only in app notifications that kind of go over the stop button, but sounds working. need to add an option to move audio sounds again.)
 - [x] *Prettify UI a bit with icons and loaders where possible
-- [ ] *Auto updates	
+- [x] *Auto updates	
 - [ ] Improve logging - adding debug and info logging where needed, ensure exceptions are logged and log warnings where relevant. Include logging level option either in config or settings
 - [x] *triggers for notifications (This seems to work but still having the weird issue on the settings screen.)
 - [ ] *improve programmer mode documentation
@@ -84,7 +84,7 @@
 - [x] *Programmer mode templates and testing after multi game changes
 - [x] *Lable colours not setting correctly
 - [x] *Betamounts not set correctly when changing strategies
-- [ ] *Retry Bet not restarting bet loop - errors also won't...
+- [x] *Retry Bet not restarting bet loop - errors also won't...
 - [ ] *Double check site settings
 - [ ] *reset seed caused betting to stop (this probably just needs to implemented on all of the sites?)
 - [x] *SiteDetails and SiteStats class are not defined before until we do a first bet
