@@ -60,12 +60,15 @@ stages:
           (Get-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs).Replace('config.GetValue<string>("ActiproLicense:Licensee")', '"'+${env:ActiproLicensee}+'"') | Set-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs
           (Get-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs).Replace('config.GetValue<string>("ActiproLicense:LisenceKey")', '"'+${env:ActiproLicenseKey}+'"') | Set-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs
 
-    - task: NuGetToolInstaller@1
-
-    - script: |
-        dotnet restore $(solution) --verbosity detailed
-      displayName: 'Restore NuGet packages'
-
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'restore'
+        projects: '$(solution)'
+        restoreArguments: '--verbosity detailed'
+        feedsToUse: 'config'
+        nugetConfigPath: 'Gambler.Bot/nuget.config'
+        externalFeedCredentials: 'avalonia-accelerate'
+        
     - script: |
         dotnet publish Gambler.Bot/Platforms/Gambler.Bot.Desktop/Gambler.Bot.Desktop.csproj -c $(buildConfiguration) -r win-x64 --self-contained=$(selfContained) -o "$(Build.ArtifactStagingDirectory)/Artifacts/win-x64"
       displayName: 'Publish for win-x64'
@@ -119,13 +122,14 @@ stages:
           (Get-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs).Replace('config.GetValue<string>("ActiproLicense:Licensee")', '"'+${env:ActiproLicensee}+'"') | Set-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs
           (Get-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs).Replace('config.GetValue<string>("ActiproLicense:LisenceKey")', '"'+${env:ActiproLicenseKey}+'"') | Set-Content Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs
 
-    - task: NuGetToolInstaller@1
-
-    - script: |
-
-        dotnet restore $(solution) --verbosity detailed /p:EnableWindowsTargeting=true
-
-      displayName: 'Restore NuGet packages'
+    - task: DotNetCoreCLI@2
+      inputs:        
+        command: 'restore'
+        projects: '$(solution)'
+        restoreArguments: '--verbosity detailed /p:EnableWindowsTargeting=true'
+        feedsToUse: 'config'
+        nugetConfigPath: 'Gambler.Bot/nuget.config'
+        externalFeedCredentials: 'avalonia-accelerate'
 
     - script: |
         dotnet publish Gambler.Bot/Platforms/Gambler.Bot.Desktop/Gambler.Bot.Desktop.csproj -c $(buildConfiguration) -r linux-x64 --self-contained=$(selfContained) -o "$(Build.ArtifactStagingDirectory)/Artifacts/linux-x64"
@@ -166,10 +170,15 @@ stages:
       displayName: 'Inject Actipro license keys'
 
     - task: NuGetToolInstaller@1
-
-    - script: |
-        dotnet restore $(solution) --verbosity detailed /p:EnableWindowsTargeting=true
-      displayName: 'Restore NuGet packages'
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'restore'
+        projects: '$(solution)'
+        restoreArguments: '--verbosity detailed /p:EnableWindowsTargeting=true'
+        feedsToUse: 'config'
+        nugetConfigPath: 'Gambler.Bot/nuget.config'
+        externalFeedCredentials: 'avalonia-accelerate'
+    
 
     - script: |
         dotnet publish Gambler.Bot/Platforms/Gambler.Bot.Desktop/Gambler.Bot.Desktop.csproj -c $(buildConfiguration) -r osx-x64 --self-contained=$(selfContained) -o "$(Build.ArtifactStagingDirectory)/Artifacts/osx-x64"
