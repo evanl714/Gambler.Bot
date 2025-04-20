@@ -280,7 +280,7 @@ namespace Gambler.Bot.Classes
         public Games CurrentGame
         {
             get { return currentGame; }
-            set { currentGame = value; OnGameChanged?.Invoke(this, new EventArgs()); }
+            set { currentGame = value; OnGameChanged?.Invoke(this, new EventArgs()); this.RaisePropertyChanged(); }
         }
 
 

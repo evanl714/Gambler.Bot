@@ -27,7 +27,7 @@
             <DataGridTextColumn Binding="{Binding BetID}" Header="{DynamicResource Localization.Game.BetId}"/>
             <DataGridTextColumn Binding="{Binding DateValue}" Header="{DynamicResource Localization.Game.Time}"/>
             <DataGridTextColumn Binding="{Binding TotalAmount}" Header="{DynamicResource Localization.Game.Amount}"/>
-          <DataGridTextColumn Binding="{Binding Currency}" Header="{DynamicResource Localization.Game.Currency}"/>
+          <DataGridTextColumn Binding="{Binding Currency}" Header="{DynamicResource Localization.Common.Currency}"/>
             <DataGridTextColumn Binding="{Binding Payout}" Header="{DynamicResource Localization.Game.Payout}"/>
             <DataGridTemplateColumn Header="{DynamicResource Localization.Games.Limbo.Result}"  >
                 <DataTemplate >
