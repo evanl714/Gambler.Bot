@@ -1,23 +1,12 @@
 ﻿using Avalonia.Threading;
-using Gambler.Bot.Strategies.Helpers;
-using Gambler.Bot.Strategies.Strategies.Abstractions;
+using Gambler.Bot.Classes;
 using Gambler.Bot.Common.Events;
-using Gambler.Bot.Common.Interfaces;
-using Gambler.Bot.Core.Events;
-using Gambler.Bot.Core.Sites;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using static Community.CsharpSqlite.Sqlite3;
-using DryIoc;
-using Gambler.Bot.Classes;
-using System.Threading;
 
 namespace Gambler.Bot.ViewModels.Common
 {

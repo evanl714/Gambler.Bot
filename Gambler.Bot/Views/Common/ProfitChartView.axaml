@@ -9,9 +9,9 @@
              xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
              xmlns:img="https://github.com/projektanker/icons.avalonia">
     <Grid>
-        <lvc:CartesianChart EasingFunction="{x:Null}"
+        <lvc:CartesianChart 
                             Series="{Binding Series}"
-                            Title="{Binding Title}" UpdateFinished="CartesianChart_UpdateFinished" Loaded="CartesianChart_Loaded"  >
+                            Title="{Binding Title}" Loaded="CartesianChart_Loaded" x:Name="CartessianChart"  >
 
         </lvc:CartesianChart>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">

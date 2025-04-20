@@ -1,5 +1,4 @@
-﻿using DryIoc.ImTools;
-using Gambler.Bot.Common.Enums;
+﻿using Gambler.Bot.Common.Enums;
 using Gambler.Bot.Common.Events;
 using Gambler.Bot.Common.Games;
 using Gambler.Bot.Common.Games.Dice;
@@ -15,6 +14,7 @@ using Gambler.Bot.Strategies.Strategies;
 using Gambler.Bot.Strategies.Strategies.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Scripting.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -249,7 +249,7 @@ namespace Gambler.Bot.Classes
                     baseSite.RegisterFinished += BaseSite_RegisterFinished;
                     baseSite.StatsUpdated += BaseSite_StatsUpdated;
                     baseSite.OnBrowserBypassRequired += BaseSite_OnBrowserBypassRequired;
-                    int tmpcurrency = baseSite.Currencies.IndexOf(x=>x.ToLower() == CurrentCurrency.ToLower());
+                    int tmpcurrency = baseSite.Currencies.FindIndex(x=>x.ToLower() == CurrentCurrency.ToLower());
                     if (tmpcurrency < 0)
                     {
                         CurrentCurrency = baseSite.Currencies.First();

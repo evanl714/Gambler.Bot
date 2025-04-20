@@ -1,14 +1,9 @@
-using System;
 using Avalonia;
 using Avalonia.ReactiveUI;
-using Gambler.Bot;
-using Avalonia.WebView.Desktop;
 using Microsoft.Extensions.Configuration;
-using Gambler.Bot.Classes;
-using Projektanker.Icons.Avalonia.MaterialDesign;
-using Projektanker.Icons.Avalonia;
-using Velopack;
 using Serilog;
+using System;
+using Velopack;
 
 namespace Gambler.Bot.Desktop;
 
@@ -58,7 +53,6 @@ class Program
               .WithInterFont()
               .LogToTrace()
               .UseReactiveUI()
-              .UseDesktopWebView()
               ;
         try
         {

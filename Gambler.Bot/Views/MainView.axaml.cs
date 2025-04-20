@@ -1,25 +1,21 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Platform;
 using Avalonia.ReactiveUI;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
-using DryIoc;
 using Gambler.Bot.Core.Events;
 using Gambler.Bot.Core.Helpers;
 using Gambler.Bot.ViewModels;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using WebViewCore.Models;
 
 namespace Gambler.Bot.Views;
 
@@ -36,15 +32,18 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
         InitializeComponent();
         _instance=this;
         wvBypass.NavigationCompleted += WvBypass_NavigationCompleted;
-        wvBypass.WebMessageReceived += WvBypass_WebMessageReceived;
+        wvBypass.WebMessageReceived += WvBypass_WebMessageReceived; ;
         wvBypass.Loaded += WvBypass_Loaded;
-        wvBypass.WebViewCreated += WvBypass_WebViewCreated;
+        
+        //wvBypass.WebViewCreated += WvBypass_WebViewCreated;
         //PART_WebView.
         this.AttachedToVisualTree += OnAttachedToVisualTree;
         this.DetachedFromVisualTree += OnDetachedFromVisualTree;
         timer = new Timer(cookietmrCallback, null, 1000, 1000);
         
     }
+
+    
 
     private void cookietmrCallback(object? state)
     {
@@ -59,39 +58,39 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
     }
 
     Dictionary<string,Cookie> cookies;
-    private void WvBypass_WebViewCreated(object? sender, WebViewCore.Events.WebViewCreatedEventArgs e)
-    {
-        if (!subscribed)
-        {
-            var obj = wvBypass.PlatformWebView.PlatformViewContext;
-            var type2 = obj.GetType();
-            var tmp2 = wvBypass.PlatformWebView.GetType();
+    //private void WvBypass_WebViewCreated(object? sender, WebViewNavigationCompletedEventArgs e)
+    //{
+    //    if (!subscribed)
+    //    {
+    //        var obj = wvBypass.PlatformWebView.PlatformViewContext;
+    //        var type2 = obj.GetType();
+    //        var tmp2 = wvBypass.PlatformWebView.GetType();
 
-            if (tmp2.FullName == "Avalonia.WebView.Windows.Core.WebView2Core")
-            {
-                var properties = tmp2.GetProperties();
-                object CoreWebView2 = tmp2.GetProperty("CoreWebView2").GetValue(wvBypass.PlatformWebView);
-                Assembly ass = CoreWebView2.GetType().GetAssembly();
-                Type[] enumTypes = ass.GetTypes();
-                Type enumType = enumTypes.FirstOrDefault(x => x.Name == "CoreWebView2WebResourceContext");
-                var filter = CoreWebView2.GetType().GetMethod("AddWebResourceRequestedFilter", new Type[] { typeof(string), enumType });
-                object enumValue = Enum.Parse(enumType, "All");
-                filter.Invoke(CoreWebView2, new object[] { "*", enumValue });
-                var evnt = CoreWebView2.GetType().GetEvent("WebResourceRequested");
-                var evnt2 = CoreWebView2.GetType().GetEvent("WebResourceResponseReceived");
-                var evnts = CoreWebView2.GetType().GetEvents(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
+    //        if (tmp2.FullName == "Avalonia.WebView.Windows.Core.WebView2Core")
+    //        {
+    //            var properties = tmp2.GetProperties();
+    //            object CoreWebView2 = tmp2.GetProperty("CoreWebView2").GetValue(wvBypass.PlatformWebView);
+    //            Assembly ass = CoreWebView2.GetType().GetAssembly();
+    //            Type[] enumTypes = ass.GetTypes();
+    //            Type enumType = enumTypes.FirstOrDefault(x => x.Name == "CoreWebView2WebResourceContext");
+    //            var filter = CoreWebView2.GetType().GetMethod("AddWebResourceRequestedFilter", new Type[] { typeof(string), enumType });
+    //            object enumValue = Enum.Parse(enumType, "All");
+    //            filter.Invoke(CoreWebView2, new object[] { "*", enumValue });
+    //            var evnt = CoreWebView2.GetType().GetEvent("WebResourceRequested");
+    //            var evnt2 = CoreWebView2.GetType().GetEvent("WebResourceResponseReceived");
+    //            var evnts = CoreWebView2.GetType().GetEvents(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
                 
-                MethodInfo method = this.GetType().GetMethod("webrequestreceived", BindingFlags.Instance | BindingFlags.NonPublic);
+    //            MethodInfo method = this.GetType().GetMethod("webrequestreceived", BindingFlags.Instance | BindingFlags.NonPublic);
 
-                Delegate handler = Delegate.CreateDelegate(evnt.EventHandlerType, this, method);
-                Delegate handler2 = Delegate.CreateDelegate(evnt2.EventHandlerType, this, method);
+    //            Delegate handler = Delegate.CreateDelegate(evnt.EventHandlerType, this, method);
+    //            Delegate handler2 = Delegate.CreateDelegate(evnt2.EventHandlerType, this, method);
 
 
-                evnt.AddEventHandler(CoreWebView2, handler);
-                evnt2.AddEventHandler(CoreWebView2, handler2);
-            }
-        }
-    }
+    //            evnt.AddEventHandler(CoreWebView2, handler);
+    //            evnt2.AddEventHandler(CoreWebView2, handler2);
+    //        }
+    //    }
+    //}
 
     private void WvBypass_Loaded(object? sender, RoutedEventArgs e)
     {
@@ -159,7 +158,7 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
         }
     }
 
-    private void WvBypass_WebMessageReceived(object? sender, WebViewCore.Events.WebViewMessageReceivedEventArgs e)
+    private void WvBypass_WebMessageReceived(object? sender, WebMessageReceivedEventArgs e)
     {
         
     }
@@ -185,7 +184,7 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
         // Handle window closing logic here
         ViewModel.OnClosing();
     }
-    private async void WvBypass_NavigationCompleted(object? sender, WebViewCore.Events.WebViewUrlLoadedEventArg e)
+    private async void WvBypass_NavigationCompleted(object? sender, WebViewNavigationCompletedEventArgs e)
     {
         //Navigation happened here, check for cookies again.
        
@@ -228,7 +227,7 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
     {
         if (string.IsNullOrWhiteSpace(agent))
         {
-            agent = await _instance.wvBypass.ExecuteScriptAsync("navigator.userAgent");
+            agent = await _instance.wvBypass.InvokeScript("navigator.userAgent");
             if (agent == null)
                 return;
             if (agent.StartsWith("\\"))
@@ -253,6 +252,7 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
             return;
         var bc = new BrowserConfig();
         CookieContainer cs = new CookieContainer();
+        Uri cururi = new Uri(args.URL);
         bool found = false;
         try
         {
@@ -260,62 +260,30 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
             await GetAgent();
             string result = agent;
 
-            var tmp = await wvBypass.PlatformWebView.ExecuteScriptAsync("document.cookie");
-            var obj = wvBypass.PlatformWebView.PlatformViewContext;
-            var type2 = obj.GetType();
-            var tmp2 = wvBypass.PlatformWebView.GetType();
-            Uri uri = new Uri(args.URL);
-            if (tmp2.FullName == "Avalonia.WebView.Windows.Core.WebView2Core")
+            var Cookiemanager = wvBypass.TryGetCookieManager();
+            if (Cookiemanager == null)
+                return;
+            var cookies = await Cookiemanager.GetCookiesAsync();
+            foreach (var cookie in cookies)
             {
-
-                var properties = tmp2.GetProperties();
-                object CoreWebView2 = tmp2.GetProperty("CoreWebView2").GetValue(wvBypass.PlatformWebView);
-                properties = CoreWebView2.GetType().GetProperties();
-                object CookieMan = CoreWebView2.GetType().GetProperty("CookieManager").GetValue(CoreWebView2);
-                var method = CookieMan.GetType().GetMethod("GetCookiesAsync");//.Invoke(CookieMan, null);
-                var cookies = await method.InvokeAsync(CookieMan, new object[] { uri.IdnHost });
-                var cookies2 = await method.InvokeAsync(CookieMan, new object[] { uri.Host.Replace("/www", "/.www") });
-
-                foreach (object c in (cookies as IList))
+                try
                 {
-                    try
-                    {
-                        System.Net.Cookie svalue = (System.Net.Cookie)c.GetType().GetMethod("ToSystemNetCookie").Invoke(c, null);
-                        this.cookies[svalue.Name] = svalue;
-                    }
-                    catch (Exception ex)
-                    {
-
+                    if (cookie.Domain.ToLower().Contains(cururi.Host.ToLower()))
+                    { 
+                        cs.Add(cookie);
+                        if (cookie.Name == args.RequiredCookie)
+                        {
+                            found = true;
+                        }
                     }
                 }
-                foreach (object c in (cookies2 as IList))
+                catch (Exception ex)
                 {
-                    try
-                    {
-                        System.Net.Cookie svalue = (System.Net.Cookie)c.GetType().GetMethod("ToSystemNetCookie").Invoke(c, null);
-                        this.cookies[svalue.Name] = svalue;
-                    }
-                    catch (Exception ex)
-                    {
 
-                    }
                 }
-                foreach (var x in this.cookies.Keys)
-                {
-                    if (x == args.RequiredCookie)
-                    {
-                        found = true;
-                    }
-                    try
-                    {
-                        cs.Add(this.cookies[x]);
-                    }
-                    catch (Exception ex)
-                    {
-
-                    }
-                }
+                
             }
+
             bc.UserAgent = agent;
             bc.Cookies = cs;
             if (found || cts.IsCancellationRequested)
@@ -345,7 +313,7 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
                 lblDisclaimer.IsVisible = true;
                 lblDisclaimer.ZIndex =- 2;
                 wvBypass.IsVisible = true;
-                wvBypass.Url = new Uri(e.URL);
+                wvBypass.Navigate(new  Uri(e.URL));
                 try
                 {
                     await Task.Delay(15000, cts.Token);
@@ -359,7 +327,7 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
                     cts.Cancel();
                     await CheckCookies();
                 }
-                wvBypass.Url = new Uri("about:blank");
+                wvBypass.Navigate(new Uri("about:blank"));
                 wvBypass.IsVisible = false;
                 lblDisclaimer.IsVisible = false;
             }
