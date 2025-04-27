@@ -841,6 +841,9 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                //.Wait();
             else*/
             ShowSites = false;
+            ShowGameMode = botIns.GetCurrentSite()?.GameModes.Count > 1;
+            this.RaisePropertyChanged(nameof(GameModes));
+            this.RaisePropertyChanged(nameof(SelectedGameMode));
         }
 
         void Start()
@@ -1023,6 +1026,25 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                 this.RaisePropertyChanged();
             }
         }
+        public List<string> GameModes { get => botIns.GetCurrentSite()?.GameModes; }
+        public string SelectedGameMode
+        {
+            get => botIns.GetCurrentSite()?.SelectedGameMode; set
+            {
+                if (botIns.GetCurrentSite() != null)
+                    botIns.GetCurrentSite().SelectedGameMode = value;
+                this.RaisePropertyChanged(nameof(SelectedGameMode));
+            }
+        }
+        private bool showGameMode;
+
+        public bool ShowGameMode
+        {
+            get { return showGameMode; }
+            set { showGameMode = value; this.RaisePropertyChanged(); }
+        }
+
+
 
         public Bot.Common.Games.Games? CurrentGame
         {

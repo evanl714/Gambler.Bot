@@ -621,6 +621,7 @@ namespace Gambler.Bot.Classes
             } 
         }
 
+       
         public Games[] SiteGames { get => CurrentSite?.SupportedGames; }
 
         private void Autobet_OnSetCurrency(object sender, PrintEventArgs e)
