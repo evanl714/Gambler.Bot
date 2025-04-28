@@ -24,8 +24,7 @@
                    FontSize="24"
                    Text="Please wait while we try to establish a connection to the site."
                    IsVisible="False"/>
-
-      <NativeWebView Grid.Row="1" x:Name="wvBypass"  IsVisible="false" />
+      <Panel Grid.Row="1" x:Name="wvcontainer"  IsVisible="false" />
 
         <ContentControl Grid.Row="0" Grid.RowSpan="2" Content="{Binding Instance}">
             <ContentControl.DataTemplates>
