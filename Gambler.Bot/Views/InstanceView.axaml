@@ -65,12 +65,16 @@
                 <MenuItem Header="{Binding SiteName}">
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.LogOut}" Command="{Binding LogOutCommand}" IsVisible="{Binding LoggedIn}"  IsEnabled="{Binding ShowBot}"/>
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.LogIn}" Command="{Binding LogOutCommand}" IsVisible="{Binding NotLoggedIn}"  IsEnabled="{Binding ShowBot}"/>
+                 
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.ChangeSite}"  Command="{Binding ChangeSiteCommand}"  IsEnabled="{Binding ShowBot}"/>
+                  
                 </MenuItem>
                 <ComboBox ItemsSource="{Binding Currencies, Mode=TwoWay, 
                            UpdateSourceTrigger=PropertyChanged}" SelectedValue="{Binding CurrentCurrency, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}"  IsEnabled="{Binding ShowBot}" />
                 <ComboBox ItemsSource="{Binding Games, Mode=TwoWay, 
                            UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentGame, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}"  IsEnabled="{Binding ShowBot}" />
+              <ComboBox ItemsSource="{Binding GameModes, Mode=TwoWay, 
+                           UpdateSourceTrigger=PropertyChanged}" SelectedValue="{Binding SelectedGameMode, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}"  IsEnabled="{Binding ShowBot}" />
                 <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Help}">
                     <MenuItem Header="{DynamicResource Localization.InstanceView.Menu.Language}" ItemsSource="{Binding Languages}">
                         <MenuItem.ItemTemplate>

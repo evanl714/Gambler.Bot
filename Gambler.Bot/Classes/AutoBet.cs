@@ -621,6 +621,7 @@ namespace Gambler.Bot.Classes
             } 
         }
 
+       
         public Games[] SiteGames { get => CurrentSite?.SupportedGames; }
 
         private void Autobet_OnSetCurrency(object sender, PrintEventArgs e)
@@ -1017,14 +1018,21 @@ namespace Gambler.Bot.Classes
             var NewBet =  await CurrentSite.PlaceBet(Bet);
             try
             {
-                if (DBInterface != null && NewBet != null)
+                if (NewBet == null)
                 {
-                    DBInterface?.Add(NewBet);
-                    await DBInterface?.SaveChangesAsync();
+                    _Logger.LogWarning("Bet is null, nothing to save");
                 }
                 else
                 {
-                    _Logger.LogError("DBInterface not initialized");
+                    if (DBInterface != null)
+                    {
+                        DBInterface?.Add(NewBet);
+                        await DBInterface?.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        _Logger.LogError("DBInterface not initialized");
+                    }
                 }
             }
             catch (Exception ex)

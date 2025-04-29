@@ -1,7 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Platform;
 using Avalonia.ReactiveUI;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
@@ -9,9 +8,7 @@ using Gambler.Bot.Core.Events;
 using Gambler.Bot.Core.Helpers;
 using Gambler.Bot.ViewModels;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Threading;
@@ -27,13 +24,21 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
     string cookievalue = "";
     static DateTime LastRequest = DateTime.Now;
     Timer timer;
+    public NativeWebView wvBypass { get; set; }
+    NativeWebDialog dialog = null;
     public MainView()
     {
         InitializeComponent();
         _instance=this;
-        wvBypass.NavigationCompleted += WvBypass_NavigationCompleted;
-        wvBypass.WebMessageReceived += WvBypass_WebMessageReceived; ;
-        wvBypass.Loaded += WvBypass_Loaded;
+        if (!OperatingSystem.IsLinux())
+        {
+            wvBypass = new NativeWebView();
+            wvcontainer.Children.Add(wvBypass);
+            wvBypass.NavigationCompleted += WvBypass_NavigationCompleted;
+            wvBypass.WebMessageReceived += WvBypass_WebMessageReceived; ;
+            wvBypass.Loaded += WvBypass_Loaded;
+        }
+        
         
         //wvBypass.WebViewCreated += WvBypass_WebViewCreated;
         //PART_WebView.
@@ -52,6 +57,11 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
             if ((DateTime.Now - LastRequest).TotalSeconds >= 2)
             {
                 LastRequest = DateTime.Now;
+                if (OperatingSystem.IsLinux() && dialog ==null)
+                {
+                    return;
+                }
+                
                 CheckCookies();
             }
         }
@@ -227,7 +237,14 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
     {
         if (string.IsNullOrWhiteSpace(agent))
         {
-            agent = await _instance.wvBypass.InvokeScript("navigator.userAgent");
+            if (OperatingSystem.IsLinux())
+            {
+                agent = await _instance.dialog.InvokeScript("navigator.userAgent");                
+            }
+            else
+            {
+                agent = await _instance.wvBypass.InvokeScript("navigator.userAgent");
+            }
             if (agent == null)
                 return;
             if (agent.StartsWith("\\"))
@@ -243,6 +260,8 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
 
     static BrowserConfig _conf = null;
     bool checking = false;
+
+
     async Task CheckCookies()
     {
         if (checking)
@@ -259,8 +278,16 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
 
             await GetAgent();
             string result = agent;
-
-            var Cookiemanager = wvBypass.TryGetCookieManager();
+            NativeWebViewCookieManager Cookiemanager = null;
+            if (OperatingSystem.IsLinux())
+            {
+                Cookiemanager = dialog.TryGetCookieManager();
+            }
+            else
+            {
+                Cookiemanager = wvBypass.TryGetCookieManager();
+            }
+            
             if (Cookiemanager == null)
                 return;
             var cookies = await Cookiemanager.GetCookiesAsync();
@@ -309,27 +336,58 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
             try
             {
                 cookies = new Dictionary<string, Cookie>();
-                wvBypass.ZIndex = -1;
+                
                 lblDisclaimer.IsVisible = true;
                 lblDisclaimer.ZIndex =- 2;
-                wvBypass.IsVisible = true;
-                wvBypass.Navigate(new  Uri(e.URL));
-                try
-                {
-                    await Task.Delay(15000, cts.Token);
-                }
-                catch (Exception ex)
-                {
 
-                }
-                if (_conf == null)
+                if (OperatingSystem.IsLinux())
                 {
-                    cts.Cancel();
-                    await CheckCookies();
+                    var url = new Uri(e.URL);
+                    dialog = new NativeWebDialog
+                    {
+                        Source = url
+                    };
+                    dialog.Resize(400, 500);
+                    dialog.Show();
+                    try
+                    {
+                        await Task.Delay(15000, cts.Token);
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                    if (_conf == null)
+                    {
+                        cts.Cancel();
+                        await CheckCookies();
+                    }
+                    dialog.Close();
+                    lblDisclaimer.IsVisible = false;
+                    
                 }
-                wvBypass.Navigate(new Uri("about:blank"));
-                wvBypass.IsVisible = false;
-                lblDisclaimer.IsVisible = false;
+                else
+                {
+                    wvcontainer.ZIndex = -1;
+                    wvcontainer.IsVisible = true;
+                    wvBypass.Navigate(new Uri(e.URL));
+                    try
+                    {
+                        await Task.Delay(15000, cts.Token);
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                    if (_conf == null)
+                    {
+                        cts.Cancel();
+                        await CheckCookies();
+                    }
+                    wvBypass.Navigate(new Uri("about:blank"));
+                    wvcontainer.IsVisible = false;
+                    lblDisclaimer.IsVisible = false;
+                }
             }
             catch (Exception ex)
             {

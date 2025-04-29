@@ -2,15 +2,13 @@
 using ActiproSoftware.UI.Avalonia.Themes;
 using Avalonia.Controls.Notifications;
 using Avalonia.Markup.Xaml.Styling;
+using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using Gambler.Bot.Classes;
 using Gambler.Bot.Classes.BetsPanel;
 using Gambler.Bot.Classes.Strategies;
 using Gambler.Bot.Common.Events;
-using Gambler.Bot.Common.Games;
-using Gambler.Bot.Common.Games.Dice;
-using Gambler.Bot.Common.Games.Limbo;
 using Gambler.Bot.Core.Events;
 using Gambler.Bot.Core.Helpers;
 using Gambler.Bot.Strategies.Helpers;
@@ -24,7 +22,6 @@ using Gambler.Bot.ViewModels.Games.Limbo;
 using Gambler.Bot.ViewModels.Games.Twist;
 using Gambler.Bot.ViewModels.Strategies;
 using Gambler.Bot.Views;
-using LibVLCSharp.Shared;
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
@@ -36,6 +33,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reflection;
+using System.Security.Claims;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -69,7 +67,6 @@ namespace Gambler.Bot.ViewModels
 
         private string title;
         private DispatcherTimer tmrStats = new DispatcherTimer();
-        private LibVLC _libvlc = new LibVLC();
         private MediaPlayer _chime;
         private MediaPlayer _alarm;
 
@@ -150,13 +147,21 @@ namespace Gambler.Bot.ViewModels
             this.RaisePropertyChanged(e.PropertyName);
         }
 
-        private void CreateMediaPlayers()
+        private async void CreateMediaPlayers()
         {
             _logger.LogDebug("Creating media players");
-            _chime = new MediaPlayer(
-                new Media(_libvlc, new Uri(Path.Combine(Environment.CurrentDirectory, @"Assets/Sounds/chime.wav"))));
-            _alarm = new MediaPlayer(
-                new Media(_libvlc, new Uri(Path.Combine(Environment.CurrentDirectory, @"Assets/Sounds/alarm.wav"))));
+            _chime = new MediaPlayer();
+            _chime.LoadedBehavior = MediaPlayerLoadedBehavior.Manual;
+            //await _chime.InitializeAsync();
+            _chime.Source = new UriSource(Path.Combine(Environment.CurrentDirectory, @"Assets/Sounds/chime.wav"));
+            await _chime.PrepareAsync();
+            //await _chime.PlayAsync();
+
+            _alarm = new MediaPlayer();
+//            await _alarm.InitializeAsync();
+            _alarm.Source = new UriSource(Path.Combine(Environment.CurrentDirectory, @"Assets/Sounds/alarm.wav"));
+            await _alarm.PrepareAsync();
+            
         }
 
         private void LoginVM_ChangeSite(object? sender, EventArgs e)
@@ -351,9 +356,10 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
             setTitle();
         }
 
-        void PlaySound(MediaPlayer sound)
+        async Task PlaySound(MediaPlayer sound)
         {
-            if (!Dispatcher.UIThread.CheckAccess())
+            
+            /*if (!Dispatcher.UIThread.CheckAccess())
             {
                 Dispatcher.UIThread
                     .Invoke(
@@ -361,11 +367,11 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                         {
                             PlaySound(sound);
                         });
-            }
+            }*/
             try
             {
-                sound.Stop();
-                sound.Play();
+                await sound.StopAsync();
+                await sound.PlayAsync();
             }
             catch (Exception ex)
             {
@@ -835,6 +841,9 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                //.Wait();
             else*/
             ShowSites = false;
+            ShowGameMode = botIns.GetCurrentSite()?.GameModes.Count > 1;
+            this.RaisePropertyChanged(nameof(GameModes));
+            this.RaisePropertyChanged(nameof(SelectedGameMode));
         }
 
         void Start()
@@ -1017,6 +1026,25 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
                 this.RaisePropertyChanged();
             }
         }
+        public List<string> GameModes { get => botIns.GetCurrentSite()?.GameModes; }
+        public string SelectedGameMode
+        {
+            get => botIns.GetCurrentSite()?.SelectedGameMode; set
+            {
+                if (botIns.GetCurrentSite() != null)
+                    botIns.GetCurrentSite().SelectedGameMode = value;
+                this.RaisePropertyChanged(nameof(SelectedGameMode));
+            }
+        }
+        private bool showGameMode;
+
+        public bool ShowGameMode
+        {
+            get { return showGameMode; }
+            set { showGameMode = value; this.RaisePropertyChanged(); }
+        }
+
+
 
         public Bot.Common.Games.Games? CurrentGame
         {
