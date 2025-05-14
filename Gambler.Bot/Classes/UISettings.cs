@@ -6,7 +6,7 @@ namespace Gambler.Bot.Classes
     public class UISettings: INotifyPropertyChanged
     {
         public static UISettings Settings = new UISettings();
-        public static bool Portable = false;
+        public static bool Portable = App.IsPortable();
         public static bool Resetting = false;
         bool? darkMode = true;
         public bool? DarkMode { get=>darkMode; set { darkMode = value; RaisePropertyChanged(); } }
