@@ -33,10 +33,16 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
         if (!OperatingSystem.IsLinux())
         {
             wvBypass = new NativeWebView();
-            wvcontainer.Children.Add(wvBypass);
+            
+            wvBypass.BeginInit();
+            layoutgrd.Children.Add(wvBypass);
+            Grid.SetRow(wvBypass, 1);
+            wvBypass.IsVisible = false;
             wvBypass.NavigationCompleted += WvBypass_NavigationCompleted;
             wvBypass.WebMessageReceived += WvBypass_WebMessageReceived; ;
             wvBypass.Loaded += WvBypass_Loaded;
+            wvBypass.SizeChanged += WvBypass_SizeChanged;
+            wvBypass.EndInit();
         }
         
         
@@ -48,7 +54,10 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
         
     }
 
-    
+    private void WvBypass_SizeChanged(object? sender, SizeChangedEventArgs e)
+    {
+        
+    }
 
     private void cookietmrCallback(object? state)
     {
@@ -368,8 +377,9 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
                 }
                 else
                 {
-                    wvcontainer.ZIndex = -1;
-                    wvcontainer.IsVisible = true;
+                    wvBypass.ZIndex = -1;
+                    wvBypass.IsVisible = true;
+                    //wvBypass.UpdateLayout();
                     wvBypass.Navigate(new Uri(e.URL));
                     try
                     {
@@ -385,7 +395,7 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
                         await CheckCookies();
                     }
                     wvBypass.Navigate(new Uri("about:blank"));
-                    wvcontainer.IsVisible = false;
+                    wvBypass.IsVisible = false;
                     lblDisclaimer.IsVisible = false;
                 }
             }
