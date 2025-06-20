@@ -55,7 +55,7 @@
         <DataGrid Grid.Row="1" IsVisible="{Binding CanSave}" ItemsSource="{Binding Rolls}" IsReadOnly="True" VerticalAlignment="Stretch" MinHeight="100" >
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Nonce}" Header="{DynamicResource Localization.Common.RollVerify.Nonce}" />
-                <DataGridTextColumn Binding="{Binding Roll}" Header="{DynamicResource Localization.Common.RollVerify.Roll}"/>
+                <DataGridTextColumn Binding="{Binding Result}" Header="{DynamicResource Localization.Common.RollVerify.Roll}"/>
             </DataGrid.Columns>
         </DataGrid>
 

@@ -1,5 +1,6 @@
 ﻿using Avalonia.Platform.Storage;
 using Gambler.Bot.Classes;
+using Gambler.Bot.Common.Games;
 using Gambler.Bot.Core.Sites;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
@@ -152,8 +153,9 @@ namespace Gambler.Bot.ViewModels.Common
             
             while (nonce< max)
             {
-                decimal roll = Site.GetLucky(serverSeed, clientSeed, nonce);
-                tmpRolls.Add(new RollVerifierRoll { Roll = roll, Nonce = nonce });
+                IGameResult roll = Site.GetLucky(serverSeed, clientSeed, nonce, Game);
+                
+                tmpRolls.Add(new RollVerifierRoll { Result = roll?.ToString(), Nonce = nonce });
                 nonce++;
             }
 
@@ -187,7 +189,7 @@ namespace Gambler.Bot.ViewModels.Common
                 sb.AppendLine($"Nonce{delimiter}Roll");
                 foreach (var roll in Rolls)
                 {
-                    sb.AppendLine($"{roll.Nonce}{delimiter}{roll.Roll:0.00000}");
+                    sb.AppendLine($"{roll.Nonce}{delimiter}{roll.Result}");
                 }
                 File.WriteAllText(result, sb.ToString());
             }
