@@ -3,11 +3,13 @@ using Gambler.Bot.Classes;
 using Gambler.Bot.Core.Events;
 using Gambler.Bot.Core.Sites;
 using Gambler.Bot.Core.Sites.Classes;
+using Gambler.Bot.Strategies.Strategies.Abstractions;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Security.Policy;
@@ -40,7 +42,12 @@ namespace Gambler.Bot.ViewModels.Common
             get { return selectedMirror; }
             set { selectedMirror = value; this.RaisePropertyChanged(); }
         }
-
+        string error = "";
+        public string Error
+        {
+            get { return error; }
+            set { error = value; this.RaisePropertyChanged(); }
+        }
 
         private AutoBet _site;
 
@@ -78,7 +85,8 @@ namespace Gambler.Bot.ViewModels.Common
                 CanLogIn = true;
                 ShowError = true;
                 
-                
+                var fetched = App.Current.TryGetResource("Localization.Common.LoginFailed", null, out var tmptxt);
+                Error = tmptxt?.ToString();
             }
             else
             {                
@@ -156,9 +164,21 @@ namespace Gambler.Bot.ViewModels.Common
         {
             if (Site != null)
             {
-                CanLogIn = false;
                 ShowError = false;
-                await Site.Login(Mirrors[SelectedMirror], LoginParams.ToArray());
+                Error = null;
+                foreach (var x in LoginParams)
+                {
+                    if (x.Param.Required && string.IsNullOrWhiteSpace(x.Value))
+                    {
+                        Error += $"{x.Param.Name} is required.{Environment.NewLine}";
+                        ShowError = true;
+                    }
+                }
+                if (!ShowError)
+                {
+                    CanLogIn = false;
+                    await Site.Login(Mirrors[SelectedMirror], LoginParams.ToArray());
+                }
             }
         }
         public ICommand SkipCommand { get; }

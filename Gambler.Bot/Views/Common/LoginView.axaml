@@ -39,7 +39,7 @@
 
         <TextBlock HorizontalAlignment="Center" IsVisible="{Binding LoggingIn}" Text="{DynamicResource Localization.Common.LoggingIn}"/>
 
-        <TextBlock HorizontalAlignment="Center"  IsVisible="{Binding ShowError}" Foreground="Red" Text="{DynamicResource Localization.Common.LoginFailed}"/>
+        <TextBlock HorizontalAlignment="Center"  IsVisible="{Binding ShowError}" Foreground="Red" Text="{Binding Error}"/>
         <StackPanel  Orientation="Horizontal" HorizontalAlignment="Center" IsEnabled="{Binding CanLogIn}">
             <Button Margin="5" Command="{Binding LoginCommand}" >
                 <StackPanel Orientation="Horizontal">
