@@ -22,7 +22,7 @@ namespace Gambler.Bot.ViewModels
            
             log = logger;
             uiSettingsFile = string.Empty;
-            UISettings.Portable = File.Exists("portable"); //this needs to integrate with velopacks portable thing
+            UISettings.Portable = App.IsPortable(); //this needs to integrate with velopacks portable thing
             if (UISettings.Portable)
             {
                 logger.LogDebug("Portable");

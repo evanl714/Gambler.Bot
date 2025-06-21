@@ -20,7 +20,7 @@ namespace Gambler.Bot.ViewModels.Common
         public string Acknowledgements { get; set; }
         public AboutViewModel(ILogger logger):base(logger)
         {
-            Version = Assembly.GetExecutingAssembly().GetFileVersion().ToString();
+            Version = App.GetVersion();
             Author = "Seuntjie";
             Description = "A bot for gambling sites";
             License = "MIT";

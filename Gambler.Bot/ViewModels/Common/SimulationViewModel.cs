@@ -1,6 +1,7 @@
 ﻿using Avalonia.Threading;
 using Gambler.Bot.Classes;
 using Gambler.Bot.Common.Events;
+using Gambler.Bot.Common.Games;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using System;
@@ -29,7 +30,7 @@ namespace Gambler.Bot.ViewModels.Common
         public AutoBet Bot
         {
             get { return bot; }
-            set { bot = value; }
+            set { bot = value; Game = bot?.CurrentGame ?? Gambler.Bot.Common.Games.Games.Dice; }
         }
 
 
@@ -78,6 +79,7 @@ namespace Gambler.Bot.ViewModels.Common
         public TimeSpan ProjectedTime { get; set; }
         public TimeSpan ProjectedRemaining { get; set; }
 
+        public Gambler.Bot.Common.Games.Games Game { get; set; }
 
         public SimulationViewModel(ILogger logger):base(logger)
         {
@@ -158,26 +160,34 @@ namespace Gambler.Bot.ViewModels.Common
             SimTimer.Start();
             Running = true;
             CanSave = false;
-            CurrentSimulation.Start();
+            CurrentSimulation.Start(Game);
             Stats.Stats = CurrentSimulation.Stats;
             Chart.Reset();
             //chrt.MaxItems = 10000;
         }
         List<decimal> Bets = new List<decimal>();
+        DateTime LastCheck = DateTime.Today;
+        long counter = 0;
         private void CurrentSimulation_OnBetSimulated(object? sender, BetFinisedEventArgs e)
         {
-            
+
             Bets.Add(e.NewBet.Profit);
             if (chrt.Enabled)
             {
                 //chrt.AddPoint(e.NewBet.Profit, e.NewBet.IsWin);
-                if (Bets.Count %100 ==0)
+                if (Bets.Count % 100 == 0)
                 {
                     chrt.AddRange(Bets).Wait();
                     //Thread.Sleep(10);
-                    
+
                     Bets.Clear();
                 }
+            }
+            if (simulation.TotalBetsPlaced % 10000 == 0 || (DateTime.Now - LastCheck).Seconds >=1)
+            {
+                LastCheck = DateTime.Now;
+                UpdateStats();
+                Bets.Clear();
             }
             /*if (Bets.Count > 100)
                 Bets.RemoveAt(0);*/
@@ -194,16 +204,19 @@ namespace Gambler.Bot.ViewModels.Common
                 Dispatcher.UIThread.Invoke(Finished);
             else
             {
-                
+
                 SimTimer.Stop();
                 Gambler.Bot.Strategies.Helpers.Simulation tmp = CurrentSimulation;
                 Stats.StatsUpdated(tmp.Stats);
                 long ElapsedMilliseconds = SimTimer.ElapsedMilliseconds;
-                Progress = (decimal)tmp.TotalBetsPlaced / (decimal)tmp.Bets;
-                decimal totaltime = ElapsedMilliseconds / Progress;
-                TimeRunning = TimeSpan.FromMilliseconds(ElapsedMilliseconds);
-                ProjectedTime = TimeSpan.FromMilliseconds((double)totaltime);
-                ProjectedRemaining = TimeSpan.FromMilliseconds((double)totaltime - ElapsedMilliseconds);
+                if ((decimal)tmp.Bets == 0)
+                { 
+                    Progress = (decimal)tmp.TotalBetsPlaced / (decimal)tmp.Bets;
+                    decimal totaltime = ElapsedMilliseconds / Progress;
+                    TimeRunning = TimeSpan.FromMilliseconds(ElapsedMilliseconds);
+                    ProjectedTime = TimeSpan.FromMilliseconds((double)totaltime);
+                    ProjectedRemaining = TimeSpan.FromMilliseconds((double)totaltime - ElapsedMilliseconds);
+                }
 
                 this.RaisePropertyChanged(nameof(Progress));
                 this.RaisePropertyChanged(nameof(TimeRunning));
@@ -251,9 +264,7 @@ namespace Gambler.Bot.ViewModels.Common
 
         private void CurrentSimulation_OnSimulationWriting(object? sender, EventArgs e)
         {
-            UpdateStats();            
             
-            Bets.Clear();
             
         }
 

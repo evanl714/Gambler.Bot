@@ -32,30 +32,32 @@
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
-
+              <RowDefinition/>
 
             </Grid.RowDefinitions>
             <TextBlock Grid.Column="0" Grid.Row="0" Text="{DynamicResource Localization.Common.Simulation.StartingBalance}"/>
             <NumericUpDown Grid.Column="1" Grid.Row="0" FormatString="n8" Value="{Binding StartingBalance}" />
             <TextBlock Grid.Column="0" Grid.Row="1" Text="{DynamicResource Localization.Common.RollVerify.NoBets}"/>
             <NumericUpDown Grid.Column="1" Grid.Row="1" FormatString="n0" Maximum="10000000000" Minimum="10" Value="{Binding NumberOfBets}" />
+          <TextBlock Grid.Column="0" Grid.Row="2" Text="{DynamicResource Localization.Common.RollVerify.Game}"/>
+          <ComboBox Grid.Column="1" Grid.Row="2" ItemsSource="{Binding Bot.SiteGames}" SelectedItem="{Binding Game}" />
             <!--
             <TextBlock Grid.Column="0" Grid.Row="2"  Text="{Binding CurrentSite.SiteName}"/>
             <TextBlock Grid.Column="0" Grid.Row="3"  Text="{Binding Strategy.StrategyName}"/>-->
-            <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" HorizontalAlignment="Right">
+            <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" HorizontalAlignment="Right">
                 <Button HorizontalAlignment="Right" VerticalAlignment="Top"  Content="{DynamicResource Localization.Common.Simulation.StartSimulation}" Command="{Binding StartCommand}" IsEnabled="{Binding NotRunning}"/>
                 <Button HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Column="1" Grid.Row="2" Content="{DynamicResource Localization.Common.Simulation.StopSimulation}" Command="{Binding StopCommand}" IsEnabled="{Binding Running}"/>
             </StackPanel>
-            <TextBlock Grid.Column="0" Grid.Row="3"  Text="{DynamicResource Localization.Common.Simulation.EnableBetLog}"/>
-            <ToggleSwitch IsChecked="{Binding Log}" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" IsEnabled="{Binding NotRunning}" />
-            <TextBlock Grid.Column="0" Grid.Row="4"  Text="{DynamicResource Localization.Common.Simulation.ShowChart}"/>
-
-            <ToggleSwitch IsChecked="{Binding Chart.Enabled}"  ToolTip.Tip="{DynamicResource Localization.Common.Simulation.ChartSlow}"  Grid.Column="1" Grid.Row="4" HorizontalAlignment="Left"  />
-            <Button HorizontalAlignment="Right" IsEnabled="{Binding CanSave}" VerticalAlignment="Top" Grid.Column="1" Grid.Row="3"  Content="{DynamicResource Localization.Common.Simulation.SaveBets}" Command="{Binding SaveCommand}"/>
+            <TextBlock Grid.Column="0" Grid.Row="4"  Text="{DynamicResource Localization.Common.Simulation.EnableBetLog}"/>
+            <ToggleSwitch IsChecked="{Binding Log}" Grid.Column="1" Grid.Row="4" HorizontalAlignment="Left" IsEnabled="{Binding NotRunning}" />
             <TextBlock Grid.Column="0" Grid.Row="5"  Text="{DynamicResource Localization.Common.Simulation.ShowChart}"/>
-            <NumericUpDown Value="{Binding Chart.MaxItems}" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left"  />
-            <SelectableTextBlock Grid.Column="0" Grid.Row="6" Text="{DynamicResource Localization.Common.Balance}" />
-            <SelectableTextBlock Grid.Column="1" Grid.Row="6"  >
+
+            <ToggleSwitch IsChecked="{Binding Chart.Enabled}"  ToolTip.Tip="{DynamicResource Localization.Common.Simulation.ChartSlow}"  Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left"  />
+            <Button HorizontalAlignment="Right" IsEnabled="{Binding CanSave}" VerticalAlignment="Top" Grid.Column="1" Grid.Row="4"  Content="{DynamicResource Localization.Common.Simulation.SaveBets}" Command="{Binding SaveCommand}"/>
+            <TextBlock Grid.Column="0" Grid.Row="6"  Text="{DynamicResource Localization.Common.Simulation.ChartBets}"/>
+            <NumericUpDown Value="{Binding Chart.MaxItems}" Grid.Column="1" Grid.Row="6" HorizontalAlignment="Left"  />
+            <SelectableTextBlock Grid.Column="2" Grid.Row="7" Text="{DynamicResource Localization.Common.Balance}" />
+            <SelectableTextBlock Grid.Column="3" Grid.Row="7"  >
                 <i:Interaction.Behaviors>
                     <behaviours:NumberFormatBehaviour Mask="n8" Text="{Binding Balance, Mode=OneWay}" />
                 </i:Interaction.Behaviors>

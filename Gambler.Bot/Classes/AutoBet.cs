@@ -98,7 +98,7 @@ namespace Gambler.Bot.Classes
         {
             _Logger = logger;
             _Logger.LogDebug("AutoBet instance creating");
-            VersionStr = string.Format("{0}.{1}.{2}", Environment.Version.Major, Environment.Version.MajorRevision, Environment.Version.Build);
+            VersionStr = App.GetVersion();
             Stats = new SessionStats();
             Running = false;
             BetTimer.Elapsed += BetTimer_Elapsed;

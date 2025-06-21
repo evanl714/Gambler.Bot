@@ -186,3 +186,51 @@ stages:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)/Artifacts/osx-x64'
         ArtifactName: 'BuildArtifacts-osx-x64'
         publishLocation: 'container'
+
+
+- stage: BuildMacArm
+  jobs:
+  - job: BuildMacArmJob
+    pool:
+      vmImage: 'macos-latest'
+    steps:
+    - checkout: Gambler.Bot.Core
+    - checkout: Gambler.Bot.Strategies
+    - checkout: Self
+
+    - script: |
+        echo "Listing directory contents to verify solution file presence"
+        ls $(Build.SourcesDirectory)
+      displayName: 'List directory contents'
+    - script: |
+        brew install xmlstarlet
+      displayName: 'Install xmlstarlet'
+      
+    - script: |
+        csprojPath=$(find $(Build.SourcesDirectory) -name "Gambler.Bot.Desktop.csproj" | head -n 1)
+        xmlstarlet ed -L -u "//Project/PropertyGroup/Version" -v "$(Build.BuildNumber)" $csprojPath || xmlstarlet ed -L -s "//Project" -t elem -n "PropertyGroup" -v "" -s "//Project/PropertyGroup[last()]" -t elem -n "Version" -v "$(Build.BuildNumber)" $csprojPath
+      displayName: 'Update version in csproj'
+
+    - script: |
+        sed -i '' 's/config.GetValue<string>("ActiproLicense:Licensee")/"'${ActiproLicensee}'"/' Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs
+        sed -i '' 's/config.GetValue<string>("ActiproLicense:LisenceKey")/"'${ActiproLicenseKey}'"/' Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs
+      displayName: 'Inject Actipro license keys'
+
+    - task: NuGetToolInstaller@1
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'restore'
+        projects: 'Gambler.Bot/Platforms/Gambler.Bot.Desktop/Gambler.Bot.Desktop.csproj'
+        feedsToUse: 'config'
+        nugetConfigPath: 'Gambler.Bot/nuget.config'
+        externalFeedCredentials: 'avalonia-accelerate'
+    
+    - script: |
+        dotnet publish Gambler.Bot/Platforms/Gambler.Bot.Desktop/Gambler.Bot.Desktop.csproj -c $(buildConfiguration) -r osx-arm64 --self-contained=$(selfContained) -o "$(Build.ArtifactStagingDirectory)/Artifacts/osx-arm64"
+      displayName: 'Publish for osx-arm64'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/Artifacts/osx-arm64'
+        ArtifactName: 'BuildArtifacts-osx-arm64'
+        publishLocation: 'container'

@@ -14,6 +14,8 @@ using Velopack;
 using System.Threading.Tasks;
 using Serilog;
 using Velopack.Sources;
+using System.Reflection;
+using ActiproSoftware.Extensions;
 
 namespace Gambler.Bot
 {
@@ -54,6 +56,32 @@ namespace Gambler.Bot
 
             // install new version and restart app
             mgr.ApplyUpdatesAndRestart(newVersion);
+        }
+        internal static string GetVersion()
+        {
+            try
+            {
+                var mgr = new UpdateManager(new GithubSource("https://github.com/Seuntjie900/Gambler.Bot", null, false));
+                return (mgr.CurrentVersion?.ToFullString() ?? Assembly.GetExecutingAssembly().GetFileVersion().ToString());
+            }
+            catch (Exception ex)
+            {
+                return Assembly.GetExecutingAssembly().GetFileVersion().ToString();
+            }
+            
+        }
+        internal static bool IsPortable()
+        {
+            try
+            {
+                var mgr = new UpdateManager(new GithubSource("https://github.com/Seuntjie900/Gambler.Bot", null, false));
+                return mgr?.IsPortable ?? false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+
+            }
         }
         public override void OnFrameworkInitializationCompleted()
         {

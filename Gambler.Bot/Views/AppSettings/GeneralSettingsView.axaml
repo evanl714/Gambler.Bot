@@ -10,7 +10,7 @@
              >
     <StackPanel Orientation="Vertical">
 
-        <ToggleSwitch Content="Portable"/>
+       
 
         <WrapPanel Orientation="Horizontal">
 
