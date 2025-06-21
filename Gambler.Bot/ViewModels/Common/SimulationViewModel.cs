@@ -204,16 +204,19 @@ namespace Gambler.Bot.ViewModels.Common
                 Dispatcher.UIThread.Invoke(Finished);
             else
             {
-                
+
                 SimTimer.Stop();
                 Gambler.Bot.Strategies.Helpers.Simulation tmp = CurrentSimulation;
                 Stats.StatsUpdated(tmp.Stats);
                 long ElapsedMilliseconds = SimTimer.ElapsedMilliseconds;
-                Progress = (decimal)tmp.TotalBetsPlaced / (decimal)tmp.Bets;
-                decimal totaltime = ElapsedMilliseconds / Progress;
-                TimeRunning = TimeSpan.FromMilliseconds(ElapsedMilliseconds);
-                ProjectedTime = TimeSpan.FromMilliseconds((double)totaltime);
-                ProjectedRemaining = TimeSpan.FromMilliseconds((double)totaltime - ElapsedMilliseconds);
+                if ((decimal)tmp.Bets == 0)
+                { 
+                    Progress = (decimal)tmp.TotalBetsPlaced / (decimal)tmp.Bets;
+                    decimal totaltime = ElapsedMilliseconds / Progress;
+                    TimeRunning = TimeSpan.FromMilliseconds(ElapsedMilliseconds);
+                    ProjectedTime = TimeSpan.FromMilliseconds((double)totaltime);
+                    ProjectedRemaining = TimeSpan.FromMilliseconds((double)totaltime - ElapsedMilliseconds);
+                }
 
                 this.RaisePropertyChanged(nameof(Progress));
                 this.RaisePropertyChanged(nameof(TimeRunning));
