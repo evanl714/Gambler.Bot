@@ -1150,7 +1150,7 @@ namespace Gambler.Bot.Classes
 
         public void SavePersonalSettings(string FileLocation)
         {
-            if (!Directory.Exists(Path.GetDirectoryName(FileLocation)))
+            if (Path.GetDirectoryName(FileLocation)!= string.Empty && !Directory.Exists(Path.GetDirectoryName(FileLocation)))
                 Directory.CreateDirectory(Path.GetDirectoryName(FileLocation));
             string Settings = JsonSerializer.Serialize(PersonalSettings);
             using (StreamWriter sw = new StreamWriter(FileLocation, false))
@@ -1170,7 +1170,7 @@ namespace Gambler.Bot.Classes
             tmp.SetStrategy(Strategy);*/
             StoredBetSettings.SetStrategy(strategy);
             string Settings = JsonSerializer.Serialize(this.StoredBetSettings);
-            if (!Directory.Exists(Path.GetDirectoryName(FileLocation)))
+            if (Path.GetDirectoryName(FileLocation)!= string.Empty && !Directory.Exists(Path.GetDirectoryName(FileLocation)))
                 Directory.CreateDirectory(Path.GetDirectoryName(FileLocation));
             using (StreamWriter sw = new StreamWriter(FileLocation, false)) 
             {
@@ -1182,7 +1182,7 @@ namespace Gambler.Bot.Classes
         public void LoadPersonalSettings(string FileLocation)
         {
             string Settings = "";
-            var files = System.IO.Directory.GetFiles(Path.GetDirectoryName(FileLocation));
+            //var files = System.IO.Directory.GetFiles(Path.GetDirectoryName(FileLocation));
             
             using (StreamReader sr = new StreamReader(FileLocation))
             {

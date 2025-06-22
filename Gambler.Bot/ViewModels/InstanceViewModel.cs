@@ -681,7 +681,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         void SaveINstanceSettings(string FileLocation)
         {
-            if (!Directory.Exists(Path.GetDirectoryName(FileLocation)))
+            if (Path.GetDirectoryName(FileLocation) != string.Empty && !Directory.Exists(Path.GetDirectoryName(FileLocation)))
                 Directory.CreateDirectory(Path.GetDirectoryName(FileLocation));
             string Settings = JsonSerializer.Serialize<InstanceSettings>(
                 new InstanceSettings
