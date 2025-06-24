@@ -50,6 +50,7 @@
                 </StackPanel>
             </Button>
             <Button Margin="5" Content="{DynamicResource Localization.InstanceView.Menu.ChangeSite}" Command="{Binding CancelCommand}" />
+          <Button Margin="5" IsVisible="{Binding Site.SupportsBrowserLogin}" Content="{DynamicResource Localization.InstanceView.Menu.BrowserLogin}" Command="{Binding BrowserLoginCommand}" />
         </StackPanel>
     </StackPanel>
 </UserControl>

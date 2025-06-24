@@ -236,6 +236,7 @@ namespace Gambler.Bot.Classes
                     baseSite.RegisterFinished -= BaseSite_RegisterFinished;
                     baseSite.StatsUpdated -= BaseSite_StatsUpdated;
                     baseSite.OnBrowserBypassRequired -= BaseSite_OnBrowserBypassRequired;
+                    baseSite.OnInvokeScript -= BaseSite_OnInvokeScript;
                     baseSite.Disconnect();                    
                 }
                 baseSite = value;
@@ -249,6 +250,7 @@ namespace Gambler.Bot.Classes
                     baseSite.RegisterFinished += BaseSite_RegisterFinished;
                     baseSite.StatsUpdated += BaseSite_StatsUpdated;
                     baseSite.OnBrowserBypassRequired += BaseSite_OnBrowserBypassRequired;
+                    baseSite.OnInvokeScript += BaseSite_OnInvokeScript;
                     int tmpcurrency = baseSite.Currencies.FindIndex(x=>x.ToLower() == CurrentCurrency.ToLower());
                     if (tmpcurrency < 0)
                     {
@@ -268,9 +270,13 @@ namespace Gambler.Bot.Classes
                 {
                     prog.UpdateSite(baseSite.SiteDetails, baseSite.CurrentCurrency);//CopyHelper.CreateCopy<SiteDetails>(baseSite.SiteDetails));
                 }
+                this.RaisePropertyChanged(nameof(SupportsBrowserLogin));
             }
         }
-
+        private void BaseSite_OnInvokeScript(object sender, GenericEventArgs e)
+        {
+            OnInvokeScript?.Invoke(sender, e);
+        }
         private void BaseSite_OnBrowserBypassRequired(object sender, BypassRequiredArgs e)
         {
             OnBypassRequired?.Invoke(sender, e);
@@ -301,6 +307,7 @@ namespace Gambler.Bot.Classes
         public event EventHandler OnStarted;
         public event EventHandler<GenericEventArgs> OnStopped;
         public event EventHandler<BypassRequiredArgs> OnBypassRequired;
+        public event EventHandler<GenericEventArgs> OnInvokeScript;
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void BaseSite_StatsUpdated(object sender, StatsUpdatedEventArgs e)
@@ -524,8 +531,16 @@ namespace Gambler.Bot.Classes
             LoggedIn = await CurrentSite.LogIn(url,LoginParams);
             return LoggedIn;
         }
+        public async Task<bool> BrowserLogin(string url)
+        {
+            if (CurrentSite == null)
+            {
+                throw new Exception("Cannot login without a site. Assign a value to CurrentSite, then log in.");
+            }
+            LoggedIn = await CurrentSite.BrowserLogin(url);
+            return LoggedIn;
+        }
 
-        
 
         //Site Stuff
         #endregion
@@ -623,7 +638,7 @@ namespace Gambler.Bot.Classes
 
        
         public Games[] SiteGames { get => CurrentSite?.SupportedGames; }
-
+        public bool SupportsBrowserLogin { get => CurrentSite?.SupportsBrowserLogin??false; }
         private void Autobet_OnSetCurrency(object sender, PrintEventArgs e)
         {
             if (CurrentSite != null)

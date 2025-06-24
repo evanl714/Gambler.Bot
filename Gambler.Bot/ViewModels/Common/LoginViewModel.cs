@@ -139,6 +139,7 @@ namespace Gambler.Bot.ViewModels.Common
             LoginCommand = ReactiveCommand.Create(LogIn);
             SkipCommand = ReactiveCommand.Create(Skip);
             CancelCommand = ReactiveCommand.Create(Cancel);
+            BrowserLoginCommand = ReactiveCommand.Create(BrowserLogIn);
             //CloseDialog = new Interaction<LoginViewModel, LoginViewModel?>();
 
         }
@@ -179,6 +180,19 @@ namespace Gambler.Bot.ViewModels.Common
                     CanLogIn = false;
                     await Site.Login(Mirrors[SelectedMirror], LoginParams.ToArray());
                 }
+            }
+        }
+
+        public ICommand BrowserLoginCommand { get; }
+
+        async Task BrowserLogIn()
+        {
+            if (Site != null)
+            {
+                
+                CanLogIn = false;
+                await Site.BrowserLogin(Mirrors[SelectedMirror]);
+                
             }
         }
         public ICommand SkipCommand { get; }

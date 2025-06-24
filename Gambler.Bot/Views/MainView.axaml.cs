@@ -1,3 +1,4 @@
+using Acornima.Ast;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -42,6 +43,11 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
             wvBypass.WebMessageReceived += WvBypass_WebMessageReceived; ;
             wvBypass.Loaded += WvBypass_Loaded;
             wvBypass.SizeChanged += WvBypass_SizeChanged;
+            wvBypass.AdapterCreated += WvBypass_AdapterCreated; ;
+            wvBypass.EnvironmentRequested += WvBypass_EnvironmentRequested;
+            wvBypass.NavigationStarted += WvBypass_NavigationStarted;
+            wvBypass.WebResourceRequested += WvBypass_WebResourceRequested; ;
+            
             wvBypass.EndInit();
         }
         
@@ -51,6 +57,35 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
         this.AttachedToVisualTree += OnAttachedToVisualTree;
         this.DetachedFromVisualTree += OnDetachedFromVisualTree;
         timer = new Timer(cookietmrCallback, null, 1000, 1000);
+        
+    }
+    Dictionary<string, string>? headers = new Dictionary<string, string>();
+    private void WvBypass_WebResourceRequested(object? sender, WebResourceRequestedEventArgs e)
+    {
+        if (e.Request.Uri.ToString().ToLower().Contains(args?.HeadersPath?.ToLower() ?? "ifhcf"))
+        {
+            headers.Clear();
+            foreach (var x in e.Request.Headers)
+            {
+                headers[x.Key] = x.Value;
+            }
+        }
+        //e.Request.Headers
+        //throw new NotImplementedException();
+    }
+
+    private void WvBypass_NavigationStarted(object? sender, WebViewNavigationStartingEventArgs e)
+    {
+        
+    }
+
+    private void WvBypass_EnvironmentRequested(object? sender, WebViewEnvironmentRequestedEventArgs e)
+    {
+        e.EnableDevTools = true;
+    }
+
+    private void WvBypass_AdapterCreated(object? sender, WebViewAdapterEventArgs e)
+    {
         
     }
 
@@ -116,66 +151,66 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
        
     }
 
-    private void webrequestreceived(object sender, object e)
-    {
-        if (args==null)
-            return;
-        Type argsType = e.GetType();
-        //DO NOT UNCOMMENT THIS
-        //THIS HAS A HIGH POSSIBILITY OF LEAKING YOUR TOKENS
-        //try
-        //{
-        //    string log = JsonSerializer.Serialize(e);
-        //    MainViewModel.log.LogDebug(log);
-        //}
-        //catch (Exception ex)
-        //{
+    //private void webrequestreceived(object sender, object e)
+    //{
+    //    if (args==null)
+    //        return;
+    //    Type argsType = e.GetType();
+    //    //DO NOT UNCOMMENT THIS
+    //    //THIS HAS A HIGH POSSIBILITY OF LEAKING YOUR TOKENS
+    //    //try
+    //    //{
+    //    //    string log = JsonSerializer.Serialize(e);
+    //    //    MainViewModel.log.LogDebug(log);
+    //    //}
+    //    //catch (Exception ex)
+    //    //{
 
-        //}
-        LastRequest = DateTime.Now;
-        if (argsType.Name== "CoreWebView2WebResourceResponseReceivedEventArgs")
-        {
+    //    //}
+    //    LastRequest = DateTime.Now;
+    //    if (argsType.Name== "CoreWebView2WebResourceResponseReceivedEventArgs")
+    //    {
             
             
-            object request = argsType.GetProperty("Request").GetValue(e);
-            object response = argsType.GetProperty("Response").GetValue(e);
-            int status = (int)response.GetType().GetProperty("StatusCode").GetValue(response);
-            string requesturi = request.GetType().GetProperty("Uri").GetValue(request) as string;
-            object requestheaders = request.GetType().GetProperty("Headers").GetValue(request);
-            bool hascookie = (bool)requestheaders.GetType().GetMethod("Contains").Invoke(requestheaders, new object[] { "cookie" });
-            if (hascookie)
-            {
-                string requestCookies = requestheaders.GetType().GetMethod("GetHeader").Invoke(requestheaders, new object[] { "cookie" }) as string;
-                string[] tmpCookies = cookievalue.Split(";", StringSplitOptions.TrimEntries);
-                bool found = false;
-                foreach (var x in tmpCookies)
-                {
-                    string[] curCookie = x.Split("=");
-                    if (curCookie.Length == 2)
-                    {
-                        try
-                        {
-                            System.Net.Cookie cookie = new System.Net.Cookie(curCookie[0], curCookie[1], "/", "." + new Uri(requesturi).Host);
-                            cookie.HttpOnly = true;
-                            cookie.Secure = true;
-                            cookies[curCookie[0]] = (cookie);                           
-                        }
-                        catch (Exception ex)
-                        {
+    //        object request = argsType.GetProperty("Request").GetValue(e);
+    //        object response = argsType.GetProperty("Response").GetValue(e);
+    //        int status = (int)response.GetType().GetProperty("StatusCode").GetValue(response);
+    //        string requesturi = request.GetType().GetProperty("Uri").GetValue(request) as string;
+    //        object requestheaders = request.GetType().GetProperty("Headers").GetValue(request);
+    //        bool hascookie = (bool)requestheaders.GetType().GetMethod("Contains").Invoke(requestheaders, new object[] { "cookie" });
+    //        if (hascookie)
+    //        {
+    //            string requestCookies = requestheaders.GetType().GetMethod("GetHeader").Invoke(requestheaders, new object[] { "cookie" }) as string;
+    //            string[] tmpCookies = cookievalue.Split(";", StringSplitOptions.TrimEntries);
+    //            bool found = false;
+    //            foreach (var x in tmpCookies)
+    //            {
+    //                string[] curCookie = x.Split("=");
+    //                if (curCookie.Length == 2)
+    //                {
+    //                    try
+    //                    {
+    //                        System.Net.Cookie cookie = new System.Net.Cookie(curCookie[0], curCookie[1], "/", "." + new Uri(requesturi).Host);
+    //                        cookie.HttpOnly = true;
+    //                        cookie.Secure = true;
+    //                        cookies[curCookie[0]] = (cookie);                           
+    //                    }
+    //                    catch (Exception ex)
+    //                    {
 
-                        }
-                    }
-                }
-                if (requestCookies.ToLower().Contains(args.RequiredCookie.ToLower()))
-                    cookievalue = requestCookies;
+    //                    }
+    //                }
+    //            }
+    //            if (requestCookies.ToLower().Contains(args.RequiredCookie.ToLower()))
+    //                cookievalue = requestCookies;
                 
-            }
-        }
-        if (argsType.Name == "CoreWebView2WebResourceRequestedEventArgs")
-        {
+    //        }
+    //    }
+    //    if (argsType.Name == "CoreWebView2WebResourceRequestedEventArgs")
+    //    {
            
-        }
-    }
+    //    }
+    //}
 
     private void WvBypass_WebMessageReceived(object? sender, WebMessageReceivedEventArgs e)
     {
@@ -244,26 +279,33 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
     static string agent = "";
     static async Task GetAgent()
     {
-        if (string.IsNullOrWhiteSpace(agent))
+        if (!Dispatcher.UIThread.CheckAccess())
         {
-            if (OperatingSystem.IsLinux())
+            await Dispatcher.UIThread.InvokeAsync(async () => await GetAgent());
+        }
+        else
+        {
+            if (string.IsNullOrWhiteSpace(agent))
             {
-                agent = await _instance.dialog.InvokeScript("navigator.userAgent");                
+                if (OperatingSystem.IsLinux())
+                {
+                    agent = await _instance.dialog.InvokeScript("navigator.userAgent");
+                }
+                else
+                {
+                    agent = await _instance.wvBypass.InvokeScript("navigator.userAgent");
+                }
+                if (agent == null)
+                    return;
+                if (agent.StartsWith("\\"))
+                    agent = agent.Substring(1);
+                if (agent.EndsWith("\\"))
+                    agent = agent.Substring(0, agent.Length - 1);
+                if (agent.StartsWith("\""))
+                    agent = agent.Substring(1);
+                if (agent.EndsWith("\""))
+                    agent = agent.Substring(0, agent.Length - 1);
             }
-            else
-            {
-                agent = await _instance.wvBypass.InvokeScript("navigator.userAgent");
-            }
-            if (agent == null)
-                return;
-            if (agent.StartsWith("\\"))
-                agent = agent.Substring(1);
-            if (agent.EndsWith("\\"))
-                agent = agent.Substring(0, agent.Length - 1);
-            if (agent.StartsWith("\""))
-                agent = agent.Substring(1);
-            if (agent.EndsWith("\""))
-                agent = agent.Substring(0, agent.Length - 1);
         }
     }
 
@@ -275,7 +317,15 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
     {
         if (checking)
             return;
+
+        if (!Dispatcher.UIThread.CheckAccess())
+        {
+            await Dispatcher.UIThread.InvokeAsync(async () => await CheckCookies());
+            return;
+        }
+       
         checking = true;
+
         if (args == null || _conf != null)
             return;
         var bc = new BrowserConfig();
@@ -304,10 +354,10 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
             {
                 try
                 {
-                    if (cookie.Domain.ToLower().Contains(cururi.Host.ToLower()))
+                    //if (cookie.Domain.ToLower().Contains(cururi.Host.ToLower()))
                     { 
                         cs.Add(cookie);
-                        if (cookie.Name == args.RequiredCookie)
+                        if (cookie.Name == args.RequiredCookie && cookie.Domain.ToLower().Contains(cururi.Host.ToLower()))
                         {
                             found = true;
                         }
@@ -322,8 +372,11 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
 
             bc.UserAgent = agent;
             bc.Cookies = cs;
-            if (found || cts.IsCancellationRequested)
+            if ((found && args.HasTimeout||(DateTime.Now-startDate).TotalSeconds>15) || cts.IsCancellationRequested)
                 _conf = bc;
+
+
+            
         }
         catch (Exception e)
         {
@@ -344,6 +397,7 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
         {
             try
             {
+                headers.Clear();
                 cookies = new Dictionary<string, Cookie>();
                 
                 lblDisclaimer.IsVisible = true;
@@ -358,22 +412,24 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
                     };
                     dialog.Resize(400, 500);
                     dialog.Show();
-                    try
+                    if (e.HasTimeout)
                     {
-                        await Task.Delay(15000, cts.Token);
-                    }
-                    catch (Exception ex)
-                    {
+                        try
+                        {
+                            await Task.Delay(15000, cts.Token);
+                        }
+                        catch (Exception ex)
+                        {
 
+                        }
+                        if (_conf == null)
+                        {
+                            cts.Cancel();
+                            await CheckCookies();
+                        }
+                        dialog.Close();
+                        lblDisclaimer.IsVisible = false;
                     }
-                    if (_conf == null)
-                    {
-                        cts.Cancel();
-                        await CheckCookies();
-                    }
-                    dialog.Close();
-                    lblDisclaimer.IsVisible = false;
-                    
                 }
                 else
                 {
@@ -381,22 +437,26 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
                     wvBypass.IsVisible = true;
                     //wvBypass.UpdateLayout();
                     wvBypass.Navigate(new Uri(e.URL));
-                    try
-                    {
-                        await Task.Delay(15000, cts.Token);
-                    }
-                    catch (Exception ex)
+                    if (e.HasTimeout)
                     {
 
+                        try
+                        {
+                            await Task.Delay(15000, cts.Token);
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                        if (_conf == null)
+                        {
+                            cts.Cancel();
+                            await CheckCookies();
+                        }
+                        wvBypass.Navigate(new Uri("about:blank"));
+                        wvBypass.IsVisible = false;
+                        lblDisclaimer.IsVisible = false;
                     }
-                    if (_conf == null)
-                    {
-                        cts.Cancel();
-                        await CheckCookies();
-                    }
-                    wvBypass.Navigate(new Uri("about:blank"));
-                    wvBypass.IsVisible = false;
-                    lblDisclaimer.IsVisible = false;
                 }
             }
             catch (Exception ex)
@@ -405,6 +465,44 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
             }
         });
     }
+    bool scriptrunning = false;
+    internal void internalInvokeScript(string script)
+    {
+        scriptrunning = true;
+        Dispatcher.UIThread.InvokeAsync(async () =>
+        {
+            try
+            {
+                wvBypass.IsVisible = true;
+                var result = await wvBypass.InvokeScript(script);
+            
+            }
+            catch (Exception ex)
+            {
+
+            }
+            scriptrunning = false;
+        });
+    }
+
+    internal void closeBrowser()
+    {
+
+        Dispatcher.UIThread.InvokeAsync(async () =>
+        {
+            try
+            {
+                //wvBypass.Navigate(new Uri("about:blank"));
+                wvBypass.IsVisible = false;
+                lblDisclaimer.IsVisible = false;
+            }
+            catch (Exception ex)
+            {
+
+            }
+        });
+    }
+
     static DateTime startDate = default;
     internal static BrowserConfig GetBypass(BypassRequiredArgs e)
     {
@@ -415,9 +513,23 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
         _instance.internalGetBypass(e);
         LastRequest = DateTime.Now;
         while (_conf == null) { Thread.Sleep(100); }
+        _instance.closeBrowser();
         args = null;
         cts.Cancel();
+        _conf.Headers = _instance.headers;
         return _conf;
+    }
+    internal static void InvokeScript(string script)
+    {
+        
+        _instance.internalInvokeScript(script);
+        DateTime start = DateTime.Now;
+        while (_instance.scriptrunning|| (DateTime.Now-start).TotalSeconds<15) 
+        { 
+            Thread.Sleep(100);
+        }
+        //_instance.closeBrowser();
+        
     }
 }
 public static class ExtensionMethods
