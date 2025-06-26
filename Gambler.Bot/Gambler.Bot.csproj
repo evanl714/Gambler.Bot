@@ -1611,7 +1611,7 @@
 	  <AvaloniaResource Update="Assets\Images\Sites\windice.png">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </AvaloniaResource>
-	  <AvaloniaResource Update="Assets\Images\Sites\wolf.bet.png">
+	  <AvaloniaResource Update="Assets\Images\Sites\wolfbet.png">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </AvaloniaResource>
 	  <AvaloniaResource Update="Assets\Sounds\alarm.wav">
