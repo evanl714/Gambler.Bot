@@ -238,7 +238,7 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
             if (Cookiemanager == null)
                 return;
             var cookies = await Cookiemanager.GetCookiesAsync();
-            cs.SetCookies(cururi, cookiesheader);
+            //cs.SetCookies(cururi, cookiesheader);
             HashSet<string> foundcookies = new HashSet<string>();
             foreach (var cookie in cookies)
             {
@@ -295,7 +295,7 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
                 headers.Clear();
                 cookiesheader = string.Empty;
                 cookies = new Dictionary<string, Cookie>();
-                
+                instance.IsVisible = false;
                 lblDisclaimer.IsVisible = true;
                 btnCancelBrowser.IsVisible = true;
                 lblDisclaimer.ZIndex =- 2;
@@ -341,12 +341,14 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
                         dialog = null;
                         lblDisclaimer.IsVisible = false;
                         btnCancelBrowser.IsVisible = false;
+                        instance.IsVisible = true;
                     }
                 }
                 else
                 {
                     wvBypass.ZIndex = -1;
                     wvBypass.IsVisible = true;
+                    instance.IsVisible = false;
                     //wvBypass.UpdateLayout();
                     wvBypass.Navigate(new Uri(e.URL));
                     if (e.HasTimeout)
@@ -365,10 +367,11 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
                             cts.Cancel();
                             await CheckCookies();
                         }
-                        wvBypass.Navigate(new Uri("about:blank"));
+                       // wvBypass.Navigate(new Uri("about:blank"));
                         wvBypass.IsVisible = false;
                         lblDisclaimer.IsVisible = false;
                         btnCancelBrowser.IsVisible = false;
+                        instance.IsVisible = true;
                     }
                     else
                     {
@@ -391,11 +394,16 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
             lblDisclaimer.IsVisible = true;
             btnCancelBrowser.IsVisible = true;
             lblDisclaimer.ZIndex = -2;
+            instance.IsVisible = false;
             try
             {
                 wvBypass.IsVisible = true;
-                string replacescript = $"document.open();document.write('{script.Replace("'","\\'").Replace("\r","").Replace("\n","")}');document.close();";
-                var result = await wvBypass.InvokeScript(script);
+                
+                string result = await wvBypass.InvokeScript("console.log('start');");
+                result = await wvBypass.InvokeScript("document.open();");
+                result = await wvBypass.InvokeScript($"document.write('{script.Replace("'", "\\'").Replace("\r", "").Replace("\n", "")}');");
+                result = await wvBypass.InvokeScript("document.close();");
+                result = await wvBypass.InvokeScript("console.log('finish');");
             
             }
             catch (Exception ex)
@@ -417,6 +425,7 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
                 wvBypass.IsVisible = false;
                 lblDisclaimer.IsVisible = false;
                 btnCancelBrowser.IsVisible = false;
+                instance.IsVisible = true;
             }
             catch (Exception ex)
             {

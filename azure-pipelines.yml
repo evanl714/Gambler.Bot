@@ -166,6 +166,9 @@ stages:
         sed -i '' 's/config.GetValue<string>("ActiproLicense:Licensee")/"'${ActiproLicensee}'"/' Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs
         sed -i '' 's/config.GetValue<string>("ActiproLicense:LisenceKey")/"'${ActiproLicenseKey}'"/' Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs
       displayName: 'Inject Actipro license keys'
+      env:
+        ActiproLicensee: $(ActiproLicensee)
+        ActiproLicenseKey: $(ActiproLicenseKey)
 
     - task: NuGetToolInstaller@1
     - task: DotNetCoreCLI@2
@@ -215,6 +218,9 @@ stages:
         sed -i '' 's/config.GetValue<string>("ActiproLicense:Licensee")/"'${ActiproLicensee}'"/' Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs
         sed -i '' 's/config.GetValue<string>("ActiproLicense:LisenceKey")/"'${ActiproLicenseKey}'"/' Gambler.Bot/Platforms/Gambler.Bot.Desktop/Program.cs
       displayName: 'Inject Actipro license keys'
+      env:
+        ActiproLicensee: $(ActiproLicensee)
+        ActiproLicenseKey: $(ActiproLicenseKey)
 
     - task: NuGetToolInstaller@1
     - task: DotNetCoreCLI@2
