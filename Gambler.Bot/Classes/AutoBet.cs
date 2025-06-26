@@ -236,7 +236,7 @@ namespace Gambler.Bot.Classes
                     baseSite.RegisterFinished -= BaseSite_RegisterFinished;
                     baseSite.StatsUpdated -= BaseSite_StatsUpdated;
                     baseSite.OnBrowserBypassRequired -= BaseSite_OnBrowserBypassRequired;
-                    baseSite.OnInvokeScript -= BaseSite_OnInvokeScript;
+                    baseSite.OnCFCaptchaBypass -= BaseSite_OnCFCaptchaBypass;
                     baseSite.Disconnect();                    
                 }
                 baseSite = value;
@@ -250,7 +250,7 @@ namespace Gambler.Bot.Classes
                     baseSite.RegisterFinished += BaseSite_RegisterFinished;
                     baseSite.StatsUpdated += BaseSite_StatsUpdated;
                     baseSite.OnBrowserBypassRequired += BaseSite_OnBrowserBypassRequired;
-                    baseSite.OnInvokeScript += BaseSite_OnInvokeScript;
+                    baseSite.OnCFCaptchaBypass += BaseSite_OnCFCaptchaBypass;
                     int tmpcurrency = baseSite.Currencies.FindIndex(x=>x.ToLower() == CurrentCurrency.ToLower());
                     if (tmpcurrency < 0)
                     {
@@ -271,11 +271,12 @@ namespace Gambler.Bot.Classes
                     prog.UpdateSite(baseSite.SiteDetails, baseSite.CurrentCurrency);//CopyHelper.CreateCopy<SiteDetails>(baseSite.SiteDetails));
                 }
                 this.RaisePropertyChanged(nameof(SupportsBrowserLogin));
+                this.RaisePropertyChanged(nameof(SupportsNormalLogin));
             }
         }
-        private void BaseSite_OnInvokeScript(object sender, GenericEventArgs e)
+        private void BaseSite_OnCFCaptchaBypass(object sender, GenericEventArgs e)
         {
-            OnInvokeScript?.Invoke(sender, e);
+            OnCFCaptchaBypass?.Invoke(sender, e);
         }
         private void BaseSite_OnBrowserBypassRequired(object sender, BypassRequiredArgs e)
         {
@@ -307,7 +308,7 @@ namespace Gambler.Bot.Classes
         public event EventHandler OnStarted;
         public event EventHandler<GenericEventArgs> OnStopped;
         public event EventHandler<BypassRequiredArgs> OnBypassRequired;
-        public event EventHandler<GenericEventArgs> OnInvokeScript;
+        public event EventHandler<GenericEventArgs> OnCFCaptchaBypass;
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void BaseSite_StatsUpdated(object sender, StatsUpdatedEventArgs e)
@@ -639,6 +640,7 @@ namespace Gambler.Bot.Classes
        
         public Games[] SiteGames { get => CurrentSite?.SupportedGames; }
         public bool SupportsBrowserLogin { get => CurrentSite?.SupportsBrowserLogin??false; }
+        public bool SupportsNormalLogin { get => CurrentSite?.SupportsNormalLogin ?? true; }
         private void Autobet_OnSetCurrency(object sender, PrintEventArgs e)
         {
             if (CurrentSite != null)

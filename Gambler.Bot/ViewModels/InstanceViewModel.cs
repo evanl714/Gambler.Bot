@@ -132,7 +132,7 @@ namespace Gambler.Bot.ViewModels
             tmp.OnStrategyChanged += BotIns_OnStrategyChanged;
             tmp.OnSiteLoginFinished += BotIns_OnSiteLoginFinished;
             tmp.OnBypassRequired += Tmp_OnBypassRequired;
-            tmp.OnInvokeScript += Tmp_OnInvokeScript;
+            tmp.OnCFCaptchaBypass += Tmp_OnCFCaptchaBypass;
             tmp.OnSiteNotify += Tmp_OnSiteNotify;
             tmp.OnSiteError += Tmp_OnSiteError;
             tmp.PropertyChanged += Tmp_PropertyChanged;
@@ -143,9 +143,9 @@ namespace Gambler.Bot.ViewModels
             genLiveBetView = new GenericLiveBetViewModel(_logger);
         }
 
-        private void Tmp_OnInvokeScript(object? sender, GenericEventArgs e)
+        private void Tmp_OnCFCaptchaBypass(object? sender, GenericEventArgs e)
         {
-            MainView.InvokeScript(e.Message);
+            MainView.CFCaptchaBypass(e.Message);
         }
 
         private void Tmp_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)

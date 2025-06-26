@@ -12,7 +12,7 @@
              >
 
     <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <ItemsControl IsEnabled="{Binding CanLogIn}"  Width="300" Padding="5,0,0,0" Margin="5" Grid.Column="2" ItemsSource="{Binding LoginParams}" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <ItemsControl IsVisible="{Binding Site.SupportsNormalLogin}" IsEnabled="{Binding CanLogIn}"  Width="300" Padding="5,0,0,0" Margin="5" Grid.Column="2" ItemsSource="{Binding LoginParams}" VerticalAlignment="Center" HorizontalAlignment="Center">
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
@@ -41,7 +41,7 @@
 
         <TextBlock HorizontalAlignment="Center"  IsVisible="{Binding ShowError}" Foreground="Red" Text="{Binding Error}"/>
         <StackPanel  Orientation="Horizontal" HorizontalAlignment="Center" IsEnabled="{Binding CanLogIn}">
-            <Button Margin="5" Command="{Binding LoginCommand}" >
+            <Button IsVisible="{Binding Site.SupportsNormalLogin}" Margin="5" Command="{Binding LoginCommand}" >
                 <StackPanel Orientation="Horizontal">
                     <actipro:RingSpinner Width="24" Height="24" Classes="accent"
                                          Background="{actipro:ThemeResource Container5BackgroundBrush}"
@@ -49,8 +49,9 @@
                     <TextBlock Text="{DynamicResource Localization.InstanceView.Menu.LogIn}"></TextBlock>
                 </StackPanel>
             </Button>
-            <Button Margin="5" Content="{DynamicResource Localization.InstanceView.Menu.ChangeSite}" Command="{Binding CancelCommand}" />
           <Button Margin="5" IsVisible="{Binding Site.SupportsBrowserLogin}" Content="{DynamicResource Localization.InstanceView.Menu.BrowserLogin}" Command="{Binding BrowserLoginCommand}" />
+            <Button Margin="5" Content="{DynamicResource Localization.InstanceView.Menu.ChangeSite}" Command="{Binding CancelCommand}" />
+          
         </StackPanel>
     </StackPanel>
 </UserControl>
