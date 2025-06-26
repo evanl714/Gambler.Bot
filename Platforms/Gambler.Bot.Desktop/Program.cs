@@ -49,7 +49,11 @@ class Program
         
         var builder =  AppBuilder.Configure<App>()                
               .UsePlatformDetect()
+#if DEBUG
               .LogToTrace(Avalonia.Logging.LogEventLevel.Debug)
+#else
+              .LogToTrace(Avalonia.Logging.LogEventLevel.Warning)
+#endif
               .WithInterFont()
               .LogToTrace()
               .UseReactiveUI()
