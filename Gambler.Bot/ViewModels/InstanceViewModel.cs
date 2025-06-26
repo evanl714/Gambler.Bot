@@ -132,6 +132,7 @@ namespace Gambler.Bot.ViewModels
             tmp.OnStrategyChanged += BotIns_OnStrategyChanged;
             tmp.OnSiteLoginFinished += BotIns_OnSiteLoginFinished;
             tmp.OnBypassRequired += Tmp_OnBypassRequired;
+            tmp.OnCFCaptchaBypass += Tmp_OnCFCaptchaBypass;
             tmp.OnSiteNotify += Tmp_OnSiteNotify;
             tmp.OnSiteError += Tmp_OnSiteError;
             tmp.PropertyChanged += Tmp_PropertyChanged;
@@ -140,6 +141,11 @@ namespace Gambler.Bot.ViewModels
             botIns.CurrentGame = Bot.Common.Games.Games.Dice;
             _logger.LogDebug("Instance viewmodel created");
             genLiveBetView = new GenericLiveBetViewModel(_logger);
+        }
+
+        private void Tmp_OnCFCaptchaBypass(object? sender, GenericEventArgs e)
+        {
+            MainView.CFCaptchaBypass(e.Message);
         }
 
         private void Tmp_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -681,7 +687,7 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         void SaveINstanceSettings(string FileLocation)
         {
-            if (!Directory.Exists(Path.GetDirectoryName(FileLocation)))
+            if (Path.GetDirectoryName(FileLocation) != string.Empty && !Directory.Exists(Path.GetDirectoryName(FileLocation)))
                 Directory.CreateDirectory(Path.GetDirectoryName(FileLocation));
             string Settings = JsonSerializer.Serialize<InstanceSettings>(
                 new InstanceSettings

@@ -236,6 +236,7 @@ namespace Gambler.Bot.Classes
                     baseSite.RegisterFinished -= BaseSite_RegisterFinished;
                     baseSite.StatsUpdated -= BaseSite_StatsUpdated;
                     baseSite.OnBrowserBypassRequired -= BaseSite_OnBrowserBypassRequired;
+                    baseSite.OnCFCaptchaBypass -= BaseSite_OnCFCaptchaBypass;
                     baseSite.Disconnect();                    
                 }
                 baseSite = value;
@@ -249,6 +250,7 @@ namespace Gambler.Bot.Classes
                     baseSite.RegisterFinished += BaseSite_RegisterFinished;
                     baseSite.StatsUpdated += BaseSite_StatsUpdated;
                     baseSite.OnBrowserBypassRequired += BaseSite_OnBrowserBypassRequired;
+                    baseSite.OnCFCaptchaBypass += BaseSite_OnCFCaptchaBypass;
                     int tmpcurrency = baseSite.Currencies.FindIndex(x=>x.ToLower() == CurrentCurrency.ToLower());
                     if (tmpcurrency < 0)
                     {
@@ -268,9 +270,14 @@ namespace Gambler.Bot.Classes
                 {
                     prog.UpdateSite(baseSite.SiteDetails, baseSite.CurrentCurrency);//CopyHelper.CreateCopy<SiteDetails>(baseSite.SiteDetails));
                 }
+                this.RaisePropertyChanged(nameof(SupportsBrowserLogin));
+                this.RaisePropertyChanged(nameof(SupportsNormalLogin));
             }
         }
-
+        private void BaseSite_OnCFCaptchaBypass(object sender, GenericEventArgs e)
+        {
+            OnCFCaptchaBypass?.Invoke(sender, e);
+        }
         private void BaseSite_OnBrowserBypassRequired(object sender, BypassRequiredArgs e)
         {
             OnBypassRequired?.Invoke(sender, e);
@@ -301,6 +308,7 @@ namespace Gambler.Bot.Classes
         public event EventHandler OnStarted;
         public event EventHandler<GenericEventArgs> OnStopped;
         public event EventHandler<BypassRequiredArgs> OnBypassRequired;
+        public event EventHandler<GenericEventArgs> OnCFCaptchaBypass;
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void BaseSite_StatsUpdated(object sender, StatsUpdatedEventArgs e)
@@ -524,8 +532,16 @@ namespace Gambler.Bot.Classes
             LoggedIn = await CurrentSite.LogIn(url,LoginParams);
             return LoggedIn;
         }
+        public async Task<bool> BrowserLogin(string url)
+        {
+            if (CurrentSite == null)
+            {
+                throw new Exception("Cannot login without a site. Assign a value to CurrentSite, then log in.");
+            }
+            LoggedIn = await CurrentSite.BrowserLogin(url);
+            return LoggedIn;
+        }
 
-        
 
         //Site Stuff
         #endregion
@@ -623,7 +639,8 @@ namespace Gambler.Bot.Classes
 
        
         public Games[] SiteGames { get => CurrentSite?.SupportedGames; }
-
+        public bool SupportsBrowserLogin { get => CurrentSite?.SupportsBrowserLogin??false; }
+        public bool SupportsNormalLogin { get => CurrentSite?.SupportsNormalLogin ?? true; }
         private void Autobet_OnSetCurrency(object sender, PrintEventArgs e)
         {
             if (CurrentSite != null)
@@ -1150,7 +1167,7 @@ namespace Gambler.Bot.Classes
 
         public void SavePersonalSettings(string FileLocation)
         {
-            if (!Directory.Exists(Path.GetDirectoryName(FileLocation)))
+            if (Path.GetDirectoryName(FileLocation)!= string.Empty && !Directory.Exists(Path.GetDirectoryName(FileLocation)))
                 Directory.CreateDirectory(Path.GetDirectoryName(FileLocation));
             string Settings = JsonSerializer.Serialize(PersonalSettings);
             using (StreamWriter sw = new StreamWriter(FileLocation, false))
@@ -1170,7 +1187,7 @@ namespace Gambler.Bot.Classes
             tmp.SetStrategy(Strategy);*/
             StoredBetSettings.SetStrategy(strategy);
             string Settings = JsonSerializer.Serialize(this.StoredBetSettings);
-            if (!Directory.Exists(Path.GetDirectoryName(FileLocation)))
+            if (Path.GetDirectoryName(FileLocation)!= string.Empty && !Directory.Exists(Path.GetDirectoryName(FileLocation)))
                 Directory.CreateDirectory(Path.GetDirectoryName(FileLocation));
             using (StreamWriter sw = new StreamWriter(FileLocation, false)) 
             {
@@ -1182,7 +1199,7 @@ namespace Gambler.Bot.Classes
         public void LoadPersonalSettings(string FileLocation)
         {
             string Settings = "";
-            var files = System.IO.Directory.GetFiles(Path.GetDirectoryName(FileLocation));
+            //var files = System.IO.Directory.GetFiles(Path.GetDirectoryName(FileLocation));
             
             using (StreamReader sr = new StreamReader(FileLocation))
             {
