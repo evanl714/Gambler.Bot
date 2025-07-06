@@ -515,6 +515,11 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         private void Prog_OnReadAdv(object? sender, ReadEventArgs e)
         {
+            if (!Dispatcher.UIThread.CheckAccess())
+            {
+                Dispatcher.UIThread.Invoke(() => Prog_OnReadAdv(sender, e));
+                return;
+            }
             using (var source = new CancellationTokenSource())
             {
                 Read(e).ContinueWith(t => source.Cancel(), TaskScheduler.FromCurrentSynchronizationContext());
@@ -526,6 +531,11 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         private void Prog_OnRead(object? sender, ReadEventArgs e)
         {
+            if (!Dispatcher.UIThread.CheckAccess() )
+            {
+                Dispatcher.UIThread.Invoke(() => Prog_OnRead(sender,e));
+                return;
+            }
             if (e.DataType == 0)
             {
                 e.btncanceltext = "No";
@@ -545,10 +555,19 @@ var langs2 = langs.Where(x => x.Source?.OriginalString?.Contains("/Lang/") ?? fa
 
         public async Task Read(ReadEventArgs e)
         {
-            UserInputViewModel tmp = new UserInputViewModel(_logger);
-            tmp.Args = e;
+            try
+            {
+                
+                UserInputViewModel tmp = new UserInputViewModel(_logger);
+                tmp.Args = e;
 
-            await ShowUserInput.Handle(tmp);
+                await ShowUserInput.Handle(tmp);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error reading user input");
+                ConsoleVM.AddLine("Error reading user input: " + ex.Message);
+            }
         }
 
         private void Prog_OnPrint(object? sender, PrintEventArgs e) { ConsoleVM.AddLine(e.Message); }

@@ -732,28 +732,31 @@ namespace Gambler.Bot.Classes
 
             CurrentSite.ActiveActions.Clear();
             ActiveErrors.Clear();
-            
+
             if (!Running && !RunningSimulation)
             {
-                if (Strategy is IProgrammerMode prog)
+                Task.Run(() =>
                 {
-                    prog.SetSimulation(false);
-                    
-                    prog.UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
-                    prog.UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
-                    prog.UpdateSite(CurrentSite.SiteDetails, baseSite.CurrentCurrency);
-                    prog.LoadScript();
+                    if (Strategy is IProgrammerMode prog)
+                    {
+                        prog.SetSimulation(false);
 
-                }
-                Running = true;
-                if (Stats == null)
-                    Stats = new SessionStats();
-                Stats.StartTime = DateTime.Now;
-                //Indicate to the selected strategy to create a working set and start betting.
-                OnStarted?.Invoke(this, new EventArgs());
-                MostRecentBetTime = DateTime.Now;
-                BetTimer.Enabled = true;
-                RunningThread = RunBot();
+                        prog.UpdateSessionStats(CopyHelper.CreateCopy<SessionStats>(Stats));
+                        prog.UpdateSiteStats(CopyHelper.CreateCopy<SiteStats>(CurrentSite.Stats));
+                        prog.UpdateSite(CurrentSite.SiteDetails, baseSite.CurrentCurrency);
+                        prog.LoadScript();
+
+                    }
+                    Running = true;
+                    if (Stats == null)
+                        Stats = new SessionStats();
+                    Stats.StartTime = DateTime.Now;
+                    //Indicate to the selected strategy to create a working set and start betting.
+                    OnStarted?.Invoke(this, new EventArgs());
+                    MostRecentBetTime = DateTime.Now;
+                    BetTimer.Enabled = true;
+                    RunningThread = RunBot();
+                });
                 
             }
             /*

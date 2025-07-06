@@ -69,6 +69,7 @@ public partial class InstanceView : ReactiveUserControl<InstanceViewModel>
         window.SizeToContent = SizeToContent.WidthAndHeight;
         window.Title = $"User input";
         await window.ShowDialog(this.parentWindow);
+        context.SetOutput(default);
     }
 
     private void ShowNotification(IInteractionContext<INotification, Unit?> context)
